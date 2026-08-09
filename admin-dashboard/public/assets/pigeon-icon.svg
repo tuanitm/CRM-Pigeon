@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 60">
+  <!-- Pigeon P-with-heart icon mark only -->
+  <rect x="0" y="0" width="12" height="60" rx="3" fill="#E8685E"/>
+  <path d="M12 3 Q12 0 15 0 L32 0 Q50 0 50 17 Q50 34 32 34 L15 34 Q12 34 12 31 Z" fill="#E8685E"/>
+  <path d="M20 8 C20 4.5 23.5 2 27 2 C30 2 33 4.5 33 8 C33 4.5 36 2 39 2 C42.5 2 46 4.5 46 8 C46 15 33 24 33 24 C33 24 20 15 20 8 Z" fill="white"/>
+</svg>

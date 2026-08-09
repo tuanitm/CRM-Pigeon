@@ -1,0 +1,436 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  /* CNV CDP inspired color palette */
+  --sidebar-bg: #1a1f36;
+  --sidebar-bg-gradient: linear-gradient(180deg, #1a1f36 0%, #0f1324 100%);
+  --sidebar-item-active: rgba(59, 130, 246, 0.15);
+  --sidebar-item-active-border: #3b82f6;
+  --sidebar-text: rgba(255, 255, 255, 0.65);
+  --sidebar-text-active: #ffffff;
+  --sidebar-width: 240px;
+  --sidebar-collapsed-width: 72px;
+
+  --primary: #3b82f6;
+  --primary-light: #60a5fa;
+  --primary-dark: #2563eb;
+
+  --success: #10b981;
+  --warning: #f59e0b;
+  --error: #ef4444;
+  --info: #06b6d4;
+
+  --bg-main: #f0f2f5;
+  --bg-card: #ffffff;
+  --bg-header: #ffffff;
+
+  --text-primary: #1f2937;
+  --text-secondary: #6b7280;
+  --text-muted: #9ca3af;
+
+  --border-color: #e5e7eb;
+  --border-radius: 10px;
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-card-hover: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+  --header-height: 56px;
+
+  /* KPI card label colors (CNV CDP style) */
+  --kpi-quantity: #3b82f6;
+  --kpi-value: #10b981;
+  --kpi-rate: #f59e0b;
+  --kpi-count: #8b5cf6;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--bg-main);
+  color: var(--text-primary);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* ─── AntD Theme Overrides ─── */
+.ant-card {
+  transition: box-shadow 0.25s ease, transform 0.2s ease;
+  border-radius: var(--border-radius) !important;
+}
+
+.ant-card:hover {
+  box-shadow: var(--shadow-card-hover) !important;
+}
+
+.ant-table-thead > tr > th {
+  background: #fafafa !important;
+  font-weight: 600 !important;
+  font-size: 13px !important;
+  color: var(--text-secondary) !important;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.ant-table-tbody > tr:hover > td {
+  background: #f8fafc !important;
+}
+
+.ant-statistic-title {
+  font-size: 12px !important;
+  color: var(--text-muted) !important;
+  font-weight: 500 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.ant-statistic-content-value {
+  font-weight: 700 !important;
+  color: var(--text-primary) !important;
+}
+
+/* ─── Sidebar Styling ─── */
+.ant-layout-sider {
+  background: var(--sidebar-bg-gradient) !important;
+}
+
+.ant-menu-dark {
+  background: transparent !important;
+}
+
+.ant-menu-dark .ant-menu-item {
+  margin: 2px 8px !important;
+  border-radius: 8px !important;
+  height: 44px !important;
+  line-height: 44px !important;
+  transition: all 0.2s ease !important;
+}
+
+.ant-menu-dark .ant-menu-item:hover {
+  background: rgba(255, 255, 255, 0.06) !important;
+}
+
+.ant-menu-dark .ant-menu-item-selected {
+  background: var(--sidebar-item-active) !important;
+  border-right: none !important;
+  position: relative;
+}
+
+.ant-menu-dark .ant-menu-item-selected::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 8px;
+  width: 3px;
+  background: var(--sidebar-item-active-border);
+  border-radius: 0 3px 3px 0;
+}
+
+/* ─── KPI Category Labels (CNV CDP style) ─── */
+.kpi-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.kpi-label--quantity { color: var(--kpi-quantity); }
+.kpi-label--quantity::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--kpi-quantity); }
+
+.kpi-label--value { color: var(--kpi-value); }
+.kpi-label--value::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--kpi-value); }
+
+.kpi-label--rate { color: var(--kpi-rate); }
+.kpi-label--rate::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--kpi-rate); }
+
+.kpi-label--count { color: var(--kpi-count); }
+.kpi-label--count::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--kpi-count); }
+
+/* ─── Conversion Funnel Chevron ─── */
+.funnel-chevron {
+  display: flex;
+  width: 100%;
+  gap: 0;
+}
+
+.funnel-stage {
+  flex: 1;
+  position: relative;
+  padding: 16px 20px 16px 28px;
+  color: #fff;
+  font-weight: 600;
+  font-size: 13px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 50%, calc(100% - 16px) 100%, 0 100%, 16px 50%);
+  min-height: 56px;
+}
+
+.funnel-stage:first-child {
+  clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 50%, calc(100% - 16px) 100%, 0 100%);
+  padding-left: 20px;
+  border-radius: 8px 0 0 8px;
+}
+
+.funnel-stage:last-child {
+  border-radius: 0 8px 8px 0;
+}
+
+.funnel-stage-name {
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.funnel-stage-sub {
+  font-size: 10px;
+  opacity: 0.8;
+  font-weight: 400;
+}
+
+.funnel-stage-pct {
+  font-size: 18px;
+  font-weight: 800;
+}
+
+/* ─── Sparkline Mini Chart ─── */
+.sparkline-container {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 32px;
+}
+
+.sparkline-bar {
+  width: 4px;
+  border-radius: 2px;
+  background: var(--primary);
+  opacity: 0.3;
+  transition: opacity 0.15s ease;
+}
+
+.sparkline-bar:last-child {
+  opacity: 1;
+}
+
+/* ─── Change Indicator ─── */
+.change-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.change-indicator--up {
+  color: #059669;
+  background: #d1fae5;
+}
+
+.change-indicator--down {
+  color: #dc2626;
+  background: #fee2e2;
+}
+
+/* ─── Page Sub-sidebar (CNV CDP pattern) ─── */
+.page-sub-sidebar {
+  width: 220px;
+  background: #fff;
+  border-right: 1px solid var(--border-color);
+  padding: 16px 0;
+  min-height: calc(100vh - var(--header-height));
+  flex-shrink: 0;
+}
+
+.sub-sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.15s ease;
+  border-radius: 0;
+  position: relative;
+}
+
+.sub-sidebar-item:hover {
+  background: #f3f4f6;
+  color: var(--text-primary);
+}
+
+.sub-sidebar-item--active {
+  background: var(--primary) !important;
+  color: #fff !important;
+  border-radius: 8px;
+  margin: 0 8px;
+  padding: 10px 12px;
+}
+
+/* ─── Gamification Cards ─── */
+.game-card {
+  border-radius: 16px;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.game-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+}
+
+.game-card-image {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+}
+
+.game-card-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  background: var(--primary);
+}
+
+/* ─── Sentiment Curve ─── */
+.sentiment-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px dashed var(--border-color);
+}
+
+.sentiment-label {
+  width: 80px;
+  font-size: 12px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.sentiment-dots {
+  flex: 1;
+  display: flex;
+  gap: 0;
+  justify-content: space-around;
+}
+
+.sentiment-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  transition: transform 0.15s ease;
+}
+
+.sentiment-dot:hover {
+  transform: scale(1.5);
+}
+
+/* ─── Scrollbar ─── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+
+/* ─── Loading shimmer ─── */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.shimmer {
+  background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 6px;
+}
+
+/* ─── Badge pulse ─── */
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+  100% { box-shadow: 0 0 0 8px rgba(59, 130, 246, 0); }
+}
+
+.pulse-badge {
+  animation: pulse-ring 2s infinite;
+}
+
+/* ─── Smooth page transitions ─── */
+.page-enter {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.page-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* ─── Customer Detail 360 Page ─── */
+.profile-card {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+.profile-avatar-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+.profile-stat-box {
+  background: #f8fafc;
+  border-radius: 8px;
+  padding: 12px;
+  text-align: center;
+  border: 1px solid #e2e8f0;
+}
+.profile-stat-box-value {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--primary);
+}
+.profile-stat-box-label {
+  font-size: 11px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+}
+.detail-tabs .ant-tabs-nav::before {
+  border-bottom: 2px solid var(--border-color);
+}
+.detail-tabs .ant-tabs-tab {
+  padding: 12px 16px !important;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+.detail-tabs .ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: var(--primary) !important;
+}
