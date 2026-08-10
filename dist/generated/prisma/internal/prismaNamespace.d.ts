@@ -227,6 +227,15 @@ export declare const ModelName: {
     readonly warranty_registration: "warranty_registration";
     readonly webhook_inbox: "webhook_inbox";
     readonly SystemConfig: "SystemConfig";
+    readonly DataHub: "DataHub";
+    readonly DynamicAction: "DynamicAction";
+    readonly DynamicActionPage: "DynamicActionPage";
+    readonly DynamicActionComponent: "DynamicActionComponent";
+    readonly DataHubTable: "DataHubTable";
+    readonly DataHubColumn: "DataHubColumn";
+    readonly DataHubRecord: "DataHubRecord";
+    readonly ZaloOA: "ZaloOA";
+    readonly ZaloMiniApp: "ZaloMiniApp";
 };
 export type ModelName = (typeof ModelName)[keyof typeof ModelName];
 export interface TypeMapCb<GlobalOmitOptions = {}> extends runtime.Types.Utils.Fn<{
@@ -239,7 +248,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         omit: GlobalOmitOptions;
     };
     meta: {
-        modelProps: "customer" | "customerIdentity" | "mergeCandidate" | "customerAddress" | "customerTag" | "baby" | "babyGrowthLog" | "babyStageHistory" | "consentDocumentVersion" | "consent" | "product" | "productLifecycleRule" | "order" | "orderItem" | "productExchange" | "review" | "loyaltyTierConfig" | "loyaltyAccount" | "loyaltyTransaction" | "loyaltyEarnRule" | "rewardCatalog" | "rewardRedemption" | "segment" | "journey" | "messageTemplate" | "role" | "adminUser" | "auditLog" | "campaign_control_group" | "checklist_definition" | "checklist_progress" | "customer_metrics_daily" | "data_layer_definition" | "data_quality_flag_log" | "data_quality_rule" | "dsr_request" | "event" | "expert_booking" | "expert_slot" | "expert_topic" | "frequency_counter" | "integration_job" | "journey_run" | "journey_step_log" | "kpi_daily_snapshot" | "message_log" | "milestone_definition" | "milestone_progress" | "points_liability_snapshot" | "product_purchase_cycle" | "product_serial" | "quiz_definition" | "quiz_response" | "referral_code" | "referral_conversion" | "replenishment_schedule" | "rfm_snapshot" | "segment_membership" | "serial_batch" | "serial_scan" | "session" | "subscription" | "subscription_delivery" | "subscription_item" | "warranty_registration" | "webhook_inbox" | "systemConfig";
+        modelProps: "customer" | "customerIdentity" | "mergeCandidate" | "customerAddress" | "customerTag" | "baby" | "babyGrowthLog" | "babyStageHistory" | "consentDocumentVersion" | "consent" | "product" | "productLifecycleRule" | "order" | "orderItem" | "productExchange" | "review" | "loyaltyTierConfig" | "loyaltyAccount" | "loyaltyTransaction" | "loyaltyEarnRule" | "rewardCatalog" | "rewardRedemption" | "segment" | "journey" | "messageTemplate" | "role" | "adminUser" | "auditLog" | "campaign_control_group" | "checklist_definition" | "checklist_progress" | "customer_metrics_daily" | "data_layer_definition" | "data_quality_flag_log" | "data_quality_rule" | "dsr_request" | "event" | "expert_booking" | "expert_slot" | "expert_topic" | "frequency_counter" | "integration_job" | "journey_run" | "journey_step_log" | "kpi_daily_snapshot" | "message_log" | "milestone_definition" | "milestone_progress" | "points_liability_snapshot" | "product_purchase_cycle" | "product_serial" | "quiz_definition" | "quiz_response" | "referral_code" | "referral_conversion" | "replenishment_schedule" | "rfm_snapshot" | "segment_membership" | "serial_batch" | "serial_scan" | "session" | "subscription" | "subscription_delivery" | "subscription_item" | "warranty_registration" | "webhook_inbox" | "systemConfig" | "dataHub" | "dynamicAction" | "dynamicActionPage" | "dynamicActionComponent" | "dataHubTable" | "dataHubColumn" | "dataHubRecord" | "zaloOA" | "zaloMiniApp";
         txIsolationLevel: TransactionIsolationLevel;
     };
     model: {
@@ -5201,6 +5210,672 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
                 };
             };
         };
+        DataHub: {
+            payload: Prisma.$DataHubPayload<ExtArgs>;
+            fields: Prisma.DataHubFieldRefs;
+            operations: {
+                findUnique: {
+                    args: Prisma.DataHubFindUniqueArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubPayload> | null;
+                };
+                findUniqueOrThrow: {
+                    args: Prisma.DataHubFindUniqueOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubPayload>;
+                };
+                findFirst: {
+                    args: Prisma.DataHubFindFirstArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubPayload> | null;
+                };
+                findFirstOrThrow: {
+                    args: Prisma.DataHubFindFirstOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubPayload>;
+                };
+                findMany: {
+                    args: Prisma.DataHubFindManyArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubPayload>[];
+                };
+                create: {
+                    args: Prisma.DataHubCreateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubPayload>;
+                };
+                createMany: {
+                    args: Prisma.DataHubCreateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                createManyAndReturn: {
+                    args: Prisma.DataHubCreateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubPayload>[];
+                };
+                delete: {
+                    args: Prisma.DataHubDeleteArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubPayload>;
+                };
+                update: {
+                    args: Prisma.DataHubUpdateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubPayload>;
+                };
+                deleteMany: {
+                    args: Prisma.DataHubDeleteManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateMany: {
+                    args: Prisma.DataHubUpdateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateManyAndReturn: {
+                    args: Prisma.DataHubUpdateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubPayload>[];
+                };
+                upsert: {
+                    args: Prisma.DataHubUpsertArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubPayload>;
+                };
+                aggregate: {
+                    args: Prisma.DataHubAggregateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.AggregateDataHub>;
+                };
+                groupBy: {
+                    args: Prisma.DataHubGroupByArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.DataHubGroupByOutputType>[];
+                };
+                count: {
+                    args: Prisma.DataHubCountArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.DataHubCountAggregateOutputType> | number;
+                };
+            };
+        };
+        DynamicAction: {
+            payload: Prisma.$DynamicActionPayload<ExtArgs>;
+            fields: Prisma.DynamicActionFieldRefs;
+            operations: {
+                findUnique: {
+                    args: Prisma.DynamicActionFindUniqueArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionPayload> | null;
+                };
+                findUniqueOrThrow: {
+                    args: Prisma.DynamicActionFindUniqueOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionPayload>;
+                };
+                findFirst: {
+                    args: Prisma.DynamicActionFindFirstArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionPayload> | null;
+                };
+                findFirstOrThrow: {
+                    args: Prisma.DynamicActionFindFirstOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionPayload>;
+                };
+                findMany: {
+                    args: Prisma.DynamicActionFindManyArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionPayload>[];
+                };
+                create: {
+                    args: Prisma.DynamicActionCreateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionPayload>;
+                };
+                createMany: {
+                    args: Prisma.DynamicActionCreateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                createManyAndReturn: {
+                    args: Prisma.DynamicActionCreateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionPayload>[];
+                };
+                delete: {
+                    args: Prisma.DynamicActionDeleteArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionPayload>;
+                };
+                update: {
+                    args: Prisma.DynamicActionUpdateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionPayload>;
+                };
+                deleteMany: {
+                    args: Prisma.DynamicActionDeleteManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateMany: {
+                    args: Prisma.DynamicActionUpdateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateManyAndReturn: {
+                    args: Prisma.DynamicActionUpdateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionPayload>[];
+                };
+                upsert: {
+                    args: Prisma.DynamicActionUpsertArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionPayload>;
+                };
+                aggregate: {
+                    args: Prisma.DynamicActionAggregateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.AggregateDynamicAction>;
+                };
+                groupBy: {
+                    args: Prisma.DynamicActionGroupByArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.DynamicActionGroupByOutputType>[];
+                };
+                count: {
+                    args: Prisma.DynamicActionCountArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.DynamicActionCountAggregateOutputType> | number;
+                };
+            };
+        };
+        DynamicActionPage: {
+            payload: Prisma.$DynamicActionPagePayload<ExtArgs>;
+            fields: Prisma.DynamicActionPageFieldRefs;
+            operations: {
+                findUnique: {
+                    args: Prisma.DynamicActionPageFindUniqueArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionPagePayload> | null;
+                };
+                findUniqueOrThrow: {
+                    args: Prisma.DynamicActionPageFindUniqueOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionPagePayload>;
+                };
+                findFirst: {
+                    args: Prisma.DynamicActionPageFindFirstArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionPagePayload> | null;
+                };
+                findFirstOrThrow: {
+                    args: Prisma.DynamicActionPageFindFirstOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionPagePayload>;
+                };
+                findMany: {
+                    args: Prisma.DynamicActionPageFindManyArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionPagePayload>[];
+                };
+                create: {
+                    args: Prisma.DynamicActionPageCreateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionPagePayload>;
+                };
+                createMany: {
+                    args: Prisma.DynamicActionPageCreateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                createManyAndReturn: {
+                    args: Prisma.DynamicActionPageCreateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionPagePayload>[];
+                };
+                delete: {
+                    args: Prisma.DynamicActionPageDeleteArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionPagePayload>;
+                };
+                update: {
+                    args: Prisma.DynamicActionPageUpdateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionPagePayload>;
+                };
+                deleteMany: {
+                    args: Prisma.DynamicActionPageDeleteManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateMany: {
+                    args: Prisma.DynamicActionPageUpdateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateManyAndReturn: {
+                    args: Prisma.DynamicActionPageUpdateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionPagePayload>[];
+                };
+                upsert: {
+                    args: Prisma.DynamicActionPageUpsertArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionPagePayload>;
+                };
+                aggregate: {
+                    args: Prisma.DynamicActionPageAggregateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.AggregateDynamicActionPage>;
+                };
+                groupBy: {
+                    args: Prisma.DynamicActionPageGroupByArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.DynamicActionPageGroupByOutputType>[];
+                };
+                count: {
+                    args: Prisma.DynamicActionPageCountArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.DynamicActionPageCountAggregateOutputType> | number;
+                };
+            };
+        };
+        DynamicActionComponent: {
+            payload: Prisma.$DynamicActionComponentPayload<ExtArgs>;
+            fields: Prisma.DynamicActionComponentFieldRefs;
+            operations: {
+                findUnique: {
+                    args: Prisma.DynamicActionComponentFindUniqueArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionComponentPayload> | null;
+                };
+                findUniqueOrThrow: {
+                    args: Prisma.DynamicActionComponentFindUniqueOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionComponentPayload>;
+                };
+                findFirst: {
+                    args: Prisma.DynamicActionComponentFindFirstArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionComponentPayload> | null;
+                };
+                findFirstOrThrow: {
+                    args: Prisma.DynamicActionComponentFindFirstOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionComponentPayload>;
+                };
+                findMany: {
+                    args: Prisma.DynamicActionComponentFindManyArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionComponentPayload>[];
+                };
+                create: {
+                    args: Prisma.DynamicActionComponentCreateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionComponentPayload>;
+                };
+                createMany: {
+                    args: Prisma.DynamicActionComponentCreateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                createManyAndReturn: {
+                    args: Prisma.DynamicActionComponentCreateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionComponentPayload>[];
+                };
+                delete: {
+                    args: Prisma.DynamicActionComponentDeleteArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionComponentPayload>;
+                };
+                update: {
+                    args: Prisma.DynamicActionComponentUpdateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionComponentPayload>;
+                };
+                deleteMany: {
+                    args: Prisma.DynamicActionComponentDeleteManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateMany: {
+                    args: Prisma.DynamicActionComponentUpdateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateManyAndReturn: {
+                    args: Prisma.DynamicActionComponentUpdateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionComponentPayload>[];
+                };
+                upsert: {
+                    args: Prisma.DynamicActionComponentUpsertArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionComponentPayload>;
+                };
+                aggregate: {
+                    args: Prisma.DynamicActionComponentAggregateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.AggregateDynamicActionComponent>;
+                };
+                groupBy: {
+                    args: Prisma.DynamicActionComponentGroupByArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.DynamicActionComponentGroupByOutputType>[];
+                };
+                count: {
+                    args: Prisma.DynamicActionComponentCountArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.DynamicActionComponentCountAggregateOutputType> | number;
+                };
+            };
+        };
+        DataHubTable: {
+            payload: Prisma.$DataHubTablePayload<ExtArgs>;
+            fields: Prisma.DataHubTableFieldRefs;
+            operations: {
+                findUnique: {
+                    args: Prisma.DataHubTableFindUniqueArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubTablePayload> | null;
+                };
+                findUniqueOrThrow: {
+                    args: Prisma.DataHubTableFindUniqueOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubTablePayload>;
+                };
+                findFirst: {
+                    args: Prisma.DataHubTableFindFirstArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubTablePayload> | null;
+                };
+                findFirstOrThrow: {
+                    args: Prisma.DataHubTableFindFirstOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubTablePayload>;
+                };
+                findMany: {
+                    args: Prisma.DataHubTableFindManyArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubTablePayload>[];
+                };
+                create: {
+                    args: Prisma.DataHubTableCreateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubTablePayload>;
+                };
+                createMany: {
+                    args: Prisma.DataHubTableCreateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                createManyAndReturn: {
+                    args: Prisma.DataHubTableCreateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubTablePayload>[];
+                };
+                delete: {
+                    args: Prisma.DataHubTableDeleteArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubTablePayload>;
+                };
+                update: {
+                    args: Prisma.DataHubTableUpdateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubTablePayload>;
+                };
+                deleteMany: {
+                    args: Prisma.DataHubTableDeleteManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateMany: {
+                    args: Prisma.DataHubTableUpdateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateManyAndReturn: {
+                    args: Prisma.DataHubTableUpdateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubTablePayload>[];
+                };
+                upsert: {
+                    args: Prisma.DataHubTableUpsertArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubTablePayload>;
+                };
+                aggregate: {
+                    args: Prisma.DataHubTableAggregateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.AggregateDataHubTable>;
+                };
+                groupBy: {
+                    args: Prisma.DataHubTableGroupByArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.DataHubTableGroupByOutputType>[];
+                };
+                count: {
+                    args: Prisma.DataHubTableCountArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.DataHubTableCountAggregateOutputType> | number;
+                };
+            };
+        };
+        DataHubColumn: {
+            payload: Prisma.$DataHubColumnPayload<ExtArgs>;
+            fields: Prisma.DataHubColumnFieldRefs;
+            operations: {
+                findUnique: {
+                    args: Prisma.DataHubColumnFindUniqueArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubColumnPayload> | null;
+                };
+                findUniqueOrThrow: {
+                    args: Prisma.DataHubColumnFindUniqueOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubColumnPayload>;
+                };
+                findFirst: {
+                    args: Prisma.DataHubColumnFindFirstArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubColumnPayload> | null;
+                };
+                findFirstOrThrow: {
+                    args: Prisma.DataHubColumnFindFirstOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubColumnPayload>;
+                };
+                findMany: {
+                    args: Prisma.DataHubColumnFindManyArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubColumnPayload>[];
+                };
+                create: {
+                    args: Prisma.DataHubColumnCreateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubColumnPayload>;
+                };
+                createMany: {
+                    args: Prisma.DataHubColumnCreateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                createManyAndReturn: {
+                    args: Prisma.DataHubColumnCreateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubColumnPayload>[];
+                };
+                delete: {
+                    args: Prisma.DataHubColumnDeleteArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubColumnPayload>;
+                };
+                update: {
+                    args: Prisma.DataHubColumnUpdateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubColumnPayload>;
+                };
+                deleteMany: {
+                    args: Prisma.DataHubColumnDeleteManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateMany: {
+                    args: Prisma.DataHubColumnUpdateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateManyAndReturn: {
+                    args: Prisma.DataHubColumnUpdateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubColumnPayload>[];
+                };
+                upsert: {
+                    args: Prisma.DataHubColumnUpsertArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubColumnPayload>;
+                };
+                aggregate: {
+                    args: Prisma.DataHubColumnAggregateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.AggregateDataHubColumn>;
+                };
+                groupBy: {
+                    args: Prisma.DataHubColumnGroupByArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.DataHubColumnGroupByOutputType>[];
+                };
+                count: {
+                    args: Prisma.DataHubColumnCountArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.DataHubColumnCountAggregateOutputType> | number;
+                };
+            };
+        };
+        DataHubRecord: {
+            payload: Prisma.$DataHubRecordPayload<ExtArgs>;
+            fields: Prisma.DataHubRecordFieldRefs;
+            operations: {
+                findUnique: {
+                    args: Prisma.DataHubRecordFindUniqueArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubRecordPayload> | null;
+                };
+                findUniqueOrThrow: {
+                    args: Prisma.DataHubRecordFindUniqueOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubRecordPayload>;
+                };
+                findFirst: {
+                    args: Prisma.DataHubRecordFindFirstArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubRecordPayload> | null;
+                };
+                findFirstOrThrow: {
+                    args: Prisma.DataHubRecordFindFirstOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubRecordPayload>;
+                };
+                findMany: {
+                    args: Prisma.DataHubRecordFindManyArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubRecordPayload>[];
+                };
+                create: {
+                    args: Prisma.DataHubRecordCreateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubRecordPayload>;
+                };
+                createMany: {
+                    args: Prisma.DataHubRecordCreateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                createManyAndReturn: {
+                    args: Prisma.DataHubRecordCreateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubRecordPayload>[];
+                };
+                delete: {
+                    args: Prisma.DataHubRecordDeleteArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubRecordPayload>;
+                };
+                update: {
+                    args: Prisma.DataHubRecordUpdateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubRecordPayload>;
+                };
+                deleteMany: {
+                    args: Prisma.DataHubRecordDeleteManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateMany: {
+                    args: Prisma.DataHubRecordUpdateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateManyAndReturn: {
+                    args: Prisma.DataHubRecordUpdateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubRecordPayload>[];
+                };
+                upsert: {
+                    args: Prisma.DataHubRecordUpsertArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubRecordPayload>;
+                };
+                aggregate: {
+                    args: Prisma.DataHubRecordAggregateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.AggregateDataHubRecord>;
+                };
+                groupBy: {
+                    args: Prisma.DataHubRecordGroupByArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.DataHubRecordGroupByOutputType>[];
+                };
+                count: {
+                    args: Prisma.DataHubRecordCountArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.DataHubRecordCountAggregateOutputType> | number;
+                };
+            };
+        };
+        ZaloOA: {
+            payload: Prisma.$ZaloOAPayload<ExtArgs>;
+            fields: Prisma.ZaloOAFieldRefs;
+            operations: {
+                findUnique: {
+                    args: Prisma.ZaloOAFindUniqueArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ZaloOAPayload> | null;
+                };
+                findUniqueOrThrow: {
+                    args: Prisma.ZaloOAFindUniqueOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ZaloOAPayload>;
+                };
+                findFirst: {
+                    args: Prisma.ZaloOAFindFirstArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ZaloOAPayload> | null;
+                };
+                findFirstOrThrow: {
+                    args: Prisma.ZaloOAFindFirstOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ZaloOAPayload>;
+                };
+                findMany: {
+                    args: Prisma.ZaloOAFindManyArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ZaloOAPayload>[];
+                };
+                create: {
+                    args: Prisma.ZaloOACreateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ZaloOAPayload>;
+                };
+                createMany: {
+                    args: Prisma.ZaloOACreateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                createManyAndReturn: {
+                    args: Prisma.ZaloOACreateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ZaloOAPayload>[];
+                };
+                delete: {
+                    args: Prisma.ZaloOADeleteArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ZaloOAPayload>;
+                };
+                update: {
+                    args: Prisma.ZaloOAUpdateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ZaloOAPayload>;
+                };
+                deleteMany: {
+                    args: Prisma.ZaloOADeleteManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateMany: {
+                    args: Prisma.ZaloOAUpdateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateManyAndReturn: {
+                    args: Prisma.ZaloOAUpdateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ZaloOAPayload>[];
+                };
+                upsert: {
+                    args: Prisma.ZaloOAUpsertArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ZaloOAPayload>;
+                };
+                aggregate: {
+                    args: Prisma.ZaloOAAggregateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.AggregateZaloOA>;
+                };
+                groupBy: {
+                    args: Prisma.ZaloOAGroupByArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.ZaloOAGroupByOutputType>[];
+                };
+                count: {
+                    args: Prisma.ZaloOACountArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.ZaloOACountAggregateOutputType> | number;
+                };
+            };
+        };
+        ZaloMiniApp: {
+            payload: Prisma.$ZaloMiniAppPayload<ExtArgs>;
+            fields: Prisma.ZaloMiniAppFieldRefs;
+            operations: {
+                findUnique: {
+                    args: Prisma.ZaloMiniAppFindUniqueArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ZaloMiniAppPayload> | null;
+                };
+                findUniqueOrThrow: {
+                    args: Prisma.ZaloMiniAppFindUniqueOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ZaloMiniAppPayload>;
+                };
+                findFirst: {
+                    args: Prisma.ZaloMiniAppFindFirstArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ZaloMiniAppPayload> | null;
+                };
+                findFirstOrThrow: {
+                    args: Prisma.ZaloMiniAppFindFirstOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ZaloMiniAppPayload>;
+                };
+                findMany: {
+                    args: Prisma.ZaloMiniAppFindManyArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ZaloMiniAppPayload>[];
+                };
+                create: {
+                    args: Prisma.ZaloMiniAppCreateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ZaloMiniAppPayload>;
+                };
+                createMany: {
+                    args: Prisma.ZaloMiniAppCreateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                createManyAndReturn: {
+                    args: Prisma.ZaloMiniAppCreateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ZaloMiniAppPayload>[];
+                };
+                delete: {
+                    args: Prisma.ZaloMiniAppDeleteArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ZaloMiniAppPayload>;
+                };
+                update: {
+                    args: Prisma.ZaloMiniAppUpdateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ZaloMiniAppPayload>;
+                };
+                deleteMany: {
+                    args: Prisma.ZaloMiniAppDeleteManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateMany: {
+                    args: Prisma.ZaloMiniAppUpdateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateManyAndReturn: {
+                    args: Prisma.ZaloMiniAppUpdateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ZaloMiniAppPayload>[];
+                };
+                upsert: {
+                    args: Prisma.ZaloMiniAppUpsertArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ZaloMiniAppPayload>;
+                };
+                aggregate: {
+                    args: Prisma.ZaloMiniAppAggregateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.AggregateZaloMiniApp>;
+                };
+                groupBy: {
+                    args: Prisma.ZaloMiniAppGroupByArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.ZaloMiniAppGroupByOutputType>[];
+                };
+                count: {
+                    args: Prisma.ZaloMiniAppCountArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.ZaloMiniAppCountAggregateOutputType> | number;
+                };
+            };
+        };
     };
 } & {
     other: {
@@ -6044,6 +6719,109 @@ export declare const SystemConfigScalarFieldEnum: {
     readonly updatedAt: "updatedAt";
 };
 export type SystemConfigScalarFieldEnum = (typeof SystemConfigScalarFieldEnum)[keyof typeof SystemConfigScalarFieldEnum];
+export declare const DataHubScalarFieldEnum: {
+    readonly id: "id";
+    readonly name: "name";
+    readonly source: "source";
+    readonly ownerId: "ownerId";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
+};
+export type DataHubScalarFieldEnum = (typeof DataHubScalarFieldEnum)[keyof typeof DataHubScalarFieldEnum];
+export declare const DynamicActionScalarFieldEnum: {
+    readonly id: "id";
+    readonly actionCode: "actionCode";
+    readonly name: "name";
+    readonly description: "description";
+    readonly trigger: "trigger";
+    readonly target: "target";
+    readonly status: "status";
+    readonly ownerId: "ownerId";
+    readonly dataHubId: "dataHubId";
+    readonly startDate: "startDate";
+    readonly endDate: "endDate";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
+};
+export type DynamicActionScalarFieldEnum = (typeof DynamicActionScalarFieldEnum)[keyof typeof DynamicActionScalarFieldEnum];
+export declare const DynamicActionPageScalarFieldEnum: {
+    readonly id: "id";
+    readonly actionId: "actionId";
+    readonly pageOrder: "pageOrder";
+    readonly title: "title";
+    readonly headerConfig: "headerConfig";
+    readonly actionConfig: "actionConfig";
+    readonly dataHubTableId: "dataHubTableId";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
+};
+export type DynamicActionPageScalarFieldEnum = (typeof DynamicActionPageScalarFieldEnum)[keyof typeof DynamicActionPageScalarFieldEnum];
+export declare const DynamicActionComponentScalarFieldEnum: {
+    readonly id: "id";
+    readonly pageId: "pageId";
+    readonly componentOrder: "componentOrder";
+    readonly type: "type";
+    readonly label: "label";
+    readonly placeholder: "placeholder";
+    readonly required: "required";
+    readonly options: "options";
+    readonly validation: "validation";
+    readonly dataHubColumnId: "dataHubColumnId";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
+};
+export type DynamicActionComponentScalarFieldEnum = (typeof DynamicActionComponentScalarFieldEnum)[keyof typeof DynamicActionComponentScalarFieldEnum];
+export declare const DataHubTableScalarFieldEnum: {
+    readonly id: "id";
+    readonly dataHubId: "dataHubId";
+    readonly name: "name";
+};
+export type DataHubTableScalarFieldEnum = (typeof DataHubTableScalarFieldEnum)[keyof typeof DataHubTableScalarFieldEnum];
+export declare const DataHubColumnScalarFieldEnum: {
+    readonly id: "id";
+    readonly tableId: "tableId";
+    readonly name: "name";
+    readonly dataType: "dataType";
+};
+export type DataHubColumnScalarFieldEnum = (typeof DataHubColumnScalarFieldEnum)[keyof typeof DataHubColumnScalarFieldEnum];
+export declare const DataHubRecordScalarFieldEnum: {
+    readonly id: "id";
+    readonly tableId: "tableId";
+    readonly data: "data";
+    readonly createdAt: "createdAt";
+};
+export type DataHubRecordScalarFieldEnum = (typeof DataHubRecordScalarFieldEnum)[keyof typeof DataHubRecordScalarFieldEnum];
+export declare const ZaloOAScalarFieldEnum: {
+    readonly id: "id";
+    readonly oaId: "oaId";
+    readonly name: "name";
+    readonly description: "description";
+    readonly avatarUrl: "avatarUrl";
+    readonly packageName: "packageName";
+    readonly followers: "followers";
+    readonly status: "status";
+    readonly expiryDate: "expiryDate";
+    readonly ownerId: "ownerId";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
+};
+export type ZaloOAScalarFieldEnum = (typeof ZaloOAScalarFieldEnum)[keyof typeof ZaloOAScalarFieldEnum];
+export declare const ZaloMiniAppScalarFieldEnum: {
+    readonly id: "id";
+    readonly appId: "appId";
+    readonly name: "name";
+    readonly description: "description";
+    readonly iconUrl: "iconUrl";
+    readonly themeColor: "themeColor";
+    readonly status: "status";
+    readonly features: "features";
+    readonly totalUsers: "totalUsers";
+    readonly zaloOAId: "zaloOAId";
+    readonly ownerId: "ownerId";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
+};
+export type ZaloMiniAppScalarFieldEnum = (typeof ZaloMiniAppScalarFieldEnum)[keyof typeof ZaloMiniAppScalarFieldEnum];
 export declare const SortOrder: {
     readonly asc: "asc";
     readonly desc: "desc";
@@ -6184,6 +6962,15 @@ export type GlobalOmitConfig = {
     warranty_registration?: Prisma.warranty_registrationOmit;
     webhook_inbox?: Prisma.webhook_inboxOmit;
     systemConfig?: Prisma.SystemConfigOmit;
+    dataHub?: Prisma.DataHubOmit;
+    dynamicAction?: Prisma.DynamicActionOmit;
+    dynamicActionPage?: Prisma.DynamicActionPageOmit;
+    dynamicActionComponent?: Prisma.DynamicActionComponentOmit;
+    dataHubTable?: Prisma.DataHubTableOmit;
+    dataHubColumn?: Prisma.DataHubColumnOmit;
+    dataHubRecord?: Prisma.DataHubRecordOmit;
+    zaloOA?: Prisma.ZaloOAOmit;
+    zaloMiniApp?: Prisma.ZaloMiniAppOmit;
 };
 export type LogLevel = 'info' | 'query' | 'warn' | 'error';
 export type LogDefinition = {

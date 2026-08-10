@@ -78,6 +78,15 @@ export declare const ModelName: {
     readonly warranty_registration: "warranty_registration";
     readonly webhook_inbox: "webhook_inbox";
     readonly SystemConfig: "SystemConfig";
+    readonly DataHub: "DataHub";
+    readonly DynamicAction: "DynamicAction";
+    readonly DynamicActionPage: "DynamicActionPage";
+    readonly DynamicActionComponent: "DynamicActionComponent";
+    readonly DataHubTable: "DataHubTable";
+    readonly DataHubColumn: "DataHubColumn";
+    readonly DataHubRecord: "DataHubRecord";
+    readonly ZaloOA: "ZaloOA";
+    readonly ZaloMiniApp: "ZaloMiniApp";
 };
 export type ModelName = (typeof ModelName)[keyof typeof ModelName];
 export declare const TransactionIsolationLevel: {
@@ -899,6 +908,109 @@ export declare const SystemConfigScalarFieldEnum: {
     readonly updatedAt: "updatedAt";
 };
 export type SystemConfigScalarFieldEnum = (typeof SystemConfigScalarFieldEnum)[keyof typeof SystemConfigScalarFieldEnum];
+export declare const DataHubScalarFieldEnum: {
+    readonly id: "id";
+    readonly name: "name";
+    readonly source: "source";
+    readonly ownerId: "ownerId";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
+};
+export type DataHubScalarFieldEnum = (typeof DataHubScalarFieldEnum)[keyof typeof DataHubScalarFieldEnum];
+export declare const DynamicActionScalarFieldEnum: {
+    readonly id: "id";
+    readonly actionCode: "actionCode";
+    readonly name: "name";
+    readonly description: "description";
+    readonly trigger: "trigger";
+    readonly target: "target";
+    readonly status: "status";
+    readonly ownerId: "ownerId";
+    readonly dataHubId: "dataHubId";
+    readonly startDate: "startDate";
+    readonly endDate: "endDate";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
+};
+export type DynamicActionScalarFieldEnum = (typeof DynamicActionScalarFieldEnum)[keyof typeof DynamicActionScalarFieldEnum];
+export declare const DynamicActionPageScalarFieldEnum: {
+    readonly id: "id";
+    readonly actionId: "actionId";
+    readonly pageOrder: "pageOrder";
+    readonly title: "title";
+    readonly headerConfig: "headerConfig";
+    readonly actionConfig: "actionConfig";
+    readonly dataHubTableId: "dataHubTableId";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
+};
+export type DynamicActionPageScalarFieldEnum = (typeof DynamicActionPageScalarFieldEnum)[keyof typeof DynamicActionPageScalarFieldEnum];
+export declare const DynamicActionComponentScalarFieldEnum: {
+    readonly id: "id";
+    readonly pageId: "pageId";
+    readonly componentOrder: "componentOrder";
+    readonly type: "type";
+    readonly label: "label";
+    readonly placeholder: "placeholder";
+    readonly required: "required";
+    readonly options: "options";
+    readonly validation: "validation";
+    readonly dataHubColumnId: "dataHubColumnId";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
+};
+export type DynamicActionComponentScalarFieldEnum = (typeof DynamicActionComponentScalarFieldEnum)[keyof typeof DynamicActionComponentScalarFieldEnum];
+export declare const DataHubTableScalarFieldEnum: {
+    readonly id: "id";
+    readonly dataHubId: "dataHubId";
+    readonly name: "name";
+};
+export type DataHubTableScalarFieldEnum = (typeof DataHubTableScalarFieldEnum)[keyof typeof DataHubTableScalarFieldEnum];
+export declare const DataHubColumnScalarFieldEnum: {
+    readonly id: "id";
+    readonly tableId: "tableId";
+    readonly name: "name";
+    readonly dataType: "dataType";
+};
+export type DataHubColumnScalarFieldEnum = (typeof DataHubColumnScalarFieldEnum)[keyof typeof DataHubColumnScalarFieldEnum];
+export declare const DataHubRecordScalarFieldEnum: {
+    readonly id: "id";
+    readonly tableId: "tableId";
+    readonly data: "data";
+    readonly createdAt: "createdAt";
+};
+export type DataHubRecordScalarFieldEnum = (typeof DataHubRecordScalarFieldEnum)[keyof typeof DataHubRecordScalarFieldEnum];
+export declare const ZaloOAScalarFieldEnum: {
+    readonly id: "id";
+    readonly oaId: "oaId";
+    readonly name: "name";
+    readonly description: "description";
+    readonly avatarUrl: "avatarUrl";
+    readonly packageName: "packageName";
+    readonly followers: "followers";
+    readonly status: "status";
+    readonly expiryDate: "expiryDate";
+    readonly ownerId: "ownerId";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
+};
+export type ZaloOAScalarFieldEnum = (typeof ZaloOAScalarFieldEnum)[keyof typeof ZaloOAScalarFieldEnum];
+export declare const ZaloMiniAppScalarFieldEnum: {
+    readonly id: "id";
+    readonly appId: "appId";
+    readonly name: "name";
+    readonly description: "description";
+    readonly iconUrl: "iconUrl";
+    readonly themeColor: "themeColor";
+    readonly status: "status";
+    readonly features: "features";
+    readonly totalUsers: "totalUsers";
+    readonly zaloOAId: "zaloOAId";
+    readonly ownerId: "ownerId";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
+};
+export type ZaloMiniAppScalarFieldEnum = (typeof ZaloMiniAppScalarFieldEnum)[keyof typeof ZaloMiniAppScalarFieldEnum];
 export declare const SortOrder: {
     readonly asc: "asc";
     readonly desc: "desc";

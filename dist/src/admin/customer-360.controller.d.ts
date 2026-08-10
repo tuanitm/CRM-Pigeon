@@ -12,22 +12,33 @@ export declare class CreateCustomerDto {
 export declare class Customer360Controller {
     private prisma;
     constructor(prisma: PrismaService);
+    getMetrics(): Promise<{
+        totalCustomers: number;
+        newCustomers30d: number;
+        activeCustomers: number;
+        returningCustomers: number;
+        completeProfilesPct: number;
+        babyProfiles: number;
+        averageCLV: number;
+        churnRate: number;
+    }>;
     listCustomers(cursor?: string, take?: number, search?: string): Promise<{
         data: ({
+            loyaltyAccount: {
+                tierId: string | null;
+                pointsBalance: number;
+            } | null;
             babies: {
                 id: string;
                 name: string | null;
                 stageCode: string | null;
             }[];
-            loyaltyAccount: {
-                tierId: string | null;
-                pointsBalance: number;
-            } | null;
             _count: {
                 orders: number;
             };
         } & {
             id: string;
+            createdAt: Date;
             customerCode: string | null;
             phone: string | null;
             email: string | null;
@@ -41,7 +52,6 @@ export declare class Customer360Controller {
             dataQualityFlag: string | null;
             isMerged: boolean;
             mergedIntoId: string | null;
-            createdAt: Date;
             updatedAt: Date;
         })[];
         nextCursor: string | null;
@@ -64,6 +74,7 @@ export declare class Customer360Controller {
         } | null;
     } & {
         id: string;
+        createdAt: Date;
         customerCode: string | null;
         phone: string | null;
         email: string | null;
@@ -77,7 +88,6 @@ export declare class Customer360Controller {
         dataQualityFlag: string | null;
         isMerged: boolean;
         mergedIntoId: string | null;
-        createdAt: Date;
         updatedAt: Date;
     }>;
 }

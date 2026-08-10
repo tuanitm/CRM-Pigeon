@@ -3,58 +3,11 @@ export declare class ProfileController {
     private prisma;
     constructor(prisma: PrismaService);
     getProfile(id: string): Promise<({
-        babies: {
-            id: string;
-            gender: string | null;
-            dateOfBirth: Date | null;
-            createdAt: Date;
-            updatedAt: Date;
-            customerId: string;
-            name: string | null;
-            dueDate: Date | null;
-            isBorn: boolean;
-            stageCode: string | null;
-            feedingType: string | null;
-        }[];
-        consents: {
-            id: string;
-            createdAt: Date;
-            updatedAt: Date;
-            customerId: string;
-            status: string;
-            channel: string;
-            documentVersionId: string | null;
-            grantedAt: Date | null;
-            revokedAt: Date | null;
-            ipAddress: string | null;
-        }[];
-        addresses: {
-            id: string;
-            createdAt: Date;
-            updatedAt: Date;
-            customerId: string;
-            label: string | null;
-            addressLine1: string | null;
-            addressLine2: string | null;
-            ward: string | null;
-            district: string | null;
-            province: string | null;
-            country: string;
-            isDefault: boolean;
-        }[];
-        tags: {
-            id: string;
-            createdAt: Date;
-            customerId: string;
-            tag: string;
-            source: string | null;
-        }[];
         loyaltyAccount: ({
             tier: {
                 id: string;
                 createdAt: Date;
                 updatedAt: Date;
-                isDefault: boolean;
                 tierCode: string;
                 tierName: string;
                 tierOrder: number;
@@ -62,6 +15,7 @@ export declare class ProfileController {
                 minDistinctMonths: number;
                 pointsMultiplier: import("@prisma/client-runtime-utils").Decimal;
                 benefits: import("@prisma/client/runtime/client").JsonValue | null;
+                isDefault: boolean;
             } | null;
         } & {
             id: string;
@@ -77,8 +31,55 @@ export declare class ProfileController {
             distinctOrderMonths: number;
             tierEvaluatedAt: Date | null;
         }) | null;
+        babies: {
+            id: string;
+            createdAt: Date;
+            name: string | null;
+            gender: string | null;
+            dateOfBirth: Date | null;
+            updatedAt: Date;
+            customerId: string;
+            dueDate: Date | null;
+            isBorn: boolean;
+            stageCode: string | null;
+            feedingType: string | null;
+        }[];
+        consents: {
+            id: string;
+            ipAddress: string | null;
+            createdAt: Date;
+            updatedAt: Date;
+            customerId: string;
+            channel: string;
+            status: string;
+            documentVersionId: string | null;
+            grantedAt: Date | null;
+            revokedAt: Date | null;
+        }[];
+        addresses: {
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            customerId: string;
+            isDefault: boolean;
+            label: string | null;
+            addressLine1: string | null;
+            addressLine2: string | null;
+            ward: string | null;
+            district: string | null;
+            province: string | null;
+            country: string;
+        }[];
+        tags: {
+            id: string;
+            createdAt: Date;
+            customerId: string;
+            source: string | null;
+            tag: string;
+        }[];
     } & {
         id: string;
+        createdAt: Date;
         customerCode: string | null;
         phone: string | null;
         email: string | null;
@@ -92,11 +93,11 @@ export declare class ProfileController {
         dataQualityFlag: string | null;
         isMerged: boolean;
         mergedIntoId: string | null;
-        createdAt: Date;
         updatedAt: Date;
     }) | null>;
     updateProfile(id: string, data: any): Promise<{
         id: string;
+        createdAt: Date;
         customerCode: string | null;
         phone: string | null;
         email: string | null;
@@ -110,7 +111,6 @@ export declare class ProfileController {
         dataQualityFlag: string | null;
         isMerged: boolean;
         mergedIntoId: string | null;
-        createdAt: Date;
         updatedAt: Date;
     }>;
 }

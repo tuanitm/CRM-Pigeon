@@ -47,6 +47,16 @@ export default function Customer360Page() {
   const [form] = Form.useForm();
   const [customers, setCustomers] = useState<any[]>(demoCustomers);
   const [loading, setLoading] = useState(false);
+  const [metrics, setMetrics] = useState<any>(null);
+
+  const fetchMetrics = useCallback(async () => {
+    try {
+      const data = await customerApi.getMetrics();
+      setMetrics(data);
+    } catch (err) {
+      console.error('Failed to fetch metrics:', err);
+    }
+  }, []);
 
   const fetchCustomers = useCallback(async () => {
     setLoading(true);
@@ -63,8 +73,10 @@ export default function Customer360Page() {
   useEffect(() => {
     if (activeTab === 'customers') {
       fetchCustomers();
+    } else if (activeTab === 'overview') {
+      fetchMetrics();
     }
-  }, [activeTab, fetchCustomers]);
+  }, [activeTab, fetchCustomers, fetchMetrics]);
 
   const handleOpenCreate = () => {
     setModalMode('create');
@@ -227,10 +239,10 @@ export default function Customer360Page() {
             </div>
             <Row gutter={[12, 12]}>
               {[
-                { label: 'SỐ LƯỢNG', type: 'quantity', title: 'Total Customers', value: '12,450' },
-                { label: 'SỐ LƯỢNG', type: 'quantity', title: 'New Customers (30d)', value: '38', change: 26.5 },
-                { label: 'SỐ LƯỢNG', type: 'quantity', title: 'Active Customers', value: '1,245', change: 12.3 },
-                { label: 'TỶ LỆ', type: 'value', title: 'Returning Customers', value: '32%', change: 3.2 },
+                { label: 'SỐ LƯỢNG', type: 'quantity', title: 'Total Customers', value: metrics ? metrics.totalCustomers.toLocaleString() : '...' },
+                { label: 'SỐ LƯỢNG', type: 'quantity', title: 'New Customers (30d)', value: metrics ? metrics.newCustomers30d.toLocaleString() : '...' },
+                { label: 'SỐ LƯỢNG', type: 'quantity', title: 'Active Customers', value: metrics ? metrics.activeCustomers.toLocaleString() : '...' },
+                { label: 'SỐ LƯỢNG', type: 'quantity', title: 'Returning Customers', value: metrics ? metrics.returningCustomers.toLocaleString() : '...' },
               ].map((item, i) => (
                 <Col xs={24} sm={12} xl={6} key={i}>
                   <Card variant="outlined" style={{ borderRadius: 10, borderColor: '#e5e7eb' }} styles={{ body: { padding: '14px 18px' } }}>
@@ -248,10 +260,10 @@ export default function Customer360Page() {
             </Row>
             <Row gutter={[12, 12]} style={{ marginTop: 12 }}>
               {[
-                { label: 'TỶ LỆ', type: 'value', title: 'Churn Rate', value: '4.8%', change: -1.2 },
-                { label: 'TỶ LỆ', type: 'value', title: 'Complete Profiles', value: '74%', change: 5.1 },
-                { label: 'GIÁ TRỊ', type: 'value', title: 'Average CLV', value: '4.2M ₫', change: 8.4 },
-                { label: 'SỐ LƯỢNG', type: 'quantity', title: 'Baby Profiles', value: '1,210' },
+                { label: 'TỶ LỆ', type: 'value', title: 'Churn Rate', value: metrics ? `${metrics.churnRate}%` : '...' },
+                { label: 'TỶ LỆ', type: 'value', title: 'Complete Profiles', value: metrics ? `${metrics.completeProfilesPct}%` : '...' },
+                { label: 'GIÁ TRỊ', type: 'value', title: 'Average CLV', value: metrics ? `${(metrics.averageCLV > 0 ? metrics.averageCLV / 1000000 : 0).toFixed(1)}M ₫` : '...' },
+                { label: 'SỐ LƯỢNG', type: 'quantity', title: 'Baby Profiles', value: metrics ? metrics.babyProfiles.toLocaleString() : '...' },
               ].map((item, i) => (
                 <Col xs={24} sm={12} xl={6} key={i}>
                   <Card variant="outlined" style={{ borderRadius: 10, borderColor: '#e5e7eb' }} styles={{ body: { padding: '14px 18px' } }}>

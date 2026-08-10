@@ -1,102 +1,188 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Card, Typography, Table, Tag, Space, Button, Input, Avatar, Tabs,
-  Badge, Select, Tooltip, Modal, Row, Col,
+  Badge, Select, Tooltip, Modal, Row, Col, Form, message, Popconfirm,
 } from 'antd';
+import { dataHubApi } from '../services/api';
 import {
   PlusOutlined, SearchOutlined, FilterOutlined, DeleteOutlined,
   CopyOutlined, EditOutlined, DatabaseOutlined, ThunderboltOutlined,
-  UserOutlined, DownloadOutlined,
+  UserOutlined, DownloadOutlined, EyeOutlined, TableOutlined,
 } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 
 const { Title, Text } = Typography;
 
-const dataHubEntries = [
-  { id: 20162, name: '[GP] - Đơn hàng đầu tiên của KH (MGP 1892)', source: 'Thủ công', owner: 'Admin', ownerColor: '#ef4444', created: '14:03, 28/07/2026', updated: '14:03, 28/07/2026' },
-  { id: 19554, name: '[GP] - Referral (MGP 2162)', source: 'Thủ công', owner: 'Ms Trang', ownerColor: '#3b82f6', created: '08:34, 01/07/2026', updated: '08:34, 01/07/2026' },
-  { id: 19553, name: '[GP] Chia sẻ bạn bè (MGP 2162)', source: 'Dynamic Action', owner: 'Ms Trang', ownerColor: '#3b82f6', created: '08:34, 01/07/2026', updated: '08:34, 01/07/2026' },
-  { id: 19251, name: 'Khách hàng tiềm năng Q3', source: 'Thủ công', owner: 'Admin', ownerColor: '#ef4444', created: '10:26, 18/06/2026', updated: '10:26, 18/06/2026' },
-  { id: 18884, name: 'QR Scan Campaign July', source: 'Thủ công', owner: 'Admin', ownerColor: '#ef4444', created: '13:39, 02/06/2026', updated: '13:39, 02/06/2026' },
-  { id: 18847, name: 'Đăng ký thành viên Ofu', source: 'Dynamic Action', owner: 'Văn Tiến', ownerColor: '#10b981', created: '00:04, 01/06/2026', updated: '00:04, 01/06/2026' },
-  { id: 18280, name: 'Loyalty Re-engagement List', source: 'Dynamic Action', owner: 'Admin', ownerColor: '#ef4444', created: '21:09, 07/05/2026', updated: '21:09, 07/05/2026' },
-  { id: 17630, name: 'Đăng ký thành viên', source: 'Dynamic Action', owner: 'Admin', ownerColor: '#ef4444', created: '11:12, 08/04/2026', updated: '11:12, 08/04/2026' },
-  { id: 17570, name: 'Toppion Campaign Data', source: 'Thủ công', owner: 'Admin', ownerColor: '#ef4444', created: '17:51, 06/04/2026', updated: '17:51, 06/04/2026' },
-  { id: 17477, name: 'Kích hoạt thành viên (MGP 655)', source: 'Dynamic Action', owner: 'Admin', ownerColor: '#ef4444', created: '10:17, 03/04/2026', updated: '10:17, 03/04/2026' },
-  { id: 17353, name: 'Birthday Reward Batch', source: 'Thủ công', owner: 'Admin', ownerColor: '#ef4444', created: '12:21, 31/03/2026', updated: '12:21, 31/03/2026' },
-  { id: 17081, name: 'New Product Launch Leads', source: 'Thủ công', owner: 'Admin', ownerColor: '#ef4444', created: '14:01, 23/03/2026', updated: '14:01, 23/03/2026' },
-];
-
-const columns = [
-  {
-    title: '',
-    key: 'check',
-    width: 40,
-    render: () => <input type="checkbox" style={{ cursor: 'pointer' }} />,
-  },
-  {
-    title: 'MÃ ↕',
-    dataIndex: 'id',
-    key: 'id',
-    width: 80,
-    render: (id: number) => <Text type="secondary">{id}</Text>,
-    sorter: (a: any, b: any) => a.id - b.id,
-  },
-  {
-    title: 'TÊN ↕',
-    dataIndex: 'name',
-    key: 'name',
-    render: (name: string) => <Text strong style={{ color: '#3b82f6', cursor: 'pointer', fontSize: 13 }}>{name}</Text>,
-  },
-  {
-    title: 'LOẠI NGUỒN ↕',
-    dataIndex: 'source',
-    key: 'source',
-    render: (source: string) => (
-      <Space>
-        {source === 'Dynamic Action' ? <ThunderboltOutlined style={{ color: '#f59e0b' }} /> : <DatabaseOutlined style={{ color: '#6b7280' }} />}
-        {source}
-      </Space>
-    ),
-  },
-  {
-    title: 'SỞ HỮU',
-    key: 'owner',
-    render: (_: any, r: any) => (
-      <Space>
-        <Avatar size={24} style={{ background: r.ownerColor, fontSize: 10 }}>
-          {r.owner.split(' ').map((w: string) => w[0]).join('').slice(0, 2)}
-        </Avatar>
-        <Text style={{ fontSize: 13 }}>{r.owner}</Text>
-      </Space>
-    ),
-  },
-  {
-    title: 'NGÀY TẠO ↕',
-    dataIndex: 'created',
-    key: 'created',
-    render: (d: string) => <Text type="secondary" style={{ fontSize: 12 }}>{d}</Text>,
-  },
-  {
-    title: 'NGÀY CẬP NHẬT ↕',
-    dataIndex: 'updated',
-    key: 'updated',
-    render: (d: string) => <Text type="secondary" style={{ fontSize: 12 }}>{d}</Text>,
-  },
-  {
-    title: 'HÀNH ĐỘNG',
-    key: 'actions',
-    width: 100,
-    render: () => (
-      <Space>
-        <Tooltip title="Chỉnh sửa"><Button type="text" size="small" icon={<CopyOutlined />} /></Tooltip>
-        <Tooltip title="Xóa"><Button type="text" size="small" danger icon={<DeleteOutlined />} /></Tooltip>
-      </Space>
-    ),
-  },
-];
-
 export default function DataHubPage() {
   const [activeTab, setActiveTab] = useState<'all' | 'export'>('all');
+  const [innerTab, setInnerTab] = useState('all');
+  const [hubs, setHubs] = useState<any[]>([]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [editingHub, setEditingHub] = useState<any>(null);
+  const navigate = useNavigate();
+  const [form] = Form.useForm();
+  
+  const loadData = async () => {
+    try {
+      const data = await dataHubApi.list();
+      setHubs(data);
+    } catch (err) {
+      console.error(err);
+      message.error('Failed to load Data Hubs');
+    }
+  };
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const handleSave = async (values: any) => {
+    try {
+      if (editingHub) {
+        await dataHubApi.update(editingHub.id, values);
+        message.success('Data Hub updated successfully');
+      } else {
+        await dataHubApi.create({ ...values, ownerId: undefined });
+        message.success('Data Hub created successfully');
+      }
+      setIsModalVisible(false);
+      setEditingHub(null);
+      form.resetFields();
+      loadData();
+    } catch (err) {
+      message.error(editingHub ? 'Failed to update Data Hub' : 'Failed to create Data Hub');
+    }
+  };
+
+  const openEdit = (hub: any) => {
+    setEditingHub(hub);
+    form.setFieldsValue({ name: hub.name, source: hub.source });
+    setIsModalVisible(true);
+  };
+
+  const openCreate = () => {
+    setEditingHub(null);
+    form.resetFields();
+    setIsModalVisible(true);
+  };
+
+  const handleDelete = async (id: string) => {
+    try {
+      await dataHubApi.delete(id);
+      message.success('Data Hub deleted');
+      loadData();
+    } catch (err: any) {
+      // Parse NestJS error response: "API 400: {\"message\":\"...\"}"
+      let errorMsg = 'Failed to delete Data Hub';
+      try {
+        const jsonPart = err.message?.split(': ').slice(1).join(': ');
+        const parsed = JSON.parse(jsonPart);
+        errorMsg = parsed.message || errorMsg;
+      } catch {}
+      message.error(errorMsg);
+    }
+  };
+
+  const displayedHubs = hubs.filter(hub => {
+    if (innerTab === 'dynamic') return hub.source === 'Dynamic Action';
+    return true;
+  });
+
+  const columns = [
+    {
+      title: '',
+      key: 'check',
+      width: 40,
+      render: () => <input type="checkbox" style={{ cursor: 'pointer' }} />,
+    },
+    {
+      title: 'ID ↕',
+      dataIndex: 'id',
+      key: 'id',
+      width: 100,
+      render: (id: string) => <Text type="secondary" style={{ fontSize: 12 }}>{id?.slice(0, 8)}</Text>,
+    },
+    {
+      title: 'NAME ↕',
+      dataIndex: 'name',
+      key: 'name',
+      render: (name: string, r: any) => (
+        <Text
+          strong
+          style={{ color: '#3b82f6', cursor: 'pointer', fontSize: 13 }}
+          onClick={() => navigate(`/data-hub/${r.id}`)}
+        >
+          {name}
+        </Text>
+      ),
+    },
+    {
+      title: 'SOURCE TYPE ↕',
+      dataIndex: 'source',
+      key: 'source',
+      render: (source: string) => (
+        <Space>
+          {source === 'Dynamic Action' ? <ThunderboltOutlined style={{ color: '#f59e0b' }} /> : <DatabaseOutlined style={{ color: '#6b7280' }} />}
+          {source}
+        </Space>
+      ),
+    },
+    {
+      title: 'OWNER',
+      key: 'owner',
+      render: (_: any, r: any) => {
+        const ownerName = r.adminUser?.fullName || 'Admin';
+        return (
+          <Space>
+            <Avatar size={24} style={{ background: '#ef4444', fontSize: 10 }}>
+              {ownerName.split(' ').map((w: string) => w[0]).join('').slice(0, 2)}
+            </Avatar>
+            <Text style={{ fontSize: 13 }}>{ownerName}</Text>
+          </Space>
+        );
+      },
+    },
+    {
+      title: 'CREATED DATE ↕',
+      dataIndex: 'createdAt',
+      key: 'createdAt',
+      render: (d: string) => <Text type="secondary" style={{ fontSize: 12 }}>{d ? new Date(d).toLocaleString('vi-VN') : '—'}</Text>,
+    },
+    {
+      title: 'UPDATED DATE ↕',
+      dataIndex: 'updatedAt',
+      key: 'updatedAt',
+      render: (d: string) => <Text type="secondary" style={{ fontSize: 12 }}>{d ? new Date(d).toLocaleString('vi-VN') : '—'}</Text>,
+    },
+    {
+      title: 'TABLES',
+      key: 'tables',
+      width: 80,
+      render: (_: any, r: any) => (
+        <Badge count={r.tables?.length || 0} style={{ background: '#6b7280' }} />
+      ),
+    },
+    {
+      title: 'ACTIONS',
+      key: 'actions',
+      width: 130,
+      render: (_: any, r: any) => (
+        <Space>
+          <Tooltip title="View Data">
+            <Button type="text" size="small" icon={<EyeOutlined />} onClick={() => navigate(`/data-hub/${r.id}`)} />
+          </Tooltip>
+          <Tooltip title="Edit">
+            <Button type="text" size="small" icon={<EditOutlined />} onClick={() => openEdit(r)} />
+          </Tooltip>
+          <Popconfirm title="Delete this Data Hub?" onConfirm={() => handleDelete(r.id)} okText="Delete" okType="danger">
+            <Tooltip title="Delete">
+              <Button type="text" size="small" danger icon={<DeleteOutlined />} />
+            </Tooltip>
+          </Popconfirm>
+        </Space>
+      ),
+    },
+  ];
 
   return (
     <div style={{ display: 'flex', gap: 0 }}>
@@ -120,19 +206,18 @@ export default function DataHubPage() {
       <div style={{ flex: 1, padding: '0 0 0 24px' }}>
         {activeTab === 'all' ? (
           <>
-            {/* Tabs */}
             <Tabs
-              defaultActiveKey="all"
+              activeKey={innerTab}
+              onChange={setInnerTab}
               items={[
-                { key: 'all', label: 'Tất cả' },
+                { key: 'all', label: 'All' },
                 { key: 'dynamic', label: 'Data Dynamic Action' },
-                { key: 'add', label: '+' },
               ]}
               tabBarExtraContent={
                 <Space>
-                  <Input placeholder="Tìm theo tên DataHub..." prefix={<SearchOutlined />} style={{ width: 240, borderRadius: 8 }} />
+                  <Input placeholder="Search Data Hub by name..." prefix={<SearchOutlined />} style={{ width: 240, borderRadius: 8 }} />
                   <Button icon={<SettingsIcon />} />
-                  <Button type="primary" icon={<PlusOutlined />}>Tạo mới</Button>
+                  <Button type="primary" icon={<PlusOutlined />} onClick={openCreate}>Create New</Button>
                 </Space>
               }
               style={{ marginBottom: 0 }}
@@ -140,16 +225,11 @@ export default function DataHubPage() {
 
             {/* Filters */}
             <Space style={{ marginBottom: 16 }}>
-              <Button icon={<FilterOutlined />} style={{ borderRadius: 8 }}>Bộ lọc</Button>
+              <Button icon={<FilterOutlined />} style={{ borderRadius: 8 }}>Filter</Button>
               <Select defaultValue="all" style={{ width: 140 }} options={[
-                { value: 'all', label: 'Loại nguồn' },
-                { value: 'manual', label: 'Thủ công' },
+                { value: 'all', label: 'Source Type' },
+                { value: 'manual', label: 'Manual' },
                 { value: 'dynamic', label: 'Dynamic Action' },
-              ]} />
-              <Select defaultValue="all" style={{ width: 120 }} options={[
-                { value: 'all', label: 'Sở hữu' },
-                { value: 'admin', label: 'Admin' },
-                { value: 'trang', label: 'Ms Trang' },
               ]} />
             </Space>
 
@@ -157,17 +237,39 @@ export default function DataHubPage() {
             <Card variant="outlined" style={{ borderRadius: 10, borderColor: '#e5e7eb' }} styles={{ body: { padding: 0 } }}>
               <Table
                 columns={columns}
-                dataSource={dataHubEntries}
+                dataSource={displayedHubs}
                 rowKey="id"
-                pagination={{ pageSize: 12, showTotal: (total) => `${total} mục` }}
+                pagination={{ pageSize: 12, showTotal: (total) => `${total} items` }}
+                locale={{ emptyText: 'No Data Hubs yet. Click "Create New" to add one.' }}
               />
             </Card>
+
+            {/* Create / Edit Modal */}
+            <Modal
+              title={editingHub ? 'Edit Data Hub' : 'Create Data Hub'}
+              open={isModalVisible}
+              onCancel={() => { setIsModalVisible(false); setEditingHub(null); form.resetFields(); }}
+              onOk={() => form.submit()}
+              okText={editingHub ? 'Save Changes' : 'Create'}
+            >
+              <Form form={form} layout="vertical" onFinish={handleSave}>
+                <Form.Item name="name" label="Hub Name" rules={[{ required: true }]}>
+                  <Input placeholder="e.g. Q3 Potential Customers" />
+                </Form.Item>
+                <Form.Item name="source" label="Source Type" rules={[{ required: true }]} initialValue="Manual">
+                  <Select options={[
+                    { value: 'Manual', label: 'Manual' },
+                    { value: 'Dynamic Action', label: 'Dynamic Action' }
+                  ]} />
+                </Form.Item>
+              </Form>
+            </Modal>
           </>
         ) : (
           <div>
             <Title level={4} style={{ margin: '0 0 16px', fontWeight: 700 }}>Export Management</Title>
             <Card variant="outlined" style={{ borderRadius: 10, borderColor: '#e5e7eb' }}>
-              <Text type="secondary">Quản lý các bản xuất dữ liệu. Tính năng đang được phát triển.</Text>
+              <Text type="secondary">Manage data exports. Feature under development.</Text>
             </Card>
           </div>
         )}

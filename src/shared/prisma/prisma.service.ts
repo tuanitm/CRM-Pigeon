@@ -68,6 +68,17 @@ export class PrismaService implements OnModuleInit, OnModuleDestroy {
   get auditLog() { return this._client.auditLog; }
   get systemConfig() { return this._client.systemConfig; }
 
+  // Data Hub & Dynamic Action models
+  get dataHub() { return this._client.dataHub; }
+  get dataHubTable() { return this._client.dataHubTable; }
+  get dataHubColumn() { return this._client.dataHubColumn; }
+  get dataHubRecord() { return this._client.dataHubRecord; }
+  get dynamicAction() { return this._client.dynamicAction; }
+  get dynamicActionPage() { return this._client.dynamicActionPage; }
+  get dynamicActionComponent() { return this._client.dynamicActionComponent; }
+  get zaloOA() { return this._client.zaloOA; }
+  get zaloMiniApp() { return this._client.zaloMiniApp; }
+
   // Models with snake_case names (from db pull)
   get campaign_control_group() { return this._client.campaign_control_group; }
   get checklist_definition() { return this._client.checklist_definition; }

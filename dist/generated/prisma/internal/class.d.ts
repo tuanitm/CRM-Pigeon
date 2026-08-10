@@ -231,5 +231,32 @@ export interface PrismaClient<in LogOpts extends Prisma.LogLevel = never, in out
     get systemConfig(): Prisma.SystemConfigDelegate<ExtArgs, {
         omit: OmitOpts;
     }>;
+    get dataHub(): Prisma.DataHubDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
+    get dynamicAction(): Prisma.DynamicActionDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
+    get dynamicActionPage(): Prisma.DynamicActionPageDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
+    get dynamicActionComponent(): Prisma.DynamicActionComponentDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
+    get dataHubTable(): Prisma.DataHubTableDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
+    get dataHubColumn(): Prisma.DataHubColumnDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
+    get dataHubRecord(): Prisma.DataHubRecordDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
+    get zaloOA(): Prisma.ZaloOADelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
+    get zaloMiniApp(): Prisma.ZaloMiniAppDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
 }
 export declare function getPrismaClientClass(): PrismaClientConstructor;

@@ -20,6 +20,7 @@ import {
   MailOutlined,
   TrophyOutlined,
   QuestionCircleOutlined,
+  MessageOutlined,
 } from '@ant-design/icons';
 import { BrowserRouter, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 
@@ -33,8 +34,12 @@ import LoyaltyPage from './pages/LoyaltyPage';
 import DataHubPage from './pages/DataHubPage';
 import IntegrationDataPage from './pages/IntegrationDataPage';
 import GamificationPage from './pages/GamificationPage';
+import DataHubDetailPage from './pages/DataHubDetailPage';
 import DynamicActionPage from './pages/DynamicActionPage';
+import DynamicActionDetailPage from './pages/DynamicActionDetailPage';
 import StoragePage from './pages/StoragePage';
+import ZaloOAPage from './pages/ZaloOAPage';
+import ZaloMiniAppPage from './pages/ZaloMiniAppPage';
 
 const { Header, Sider, Content } = Layout;
 const { Text } = Typography;
@@ -44,10 +49,12 @@ const menuItems = [
   { key: '/automation', icon: <RobotOutlined />, label: 'Automation' },
   { key: '/customer360', icon: <UserOutlined />, label: 'Customer 360' },
   { key: '/data-hub', icon: <DatabaseOutlined />, label: 'Data Hub' },
+  { key: '/dynamic-action', icon: <ThunderboltOutlined />, label: 'Dynamic Action' },
   { key: '/segments', icon: <TeamOutlined />, label: 'Segment' },
   { key: '/integration', icon: <ApiOutlined />, label: 'Integration Data' },
+  { key: '/zalo-mini-app', icon: <AppstoreOutlined />, label: 'Zalo Mini App' },
+  { key: '/zalo-oa', icon: <MessageOutlined />, label: 'Zalo OA' },
   { key: '/gamification', icon: <TrophyOutlined />, label: 'Gamification' },
-  { key: '/dynamic-action', icon: <ThunderboltOutlined />, label: 'Dynamic Action' },
   { key: '/storage', icon: <CloudOutlined />, label: 'Storage' },
   { key: '/loyalty', icon: <GiftOutlined />, label: 'Loyalty' },
   { key: '/settings', icon: <SettingOutlined />, label: 'Cài đặt' },
@@ -284,9 +291,13 @@ function AppLayout() {
             <Route path="/automation" element={<AutomationPage />} />
             <Route path="/loyalty" element={<LoyaltyPage />} />
             <Route path="/data-hub" element={<DataHubPage />} />
+            <Route path="/data-hub/:id" element={<DataHubDetailPage />} />
             <Route path="/integration" element={<IntegrationDataPage />} />
+            <Route path="/zalo-mini-app" element={<ZaloMiniAppPage />} />
+            <Route path="/zalo-oa" element={<ZaloOAPage />} />
             <Route path="/gamification" element={<GamificationPage />} />
             <Route path="/dynamic-action" element={<DynamicActionPage />} />
+            <Route path="/dynamic-action/:id" element={<DynamicActionDetailPage />} />
             <Route path="/storage" element={<StoragePage />} />
           </Routes>
         </Content>

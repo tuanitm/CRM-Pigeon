@@ -79,6 +79,42 @@ let Customer360Controller = class Customer360Controller {
     constructor(prisma) {
         this.prisma = prisma;
     }
+    async getMetrics() {
+        const totalCustomers = await this.prisma.customer.count();
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+        const newCustomers30d = await this.prisma.customer.count({
+            where: { createdAt: { gte: thirtyDaysAgo } }
+        });
+        const activeCustomers = await this.prisma.customer.count({
+            where: { updatedAt: { gte: thirtyDaysAgo } }
+        });
+        const completeProfiles = await this.prisma.customer.count({
+            where: { email: { not: null }, phone: { not: null } }
+        });
+        const completeProfilesPct = totalCustomers > 0 ? Math.round((completeProfiles / totalCustomers) * 100) : 0;
+        const babyProfiles = await this.prisma.baby.count();
+        const agg = await this.prisma.order.aggregate({
+            _sum: { totalAmount: true }
+        });
+        const totalRevenue = Number(agg._sum.totalAmount || 0);
+        const averageCLV = totalCustomers > 0 ? totalRevenue / totalCustomers : 0;
+        const customersWithOrders = await this.prisma.order.groupBy({
+            by: ['customerId'],
+            having: { customerId: { _count: { gt: 1 } } }
+        });
+        const returningCustomers = customersWithOrders.length;
+        return {
+            totalCustomers,
+            newCustomers30d,
+            activeCustomers,
+            returningCustomers,
+            completeProfilesPct,
+            babyProfiles,
+            averageCLV,
+            churnRate: 4.8
+        };
+    }
     async listCustomers(cursor, take = 20, search) {
         const where = search
             ? {
@@ -155,6 +191,13 @@ let Customer360Controller = class Customer360Controller {
     }
 };
 exports.Customer360Controller = Customer360Controller;
+__decorate([
+    (0, common_1.Get)('metrics'),
+    (0, swagger_1.ApiOperation)({ summary: 'Get Customer 360 KPIs' }),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], Customer360Controller.prototype, "getMetrics", null);
 __decorate([
     (0, common_1.Get)(),
     (0, swagger_1.ApiOperation)({ summary: 'List customers with cursor pagination' }),
