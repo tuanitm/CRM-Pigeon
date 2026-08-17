@@ -13,17 +13,17 @@ export declare class JourneyController {
     listJourneys(): Promise<{
         id: string;
         createdAt: Date;
-        name: string;
         updatedAt: Date;
-        code: string;
-        description: string | null;
         status: string;
+        name: string;
+        version: number;
+        description: string | null;
+        code: string;
         graph: import("@prisma/client/runtime/client").JsonValue;
         triggerEvent: string | null;
         triggerSegmentId: string | null;
         entryConditions: import("@prisma/client/runtime/client").JsonValue | null;
         exitConditions: import("@prisma/client/runtime/client").JsonValue | null;
-        version: number;
         hasControlGroup: boolean;
         controlGroupPct: import("@prisma/client-runtime-utils").Decimal | null;
     }[]>;

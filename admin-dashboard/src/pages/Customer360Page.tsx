@@ -3,12 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import {
   Card, Typography, Row, Col, Statistic, Tag, Space, Table, Avatar,
   Input, Button, Badge, Descriptions, Tabs, Empty, Timeline, Select,
-  Tooltip, Progress, Modal, Form, DatePicker, message,
+  Tooltip, Progress, Modal, Form, DatePicker, message, Divider,
 } from 'antd';
 import {
   UserOutlined, SearchOutlined, EyeOutlined, PhoneOutlined,
   GiftOutlined, ReloadOutlined, ArrowUpOutlined, ArrowDownOutlined,
-  MailOutlined, ShoppingCartOutlined, HeartOutlined, LineChartOutlined, PlusOutlined,
+  MailOutlined, ShoppingCartOutlined, HeartOutlined, LineChartOutlined, PlusOutlined, DeleteOutlined,
 } from '@ant-design/icons';
 import { customerApi } from '../services/api';
 import dayjs from 'dayjs';
@@ -91,6 +91,10 @@ export default function Customer360Page() {
         ...selectedCustomer,
         dateOfBirth: selectedCustomer.dateOfBirth ? dayjs(selectedCustomer.dateOfBirth) : undefined,
         address: selectedCustomer.addresses?.[0]?.addressLine1 || '',
+        babies: selectedCustomer.babies?.map((b: any) => ({
+          ...b,
+          dateOfBirth: b.dateOfBirth ? dayjs(b.dateOfBirth) : undefined,
+        })),
       });
     }
     setModalOpen(true);
@@ -102,6 +106,10 @@ export default function Customer360Page() {
       const payload = {
         ...values,
         dateOfBirth: values.dateOfBirth ? values.dateOfBirth.format('YYYY-MM-DD') : undefined,
+        babies: values.babies?.map((b: any) => ({
+          ...b,
+          dateOfBirth: b.dateOfBirth ? b.dateOfBirth.format('YYYY-MM-DD') : undefined,
+        })),
       };
       if (modalMode === 'create') {
         await customerApi.create(payload);
@@ -154,15 +162,7 @@ export default function Customer360Page() {
       key: 'source',
       render: (_: any, r: any) => <Tag>{r.source || r.registrationSource || 'Manual'}</Tag>,
     },
-    {
-      title: 'Tier',
-      key: 'tier',
-      render: (_: any, r: any) => {
-        const tier = r.tier || r.loyaltyAccount?.tierId || 'MEMBER';
-        const colors: Record<string, string> = { GOLD: 'gold', SILVER: 'default', MEMBER: 'blue' };
-        return <Tag color={colors[tier] || 'blue'}>{tier}</Tag>;
-      },
-    },
+
     {
       title: 'Points',
       key: 'points',
@@ -453,6 +453,56 @@ export default function Customer360Page() {
           <Form.Item name="notes" label="Notes">
             <Input.TextArea placeholder="Enter notes" rows={3} />
           </Form.Item>
+
+          <Divider style={{ margin: '12px 0' }} orientation="left">Children Information</Divider>
+          <Form.List name="babies">
+            {(fields, { add, remove }) => (
+              <>
+                {fields.map(({ key, name, ...restField }) => (
+                  <Card size="small" key={key} style={{ marginBottom: 12, background: '#f9fafb' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                      <Text strong>Child #{name + 1}</Text>
+                      <Button type="text" danger icon={<DeleteOutlined />} onClick={() => remove(name)} />
+                    </div>
+                    <Row gutter={12}>
+                      <Col span={12}>
+                        <Form.Item {...restField} name={[name, 'name']} label="Child Name" rules={[{ required: true, message: 'Missing name' }]}>
+                          <Input placeholder="Name" />
+                        </Form.Item>
+                      </Col>
+                      <Col span={12}>
+                        <Form.Item {...restField} name={[name, 'dateOfBirth']} label="Date of Birth" rules={[{ required: true, message: 'Missing date of birth' }]}>
+                          <DatePicker style={{ width: '100%' }} format="DD/MM/YYYY" />
+                        </Form.Item>
+                      </Col>
+                      <Col span={12}>
+                        <Form.Item {...restField} name={[name, 'gender']} label="Gender" rules={[{ required: true, message: 'Missing gender' }]}>
+                          <Select placeholder="Gender" allowClear>
+                            <Select.Option value="male">Male</Select.Option>
+                            <Select.Option value="female">Female</Select.Option>
+                          </Select>
+                        </Form.Item>
+                      </Col>
+                      <Col span={12}>
+                        <Form.Item {...restField} name={[name, 'stageCode']} label="Stage">
+                          <Select placeholder="Stage" allowClear>
+                            <Select.Option value="NEWBORN">Newborn</Select.Option>
+                            <Select.Option value="INFANT">Infant</Select.Option>
+                            <Select.Option value="TODDLER">Toddler</Select.Option>
+                          </Select>
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                  </Card>
+                ))}
+                <Form.Item>
+                  <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                    Add Child
+                  </Button>
+                </Form.Item>
+              </>
+            )}
+          </Form.List>
         </Form>
       </Modal>
     </>

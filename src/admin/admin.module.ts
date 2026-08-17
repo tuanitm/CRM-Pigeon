@@ -8,6 +8,10 @@ import { ZaloOAController } from './zalo-oa.controller';
 import { ZaloOAService } from './zalo-oa.service';
 import { ZaloMiniAppController } from './zalo-mini-app.controller';
 import { ZaloMiniAppService } from './zalo-mini-app.service';
+import { LoyaltyController } from './loyalty.controller';
+import { LoyaltyService } from './loyalty.service';
+import { ProductController } from './product.controller';
+import { ProductService } from './product.service';
 
 @Module({
   controllers: [
@@ -16,12 +20,16 @@ import { ZaloMiniAppService } from './zalo-mini-app.service';
     DynamicActionController,
     ZaloOAController,
     ZaloMiniAppController,
+    LoyaltyController,
+    ProductController,
   ],
   providers: [
     DataHubService,
     DynamicActionService,
     ZaloOAService,
     ZaloMiniAppService,
+    LoyaltyService,
+    ProductService,
   ],
 })
 export class AdminModule {}

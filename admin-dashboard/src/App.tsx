@@ -46,18 +46,53 @@ const { Text } = Typography;
 
 const menuItems = [
   { key: '/', icon: <DashboardOutlined />, label: 'Dashboard' },
-  { key: '/automation', icon: <RobotOutlined />, label: 'Automation' },
-  { key: '/customer360', icon: <UserOutlined />, label: 'Customer 360' },
-  { key: '/data-hub', icon: <DatabaseOutlined />, label: 'Data Hub' },
-  { key: '/dynamic-action', icon: <ThunderboltOutlined />, label: 'Dynamic Action' },
-  { key: '/segments', icon: <TeamOutlined />, label: 'Segment' },
-  { key: '/integration', icon: <ApiOutlined />, label: 'Integration Data' },
-  { key: '/zalo-mini-app', icon: <AppstoreOutlined />, label: 'Zalo Mini App' },
-  { key: '/zalo-oa', icon: <MessageOutlined />, label: 'Zalo OA' },
-  { key: '/gamification', icon: <TrophyOutlined />, label: 'Gamification' },
-  { key: '/storage', icon: <CloudOutlined />, label: 'Storage' },
-  { key: '/loyalty', icon: <GiftOutlined />, label: 'Loyalty' },
-  { key: '/settings', icon: <SettingOutlined />, label: 'Cài đặt' },
+  {
+    key: 'grp_audience',
+    icon: <TeamOutlined />,
+    label: 'Audience',
+    children: [
+      { key: '/customer360', label: 'Customer 360' },
+      { key: '/segments', label: 'Segments' },
+    ],
+  },
+  {
+    key: 'grp_engagement',
+    icon: <RobotOutlined />,
+    label: 'Engagement',
+    children: [
+      { key: '/automation', label: 'Automation Journeys' },
+      { key: '/dynamic-action', label: 'Dynamic Actions' },
+    ],
+  },
+  {
+    key: 'grp_loyalty',
+    icon: <GiftOutlined />,
+    label: 'Loyalty & Rewards',
+    children: [
+      { key: '/loyalty', label: 'Loyalty Program' },
+      { key: '/gamification', label: 'Gamification' },
+    ],
+  },
+  {
+    key: 'grp_channels',
+    icon: <MessageOutlined />,
+    label: 'Channels',
+    children: [
+      { key: '/zalo-oa', label: 'Zalo OA' },
+      { key: '/zalo-mini-app', label: 'Zalo Mini App' },
+    ],
+  },
+  {
+    key: 'grp_data',
+    icon: <DatabaseOutlined />,
+    label: 'Data & Infrastructure',
+    children: [
+      { key: '/data-hub', label: 'Data Hub' },
+      { key: '/integration', label: 'Integrations' },
+      { key: '/storage', label: 'Storage' },
+    ],
+  },
+  { key: '/settings', icon: <SettingOutlined />, label: 'Settings' },
 ];
 
 function AppLayout() {
@@ -68,10 +103,19 @@ function AppLayout() {
   const getSelectedKeys = () => {
     const path = location.pathname;
     if (path.startsWith('/automation')) return ['/automation'];
+    if (path.startsWith('/data-hub')) return ['/data-hub'];
+    if (path.startsWith('/dynamic-action')) return ['/dynamic-action'];
+    if (path.startsWith('/customer360')) return ['/customer360'];
     return [path];
   };
 
   const getOpenKeys = () => {
+    const path = location.pathname;
+    if (path.startsWith('/customer360') || path.startsWith('/segments')) return ['grp_audience'];
+    if (path.startsWith('/automation') || path.startsWith('/dynamic-action')) return ['grp_engagement'];
+    if (path.startsWith('/loyalty') || path.startsWith('/gamification')) return ['grp_loyalty'];
+    if (path.startsWith('/zalo')) return ['grp_channels'];
+    if (path.startsWith('/data-hub') || path.startsWith('/integration') || path.startsWith('/storage')) return ['grp_data'];
     return [];
   };
 

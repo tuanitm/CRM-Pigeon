@@ -1,131 +1,612 @@
-import React from 'react';
-import { Card, Typography, Table, Tag, Space, Row, Col, Statistic, Descriptions, Divider, Progress } from 'antd';
-import { GiftOutlined, TrophyOutlined, StarOutlined, CrownOutlined, FireOutlined } from '@ant-design/icons';
+import React, { useState, useEffect } from 'react';
+import {
+  Card, Typography, Table, Tag, Space, Row, Col, Statistic, Descriptions,
+  Divider, Button, Modal, Form, Input, InputNumber, Switch, Select,
+  Tabs, Tooltip, Popconfirm, message, Badge, Empty,
+} from 'antd';
+import {
+  GiftOutlined, TrophyOutlined, StarOutlined, CrownOutlined,
+  FireOutlined, PlusOutlined, EditOutlined, DeleteOutlined,
+  HistoryOutlined, ShoppingOutlined, ReloadOutlined,
+} from '@ant-design/icons';
+import { loyaltyApi, customerApi } from '../services/api';
 
 const { Title, Text } = Typography;
 
-const tierConfig = [
-  { code: 'MEMBER', name: 'Member', order: 1, minSpend: 0, minMonths: 0, multiplier: 1.0, members: 9_200, color: '#8c8c8c', benefits: ['Earn 1 pt / 10,000₫', 'Birthday reward'] },
-  { code: 'SILVER', name: 'Silver', order: 2, minSpend: 2_000_000, minMonths: 2, multiplier: 1.5, members: 2_450, color: '#c0c0c0', benefits: ['1.5x point multiplier', 'Exclusive offers', 'Free shipping on orders > 500k'] },
-  { code: 'GOLD', name: 'Gold', order: 3, minSpend: 5_000_000, minMonths: 4, multiplier: 2.0, members: 800, color: '#FFD700', benefits: ['2x point multiplier', 'VIP exclusive access', 'Free shipping always', 'Expert consultations'] },
-];
-
-const earnRules = [
-  { source: 'purchase', name: 'Purchase', formula: '1 pt / 10,000 VND', multiplier: true, active: true },
-  { source: 'qr_scan', name: 'QR Scan', formula: '50 pts fixed', multiplier: true, active: true },
-  { source: 'profile_completion', name: 'Profile Complete', formula: '100 pts once', multiplier: false, active: true },
-  { source: 'review', name: 'Product Review', formula: '20-50 pts', multiplier: true, active: true },
-  { source: 'milestone', name: 'Milestone', formula: 'per milestone config', multiplier: false, active: true },
-  { source: 'referral', name: 'Referral', formula: '200 pts referrer / 100 pts referred', multiplier: false, active: true },
-  { source: 'quiz', name: 'Quiz', formula: '30 pts default', multiplier: true, active: true },
-  { source: 'warranty', name: 'Warranty Reg', formula: '50 pts', multiplier: true, active: true },
-];
-
-const rewardsData = [
-  { code: 'DISC_10', name: '10% Discount Coupon', points: 500, stock: 100, active: true },
-  { code: 'DISC_20', name: '20% Discount Coupon', points: 1000, stock: 50, active: true },
-  { code: 'FREE_SHIP', name: 'Free Shipping', points: 200, stock: null, active: true },
-  { code: 'GWP_BOTTLE', name: 'Gift: PIGEON Bottle', points: 2000, stock: 25, active: true },
-  { code: 'GWP_SET', name: 'Gift: Newborn Care Set', points: 5000, stock: 10, active: true },
-];
+const TIER_COLORS: Record<string, string> = {
+  MEMBER: '#8c8c8c', SILVER: '#c0c0c0', GOLD: '#FFD700',
+  PLATINUM: '#e5e4e2', DIAMOND: '#b9f2ff', VIP: '#ff4d4f',
+};
 
 export default function LoyaltyPage() {
+  const [tiers, setTiers] = useState<any[]>([]);
+  const [earnRules, setEarnRules] = useState<any[]>([]);
+  const [rewards, setRewards] = useState<any[]>([]);
+  const [stats, setStats] = useState<any>({});
+  const [transactions, setTransactions] = useState<any[]>([]);
+  const [redemptions, setRedemptions] = useState<any[]>([]);
+  const [activeTab, setActiveTab] = useState('overview');
+
+  // Modal states
+  const [tierModal, setTierModal] = useState(false);
+  const [editingTier, setEditingTier] = useState<any>(null);
+  const [ruleModal, setRuleModal] = useState(false);
+  const [editingRule, setEditingRule] = useState<any>(null);
+  const [rewardModal, setRewardModal] = useState(false);
+  const [editingReward, setEditingReward] = useState<any>(null);
+
+  const [tierForm] = Form.useForm();
+  const [ruleForm] = Form.useForm();
+  const [rewardForm] = Form.useForm();
+
+  const loadAll = async () => {
+    try {
+      const [t, r, rw, s, tx, rd] = await Promise.all([
+        loyaltyApi.listTiers(),
+        loyaltyApi.listEarnRules(),
+        loyaltyApi.listRewards(),
+        loyaltyApi.getStats(),
+        loyaltyApi.listTransactions(30),
+        loyaltyApi.listRedemptions(30),
+      ]);
+      setTiers(t); setEarnRules(r); setRewards(rw);
+      setStats(s); setTransactions(tx); setRedemptions(rd);
+    } catch (err) { console.error(err); }
+  };
+
+  useEffect(() => { loadAll(); }, []);
+
+  // ─── Tier CRUD ────────────────────────────────────────
+  const openTierModal = (tier?: any) => {
+    setEditingTier(tier || null);
+    if (tier) {
+      tierForm.setFieldsValue({
+        tierCode: tier.tierCode, tierName: tier.tierName, tierOrder: tier.tierOrder,
+        minNetSpend: Number(tier.minNetSpend), minDistinctMonths: tier.minDistinctMonths,
+        pointsMultiplier: Number(tier.pointsMultiplier), isDefault: tier.isDefault,
+      });
+    } else { tierForm.resetFields(); }
+    setTierModal(true);
+  };
+
+  const saveTier = async (v: any) => {
+    try {
+      if (editingTier) { await loyaltyApi.updateTier(editingTier.id, v); message.success('Tier updated'); }
+      else { await loyaltyApi.createTier(v); message.success('Tier created'); }
+      setTierModal(false); tierForm.resetFields(); loadAll();
+    } catch { message.error('Failed to save tier'); }
+  };
+
+  const deleteTier = async (id: string) => {
+    try { await loyaltyApi.deleteTier(id); message.success('Tier deleted'); loadAll(); }
+    catch (err: any) {
+      let m = 'Failed to delete';
+      try { m = JSON.parse(err.message?.split(': ').slice(1).join(': ')).message || m; } catch {}
+      message.error(m);
+    }
+  };
+
+  // ─── Earn Rule CRUD ───────────────────────────────────
+  const openRuleModal = (rule?: any) => {
+    setEditingRule(rule || null);
+    if (rule) {
+      ruleForm.setFieldsValue({
+        source: rule.source, ruleName: rule.ruleName,
+        pointsFormulaStr: JSON.stringify(rule.pointsFormula),
+        tierMultiplierApplies: rule.tierMultiplierApplies, isActive: rule.isActive,
+      });
+    } else { ruleForm.resetFields(); }
+    setRuleModal(true);
+  };
+
+  const saveRule = async (v: any) => {
+    try {
+      const data = { ...v, pointsFormula: JSON.parse(v.pointsFormulaStr || '{}') };
+      delete data.pointsFormulaStr;
+      if (editingRule) { await loyaltyApi.updateEarnRule(editingRule.id, data); message.success('Rule updated'); }
+      else { await loyaltyApi.createEarnRule(data); message.success('Rule created'); }
+      setRuleModal(false); ruleForm.resetFields(); loadAll();
+    } catch { message.error('Failed to save rule'); }
+  };
+
+  const deleteRule = async (id: string) => {
+    try { await loyaltyApi.deleteEarnRule(id); message.success('Rule deleted'); loadAll(); }
+    catch { message.error('Failed to delete'); }
+  };
+
+  // ─── Reward CRUD ──────────────────────────────────────
+  const openRewardModal = (reward?: any) => {
+    setEditingReward(reward || null);
+    if (reward) {
+      rewardForm.setFieldsValue({
+        code: reward.code, name: reward.name, description: reward.description,
+        category: reward.category, pointsCost: reward.pointsCost,
+        stock: reward.stock, isActive: reward.isActive,
+      });
+    } else { rewardForm.resetFields(); }
+    setRewardModal(true);
+  };
+
+  const saveReward = async (v: any) => {
+    try {
+      if (editingReward) { await loyaltyApi.updateReward(editingReward.id, v); message.success('Reward updated'); }
+      else { await loyaltyApi.createReward(v); message.success('Reward created'); }
+      setRewardModal(false); rewardForm.resetFields(); loadAll();
+    } catch { message.error('Failed to save reward'); }
+  };
+
+  const deleteReward = async (id: string) => {
+    try { await loyaltyApi.deleteReward(id); message.success('Reward deleted'); loadAll(); }
+    catch (err: any) {
+      let m = 'Failed to delete';
+      try { m = JSON.parse(err.message?.split(': ').slice(1).join(': ')).message || m; } catch {}
+      message.error(m);
+    }
+  };
+
+  // ─── Table columns ────────────────────────────────────
+  const earnRuleCols = [
+    { title: 'Source', dataIndex: 'source', key: 'source', render: (t: string) => <Tag>{t}</Tag> },
+    { title: 'Rule Name', dataIndex: 'ruleName', key: 'ruleName', render: (t: string) => <Text strong>{t}</Text> },
+    { title: 'Formula', dataIndex: 'pointsFormula', key: 'pf', render: (f: any) => <Text type="secondary" style={{ fontSize: 11 }}>{JSON.stringify(f)}</Text> },
+    { title: 'Tier ×', dataIndex: 'tierMultiplierApplies', key: 'tm', width: 70, render: (v: boolean) => v ? <Tag color="blue">Yes</Tag> : <Tag>No</Tag> },
+    { title: 'Active', dataIndex: 'isActive', key: 'act', width: 80, render: (v: boolean) => <Tag color={v ? 'success' : 'default'}>{v ? 'Active' : 'Off'}</Tag> },
+    {
+      title: '', key: 'actions', width: 80,
+      render: (_: any, r: any) => (
+        <Space>
+          <Tooltip title="Edit"><Button type="text" size="small" icon={<EditOutlined />} onClick={() => openRuleModal(r)} /></Tooltip>
+          <Popconfirm title="Delete?" onConfirm={() => deleteRule(r.id)} okType="danger" okText="Delete">
+            <Button type="text" size="small" danger icon={<DeleteOutlined />} />
+          </Popconfirm>
+        </Space>
+      ),
+    },
+  ];
+
+  const rewardCols = [
+    { title: 'Code', dataIndex: 'code', key: 'code', render: (c: string) => <Tag>{c}</Tag> },
+    { title: 'Reward', dataIndex: 'name', key: 'name', render: (t: string) => <Text strong>{t}</Text> },
+    { title: 'Category', dataIndex: 'category', key: 'cat', render: (c: string) => c ? <Tag color="blue">{c}</Tag> : '—' },
+    { title: 'Cost', dataIndex: 'pointsCost', key: 'pts', render: (p: number) => <Tag color="gold">{p?.toLocaleString()} pts</Tag> },
+    { title: 'Stock', dataIndex: 'stock', key: 'stock', render: (s: number | null) => s !== null && s !== undefined ? s : '∞' },
+    { title: 'Redeemed', key: 'rd', render: (_: any, r: any) => <Badge count={r._count?.reward_redemption || 0} style={{ background: '#6b7280' }} /> },
+    { title: 'Active', dataIndex: 'isActive', key: 'act', width: 80, render: (v: boolean) => <Tag color={v ? 'success' : 'default'}>{v ? 'Active' : 'Off'}</Tag> },
+    {
+      title: '', key: 'actions', width: 80,
+      render: (_: any, r: any) => (
+        <Space>
+          <Tooltip title="Edit"><Button type="text" size="small" icon={<EditOutlined />} onClick={() => openRewardModal(r)} /></Tooltip>
+          <Popconfirm title="Delete?" onConfirm={() => deleteReward(r.id)} okType="danger" okText="Delete">
+            <Button type="text" size="small" danger icon={<DeleteOutlined />} />
+          </Popconfirm>
+        </Space>
+      ),
+    },
+  ];
+
+  const txCols = [
+    { title: 'Customer', key: 'cust', render: (_: any, r: any) => <Text>{r.customer?.fullName || r.customerId?.slice(0, 8)}</Text> },
+    { title: 'Type', dataIndex: 'type', key: 'type', render: (t: string) => <Tag color={t === 'earn' ? 'green' : t === 'redeem' ? 'orange' : 'default'}>{t}</Tag> },
+    { title: 'Source', dataIndex: 'source', key: 'source', render: (s: string) => <Tag>{s}</Tag> },
+    { title: 'Points', dataIndex: 'points', key: 'pts', render: (p: number) => <Text strong style={{ color: p > 0 ? '#22c55e' : '#ef4444' }}>{p > 0 ? '+' : ''}{p?.toLocaleString()}</Text> },
+    { title: 'Balance After', dataIndex: 'balanceAfter', key: 'ba', render: (b: number) => b?.toLocaleString() },
+    { title: 'Date', dataIndex: 'createdAt', key: 'date', render: (d: string) => <Text type="secondary" style={{ fontSize: 11 }}>{d ? new Date(d).toLocaleString('vi-VN') : '—'}</Text> },
+  ];
+
+  const rdCols = [
+    { title: 'Customer', key: 'cust', render: (_: any, r: any) => <Text>{r.customer?.fullName || '—'}</Text> },
+    { title: 'Reward', key: 'reward', render: (_: any, r: any) => <Text strong>{r.reward_catalog?.name || '—'}</Text> },
+    { title: 'Points', dataIndex: 'pointsSpent', key: 'pts', render: (p: number) => <Tag color="gold">{p?.toLocaleString()} pts</Tag> },
+    { title: 'Status', dataIndex: 'status', key: 'st', render: (s: string) => <Tag color={s === 'fulfilled' ? 'success' : s === 'pending' ? 'processing' : 'default'}>{s === 'pending' ? 'claimed' : s}</Tag> },
+    { title: 'Date', dataIndex: 'createdAt', key: 'date', render: (d: string) => <Text type="secondary" style={{ fontSize: 11 }}>{d ? new Date(d).toLocaleString('vi-VN') : '—'}</Text> },
+  ];
+
   return (
-    <div>
-      <Title level={3} style={{ margin: '0 0 20px', fontWeight: 700 }}>Loyalty Program</Title>
+    <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+        <div>
+          <Title level={3} style={{ margin: 0 }}>Loyalty Program</Title>
+          <Text type="secondary">Manage tiers, earning rules, reward catalog, and track activity</Text>
+        </div>
+        <Button icon={<ReloadOutlined />} onClick={loadAll}>Refresh</Button>
+      </div>
 
-      {/* Tier Cards */}
-      <Row gutter={[12, 12]} style={{ marginBottom: 24 }}>
-        {tierConfig.map((tier) => (
-          <Col span={8} key={tier.code}>
-            <Card
-              variant="outlined"
-              style={{
-                borderRadius: 10,
-                borderColor: '#e5e7eb',
-                borderTop: `4px solid ${tier.color}`,
-              }}
-            >
-              <Space align="center" style={{ marginBottom: 16 }}>
-                <CrownOutlined style={{ fontSize: 24, color: tier.color }} />
-                <Title level={4} style={{ margin: 0 }}>{tier.name}</Title>
-              </Space>
-              <Descriptions column={1} size="small">
-                <Descriptions.Item label="Min Spend">{tier.minSpend > 0 ? `${(tier.minSpend / 1_000_000).toFixed(0)}M ₫` : 'None'}</Descriptions.Item>
-                <Descriptions.Item label="Min Months">{tier.minMonths || 'None'}</Descriptions.Item>
-                <Descriptions.Item label="Multiplier">{tier.multiplier}×</Descriptions.Item>
-                <Descriptions.Item label="Members">
-                  <Text strong style={{ fontSize: 16 }}>{tier.members.toLocaleString()}</Text>
-                </Descriptions.Item>
-              </Descriptions>
-              <Divider style={{ margin: '12px 0' }} />
-              <Space orientation="vertical" size={4}>
-                {tier.benefits.map((b, i) => (
-                  <Tag key={i} color="blue" style={{ margin: 0 }}>✓ {b}</Tag>
-                ))}
-              </Space>
-            </Card>
-          </Col>
-        ))}
-      </Row>
-
-      {/* Earn Rules + Rewards */}
-      <Row gutter={[12, 12]}>
-        <Col span={12}>
-          <Card title={<Space><FireOutlined /> 8 Earning Sources</Space>} variant="outlined" style={{ borderRadius: 10, borderColor: '#e5e7eb' }}>
-            <Table
-              columns={[
-                { title: 'Source', dataIndex: 'name', key: 'name', render: (t: string) => <Text strong>{t}</Text> },
-                { title: 'Formula', dataIndex: 'formula', key: 'formula' },
-                { title: 'Tier ×', dataIndex: 'multiplier', key: 'mult', render: (v: boolean) => v ? <Tag color="blue">Yes</Tag> : <Tag>No</Tag> },
-                { title: 'Active', dataIndex: 'active', key: 'active', render: (v: boolean) => v ? <Tag color="success">Active</Tag> : <Tag>Inactive</Tag> },
-              ]}
-              dataSource={earnRules}
-              rowKey="source"
-              pagination={false}
-              size="small"
-            />
+      {/* Stats Cards */}
+      <Row gutter={16} style={{ marginBottom: 24 }}>
+        <Col span={6}>
+          <Card variant="outlined" style={{ borderRadius: 12, borderColor: '#e5e7eb' }}>
+            <Statistic title={<Text type="secondary" style={{ fontSize: 12 }}>Total Accounts</Text>}
+              value={stats.totalAccounts || 0} prefix={<StarOutlined style={{ color: '#3b82f6' }} />}
+              valueStyle={{ color: '#3b82f6', fontWeight: 700 }} />
           </Card>
         </Col>
-        <Col span={12}>
-          <Card title={<Space><GiftOutlined /> Reward Catalog</Space>} variant="outlined" style={{ borderRadius: 10, borderColor: '#e5e7eb' }}>
-            <Table
-              columns={[
-                { title: 'Reward', dataIndex: 'name', key: 'name', render: (t: string) => <Text strong>{t}</Text> },
-                { title: 'Points', dataIndex: 'points', key: 'points', render: (p: number) => <Tag color="gold">{p.toLocaleString()} pts</Tag> },
-                { title: 'Stock', dataIndex: 'stock', key: 'stock', render: (s: number | null) => s !== null ? s : '∞' },
-                { title: 'Active', dataIndex: 'active', key: 'active', render: (v: boolean) => <Tag color={v ? 'success' : 'default'}>{v ? 'Active' : 'Inactive'}</Tag> },
-              ]}
-              dataSource={rewardsData}
-              rowKey="code"
-              pagination={false}
-              size="small"
-            />
+        <Col span={6}>
+          <Card variant="outlined" style={{ borderRadius: 12, borderColor: '#e5e7eb' }}>
+            <Statistic title={<Text type="secondary" style={{ fontSize: 12 }}>Points Circulating</Text>}
+              value={stats.totalPointsCirculating || 0} prefix={<FireOutlined style={{ color: '#f59e0b' }} />}
+              valueStyle={{ color: '#f59e0b', fontWeight: 700 }} />
+          </Card>
+        </Col>
+        <Col span={6}>
+          <Card variant="outlined" style={{ borderRadius: 12, borderColor: '#e5e7eb' }}>
+            <Statistic title={<Text type="secondary" style={{ fontSize: 12 }}>Points Redeemed</Text>}
+              value={stats.totalPointsRedeemed || 0} prefix={<GiftOutlined style={{ color: '#22c55e' }} />}
+              valueStyle={{ color: '#22c55e', fontWeight: 700 }} />
+          </Card>
+        </Col>
+        <Col span={6}>
+          <Card variant="outlined" style={{ borderRadius: 12, borderColor: '#e5e7eb' }}>
+            <Statistic title={<Text type="secondary" style={{ fontSize: 12 }}>Points Expired</Text>}
+              value={stats.totalPointsExpired || 0} prefix={<HistoryOutlined style={{ color: '#ef4444' }} />}
+              valueStyle={{ color: '#ef4444', fontWeight: 700 }} />
           </Card>
         </Col>
       </Row>
 
-      {/* Points Liability */}
-      <Card
-        title="Points Liability"
-        variant="outlined"
-        style={{ borderRadius: 10, borderColor: '#e5e7eb', marginTop: 16 }}
-      >
-        <Row gutter={24}>
-          <Col span={6}>
-            <Statistic title="Điểm lưu hành" value={1_245_000} prefix={<StarOutlined />} />
-          </Col>
-          <Col span={6}>
-            <Statistic title="Giá trị ước tính" value={124_500_000} suffix="₫" />
-          </Col>
-          <Col span={6}>
-            <Statistic title="Sắp hết hạn (30d)" value={45_200} styles={{ content: { color: '#f59e0b' } }} />
-          </Col>
-          <Col span={6}>
-            <Statistic title="Sắp hết hạn (90d)" value={128_000} styles={{ content: { color: '#ef4444' } }} />
-          </Col>
-        </Row>
+      {/* Main Tabs */}
+      <Card variant="outlined" style={{ borderRadius: 12, borderColor: '#e5e7eb' }} styles={{ body: { padding: 0 } }}>
+        <div style={{ padding: '0 16px' }}>
+          <Tabs activeKey={activeTab} onChange={setActiveTab} items={[
+            { key: 'overview', label: <Space><CrownOutlined />Tiers</Space> },
+            { key: 'rules', label: <Space><FireOutlined />Earn Rules<Badge count={earnRules.length} style={{ background: '#6b7280', fontSize: 10 }} size="small" /></Space> },
+            { key: 'rewards', label: <Space><GiftOutlined />Rewards<Badge count={rewards.length} style={{ background: '#6b7280', fontSize: 10 }} size="small" /></Space> },
+            { key: 'transactions', label: <Space><HistoryOutlined />Transactions</Space> },
+            { key: 'redemptions', label: <Space><ShoppingOutlined />Redemptions</Space> },
+            { key: 'fulfillment', label: <Space><GiftOutlined />Warehouse Fulfillment</Space> },
+          ]} />
+        </div>
+
+        {/* ─── Tiers Tab ──────────────────────────────── */}
+        {activeTab === 'overview' && (
+          <div style={{ padding: 16 }}>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 16 }}>
+              <Button type="primary" icon={<PlusOutlined />} onClick={() => openTierModal()}>Add Tier</Button>
+            </div>
+            {tiers.length === 0 ? (
+              <Empty description="No tiers configured"><Button type="primary" icon={<PlusOutlined />} onClick={() => openTierModal()}>Create First Tier</Button></Empty>
+            ) : (
+              <Row gutter={[12, 12]}>
+                {tiers.map((tier) => {
+                  const color = TIER_COLORS[tier.tierCode] || '#8c8c8c';
+                  return (
+                    <Col span={8} key={tier.id}>
+                      <Card variant="outlined" style={{ borderRadius: 10, borderColor: '#e5e7eb', borderTop: `4px solid ${color}` }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                          <Space align="center"><CrownOutlined style={{ fontSize: 22, color }} /><Title level={4} style={{ margin: 0 }}>{tier.tierName}</Title></Space>
+                          <Space>
+                            <Button type="text" size="small" icon={<EditOutlined />} onClick={() => openTierModal(tier)} />
+                            <Popconfirm title="Delete this tier?" onConfirm={() => deleteTier(tier.id)} okType="danger" okText="Delete">
+                              <Button type="text" size="small" danger icon={<DeleteOutlined />} />
+                            </Popconfirm>
+                          </Space>
+                        </div>
+                        <Descriptions column={1} size="small" style={{ marginTop: 12 }}>
+                          <Descriptions.Item label="Code"><Tag>{tier.tierCode}</Tag></Descriptions.Item>
+                          <Descriptions.Item label="Min Spend">{Number(tier.minNetSpend) > 0 ? `${(Number(tier.minNetSpend) / 1_000_000).toFixed(1)}M ₫` : 'None'}</Descriptions.Item>
+                          <Descriptions.Item label="Min Months">{tier.minDistinctMonths || 'None'}</Descriptions.Item>
+                          <Descriptions.Item label="Multiplier"><Tag color="blue">{Number(tier.pointsMultiplier)}×</Tag></Descriptions.Item>
+                          <Descriptions.Item label="Members"><Text strong style={{ fontSize: 16 }}>{tier._count?.accounts?.toLocaleString() || 0}</Text></Descriptions.Item>
+                        </Descriptions>
+                        {tier.isDefault && <Tag color="green" style={{ marginTop: 8 }}>Default Tier</Tag>}
+                      </Card>
+                    </Col>
+                  );
+                })}
+              </Row>
+            )}
+          </div>
+        )}
+
+        {/* ─── Earn Rules Tab ─────────────────────────── */}
+        {activeTab === 'rules' && (
+          <div style={{ padding: '0' }}>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '12px 16px' }}>
+              <Button type="primary" icon={<PlusOutlined />} onClick={() => openRuleModal()}>Add Rule</Button>
+            </div>
+            <Table columns={earnRuleCols} dataSource={earnRules} rowKey="id" size="small"
+              pagination={false}
+              locale={{ emptyText: <Empty description="No earn rules"><Button type="primary" icon={<PlusOutlined />} onClick={() => openRuleModal()}>Create First Rule</Button></Empty> }}
+            />
+          </div>
+        )}
+
+        {/* ─── Rewards Tab ────────────────────────────── */}
+        {activeTab === 'rewards' && (
+          <div style={{ padding: '0' }}>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '12px 16px' }}>
+              <Button type="primary" icon={<PlusOutlined />} onClick={() => openRewardModal()}>Add Reward</Button>
+            </div>
+            <Table columns={rewardCols} dataSource={rewards} rowKey="id" size="small"
+              pagination={{ pageSize: 10, showTotal: (t) => `${t} rewards`, size: 'small' }}
+              locale={{ emptyText: <Empty description="No rewards"><Button type="primary" icon={<PlusOutlined />} onClick={() => openRewardModal()}>Create First Reward</Button></Empty> }}
+            />
+          </div>
+        )}
+
+        {/* ─── Transactions Tab ───────────────────────── */}
+        {activeTab === 'transactions' && (
+          <Table columns={txCols} dataSource={transactions} rowKey="id" size="small"
+            pagination={{ pageSize: 15, showTotal: (t) => `${t} transactions`, size: 'small' }}
+            locale={{ emptyText: <Empty description="No transactions yet" /> }}
+          />
+        )}
+
+        {/* ─── Redemptions Tab ────────────────────────── */}
+        {activeTab === 'redemptions' && (
+          <div style={{ padding: 16 }}>
+            <Table columns={rdCols} dataSource={redemptions} rowKey="id" pagination={{ pageSize: 15 }} />
+          </div>
+        )}
+
+        {/* ─── Fulfillment Tab ────────────────────────────── */}
+        {activeTab === 'fulfillment' && (
+          <div style={{ padding: 16 }}>
+            {(() => {
+              const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+
+              const handleFulfillSingle = async (customerId: string, redemptionId: string) => {
+                try {
+                  await customerApi.updateRewardStatus(customerId, redemptionId, 'fulfilled');
+                  message.success('Item marked as fulfilled');
+                  loadData();
+                } catch (e: any) {
+                  message.error('Failed to fulfill item');
+                }
+              };
+
+              const handleBatchFulfill = async () => {
+                if (selectedRowKeys.length === 0) return;
+                try {
+                  const itemsToFulfill = redemptions.filter((r: any) => selectedRowKeys.includes(r.id) && r.status === 'pending');
+                  await Promise.all(itemsToFulfill.map((item: any) => 
+                    customerApi.updateRewardStatus(item.customerId, item.id, 'fulfilled')
+                  ));
+                  message.success(`Batch fulfilled ${itemsToFulfill.length} items successfully`);
+                  setSelectedRowKeys([]);
+                  loadData();
+                } catch (e: any) {
+                  message.error(e.message || 'Failed to fulfill some items');
+                }
+              };
+
+              const columns = [
+                {
+                  title: 'Customer',
+                  key: 'customer',
+                  render: (_: any, r: any) => (
+                    <div>
+                      <Text strong>{r.customer?.fullName || 'Unknown'}</Text><br/>
+                      <Text type="secondary" style={{ fontSize: 12 }}>{r.customer?.phone || 'No phone'}</Text>
+                    </div>
+                  )
+                },
+                {
+                  title: 'Date Earned',
+                  dataIndex: 'createdAt',
+                  key: 'date',
+                  sorter: (a: any, b: any) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+                  render: (d: string) => new Date(d).toLocaleDateString()
+                },
+                {
+                  title: 'Product/GWP/Voucher',
+                  key: 'item',
+                  render: (_: any, r: any) => (
+                    <Space direction="vertical" size={0}>
+                      <Text strong>{r.reward_catalog?.name || 'Unknown Item'}</Text>
+                      {r.reward_catalog?.category && (
+                        <Tag style={{ fontSize: 10, marginTop: 4 }} color="blue">{r.reward_catalog.category.toUpperCase()}</Tag>
+                      )}
+                    </Space>
+                  )
+                },
+                {
+                  title: 'Qty',
+                  key: 'qty',
+                  render: () => <Text>1</Text>
+                },
+                {
+                  title: 'Status',
+                  dataIndex: 'status',
+                  key: 'status',
+                  filters: [
+                    { text: 'Pending', value: 'pending' },
+                    { text: 'Fulfilled', value: 'fulfilled' },
+                  ],
+                  onFilter: (value: any, record: any) => record.status === value,
+                  render: (s: string) => <Tag color={s === 'pending' ? 'warning' : 'success'}>{s.toUpperCase()}</Tag>
+                },
+                {
+                  title: 'Action',
+                  key: 'action',
+                  render: (_: any, r: any) => r.status === 'pending' ? (
+                    <Button size="small" type="primary" onClick={() => handleFulfillSingle(r.customerId, r.id)}>Mark Shipped</Button>
+                  ) : null
+                }
+              ];
+
+              return (
+                <Card 
+                  title="Warehouse Fulfillment" 
+                  size="small"
+                  extra={
+                    <Button 
+                      type="primary" 
+                      onClick={handleBatchFulfill} 
+                      disabled={selectedRowKeys.length === 0}
+                    >
+                      Batch Fulfill Selected ({selectedRowKeys.length})
+                    </Button>
+                  }
+                  style={{ background: '#f8fafc', border: '1px solid #cbd5e1', borderRadius: 8 }}
+                >
+                  <Table
+                    rowSelection={{
+                      selectedRowKeys,
+                      onChange: setSelectedRowKeys,
+                      getCheckboxProps: (record: any) => ({
+                        disabled: record.status !== 'pending',
+                        name: record.name,
+                      }),
+                    }}
+                    dataSource={redemptions.map((r: any) => ({ ...r, key: r.id }))}
+                    columns={columns}
+                    pagination={{ pageSize: 20 }}
+                    size="small"
+                  />
+                </Card>
+              );
+            })()}
+          </div>
+        )}
+                        </Card>
+                      </Col>
+                    );
+                  })}
+                </Row>
+              );
+            })()}
+          </div>
+        )}
       </Card>
+
+      {/* ─── Tier Modal ──────────────────────────────── */}
+      <Modal title={editingTier ? 'Edit Tier' : 'Add Tier'} open={tierModal}
+        onCancel={() => { setTierModal(false); tierForm.resetFields(); }}
+        onOk={() => tierForm.submit()} okText={editingTier ? 'Save' : 'Create'} width={480}>
+        <Form form={tierForm} layout="vertical" onFinish={saveTier}>
+          <Row gutter={12}>
+            <Col span={12}>
+              <Form.Item name="tierCode" label="Tier Code" rules={[{ required: true }]}>
+                <Input placeholder="e.g. GOLD" disabled={!!editingTier} />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item name="tierName" label="Tier Name" rules={[{ required: true }]}>
+                <Input placeholder="e.g. Gold" />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={12}>
+            <Col span={8}>
+              <Form.Item name="tierOrder" label="Order" rules={[{ required: true }]} initialValue={1}>
+                <InputNumber style={{ width: '100%' }} min={1} />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item name="minNetSpend" label="Min Spend (₫)" initialValue={0}>
+                <InputNumber style={{ width: '100%' }} min={0} step={100000} />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item name="minDistinctMonths" label="Min Months" initialValue={0}>
+                <InputNumber style={{ width: '100%' }} min={0} />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={12}>
+            <Col span={12}>
+              <Form.Item name="pointsMultiplier" label="Points Multiplier" initialValue={1.0}>
+                <InputNumber style={{ width: '100%' }} min={0.1} step={0.1} />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item name="isDefault" label="Default Tier" valuePropName="checked" initialValue={false}>
+                <Switch />
+              </Form.Item>
+            </Col>
+          </Row>
+        </Form>
+      </Modal>
+
+      {/* ─── Earn Rule Modal ─────────────────────────── */}
+      <Modal title={editingRule ? 'Edit Earn Rule' : 'Add Earn Rule'} open={ruleModal}
+        onCancel={() => { setRuleModal(false); ruleForm.resetFields(); }}
+        onOk={() => ruleForm.submit()} okText={editingRule ? 'Save' : 'Create'} width={480}>
+        <Form form={ruleForm} layout="vertical" onFinish={saveRule}>
+          <Form.Item name="source" label="Source" rules={[{ required: true }]}>
+            <Select placeholder="Select source" options={[
+              { value: 'purchase', label: 'Purchase' },
+              { value: 'qr_scan', label: 'QR Scan' },
+              { value: 'profile_completion', label: 'Profile Completion' },
+              { value: 'review', label: 'Product Review' },
+              { value: 'milestone', label: 'Milestone' },
+              { value: 'referral', label: 'Referral' },
+              { value: 'quiz', label: 'Quiz' },
+              { value: 'warranty', label: 'Warranty Registration' },
+              { value: 'checkin', label: 'Check-in' },
+              { value: 'manual', label: 'Manual' },
+            ]} />
+          </Form.Item>
+          <Form.Item name="ruleName" label="Rule Name" rules={[{ required: true }]}>
+            <Input placeholder="e.g. Purchase Earn Rule" />
+          </Form.Item>
+          <Form.Item name="pointsFormulaStr" label="Points Formula (JSON)" rules={[{ required: true }]} initialValue='{"type":"fixed","points":10}'>
+            <Input.TextArea rows={2} placeholder='{"type":"per_amount","per":10000,"points":1}' />
+          </Form.Item>
+          <Row gutter={12}>
+            <Col span={12}>
+              <Form.Item name="tierMultiplierApplies" label="Tier Multiplier" valuePropName="checked" initialValue={true}>
+                <Switch />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item name="isActive" label="Active" valuePropName="checked" initialValue={true}>
+                <Switch />
+              </Form.Item>
+            </Col>
+          </Row>
+        </Form>
+      </Modal>
+
+      {/* ─── Reward Modal ────────────────────────────── */}
+      <Modal title={editingReward ? 'Edit Reward' : 'Add Reward'} open={rewardModal}
+        onCancel={() => { setRewardModal(false); rewardForm.resetFields(); }}
+        onOk={() => rewardForm.submit()} okText={editingReward ? 'Save' : 'Create'} width={480}>
+        <Form form={rewardForm} layout="vertical" onFinish={saveReward}>
+          <Row gutter={12}>
+            <Col span={12}>
+              <Form.Item name="code" label="Code" rules={[{ required: true }]}>
+                <Input placeholder="e.g. DISC_10" disabled={!!editingReward} />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item name="name" label="Reward Name" rules={[{ required: true }]}>
+                <Input placeholder="e.g. 10% Discount Coupon" />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Form.Item name="description" label="Description">
+            <Input.TextArea rows={2} placeholder="Description (optional)" />
+          </Form.Item>
+          <Row gutter={12}>
+            <Col span={8}>
+              <Form.Item name="category" label="Category">
+                <Select allowClear placeholder="Category" options={[
+                  { value: 'product', label: 'Brand Product' },
+                  { value: 'gwp', label: 'Gift with Purchase (GWP)' },
+                  { value: 'voucher', label: 'Voucher' },
+                  { value: 'discount', label: 'Discount' },
+                  { value: 'shipping', label: 'Free Shipping' },
+                ]} />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item name="pointsCost" label="Points Cost" rules={[{ required: true }]}>
+                <InputNumber style={{ width: '100%' }} min={1} />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item name="stock" label="Stock (empty=∞)">
+                <InputNumber style={{ width: '100%' }} min={0} />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Form.Item name="isActive" label="Active" valuePropName="checked" initialValue={true}>
+            <Switch />
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   );
 }

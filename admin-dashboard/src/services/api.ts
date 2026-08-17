@@ -9,7 +9,8 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
     },
   });
   if (!res.ok) throw new Error(`API ${res.status}: ${await res.text()}`);
-  return res.json();
+  const text = await res.text();
+  return text ? JSON.parse(text) : null;
 }
 
 // Customer APIs
@@ -24,17 +25,15 @@ export const customerApi = {
     );
   },
   get: (id: string) => request<any>(`/customers/${id}`),
+  updateRewardStatus: (id: string, redemptionId: string, status: string) =>
+    request<any>(`/customers/${id}/reward-redemptions/${redemptionId}/status`, { method: 'PATCH', body: JSON.stringify({ status }) }),
+  updateOrderStatus: (id: string, orderId: string, status: string) =>
+    request<any>(`/customers/${id}/orders/${orderId}/status`, { method: 'PATCH', body: JSON.stringify({ status }) }),
   create: (data: any) => 
     request<any>('/admin/customers', { method: 'POST', body: JSON.stringify(data) }),
   update: (id: string, data: any) =>
     request<any>(`/customers/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
   getMetrics: () => request<any>('/admin/customers/metrics'),
-};
-
-// Loyalty APIs
-export const loyaltyApi = {
-  get: (customerId: string) => request<any>(`/loyalty/${customerId}`),
-  getRewards: (customerId: string) => request<any[]>(`/loyalty/${customerId}/rewards`),
 };
 
 // Baby APIs
@@ -147,4 +146,54 @@ export const zaloMiniAppApi = {
     request<any>(`/admin/zalo-mini-app/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
   delete: (id: string) =>
     request<any>(`/admin/zalo-mini-app/${id}`, { method: 'DELETE' }),
+};
+
+// Product APIs
+export const productApi = {
+  list: () => request<any[]>('/admin/products'),
+};
+
+// Loyalty APIs
+export const loyaltyApi = {
+  get: (customerId: string) => request<any>(`/loyalty/${customerId}`),
+  getRewards: (customerId: string) => request<any[]>(`/loyalty/${customerId}/rewards`),
+
+  // Stats
+  getStats: () => request<any>('/admin/loyalty/stats'),
+
+  // Tiers
+  listTiers: () => request<any[]>('/admin/loyalty/tiers'),
+  createTier: (data: any) =>
+    request<any>('/admin/loyalty/tiers', { method: 'POST', body: JSON.stringify(data) }),
+  updateTier: (id: string, data: any) =>
+    request<any>(`/admin/loyalty/tiers/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
+  deleteTier: (id: string) =>
+    request<any>(`/admin/loyalty/tiers/${id}`, { method: 'DELETE' }),
+
+  // Earn Rules
+  getWelcomeRule: () => request<any>('/admin/loyalty/welcome-rule'),
+  upsertWelcomeRule: (data: any) =>
+    request<any>('/admin/loyalty/welcome-rule', { method: 'POST', body: JSON.stringify(data) }),
+  listEarnRules: () => request<any[]>('/admin/loyalty/earn-rules'),
+  createEarnRule: (data: any) =>
+    request<any>('/admin/loyalty/earn-rules', { method: 'POST', body: JSON.stringify(data) }),
+  updateEarnRule: (id: string, data: any) =>
+    request<any>(`/admin/loyalty/earn-rules/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
+  deleteEarnRule: (id: string) =>
+    request<any>(`/admin/loyalty/earn-rules/${id}`, { method: 'DELETE' }),
+
+  // Rewards
+  listRewards: () => request<any[]>('/admin/loyalty/rewards'),
+  createReward: (data: any) =>
+    request<any>('/admin/loyalty/rewards', { method: 'POST', body: JSON.stringify(data) }),
+  updateReward: (id: string, data: any) =>
+    request<any>(`/admin/loyalty/rewards/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
+  deleteReward: (id: string) =>
+    request<any>(`/admin/loyalty/rewards/${id}`, { method: 'DELETE' }),
+
+  // Transactions & Redemptions
+  listTransactions: (take?: number) =>
+    request<any[]>(`/admin/loyalty/transactions${take ? `?take=${take}` : ''}`),
+  listRedemptions: (take?: number) =>
+    request<any[]>(`/admin/loyalty/redemptions${take ? `?take=${take}` : ''}`),
 };

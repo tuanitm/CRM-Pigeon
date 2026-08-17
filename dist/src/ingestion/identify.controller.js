@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+var IdentifyController_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.IdentifyController = void 0;
 const common_1 = require("@nestjs/common");
@@ -18,9 +19,10 @@ const swagger_1 = require("@nestjs/swagger");
 const identify_dto_1 = require("./dto/identify.dto");
 const prisma_service_1 = require("../shared/prisma/prisma.service");
 const redis_service_1 = require("../shared/redis/redis.service");
-let IdentifyController = class IdentifyController {
+let IdentifyController = IdentifyController_1 = class IdentifyController {
     prisma;
     redis;
+    logger = new common_1.Logger(IdentifyController_1.name);
     constructor(prisma, redis) {
         this.prisma = prisma;
         this.redis = redis;
@@ -32,6 +34,7 @@ let IdentifyController = class IdentifyController {
                 return { status: 'duplicate' };
         }
         let customer = null;
+        let isNew = false;
         if (dto.phone) {
             const normalizedPhone = this.normalizePhone(dto.phone);
             customer = await this.prisma.customer.findUnique({
@@ -43,8 +46,13 @@ let IdentifyController = class IdentifyController {
                         phone: normalizedPhone,
                         email: dto.email,
                         fullName: dto.fullName,
+                        customerCode: 'CUS' + Date.now().toString().slice(-4) + Math.floor(100 + Math.random() * 900).toString(),
                         registrationSource: 'api',
                     },
+                });
+                isNew = true;
+                const loyaltyAccount = await this.prisma.loyaltyAccount.create({
+                    data: { customerId: customer.id },
                 });
             }
         }
@@ -70,7 +78,24 @@ let IdentifyController = class IdentifyController {
                 },
             });
         }
-        return { status: 'identified', customerId: customer?.id || null };
+        if (customer && dto.babies && Array.isArray(dto.babies)) {
+            for (const baby of dto.babies) {
+                if (!baby.name || !baby.dateOfBirth || !baby.gender) {
+                    this.logger.warn(`Skipping baby record for customer ${customer.id} due to missing required fields`);
+                    continue;
+                }
+                await this.prisma.baby.create({
+                    data: {
+                        customerId: customer.id,
+                        name: baby.name,
+                        gender: baby.gender,
+                        dateOfBirth: new Date(baby.dateOfBirth),
+                        stageCode: baby.stageCode,
+                    },
+                });
+            }
+        }
+        return { status: 'identified', customerId: customer?.id || null, isNew };
     }
     normalizePhone(phone) {
         let cleaned = phone.replace(/\D/g, '');
@@ -93,7 +118,7 @@ __decorate([
     __metadata("design:paramtypes", [identify_dto_1.IdentifyDto]),
     __metadata("design:returntype", Promise)
 ], IdentifyController.prototype, "identify", null);
-exports.IdentifyController = IdentifyController = __decorate([
+exports.IdentifyController = IdentifyController = IdentifyController_1 = __decorate([
     (0, swagger_1.ApiTags)('Ingestion'),
     (0, common_1.Controller)('identify'),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService,

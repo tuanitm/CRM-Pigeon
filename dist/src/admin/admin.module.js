@@ -17,6 +17,10 @@ const zalo_oa_controller_1 = require("./zalo-oa.controller");
 const zalo_oa_service_1 = require("./zalo-oa.service");
 const zalo_mini_app_controller_1 = require("./zalo-mini-app.controller");
 const zalo_mini_app_service_1 = require("./zalo-mini-app.service");
+const loyalty_controller_1 = require("./loyalty.controller");
+const loyalty_service_1 = require("./loyalty.service");
+const product_controller_1 = require("./product.controller");
+const product_service_1 = require("./product.service");
 let AdminModule = class AdminModule {
 };
 exports.AdminModule = AdminModule;
@@ -28,12 +32,16 @@ exports.AdminModule = AdminModule = __decorate([
             dynamic_action_controller_1.DynamicActionController,
             zalo_oa_controller_1.ZaloOAController,
             zalo_mini_app_controller_1.ZaloMiniAppController,
+            loyalty_controller_1.LoyaltyController,
+            product_controller_1.ProductController,
         ],
         providers: [
             data_hub_service_1.DataHubService,
             dynamic_action_service_1.DynamicActionService,
             zalo_oa_service_1.ZaloOAService,
             zalo_mini_app_service_1.ZaloMiniAppService,
+            loyalty_service_1.LoyaltyService,
+            product_service_1.ProductService,
         ],
     })
 ], AdminModule);

@@ -1,10 +1,13 @@
-import React from 'react';
-import { Card, Typography, Table, Tag, Space, Badge, Row, Col, Statistic, Button } from 'antd';
-import { NodeIndexOutlined, PlayCircleOutlined, CheckCircleOutlined, PauseCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import React, { useState } from 'react';
+import { Card, Typography, Table, Tag, Space, Badge, Row, Col, Statistic, Button, Drawer, Popconfirm, message, Modal, Form, Input, Select } from 'antd';
+import { NodeIndexOutlined, PlayCircleOutlined, CheckCircleOutlined, PauseCircleOutlined, PlusOutlined, SettingOutlined, DeleteOutlined } from '@ant-design/icons';
+import JourneyBuilderDrawer from '../components/JourneyBuilderDrawer';
+import { dynamicActionApi } from '../services/api';
 
 const { Title } = Typography;
 
-const journeysData = [
+export const initialJourneysData = [
+  { code: 'JRN_WELCOME_ONBOARDING', name: 'Welcome Onboarding', trigger: 'customer.registered', status: 'active', activeRuns: 0, completed: 0, controlGroup: false },
   { code: 'JRN_WELCOME_BABY', name: 'Welcome Baby Onboarding', trigger: 'baby.profile_created', status: 'active', activeRuns: 124, completed: 892, controlGroup: false },
   { code: 'JRN_SECOND_ORDER', name: 'Convert to Second Order', trigger: 'order.completed', status: 'active', activeRuns: 67, completed: 445, controlGroup: false },
   { code: 'JRN_REPLENISH', name: 'Replenishment Reminder', trigger: 'replenishment.due', status: 'active', activeRuns: 89, completed: 1_204, controlGroup: false },
@@ -14,78 +17,199 @@ const journeysData = [
   { code: 'JRN_REACTIVATION', name: 'Win-back Reactivation', trigger: 'segment_entered', status: 'active', activeRuns: 28, completed: 92, controlGroup: true },
 ];
 
-const columns = [
-  {
-    title: 'Journey',
-    key: 'name',
-    render: (_: any, r: any) => (
-      <Space orientation="vertical" size={0}>
-        <span style={{ fontWeight: 600 }}>{r.name}</span>
-        <Tag style={{ fontSize: 11 }}>{r.code}</Tag>
-      </Space>
-    ),
-  },
-  {
-    title: 'Trigger',
-    key: 'trigger',
-    render: (_: any, r: any) => <Tag color="geekblue">{r.trigger}</Tag>,
-  },
-  {
-    title: 'Trạng thái',
-    key: 'status',
-    render: (_: any, r: any) => (
-      <Badge
-        status={r.status === 'active' ? 'processing' : r.status === 'draft' ? 'default' : 'error'}
-        text={r.status === 'active' ? 'Hoạt động' : 'Bản nháp'}
-      />
-    ),
-  },
-  { title: 'Đang chạy', dataIndex: 'activeRuns', key: 'active', sorter: (a: any, b: any) => a.activeRuns - b.activeRuns },
-  { title: 'Hoàn thành', dataIndex: 'completed', key: 'completed', sorter: (a: any, b: any) => a.completed - b.completed },
-  {
-    title: 'Control Group',
-    key: 'control',
-    render: (_: any, r: any) => r.controlGroup ? <Tag color="orange">Có</Tag> : <Tag>Không</Tag>,
-  },
-];
-
 export default function JourneysPage() {
-  const totalActive = journeysData.reduce((sum, j) => sum + j.activeRuns, 0);
-  const totalCompleted = journeysData.reduce((sum, j) => sum + j.completed, 0);
+  // Use localStorage to persist state across tab changes and reloads
+  const [journeys, setJourneys] = useState(() => {
+    const saved = localStorage.getItem('demo_journeys');
+    return saved ? JSON.parse(saved) : initialJourneysData;
+  });
+
+  const [editingJourney, setEditingJourney] = useState<string | null>(null);
+  const [drawerVisible, setDrawerVisible] = useState(false);
+  const [addModalVisible, setAddModalVisible] = useState(false);
+  const [dynamicActions, setDynamicActions] = useState<any[]>([]);
+  const [form] = Form.useForm();
+
+  // Save to localStorage whenever journeys change
+  React.useEffect(() => {
+    localStorage.setItem('demo_journeys', JSON.stringify(journeys));
+  }, [journeys]);
+
+  React.useEffect(() => {
+    // Fetch dynamic actions to link as potential triggers
+    dynamicActionApi.list()
+      .then(data => setDynamicActions(data || []))
+      .catch(console.error);
+  }, []);
+
+  const triggerOptions = [
+    { value: 'customer.registered', label: 'Customer Registered' },
+    { value: 'order.completed', label: 'Order Completed' },
+    { value: 'cart.abandoned', label: 'Cart Abandoned' },
+    { value: 'baby.profile_created', label: 'Baby Profile Created' },
+    { value: 'segment_entered', label: 'Segment Entered' },
+    ...dynamicActions.map(da => ({
+      value: da.trigger,
+      label: `Dynamic Action: ${da.name} (${da.trigger})`
+    }))
+  ];
+
+  const handleAdd = (values: any) => {
+    const newJourney = {
+      code: values.code || `JRN_${Date.now()}`,
+      name: values.name,
+      trigger: values.trigger,
+      status: 'draft',
+      activeRuns: 0,
+      completed: 0,
+      controlGroup: false,
+    };
+    setJourneys([...journeys, newJourney]);
+    setAddModalVisible(false);
+    form.resetFields();
+    message.success('Journey created successfully');
+  };
+
+  const handleDelete = (code: string) => {
+    setJourneys(journeys.filter(j => j.code !== code));
+    message.success('Journey deleted successfully');
+  };
+
+  const totalActive = journeys.reduce((sum, j) => sum + j.activeRuns, 0);
+  const totalCompleted = journeys.reduce((sum, j) => sum + j.completed, 0);
+
+  const columns = [
+    {
+      title: 'Journey',
+      key: 'name',
+      render: (_: any, r: any) => (
+        <Space orientation="vertical" size={0}>
+          <span style={{ fontWeight: 600 }}>{r.name}</span>
+          <Tag style={{ fontSize: 11 }}>{r.code}</Tag>
+        </Space>
+      ),
+    },
+    {
+      title: 'Trigger',
+      dataIndex: 'trigger',
+      key: 'trigger',
+      render: (t: string) => <Tag color="blue">{t}</Tag>,
+    },
+    {
+      title: 'Status',
+      dataIndex: 'status',
+      key: 'status',
+      render: (s: string) => (
+        <Badge status={s === 'active' ? 'success' : 'default'} text={s.toUpperCase()} />
+      ),
+    },
+    {
+      title: 'Active Runs',
+      dataIndex: 'activeRuns',
+      key: 'activeRuns',
+      align: 'right' as const,
+      render: (v: number) => <strong>{v.toLocaleString()}</strong>,
+    },
+    {
+      title: 'Completed',
+      dataIndex: 'completed',
+      key: 'completed',
+      align: 'right' as const,
+      render: (v: number) => <span style={{ color: '#6b7280' }}>{v.toLocaleString()}</span>,
+    },
+    {
+      title: 'Action',
+      key: 'action',
+      render: (_: any, r: any) => (
+        <Space size="small">
+          <Button 
+            type="text" 
+            icon={<SettingOutlined />} 
+            onClick={() => {
+              setEditingJourney(r.code);
+              setDrawerVisible(true);
+            }}
+          />
+          <Popconfirm title="Delete this journey?" onConfirm={() => handleDelete(r.code)}>
+            <Button type="text" danger icon={<DeleteOutlined />} />
+          </Popconfirm>
+        </Space>
+      ),
+    }
+  ];
 
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
         <Title level={3} style={{ margin: 0, fontWeight: 700 }}>Journeys</Title>
-        <Button type="primary" icon={<PlusOutlined />}>Tạo mới</Button>
+        <Button type="primary" icon={<PlusOutlined />} onClick={() => setAddModalVisible(true)}>Add New</Button>
       </div>
 
       <Row gutter={[12, 12]} style={{ marginBottom: 16 }}>
         <Col span={6}>
           <Card variant="outlined" style={{ borderRadius: 10, borderColor: '#e5e7eb' }}>
-            <Statistic title="Tổng Journeys" value={journeysData.length} prefix={<NodeIndexOutlined />} />
+            <Statistic title="Total Journeys" value={journeys.length} prefix={<NodeIndexOutlined />} />
           </Card>
         </Col>
         <Col span={6}>
           <Card variant="outlined" style={{ borderRadius: 10, borderColor: '#e5e7eb' }}>
-            <Statistic title="Đang chạy" value={totalActive} prefix={<PlayCircleOutlined />} styles={{ content: { color: '#3b82f6' } }} />
+            <Statistic title="Active" value={totalActive} prefix={<PlayCircleOutlined />} styles={{ content: { color: '#3b82f6' } }} />
           </Card>
         </Col>
         <Col span={6}>
           <Card variant="outlined" style={{ borderRadius: 10, borderColor: '#e5e7eb' }}>
-            <Statistic title="Hoàn thành" value={totalCompleted} prefix={<CheckCircleOutlined />} styles={{ content: { color: '#10b981' } }} />
+            <Statistic title="Completed" value={totalCompleted} prefix={<CheckCircleOutlined />} styles={{ content: { color: '#10b981' } }} />
           </Card>
         </Col>
         <Col span={6}>
           <Card variant="outlined" style={{ borderRadius: 10, borderColor: '#e5e7eb' }}>
-            <Statistic title="Bản nháp" value={journeysData.filter((j) => j.status === 'draft').length} prefix={<PauseCircleOutlined />} />
+            <Statistic title="Drafts" value={journeys.filter((j) => j.status === 'draft').length} prefix={<PauseCircleOutlined />} />
           </Card>
         </Col>
       </Row>
 
       <Card variant="outlined" style={{ borderRadius: 10, borderColor: '#e5e7eb' }}>
-        <Table columns={columns} dataSource={journeysData} rowKey="code" pagination={false} />
+        <Table 
+          dataSource={journeys} 
+          columns={columns} 
+          pagination={false} />
       </Card>
+
+      <Drawer
+        title={editingJourney === 'JRN_WELCOME_ONBOARDING' ? "Welcome Onboarding Pipeline" : "Journey Configuration"}
+        width={700}
+        onClose={() => setDrawerVisible(false)}
+        open={drawerVisible}
+        destroyOnClose
+        styles={{ body: { padding: 0 } }}
+      >
+        {editingJourney && <JourneyBuilderDrawer journeyCode={editingJourney} onClose={() => setDrawerVisible(false)} />}
+      </Drawer>
+
+      <Modal
+        title="Create New Journey"
+        open={addModalVisible}
+        onCancel={() => { setAddModalVisible(false); form.resetFields(); }}
+        onOk={() => form.submit()}
+        okText="Create"
+      >
+        <Form form={form} layout="vertical" onFinish={handleAdd}>
+          <Form.Item name="name" label="Journey Name" rules={[{ required: true }]}>
+            <Input placeholder="e.g. Birthday Campaign" />
+          </Form.Item>
+          <Form.Item name="code" label="Journey Code" rules={[{ required: true }]}>
+            <Input placeholder="e.g. JRN_BIRTHDAY" />
+          </Form.Item>
+          <Form.Item name="trigger" label="Trigger Event" rules={[{ required: true }]}>
+            <Select 
+              showSearch
+              placeholder="e.g. customer.birthday or select a Dynamic Action" 
+              options={triggerOptions}
+              allowClear
+            />
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   );
 }

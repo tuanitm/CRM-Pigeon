@@ -22,5 +22,5 @@
     "strictBindCallApply": true,
     "noFallthroughCasesInSwitch": true
   },
-  "exclude": ["admin-dashboard", "node_modules", "dist"]
+  "exclude": ["admin-dashboard", "customer-portal", "node_modules", "dist"]
 }

@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { NodeIndexOutlined, MessageOutlined } from '@ant-design/icons';
+import { NodeIndexOutlined, MessageOutlined, CalendarOutlined } from '@ant-design/icons';
 import JourneysPage from './JourneysPage';
 import MessagesPage from './MessagesPage';
+import SchedulesPage from './SchedulesPage';
 
 export default function AutomationPage() {
-  const [activeTab, setActiveTab] = useState<'journeys' | 'messages'>('journeys');
+  const [activeTab, setActiveTab] = useState<'journeys' | 'messages' | 'schedules'>('journeys');
 
   return (
     <div style={{ display: 'flex', gap: 0 }}>
@@ -22,11 +23,18 @@ export default function AutomationPage() {
         >
           <MessageOutlined /> Messages
         </div>
+        <div
+          className={`sub-sidebar-item ${activeTab === 'schedules' ? 'sub-sidebar-item--active' : ''}`}
+          onClick={() => setActiveTab('schedules')}
+        >
+          <CalendarOutlined /> Schedules
+        </div>
       </div>
 
-      {/* Main Content */}
       <div style={{ flex: 1, padding: '0 0 0 24px' }}>
-        {activeTab === 'journeys' ? <JourneysPage /> : <MessagesPage />}
+        {activeTab === 'journeys' && <JourneysPage />}
+        {activeTab === 'messages' && <MessagesPage />}
+        {activeTab === 'schedules' && <SchedulesPage />}
       </div>
     </div>
   );

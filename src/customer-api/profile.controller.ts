@@ -16,8 +16,29 @@ export class ProfileController {
         babies: true,
         addresses: true,
         tags: true,
-        loyaltyAccount: { include: { tier: true } },
+        loyaltyAccount: { 
+          include: { 
+            tier: true,
+            transactions: {
+              orderBy: { createdAt: 'desc' },
+              take: 50
+            }
+          } 
+        },
         consents: true,
+        reward_redemption: {
+          include: { reward_catalog: true },
+          orderBy: { createdAt: 'desc' }
+        },
+        journey_run: {
+          include: { journey: true },
+          orderBy: { entered_at: 'desc' }
+        },
+        orders: {
+          where: { isInternal: true },
+          include: { items: { include: { product: true } } },
+          orderBy: { createdAt: 'desc' }
+        }
       },
     });
   }
@@ -33,7 +54,33 @@ export class ProfileController {
       if (existing) throw new Error('Phone number already in use');
     }
 
-    return this.prisma.customer.update({
+    if (data.babies) {
+      const existingBabies = await this.prisma.baby.findMany({ where: { customerId: id } });
+      const incomingIds = data.babies.filter((b: any) => b.id).map((b: any) => b.id);
+      const toDelete = existingBabies.filter(b => !incomingIds.includes(b.id));
+
+      for (const b of toDelete) {
+        await this.prisma.baby.delete({ where: { id: b.id } });
+      }
+
+      for (const b of data.babies) {
+        const babyData = {
+          name: b.name,
+          gender: b.gender,
+          dateOfBirth: b.dateOfBirth ? new Date(b.dateOfBirth) : null,
+          dueDate: b.dueDate ? new Date(b.dueDate) : null,
+          isBorn: b.isBorn !== undefined ? b.isBorn : true,
+          stageCode: b.stageCode,
+        };
+        if (b.id) {
+          await this.prisma.baby.update({ where: { id: b.id }, data: babyData });
+        } else {
+          await this.prisma.baby.create({ data: { ...babyData, customerId: id } });
+        }
+      }
+    }
+
+    const updatedCustomer = await this.prisma.customer.update({
       where: { id },
       data: {
         fullName: data.fullName,
@@ -49,6 +96,176 @@ export class ProfileController {
           create: data.address ? [{ addressLine1: data.address }] : [],
         } : undefined,
       },
+    });
+
+    if (data.isOnboardingCompletion) {
+      await this.evaluateWelcomeBonus(id);
+    }
+
+    return updatedCustomer;
+  }
+
+  private async evaluateWelcomeBonus(customerId: string) {
+    const welcomeRule = await this.prisma.loyaltyEarnRule.findFirst({
+      where: { source: 'welcome_bonus', ruleName: 'Welcome Onboarding', isActive: true },
+    });
+    
+    if (!welcomeRule) return;
+
+    const now = new Date();
+    if ((welcomeRule.validFrom && welcomeRule.validFrom > now) || 
+        (welcomeRule.validUntil && welcomeRule.validUntil < now)) {
+      return;
+    }
+
+    let loyaltyAccount = await this.prisma.loyaltyAccount.findUnique({ where: { customerId } });
+    if (!loyaltyAccount) {
+      loyaltyAccount = await this.prisma.loyaltyAccount.create({ data: { customerId } });
+    }
+
+    const formula = welcomeRule.pointsFormula as any;
+    let rewards = [];
+    
+    if (formula?.rewards && Array.isArray(formula.rewards)) {
+      rewards = formula.rewards;
+    } else if (formula?.rewardType) {
+      rewards = [formula];
+    } else if (formula?.type === 'fixed') {
+      rewards = [{ type: 'points', value: formula.value }];
+    }
+
+    let rewardContexts = [];
+    
+    // Check if customer has a child for conditional rewards
+    const babyCount = await this.prisma.baby.count({ where: { customerId } });
+    const hasChild = babyCount > 0;
+
+    for (const r of rewards) {
+      // Evaluate conditions
+      if (r.condition === 'has_child' && !hasChild) continue;
+
+      const rType = r.type || r.rewardType || 'points';
+      
+      if (rType === 'points') {
+        const pts = r.value || 0;
+        if (pts > 0) {
+          await this.prisma.loyaltyAccount.update({
+            where: { id: loyaltyAccount.id },
+            data: {
+              pointsBalance: { increment: pts },
+              pointsLifetime: { increment: pts },
+              transactions: {
+                create: {
+                  customerId,
+                  type: 'earn',
+                  source: 'welcome_bonus',
+                  points: pts,
+                  balanceAfter: pts,
+                  description: r.condition ? 'Welcome Onboarding Bonus (Extra)' : 'Welcome Onboarding Bonus',
+                  idempotencyKey: `welcome-${customerId}-${r.condition || 'base'}-${Date.now()}`,
+                }
+              }
+            }
+          });
+          rewardContexts.push({ type: 'points', pointsEarned: pts, condition: r.condition });
+        }
+      } else if (rType === 'free_gift' && r.rewardId) {
+        await this.prisma.rewardRedemption.create({
+          data: {
+            loyaltyAccountId: loyaltyAccount.id,
+            customerId,
+            rewardId: r.rewardId,
+            pointsSpent: 0,
+            status: 'pending',
+            idempotencyKey: `welcome-gift-${customerId}-${r.rewardId}-${Date.now()}`
+          }
+        });
+        rewardContexts.push({ type: 'free_gift', rewardId: r.rewardId });
+      } else if (rType === 'voucher' && r.rewardId) {
+        await this.prisma.rewardRedemption.create({
+          data: {
+            loyaltyAccountId: loyaltyAccount.id,
+            customerId,
+            rewardId: r.rewardId,
+            pointsSpent: 0,
+            status: 'pending',
+            idempotencyKey: `welcome-voucher-${customerId}-${r.rewardId}-${Date.now()}`
+          }
+        });
+        rewardContexts.push({ type: 'voucher', rewardId: r.rewardId });
+      } else if (rType === 'product' && r.productId) {
+        const orderNum = `INT-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+        await this.prisma.order.create({
+          data: {
+            customerId,
+            orderNumber: orderNum,
+            status: 'pending',
+            totalAmount: 0,
+            isInternal: true,
+            isGwp: false,
+            orderedAt: new Date(),
+            items: {
+              create: {
+                productId: r.productId,
+                quantity: 1,
+                unitPrice: 0,
+                totalPrice: 0,
+              }
+            }
+          }
+        });
+        rewardContexts.push({ type: 'product', productId: r.productId });
+      }
+    }
+
+    // Ensure JRN_WELCOME_ONBOARDING journey exists
+    const journey = await this.prisma.journey.upsert({
+      where: { code: 'JRN_WELCOME_ONBOARDING' },
+      update: {},
+      create: {
+        code: 'JRN_WELCOME_ONBOARDING',
+        name: 'Welcome Onboarding',
+        status: 'active',
+        triggerEvent: 'customer.profile_completed'
+      }
+    });
+
+    // Log Journey Run
+    await this.prisma.journey_run.create({
+      data: {
+        journey_id: journey.id,
+        customer_id: customerId,
+        status: 'completed',
+        context: { rewards: rewardContexts },
+        entered_at: now,
+        exited_at: now,
+      }
+    });
+  }
+
+  @Patch(':id/reward-redemptions/:redemptionId/status')
+  @ApiOperation({ summary: 'Update GWP fulfillment status' })
+  async updateRewardRedemptionStatus(
+    @Param('id') id: string,
+    @Param('redemptionId') redemptionId: string,
+    @Body() data: { status: string }
+  ) {
+    return this.prisma.rewardRedemption.update({
+      where: { id: redemptionId, customerId: id },
+      data: { status: data.status, fulfilledAt: data.status === 'fulfilled' ? new Date() : null }
+    });
+  }
+
+  @Patch(':id/orders/:orderId/status')
+  @ApiOperation({ summary: 'Update internal order status' })
+  async updateOrderStatus(
+    @Param('id') id: string,
+    @Param('orderId') orderId: string,
+    @Body() data: { status: string }
+  ) {
+    return this.prisma.order.update({
+      where: { id: orderId, customerId: id },
+      data: { status: data.status }
     });
   }
 }

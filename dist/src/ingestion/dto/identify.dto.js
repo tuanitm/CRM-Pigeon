@@ -19,6 +19,7 @@ class IdentifyDto {
     fullName;
     traits;
     idempotencyKey;
+    babies;
 }
 exports.IdentifyDto = IdentifyDto;
 __decorate([
@@ -57,4 +58,10 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], IdentifyDto.prototype, "idempotencyKey", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ required: false, description: 'Optional array of children profiles' }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsArray)(),
+    __metadata("design:type", Array)
+], IdentifyDto.prototype, "babies", void 0);
 //# sourceMappingURL=identify.dto.js.map

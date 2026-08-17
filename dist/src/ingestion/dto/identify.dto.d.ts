@@ -5,4 +5,10 @@ export declare class IdentifyDto {
     fullName?: string;
     traits?: Record<string, any>;
     idempotencyKey?: string;
+    babies?: Array<{
+        name: string;
+        dateOfBirth: string;
+        gender: string;
+        stageCode?: string;
+    }>;
 }

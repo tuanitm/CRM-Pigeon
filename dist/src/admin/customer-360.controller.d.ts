@@ -24,21 +24,20 @@ export declare class Customer360Controller {
     }>;
     listCustomers(cursor?: string, take?: number, search?: string): Promise<{
         data: ({
-            loyaltyAccount: {
-                tierId: string | null;
-                pointsBalance: number;
-            } | null;
             babies: {
                 id: string;
                 name: string | null;
                 stageCode: string | null;
             }[];
+            loyaltyAccount: {
+                tierId: string | null;
+                pointsBalance: number;
+            } | null;
             _count: {
                 orders: number;
             };
         } & {
             id: string;
-            createdAt: Date;
             customerCode: string | null;
             phone: string | null;
             email: string | null;
@@ -52,6 +51,7 @@ export declare class Customer360Controller {
             dataQualityFlag: string | null;
             isMerged: boolean;
             mergedIntoId: string | null;
+            createdAt: Date;
             updatedAt: Date;
         })[];
         nextCursor: string | null;
@@ -74,7 +74,6 @@ export declare class Customer360Controller {
         } | null;
     } & {
         id: string;
-        createdAt: Date;
         customerCode: string | null;
         phone: string | null;
         email: string | null;
@@ -88,6 +87,7 @@ export declare class Customer360Controller {
         dataQualityFlag: string | null;
         isMerged: boolean;
         mergedIntoId: string | null;
+        createdAt: Date;
         updatedAt: Date;
     }>;
 }
