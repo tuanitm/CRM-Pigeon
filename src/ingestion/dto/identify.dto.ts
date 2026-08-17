@@ -36,4 +36,9 @@ export class IdentifyDto {
   @IsOptional()
   @IsArray()
   babies?: Array<{ name: string; dateOfBirth: string; gender: string; stageCode?: string }>;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsString()
+  userAgent?: string;
 }

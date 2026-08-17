@@ -8,22 +8,13 @@ import {
 import {
   UserOutlined, SearchOutlined, EyeOutlined, PhoneOutlined,
   GiftOutlined, ReloadOutlined, ArrowUpOutlined, ArrowDownOutlined,
-  MailOutlined, ShoppingCartOutlined, HeartOutlined, LineChartOutlined, PlusOutlined, DeleteOutlined,
+  MailOutlined, ShoppingCartOutlined, HeartOutlined, LineChartOutlined, PlusOutlined, DeleteOutlined, ShopOutlined,
 } from '@ant-design/icons';
 import { customerApi } from '../services/api';
 import dayjs from 'dayjs';
 
 const { Title, Text } = Typography;
 
-// ─── Funnel stages ───
-const funnelStages = [
-  { name: 'Awareness', sub: 'Awareness', pct: 42, color: '#ef4444' },
-  { name: 'Interest', sub: 'Interest', pct: 31, color: '#f97316' },
-  { name: 'Consideration · Lead', sub: 'Consideration', pct: 18, color: '#eab308' },
-  { name: 'Decision · Buy', sub: 'Decision', pct: 12, color: '#22c55e' },
-  { name: 'Service', sub: 'Service', pct: 8, color: '#06b6d4' },
-  { name: 'Loyalty', sub: 'Loyalty', pct: 5, color: '#8b5cf6' },
-];
 
 // ─── Demo customers ───
 const demoCustomers = [
@@ -45,18 +36,21 @@ export default function Customer360Page() {
   const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
   const [creating, setCreating] = useState(false);
   const [form] = Form.useForm();
+  const customerType = Form.useWatch('customerType', form);
+  const isEndUser = !customerType || customerType === 'End user';
   const [customers, setCustomers] = useState<any[]>(demoCustomers);
   const [loading, setLoading] = useState(false);
   const [metrics, setMetrics] = useState<any>(null);
+  const [period, setPeriod] = useState<string>('30d');
 
-  const fetchMetrics = useCallback(async () => {
+  const fetchMetrics = useCallback(async (selectedPeriod?: string) => {
     try {
-      const data = await customerApi.getMetrics();
+      const data = await customerApi.getMetrics(selectedPeriod || period);
       setMetrics(data);
     } catch (err) {
       console.error('Failed to fetch metrics:', err);
     }
-  }, []);
+  }, [period]);
 
   const fetchCustomers = useCallback(async () => {
     setLoading(true);
@@ -74,13 +68,14 @@ export default function Customer360Page() {
     if (activeTab === 'customers') {
       fetchCustomers();
     } else if (activeTab === 'overview') {
-      fetchMetrics();
+      fetchMetrics(period);
     }
-  }, [activeTab, fetchCustomers, fetchMetrics]);
+  }, [activeTab, period, fetchCustomers, fetchMetrics]);
 
   const handleOpenCreate = () => {
     setModalMode('create');
     form.resetFields();
+    form.setFieldsValue({ customerType: 'End user' });
     setModalOpen(true);
   };
 
@@ -111,9 +106,15 @@ export default function Customer360Page() {
           dateOfBirth: b.dateOfBirth ? b.dateOfBirth.format('YYYY-MM-DD') : undefined,
         })),
       };
+      // Strip personal fields for Outlet/Keyshop
+      if (payload.customerType && payload.customerType !== 'End user') {
+        delete payload.gender;
+        delete payload.dateOfBirth;
+        delete payload.babies;
+      }
       if (modalMode === 'create') {
         await customerApi.create(payload);
-        message.success('Customer được tạo thành công!');
+        message.success('Customer created successfully!');
       } else {
         await customerApi.update(selectedCustomer.id, payload);
         message.success('Customer updated successfully!');
@@ -145,9 +146,10 @@ export default function Customer360Page() {
       render: (_: any, r: any) => {
         const tier = r.tier || r.loyaltyAccount?.tierId || 'MEMBER';
         const color = tier === 'GOLD' ? '#f59e0b' : tier === 'SILVER' ? '#94a3b8' : '#3b82f6';
+        const isShop = r.customerType === 'Outlet' || r.customerType === 'Keyshop';
         return (
           <Space>
-            <Avatar style={{ background: color }} icon={<UserOutlined />} />
+            <Avatar style={{ background: color }} icon={isShop ? <ShopOutlined /> : <UserOutlined />} />
             <div>
               <Text strong style={{ fontSize: 13 }}>{r.fullName || r.full_name || 'Customer'}</Text>
               <br />
@@ -179,13 +181,18 @@ export default function Customer360Page() {
       render: (_: any, r: any) => r.totalSpend > 0 ? `${(r.totalSpend / 1_000_000).toFixed(1)}M ₫` : '—',
     },
     {
-      title: 'Data Quality',
-      key: 'flag',
+      title: 'Customer Type',
+      key: 'customerType',
       render: (_: any, r: any) => {
-        const flag = r.flag || r.dataQualityFlag;
-        return flag
-          ? <Badge status="warning" text={<Text type="warning" style={{ fontSize: 12 }}>{flag}</Text>} />
-          : <Badge status="success" text={<Text type="success" style={{ fontSize: 12 }}>Clean</Text>} />;
+        const type = r.customerType || 'End user';
+        return <Tag color={type === 'End user' ? 'blue' : 'purple'}>{type}</Tag>;
+      },
+    },
+    {
+      title: 'Status',
+      key: 'status',
+      render: (_: any, r: any) => {
+        return <Tag color={r.isActive !== false ? 'success' : 'error'}>{r.isActive !== false ? 'Active' : 'Inactive'}</Tag>;
       },
     },
   ];
@@ -224,139 +231,242 @@ export default function Customer360Page() {
               <div>
                 <Title level={4} style={{ margin: 0, fontWeight: 700 }}>Customer 360 Overview</Title>
               </div>
-              <div style={{ marginLeft: 'auto' }}>
-                <Select defaultValue="30d" style={{ width: 160 }} options={[
-                  { value: '7d', label: 'Last 7 days' },
-                  { value: '30d', label: 'Last 30 days' },
-                  { value: '90d', label: 'Last 90 days' },
-                ]} />
+              <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8 }}>
+                <Text type="secondary" style={{ fontSize: 12, fontWeight: 500 }}>Period:</Text>
+                <Select
+                  value={period}
+                  onChange={(val) => setPeriod(val)}
+                  style={{ width: 140, borderRadius: 8 }}
+                  options={[
+                    { value: 'today', label: 'Today' },
+                    { value: '7d', label: '7 days' },
+                    { value: '30d', label: '30 days' },
+                    { value: 'this_month', label: 'This month' },
+                    { value: 'this_year', label: 'This year' },
+                  ]}
+                />
               </div>
             </div>
 
-            {/* CUSTOMER-CENTRIC KPIs — distinct from Dashboard's business KPIs */}
+            {/* ── ROW 1: Core KPIs ── */}
             <div style={{ marginBottom: 8 }}>
-              <Text type="secondary" style={{ fontSize: 12, fontWeight: 600, letterSpacing: 0.5 }}>— CUSTOMER METRICS <span style={{ opacity: 0.4 }}>ⓘ</span></Text>
+              <Text type="secondary" style={{ fontSize: 12, fontWeight: 600, letterSpacing: 0.5 }}>— CUSTOMER METRICS</Text>
             </div>
             <Row gutter={[12, 12]}>
               {[
-                { label: 'SỐ LƯỢNG', type: 'quantity', title: 'Total Customers', value: metrics ? metrics.totalCustomers.toLocaleString() : '...' },
-                { label: 'SỐ LƯỢNG', type: 'quantity', title: 'New Customers (30d)', value: metrics ? metrics.newCustomers30d.toLocaleString() : '...' },
-                { label: 'SỐ LƯỢNG', type: 'quantity', title: 'Active Customers', value: metrics ? metrics.activeCustomers.toLocaleString() : '...' },
-                { label: 'SỐ LƯỢNG', type: 'quantity', title: 'Returning Customers', value: metrics ? metrics.returningCustomers.toLocaleString() : '...' },
+                { label: 'COUNT', type: 'quantity', title: 'Total Customers', value: metrics?.totalCustomers?.toLocaleString() ?? '...' },
+                { label: 'COUNT', type: 'quantity', title: `New (${period === 'today' ? 'Today' : period === '7d' ? '7 days' : period === '30d' ? '30 days' : period === 'this_month' ? 'This month' : 'This year'})`, value: metrics?.newCustomers30d?.toLocaleString() ?? '...' },
+                { label: 'COUNT', type: 'quantity', title: 'Active', value: metrics?.activeCustomers?.toLocaleString() ?? '...' },
+                { label: 'COUNT', type: 'quantity', title: 'Returning', value: metrics?.returningCustomers?.toLocaleString() ?? '...' },
               ].map((item, i) => (
                 <Col xs={24} sm={12} xl={6} key={i}>
                   <Card variant="outlined" style={{ borderRadius: 10, borderColor: '#e5e7eb' }} styles={{ body: { padding: '14px 18px' } }}>
                     <div className={`kpi-label kpi-label--${item.type}`}>{item.label}</div>
-                    <div style={{ fontSize: 11, color: '#6b7280', fontWeight: 500 }}>{item.title} <span style={{ opacity: 0.4 }}>ⓘ</span></div>
+                    <div style={{ fontSize: 11, color: '#6b7280', fontWeight: 500 }}>{item.title}</div>
                     <div style={{ fontSize: 26, fontWeight: 800, color: '#1f2937', margin: '2px 0' }}>{item.value}</div>
-                    {item.change !== undefined && (
-                      <div className={`change-indicator ${item.change >= 0 ? 'change-indicator--up' : 'change-indicator--down'}`}>
-                        {item.change >= 0 ? '▲' : '▼'} {Math.abs(item.change)}% vs last period
-                      </div>
-                    )}
                   </Card>
                 </Col>
               ))}
             </Row>
+
+            {/* ── ROW 2: Value KPIs ── */}
             <Row gutter={[12, 12]} style={{ marginTop: 12 }}>
               {[
-                { label: 'TỶ LỆ', type: 'value', title: 'Churn Rate', value: metrics ? `${metrics.churnRate}%` : '...' },
-                { label: 'TỶ LỆ', type: 'value', title: 'Complete Profiles', value: metrics ? `${metrics.completeProfilesPct}%` : '...' },
-                { label: 'GIÁ TRỊ', type: 'value', title: 'Average CLV', value: metrics ? `${(metrics.averageCLV > 0 ? metrics.averageCLV / 1000000 : 0).toFixed(1)}M ₫` : '...' },
-                { label: 'SỐ LƯỢNG', type: 'quantity', title: 'Baby Profiles', value: metrics ? metrics.babyProfiles.toLocaleString() : '...' },
+                { label: 'RATE', type: 'value', title: 'Churn Rate', value: metrics ? `${metrics.churnRate}%` : '...' },
+                { label: 'RATE', type: 'value', title: 'Complete Profiles', value: metrics ? `${metrics.completeProfilesPct}%` : '...' },
+                { label: 'VALUE', type: 'value', title: 'Average CLV', value: metrics ? `${(metrics.averageCLV > 0 ? metrics.averageCLV / 1000000 : 0).toFixed(1)}M ₫` : '...' },
+                { label: 'COUNT', type: 'quantity', title: 'Baby Profiles', value: metrics?.babyProfiles?.toLocaleString() ?? '...' },
               ].map((item, i) => (
                 <Col xs={24} sm={12} xl={6} key={i}>
                   <Card variant="outlined" style={{ borderRadius: 10, borderColor: '#e5e7eb' }} styles={{ body: { padding: '14px 18px' } }}>
                     <div className={`kpi-label kpi-label--${item.type}`}>{item.label}</div>
-                    <div style={{ fontSize: 11, color: '#6b7280', fontWeight: 500 }}>{item.title} <span style={{ opacity: 0.4 }}>ⓘ</span></div>
+                    <div style={{ fontSize: 11, color: '#6b7280', fontWeight: 500 }}>{item.title}</div>
                     <div style={{ fontSize: 26, fontWeight: 800, color: '#1f2937', margin: '2px 0' }}>{item.value}</div>
-                    {item.change !== undefined && (
-                      <div className={`change-indicator ${item.change >= 0 ? 'change-indicator--up' : 'change-indicator--down'}`}>
-                        {item.change >= 0 ? '▲' : '▼'} {Math.abs(item.change)}% vs last period
-                      </div>
-                    )}
                   </Card>
                 </Col>
               ))}
             </Row>
 
-            {/* Journey Funnel */}
-            <Card variant="outlined" style={{ borderRadius: 10, borderColor: '#e5e7eb', marginTop: 20 }} styles={{ body: { padding: '20px 24px' } }}>
-              <Title level={5} style={{ margin: 0, fontWeight: 700, marginBottom: 4 }}>Customer Journey & Conversion</Title>
-              <Text type="secondary" style={{ fontSize: 12, display: 'block', marginBottom: 16 }}>6 stages · % conversion & sentiment journey</Text>
+            {/* ── ROW 3: Orders & Tickets KPIs ── */}
+            <Row gutter={[12, 12]} style={{ marginTop: 12 }}>
+              {[
+                { label: 'COUNT', type: 'quantity', title: 'Total Orders', value: metrics?.totalOrders?.toLocaleString() ?? '...' },
+                { label: 'VALUE', type: 'value', title: 'Total Revenue', value: metrics ? `${(metrics.totalRevenue > 0 ? metrics.totalRevenue / 1000000 : 0).toFixed(1)}M ₫` : '...' },
+                { label: 'COUNT', type: 'quantity', title: 'Support Tickets', value: metrics?.totalTickets?.toLocaleString() ?? '...' },
+                { label: 'STATUS', type: 'value', title: 'Open Tickets', value: metrics?.openTickets?.toLocaleString() ?? '...' },
+              ].map((item, i) => (
+                <Col xs={24} sm={12} xl={6} key={i}>
+                  <Card variant="outlined" style={{ borderRadius: 10, borderColor: '#e5e7eb' }} styles={{ body: { padding: '14px 18px' } }}>
+                    <div className={`kpi-label kpi-label--${item.type}`}>{item.label}</div>
+                    <div style={{ fontSize: 11, color: '#6b7280', fontWeight: 500 }}>{item.title}</div>
+                    <div style={{ fontSize: 26, fontWeight: 800, color: '#1f2937', margin: '2px 0' }}>{item.value}</div>
+                  </Card>
+                </Col>
+              ))}
+            </Row>
 
-              <Row gutter={16} style={{ marginBottom: 20 }}>
-                {[
-                  { title: 'Total Reach', value: '4,250', change: -8.2, sub: 'entered journey' },
-                  { title: 'Total Conversion', value: '18%', change: 5.4, sub: 'Awareness → Purchase' },
-                  { title: 'Customers Purchased', value: '765', change: -3.1, sub: 'completed orders' },
-                  { title: 'Avg Conversion Time', value: '14', sub: 'days on average' },
-                  { title: 'Repeat Purchase', value: '32%', sub: '398 loyal customers' },
-                ].map((m, i) => (
-                  <Col key={i} flex={1}>
-                    <div style={{ background: i === 4 ? '#fef2f2' : '#f9fafb', borderRadius: 8, padding: '12px 14px' }}>
-                      <div style={{ fontSize: 12, color: '#6b7280', marginBottom: 2 }}>{m.title} <span style={{ opacity: 0.4 }}>ⓘ</span></div>
-                      <div style={{ fontSize: 22, fontWeight: 800 }}>{m.value}</div>
-                      {m.change !== undefined && (
-                        <div className={`change-indicator ${m.change >= 0 ? 'change-indicator--up' : 'change-indicator--down'}`} style={{ marginTop: 2 }}>
-                          {m.change >= 0 ? '▲' : '▼'} {Math.abs(m.change)}% vs last period
+            {/* ── ROW 4: Breakdowns ── */}
+            <Row gutter={[12, 12]} style={{ marginTop: 20 }}>
+              {/* Customer Type Breakdown */}
+              <Col xs={24} md={8}>
+                <Card variant="outlined" style={{ borderRadius: 10, borderColor: '#e5e7eb', height: '100%' }} styles={{ body: { padding: '16px 20px' } }}>
+                  <Title level={5} style={{ margin: 0, fontWeight: 700, marginBottom: 16 }}>Customer Types</Title>
+                  {metrics?.customerTypeBreakdown ? (() => {
+                    const { endUser, outlet, keyshop } = metrics.customerTypeBreakdown;
+                    const total = endUser + outlet + keyshop || 1;
+                    const items = [
+                      { label: 'End User', count: endUser, color: '#3b82f6' },
+                      { label: 'Outlet', count: outlet, color: '#8b5cf6' },
+                      { label: 'Keyshop', count: keyshop, color: '#f59e0b' },
+                    ];
+                    return items.map(it => (
+                      <div key={it.label} style={{ marginBottom: 12 }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+                          <Text style={{ fontSize: 12 }}>{it.label}</Text>
+                          <Text strong style={{ fontSize: 12 }}>{it.count} ({Math.round((it.count / total) * 100)}%)</Text>
                         </div>
-                      )}
-                      {m.sub && <div style={{ fontSize: 10, color: '#9ca3af', marginTop: 2 }}>{m.sub}</div>}
-                    </div>
-                  </Col>
-                ))}
-              </Row>
+                        <Progress percent={Math.round((it.count / total) * 100)} showInfo={false} strokeColor={it.color} size="small" />
+                      </div>
+                    ));
+                  })() : <Empty description="Loading..." />}
+                </Card>
+              </Col>
 
-              <Text type="secondary" style={{ fontSize: 11, fontWeight: 600, textTransform: 'uppercase', letterSpacing: 0.5, display: 'block', marginBottom: 8 }}>
-                FUNNEL CONVERSION
-              </Text>
-              <div className="funnel-chevron" style={{ marginBottom: 24 }}>
-                {funnelStages.map((stage) => (
-                  <div key={stage.name} className="funnel-stage" style={{ background: stage.color }}>
-                    <div>
-                      <div className="funnel-stage-name">{stage.name}</div>
-                      <div className="funnel-stage-sub">{stage.sub}</div>
-                    </div>
-                    <div className="funnel-stage-pct">{stage.pct}%</div>
-                  </div>
-                ))}
-              </div>
+              {/* Tier Distribution */}
+              <Col xs={24} md={8}>
+                <Card variant="outlined" style={{ borderRadius: 10, borderColor: '#e5e7eb', height: '100%' }} styles={{ body: { padding: '16px 20px' } }}>
+                  <Title level={5} style={{ margin: 0, fontWeight: 700, marginBottom: 16 }}>Loyalty Tiers</Title>
+                  {metrics?.tierCounts && metrics.tierCounts.length > 0 ? (() => {
+                    const total = metrics.tierCounts.reduce((s: number, t: any) => s + t.count, 0) || 1;
+                    const tierColors: Record<string, string> = { GOLD: '#f59e0b', SILVER: '#94a3b8', MEMBER: '#3b82f6', PLATINUM: '#8b5cf6' };
+                    return metrics.tierCounts.map((t: any) => (
+                      <div key={t.tier} style={{ marginBottom: 12 }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+                          <Tag color={tierColors[t.tier] || '#6b7280'} style={{ margin: 0 }}>{t.tier}</Tag>
+                          <Text strong style={{ fontSize: 12 }}>{t.count} ({Math.round((t.count / total) * 100)}%)</Text>
+                        </div>
+                        <Progress percent={Math.round((t.count / total) * 100)} showInfo={false} strokeColor={tierColors[t.tier] || '#6b7280'} size="small" />
+                      </div>
+                    ));
+                  })() : <Empty description="No tier data" />}
+                </Card>
+              </Col>
 
-              <Text type="secondary" style={{ fontSize: 11, fontWeight: 600, textTransform: 'uppercase', letterSpacing: 0.5, display: 'block', marginBottom: 8 }}>
-                CUSTOMER SENTIMENT JOURNEY <span style={{ opacity: 0.4 }}>ⓘ</span>
-              </Text>
-              {(['Positive', 'Neutral', 'Negative'] as const).map((level, li) => {
-                // Realistic sentiment: negative at start, neutral in middle, positive at end
-                const sentimentMap = [
-                  { positive: false, neutral: false, negative: true },
-                  { positive: false, neutral: true,  negative: false },
-                  { positive: false, neutral: true,  negative: false },
-                  { positive: true,  neutral: false, negative: false },
-                  { positive: true,  neutral: false, negative: false },
-                  { positive: true,  neutral: false, negative: false },
-                ];
-                return (
-                  <div key={level} className="sentiment-row">
-                    <div className="sentiment-label" style={{
-                      color: li === 0 ? '#10b981' : li === 1 ? '#6b7280' : '#ef4444',
-                    }}>{level}</div>
-                    <div className="sentiment-dots">
-                      {sentimentMap.map((stage, si) => {
-                        const isActive = li === 0 ? stage.positive : li === 1 ? stage.neutral : stage.negative;
-                        const activeColor = li === 0 ? '#10b981' : li === 1 ? '#6b7280' : '#ef4444';
-                        return (
-                          <div key={si} className="sentiment-dot" style={{
-                            background: isActive ? activeColor : 'transparent',
-                            border: `2px solid ${isActive ? activeColor : '#e5e7eb'}`,
-                          }} />
-                        );
-                      })}
-                    </div>
-                  </div>
-                );
-              })}
-            </Card>
+              {/* Registration Sources */}
+              <Col xs={24} md={8}>
+                <Card variant="outlined" style={{ borderRadius: 10, borderColor: '#e5e7eb', height: '100%' }} styles={{ body: { padding: '16px 20px' } }}>
+                  <Title level={5} style={{ margin: 0, fontWeight: 700, marginBottom: 16 }}>Registration Sources</Title>
+                  {metrics?.sourceCounts && metrics.sourceCounts.length > 0 ? (() => {
+                    const total = metrics.sourceCounts.reduce((s: number, src: any) => s + src.count, 0) || 1;
+                    const sourceColors = ['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444', '#6b7280'];
+                    return metrics.sourceCounts.slice(0, 6).map((src: any, i: number) => (
+                      <div key={src.source} style={{ marginBottom: 12 }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+                          <Text style={{ fontSize: 12 }}>{src.source}</Text>
+                          <Text strong style={{ fontSize: 12 }}>{src.count}</Text>
+                        </div>
+                        <Progress percent={Math.round((src.count / total) * 100)} showInfo={false} strokeColor={sourceColors[i % sourceColors.length]} size="small" />
+                      </div>
+                    ));
+                  })() : <Empty description="No source data" />}
+                </Card>
+              </Col>
+            </Row>
+
+            {/* ── ROW 5: Recent Activity ── */}
+            <Row gutter={[12, 12]} style={{ marginTop: 20 }}>
+              <Col xs={24} md={12}>
+                <Card variant="outlined" style={{ borderRadius: 10, borderColor: '#e5e7eb' }} styles={{ body: { padding: '16px 20px' } }}>
+                  <Title level={5} style={{ margin: 0, fontWeight: 700, marginBottom: 12 }}>Recent Customers</Title>
+                  {metrics?.recentCustomers && metrics.recentCustomers.length > 0 ? (
+                    <Table
+                      dataSource={metrics.recentCustomers}
+                      rowKey="id"
+                      size="small"
+                      pagination={false}
+                      onRow={(r: any) => ({ onClick: () => navigate(`/customer360/${r.id}`), style: { cursor: 'pointer' } })}
+                      columns={[
+                        { title: 'Name', key: 'name', render: (_: any, r: any) => (
+                          <Space>
+                            <Avatar size={28} style={{ background: '#3b82f6' }} icon={r.customerType === 'Outlet' || r.customerType === 'Keyshop' ? <ShopOutlined /> : <UserOutlined />} />
+                            <Text strong style={{ fontSize: 12 }}>{r.fullName || '—'}</Text>
+                          </Space>
+                        )},
+                        { title: 'Type', key: 'type', render: (_: any, r: any) => <Tag>{r.customerType || 'End user'}</Tag> },
+                        { title: 'Added', key: 'date', render: (_: any, r: any) => <Text type="secondary" style={{ fontSize: 11 }}>{new Date(r.createdAt).toLocaleDateString('vi-VN')}</Text> },
+                      ]}
+                    />
+                  ) : <Empty description="No customers yet" />}
+                </Card>
+              </Col>
+
+              <Col xs={24} md={12}>
+                <Card variant="outlined" style={{ borderRadius: 10, borderColor: '#e5e7eb' }} styles={{ body: { padding: '16px 20px' } }}>
+                  <Title level={5} style={{ margin: 0, fontWeight: 700, marginBottom: 12 }}>Top Customers (Lifetime Points)</Title>
+                  {metrics?.topCustomers && metrics.topCustomers.length > 0 ? (
+                    <Table
+                      dataSource={metrics.topCustomers}
+                      rowKey="id"
+                      size="small"
+                      pagination={false}
+                      onRow={(r: any) => ({ onClick: () => navigate(`/customer360/${r.customer?.id}`), style: { cursor: 'pointer' } })}
+                      columns={[
+                        { title: 'Customer', key: 'name', render: (_: any, r: any) => (
+                          <Space>
+                            <Avatar size={28} style={{ background: r.tier?.tierCode === 'GOLD' ? '#f59e0b' : '#3b82f6' }} icon={<UserOutlined />} />
+                            <Text strong style={{ fontSize: 12 }}>{r.customer?.fullName || '—'}</Text>
+                          </Space>
+                        )},
+                        { title: 'Tier', key: 'tier', render: (_: any, r: any) => <Tag color={r.tier?.tierCode === 'GOLD' ? 'gold' : r.tier?.tierCode === 'SILVER' ? 'default' : 'blue'}>{r.tier?.tierCode || '—'}</Tag> },
+                        { title: 'Points', key: 'points', render: (_: any, r: any) => <Text strong>{(r.pointsLifetime || 0).toLocaleString()}</Text> },
+                      ]}
+                    />
+                  ) : <Empty description="No loyalty data" />}
+                </Card>
+              </Col>
+            </Row>
+
+            {/* ── ROW 6: Recent Orders & Tickets ── */}
+            <Row gutter={[12, 12]} style={{ marginTop: 12 }}>
+              <Col xs={24} md={12}>
+                <Card variant="outlined" style={{ borderRadius: 10, borderColor: '#e5e7eb' }} styles={{ body: { padding: '16px 20px' } }}>
+                  <Title level={5} style={{ margin: 0, fontWeight: 700, marginBottom: 12 }}>Recent Orders</Title>
+                  {metrics?.recentOrders && metrics.recentOrders.length > 0 ? (
+                    <Table
+                      dataSource={metrics.recentOrders}
+                      rowKey="id"
+                      size="small"
+                      pagination={false}
+                      columns={[
+                        { title: 'Order #', key: 'num', render: (_: any, r: any) => <Text code style={{ fontSize: 11 }}>{r.orderNumber || r.id?.substring(0, 8)}</Text> },
+                        { title: 'Customer', key: 'cust', render: (_: any, r: any) => <Text style={{ fontSize: 12 }}>{r.customer?.fullName || '—'}</Text> },
+                        { title: 'Amount', key: 'amt', render: (_: any, r: any) => <Text strong style={{ fontSize: 12 }}>{r.totalAmount ? `${Number(r.totalAmount).toLocaleString()} ₫` : '—'}</Text> },
+                        { title: 'Status', key: 'status', render: (_: any, r: any) => <Tag color={r.status === 'completed' ? 'success' : r.status === 'processing' ? 'processing' : 'default'}>{r.status || '—'}</Tag> },
+                      ]}
+                    />
+                  ) : <Empty description="No orders yet" />}
+                </Card>
+              </Col>
+
+              <Col xs={24} md={12}>
+                <Card variant="outlined" style={{ borderRadius: 10, borderColor: '#e5e7eb' }} styles={{ body: { padding: '16px 20px' } }}>
+                  <Title level={5} style={{ margin: 0, fontWeight: 700, marginBottom: 12 }}>Recent Support Tickets</Title>
+                  {metrics?.recentTickets && metrics.recentTickets.length > 0 ? (
+                    <Table
+                      dataSource={metrics.recentTickets}
+                      rowKey="id"
+                      size="small"
+                      pagination={false}
+                      columns={[
+                        { title: 'Subject', key: 'subj', render: (_: any, r: any) => <Text style={{ fontSize: 12 }}>{r.subject}</Text> },
+                        { title: 'Customer', key: 'cust', render: (_: any, r: any) => <Text style={{ fontSize: 12 }}>{r.customer?.fullName || '—'}</Text> },
+                        { title: 'Status', key: 'status', render: (_: any, r: any) => <Tag color={r.status === 'Open' ? 'error' : r.status === 'In Progress' ? 'processing' : 'success'}>{r.status}</Tag> },
+                      ]}
+                    />
+                  ) : <Empty description="No tickets yet" />}
+                </Card>
+              </Col>
+            </Row>
           </div>
         ) : (
           /* ─── Customers List ─── */
@@ -407,102 +517,118 @@ export default function Customer360Page() {
         <Form
           form={form}
           layout="vertical"
+          initialValues={{ customerType: 'End user' }}
           onFinish={handleSubmitCustomer}
         >
+          <Form.Item name="customerType" label="Customer Type" rules={[{ required: true, message: 'Please select customer type' }]}>
+            <Select placeholder="Select customer type" disabled={modalMode === 'edit'}>
+              <Select.Option value="End user">End user</Select.Option>
+              <Select.Option value="Outlet">Outlet</Select.Option>
+              <Select.Option value="Keyshop">Keyshop</Select.Option>
+            </Select>
+          </Form.Item>
           <Form.Item
             name="fullName"
-            label="Họ và Name"
+            label="Full Name"
             rules={[{ required: true, message: 'Please enter full name' }]}
           >
             <Input placeholder="Enter full name" />
           </Form.Item>
+          {isEndUser && (
+            <>
+              <Form.Item name="gender" label="Gender" rules={[{ required: true, message: 'Please select gender' }]}>
+                <Select placeholder="Select gender">
+                  <Select.Option value="male">Male</Select.Option>
+                  <Select.Option value="female">Female</Select.Option>
+                  <Select.Option value="other">Other</Select.Option>
+                </Select>
+              </Form.Item>
+              <Form.Item name="dateOfBirth" label="Date of Birth" rules={[{ required: true, message: 'Please select date of birth' }]}>
+                <DatePicker style={{ width: '100%' }} format="DD/MM/YYYY" />
+              </Form.Item>
+            </>
+          )}
           <Form.Item
             name="phone"
             label="Phone Number"
             rules={[{ required: true, message: 'Please enter phone number' }]}
           >
-            <Input placeholder="Enter phone number" />
+            <Input placeholder="Enter phone number" disabled={modalMode === 'edit'} />
           </Form.Item>
           <Form.Item
             name="email"
             label="Email"
             rules={[{ type: 'email', message: 'Invalid email' }]}
           >
-            <Input placeholder="Enter email (optional)" />
-          </Form.Item>
-          <Form.Item name="gender" label="Gender">
-            <Select placeholder="Select gender" allowClear>
-              <Select.Option value="male">Male</Select.Option>
-              <Select.Option value="female">Female</Select.Option>
-              <Select.Option value="other">Other</Select.Option>
-            </Select>
-          </Form.Item>
-          <Form.Item name="dateOfBirth" label="Date of Birth">
-            <DatePicker style={{ width: '100%' }} format="DD/MM/YYYY" />
-          </Form.Item>
-          <Form.Item name="customerType" label="Customer Type">
-            <Select placeholder="Select customer type" allowClear>
-              <Select.Option value="End user">End user</Select.Option>
-              <Select.Option value="Outlet">Outlet</Select.Option>
-              <Select.Option value="Keyshop">Keyshop</Select.Option>
-            </Select>
+            <Input placeholder="Enter email (optional)" disabled={modalMode === 'edit'} />
           </Form.Item>
           <Form.Item name="address" label="Address">
             <Input placeholder="Enter address" />
           </Form.Item>
+          
+          {!isEndUser && (
+            <Form.Item name="dmsCode" label="DMS Code">
+              <Input placeholder="Enter DMS Code" />
+            </Form.Item>
+          )}
+
           <Form.Item name="notes" label="Notes">
             <Input.TextArea placeholder="Enter notes" rows={3} />
           </Form.Item>
 
-          <Divider style={{ margin: '12px 0' }} orientation="left">Children Information</Divider>
-          <Form.List name="babies">
-            {(fields, { add, remove }) => (
-              <>
-                {fields.map(({ key, name, ...restField }) => (
-                  <Card size="small" key={key} style={{ marginBottom: 12, background: '#f9fafb' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-                      <Text strong>Child #{name + 1}</Text>
-                      <Button type="text" danger icon={<DeleteOutlined />} onClick={() => remove(name)} />
-                    </div>
-                    <Row gutter={12}>
-                      <Col span={12}>
-                        <Form.Item {...restField} name={[name, 'name']} label="Child Name" rules={[{ required: true, message: 'Missing name' }]}>
-                          <Input placeholder="Name" />
-                        </Form.Item>
-                      </Col>
-                      <Col span={12}>
-                        <Form.Item {...restField} name={[name, 'dateOfBirth']} label="Date of Birth" rules={[{ required: true, message: 'Missing date of birth' }]}>
-                          <DatePicker style={{ width: '100%' }} format="DD/MM/YYYY" />
-                        </Form.Item>
-                      </Col>
-                      <Col span={12}>
-                        <Form.Item {...restField} name={[name, 'gender']} label="Gender" rules={[{ required: true, message: 'Missing gender' }]}>
-                          <Select placeholder="Gender" allowClear>
-                            <Select.Option value="male">Male</Select.Option>
-                            <Select.Option value="female">Female</Select.Option>
-                          </Select>
-                        </Form.Item>
-                      </Col>
-                      <Col span={12}>
-                        <Form.Item {...restField} name={[name, 'stageCode']} label="Stage">
-                          <Select placeholder="Stage" allowClear>
-                            <Select.Option value="NEWBORN">Newborn</Select.Option>
-                            <Select.Option value="INFANT">Infant</Select.Option>
-                            <Select.Option value="TODDLER">Toddler</Select.Option>
-                          </Select>
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                  </Card>
-                ))}
-                <Form.Item>
-                  <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
-                    Add Child
-                  </Button>
-                </Form.Item>
-              </>
-            )}
-          </Form.List>
+          {isEndUser && (
+            <>
+              <Divider style={{ margin: '12px 0' }} orientation="left">Children Information</Divider>
+              <Form.List name="babies">
+                {(fields, { add, remove }) => (
+                  <>
+                    {fields.map(({ key, name, ...restField }) => (
+                      <Card size="small" key={key} style={{ marginBottom: 12, background: '#f9fafb' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                          <Text strong>Child #{name + 1}</Text>
+                          <Button type="text" danger icon={<DeleteOutlined />} onClick={() => remove(name)} />
+                        </div>
+                        <Row gutter={12}>
+                          <Col span={12}>
+                            <Form.Item {...restField} name={[name, 'name']} label="Child Name" rules={[{ required: true, message: 'Missing name' }]}>
+                              <Input placeholder="Name" />
+                            </Form.Item>
+                          </Col>
+                          <Col span={12}>
+                            <Form.Item {...restField} name={[name, 'dateOfBirth']} label="Date of Birth" rules={[{ required: true, message: 'Missing date of birth' }]}>
+                              <DatePicker style={{ width: '100%' }} format="DD/MM/YYYY" />
+                            </Form.Item>
+                          </Col>
+                          <Col span={12}>
+                            <Form.Item {...restField} name={[name, 'gender']} label="Gender" rules={[{ required: true, message: 'Missing gender' }]}>
+                              <Select placeholder="Gender" allowClear>
+                                <Select.Option value="male">Male</Select.Option>
+                                <Select.Option value="female">Female</Select.Option>
+                              </Select>
+                            </Form.Item>
+                          </Col>
+                          <Col span={12}>
+                            <Form.Item {...restField} name={[name, 'stageCode']} label="Stage" rules={[{ required: true, message: 'Missing stage' }]}>
+                              <Select placeholder="Stage" allowClear>
+                                <Select.Option value="NEWBORN">Newborn</Select.Option>
+                                <Select.Option value="INFANT">Infant</Select.Option>
+                                <Select.Option value="TODDLER">Toddler</Select.Option>
+                              </Select>
+                            </Form.Item>
+                          </Col>
+                        </Row>
+                      </Card>
+                    ))}
+                    <Form.Item>
+                      <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                        Add Child
+                      </Button>
+                    </Form.Item>
+                  </>
+                )}
+              </Form.List>
+            </>
+          )}
         </Form>
       </Modal>
     </>

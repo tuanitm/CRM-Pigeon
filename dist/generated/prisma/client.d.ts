@@ -82,3 +82,6 @@ export type DataHubColumn = Prisma.DataHubColumnModel;
 export type DataHubRecord = Prisma.DataHubRecordModel;
 export type ZaloOA = Prisma.ZaloOAModel;
 export type ZaloMiniApp = Prisma.ZaloMiniAppModel;
+export type SupportTicket = Prisma.SupportTicketModel;
+export type CustomerDevice = Prisma.CustomerDeviceModel;
+export type AdminNotification = Prisma.AdminNotificationModel;

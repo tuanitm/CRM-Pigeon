@@ -19,6 +19,7 @@ const swagger_1 = require("@nestjs/swagger");
 const identify_dto_1 = require("./dto/identify.dto");
 const prisma_service_1 = require("../shared/prisma/prisma.service");
 const redis_service_1 = require("../shared/redis/redis.service");
+const ua_parser_js_1 = require("ua-parser-js");
 let IdentifyController = IdentifyController_1 = class IdentifyController {
     prisma;
     redis;
@@ -46,7 +47,7 @@ let IdentifyController = IdentifyController_1 = class IdentifyController {
                         phone: normalizedPhone,
                         email: dto.email,
                         fullName: dto.fullName,
-                        customerCode: 'CUS' + Date.now().toString().slice(-4) + Math.floor(100 + Math.random() * 900).toString(),
+                        customerCode: Math.floor(10000000 + Math.random() * 90000000).toString(),
                         registrationSource: 'api',
                     },
                 });
@@ -60,6 +61,9 @@ let IdentifyController = IdentifyController_1 = class IdentifyController {
             customer = await this.prisma.customer.findFirst({
                 where: { email: dto.email },
             });
+        }
+        if (customer && customer.isActive === false) {
+            throw new common_1.HttpException('Your account has been deactivated. Please contact support.', common_1.HttpStatus.FORBIDDEN);
         }
         if (customer && dto.anonymousId) {
             await this.prisma.customerIdentity.upsert({
@@ -93,6 +97,43 @@ let IdentifyController = IdentifyController_1 = class IdentifyController {
                         stageCode: baby.stageCode,
                     },
                 });
+            }
+        }
+        if (customer && dto.userAgent) {
+            try {
+                const parser = new ua_parser_js_1.UAParser(dto.userAgent);
+                const browser = parser.getBrowser().name || 'Unknown Browser';
+                const os = parser.getOS().name || 'Unknown OS';
+                let deviceType = parser.getDevice().type || 'Desktop';
+                if (dto.userAgent.toLowerCase().includes('zalo')) {
+                    deviceType = 'Zalo MiniApp';
+                }
+                const existingDevice = await this.prisma.customerDevice.findFirst({
+                    where: {
+                        customerId: customer.id,
+                        userAgent: dto.userAgent
+                    }
+                });
+                if (existingDevice) {
+                    await this.prisma.customerDevice.update({
+                        where: { id: existingDevice.id },
+                        data: { lastLogin: new Date() }
+                    });
+                }
+                else {
+                    await this.prisma.customerDevice.create({
+                        data: {
+                            customerId: customer.id,
+                            deviceType,
+                            browser,
+                            os,
+                            userAgent: dto.userAgent
+                        }
+                    });
+                }
+            }
+            catch (err) {
+                this.logger.error('Failed to process device info', err);
             }
         }
         return { status: 'identified', customerId: customer?.id || null, isNew };

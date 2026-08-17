@@ -427,10 +427,56 @@ body {
   border-bottom: 2px solid var(--border-color);
 }
 .detail-tabs .ant-tabs-tab {
-  padding: 12px 16px !important;
+  margin: 0 !important;
+  padding: 8px 16px !important;
   font-weight: 600;
   color: var(--text-secondary);
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 40px !important;
+  border: 1px solid transparent !important;
+  border-radius: 20px !important;
+  background: transparent !important;
+  transition: all 0.2s;
 }
+
+.detail-tabs .ant-tabs-tab:hover {
+  background: rgba(0,0,0,0.02) !important;
+}
+
+.detail-tabs .ant-tabs-tab-active {
+  background: rgba(59, 130, 246, 0.1) !important;
+  border-color: rgba(59, 130, 246, 0.2) !important;
+}
+
 .detail-tabs .ant-tabs-tab-active .ant-tabs-tab-btn {
   color: var(--primary) !important;
+}
+
+.detail-tabs .ant-tabs-tab-btn {
+  line-height: 1 !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+/* Hide standard Ant Design ink-bar because it breaks in multi-row layout */
+.detail-tabs .ant-tabs-ink-bar {
+  display: none !important;
+}
+
+/* Force tabs to wrap into multiple rows and hide the dropdown button */
+.detail-tabs .ant-tabs-nav-wrap {
+  overflow: visible !important;
+  white-space: normal !important;
+}
+.detail-tabs .ant-tabs-nav-list {
+  flex-wrap: wrap;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 16px;
+  padding-bottom: 8px;
+}
+.detail-tabs .ant-tabs-nav-operations {
+  display: none !important;
 }

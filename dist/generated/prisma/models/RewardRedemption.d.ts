@@ -21,6 +21,8 @@ export type RewardRedemptionMinAggregateOutputType = {
     rewardId: string | null;
     pointsSpent: number | null;
     status: string | null;
+    shipmentNo: string | null;
+    trackingLink: string | null;
     fulfilledAt: Date | null;
     idempotencyKey: string | null;
     createdAt: Date | null;
@@ -33,6 +35,8 @@ export type RewardRedemptionMaxAggregateOutputType = {
     rewardId: string | null;
     pointsSpent: number | null;
     status: string | null;
+    shipmentNo: string | null;
+    trackingLink: string | null;
     fulfilledAt: Date | null;
     idempotencyKey: string | null;
     createdAt: Date | null;
@@ -45,6 +49,8 @@ export type RewardRedemptionCountAggregateOutputType = {
     rewardId: number;
     pointsSpent: number;
     status: number;
+    shipmentNo: number;
+    trackingLink: number;
     fulfilledAt: number;
     idempotencyKey: number;
     createdAt: number;
@@ -64,6 +70,8 @@ export type RewardRedemptionMinAggregateInputType = {
     rewardId?: true;
     pointsSpent?: true;
     status?: true;
+    shipmentNo?: true;
+    trackingLink?: true;
     fulfilledAt?: true;
     idempotencyKey?: true;
     createdAt?: true;
@@ -76,6 +84,8 @@ export type RewardRedemptionMaxAggregateInputType = {
     rewardId?: true;
     pointsSpent?: true;
     status?: true;
+    shipmentNo?: true;
+    trackingLink?: true;
     fulfilledAt?: true;
     idempotencyKey?: true;
     createdAt?: true;
@@ -88,6 +98,8 @@ export type RewardRedemptionCountAggregateInputType = {
     rewardId?: true;
     pointsSpent?: true;
     status?: true;
+    shipmentNo?: true;
+    trackingLink?: true;
     fulfilledAt?: true;
     idempotencyKey?: true;
     createdAt?: true;
@@ -129,6 +141,8 @@ export type RewardRedemptionGroupByOutputType = {
     rewardId: string;
     pointsSpent: number;
     status: string;
+    shipmentNo: string | null;
+    trackingLink: string | null;
     fulfilledAt: Date | null;
     idempotencyKey: string | null;
     createdAt: Date;
@@ -152,6 +166,8 @@ export type RewardRedemptionWhereInput = {
     rewardId?: Prisma.UuidFilter<"RewardRedemption"> | string;
     pointsSpent?: Prisma.IntFilter<"RewardRedemption"> | number;
     status?: Prisma.StringFilter<"RewardRedemption"> | string;
+    shipmentNo?: Prisma.StringNullableFilter<"RewardRedemption"> | string | null;
+    trackingLink?: Prisma.StringNullableFilter<"RewardRedemption"> | string | null;
     fulfilledAt?: Prisma.DateTimeNullableFilter<"RewardRedemption"> | Date | string | null;
     idempotencyKey?: Prisma.StringNullableFilter<"RewardRedemption"> | string | null;
     createdAt?: Prisma.DateTimeFilter<"RewardRedemption"> | Date | string;
@@ -167,6 +183,8 @@ export type RewardRedemptionOrderByWithRelationInput = {
     rewardId?: Prisma.SortOrder;
     pointsSpent?: Prisma.SortOrder;
     status?: Prisma.SortOrder;
+    shipmentNo?: Prisma.SortOrderInput | Prisma.SortOrder;
+    trackingLink?: Prisma.SortOrderInput | Prisma.SortOrder;
     fulfilledAt?: Prisma.SortOrderInput | Prisma.SortOrder;
     idempotencyKey?: Prisma.SortOrderInput | Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
@@ -186,6 +204,8 @@ export type RewardRedemptionWhereUniqueInput = Prisma.AtLeast<{
     rewardId?: Prisma.UuidFilter<"RewardRedemption"> | string;
     pointsSpent?: Prisma.IntFilter<"RewardRedemption"> | number;
     status?: Prisma.StringFilter<"RewardRedemption"> | string;
+    shipmentNo?: Prisma.StringNullableFilter<"RewardRedemption"> | string | null;
+    trackingLink?: Prisma.StringNullableFilter<"RewardRedemption"> | string | null;
     fulfilledAt?: Prisma.DateTimeNullableFilter<"RewardRedemption"> | Date | string | null;
     createdAt?: Prisma.DateTimeFilter<"RewardRedemption"> | Date | string;
     updatedAt?: Prisma.DateTimeFilter<"RewardRedemption"> | Date | string;
@@ -200,6 +220,8 @@ export type RewardRedemptionOrderByWithAggregationInput = {
     rewardId?: Prisma.SortOrder;
     pointsSpent?: Prisma.SortOrder;
     status?: Prisma.SortOrder;
+    shipmentNo?: Prisma.SortOrderInput | Prisma.SortOrder;
+    trackingLink?: Prisma.SortOrderInput | Prisma.SortOrder;
     fulfilledAt?: Prisma.SortOrderInput | Prisma.SortOrder;
     idempotencyKey?: Prisma.SortOrderInput | Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
@@ -220,6 +242,8 @@ export type RewardRedemptionScalarWhereWithAggregatesInput = {
     rewardId?: Prisma.UuidWithAggregatesFilter<"RewardRedemption"> | string;
     pointsSpent?: Prisma.IntWithAggregatesFilter<"RewardRedemption"> | number;
     status?: Prisma.StringWithAggregatesFilter<"RewardRedemption"> | string;
+    shipmentNo?: Prisma.StringNullableWithAggregatesFilter<"RewardRedemption"> | string | null;
+    trackingLink?: Prisma.StringNullableWithAggregatesFilter<"RewardRedemption"> | string | null;
     fulfilledAt?: Prisma.DateTimeNullableWithAggregatesFilter<"RewardRedemption"> | Date | string | null;
     idempotencyKey?: Prisma.StringNullableWithAggregatesFilter<"RewardRedemption"> | string | null;
     createdAt?: Prisma.DateTimeWithAggregatesFilter<"RewardRedemption"> | Date | string;
@@ -229,6 +253,8 @@ export type RewardRedemptionCreateInput = {
     id?: string;
     pointsSpent: number;
     status?: string;
+    shipmentNo?: string | null;
+    trackingLink?: string | null;
     fulfilledAt?: Date | string | null;
     idempotencyKey?: string | null;
     createdAt?: Date | string;
@@ -244,6 +270,8 @@ export type RewardRedemptionUncheckedCreateInput = {
     rewardId: string;
     pointsSpent: number;
     status?: string;
+    shipmentNo?: string | null;
+    trackingLink?: string | null;
     fulfilledAt?: Date | string | null;
     idempotencyKey?: string | null;
     createdAt?: Date | string;
@@ -253,6 +281,8 @@ export type RewardRedemptionUpdateInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     pointsSpent?: Prisma.IntFieldUpdateOperationsInput | number;
     status?: Prisma.StringFieldUpdateOperationsInput | string;
+    shipmentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    trackingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     fulfilledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     idempotencyKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -268,6 +298,8 @@ export type RewardRedemptionUncheckedUpdateInput = {
     rewardId?: Prisma.StringFieldUpdateOperationsInput | string;
     pointsSpent?: Prisma.IntFieldUpdateOperationsInput | number;
     status?: Prisma.StringFieldUpdateOperationsInput | string;
+    shipmentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    trackingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     fulfilledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     idempotencyKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -280,6 +312,8 @@ export type RewardRedemptionCreateManyInput = {
     rewardId: string;
     pointsSpent: number;
     status?: string;
+    shipmentNo?: string | null;
+    trackingLink?: string | null;
     fulfilledAt?: Date | string | null;
     idempotencyKey?: string | null;
     createdAt?: Date | string;
@@ -289,6 +323,8 @@ export type RewardRedemptionUpdateManyMutationInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     pointsSpent?: Prisma.IntFieldUpdateOperationsInput | number;
     status?: Prisma.StringFieldUpdateOperationsInput | string;
+    shipmentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    trackingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     fulfilledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     idempotencyKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -301,6 +337,8 @@ export type RewardRedemptionUncheckedUpdateManyInput = {
     rewardId?: Prisma.StringFieldUpdateOperationsInput | string;
     pointsSpent?: Prisma.IntFieldUpdateOperationsInput | number;
     status?: Prisma.StringFieldUpdateOperationsInput | string;
+    shipmentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    trackingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     fulfilledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     idempotencyKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -321,6 +359,8 @@ export type RewardRedemptionCountOrderByAggregateInput = {
     rewardId?: Prisma.SortOrder;
     pointsSpent?: Prisma.SortOrder;
     status?: Prisma.SortOrder;
+    shipmentNo?: Prisma.SortOrder;
+    trackingLink?: Prisma.SortOrder;
     fulfilledAt?: Prisma.SortOrder;
     idempotencyKey?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
@@ -336,6 +376,8 @@ export type RewardRedemptionMaxOrderByAggregateInput = {
     rewardId?: Prisma.SortOrder;
     pointsSpent?: Prisma.SortOrder;
     status?: Prisma.SortOrder;
+    shipmentNo?: Prisma.SortOrder;
+    trackingLink?: Prisma.SortOrder;
     fulfilledAt?: Prisma.SortOrder;
     idempotencyKey?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
@@ -348,6 +390,8 @@ export type RewardRedemptionMinOrderByAggregateInput = {
     rewardId?: Prisma.SortOrder;
     pointsSpent?: Prisma.SortOrder;
     status?: Prisma.SortOrder;
+    shipmentNo?: Prisma.SortOrder;
+    trackingLink?: Prisma.SortOrder;
     fulfilledAt?: Prisma.SortOrder;
     idempotencyKey?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
@@ -474,6 +518,8 @@ export type RewardRedemptionCreateWithoutCustomerInput = {
     id?: string;
     pointsSpent: number;
     status?: string;
+    shipmentNo?: string | null;
+    trackingLink?: string | null;
     fulfilledAt?: Date | string | null;
     idempotencyKey?: string | null;
     createdAt?: Date | string;
@@ -487,6 +533,8 @@ export type RewardRedemptionUncheckedCreateWithoutCustomerInput = {
     rewardId: string;
     pointsSpent: number;
     status?: string;
+    shipmentNo?: string | null;
+    trackingLink?: string | null;
     fulfilledAt?: Date | string | null;
     idempotencyKey?: string | null;
     createdAt?: Date | string;
@@ -523,6 +571,8 @@ export type RewardRedemptionScalarWhereInput = {
     rewardId?: Prisma.UuidFilter<"RewardRedemption"> | string;
     pointsSpent?: Prisma.IntFilter<"RewardRedemption"> | number;
     status?: Prisma.StringFilter<"RewardRedemption"> | string;
+    shipmentNo?: Prisma.StringNullableFilter<"RewardRedemption"> | string | null;
+    trackingLink?: Prisma.StringNullableFilter<"RewardRedemption"> | string | null;
     fulfilledAt?: Prisma.DateTimeNullableFilter<"RewardRedemption"> | Date | string | null;
     idempotencyKey?: Prisma.StringNullableFilter<"RewardRedemption"> | string | null;
     createdAt?: Prisma.DateTimeFilter<"RewardRedemption"> | Date | string;
@@ -532,6 +582,8 @@ export type RewardRedemptionCreateWithoutLoyalty_accountInput = {
     id?: string;
     pointsSpent: number;
     status?: string;
+    shipmentNo?: string | null;
+    trackingLink?: string | null;
     fulfilledAt?: Date | string | null;
     idempotencyKey?: string | null;
     createdAt?: Date | string;
@@ -545,6 +597,8 @@ export type RewardRedemptionUncheckedCreateWithoutLoyalty_accountInput = {
     rewardId: string;
     pointsSpent: number;
     status?: string;
+    shipmentNo?: string | null;
+    trackingLink?: string | null;
     fulfilledAt?: Date | string | null;
     idempotencyKey?: string | null;
     createdAt?: Date | string;
@@ -575,6 +629,8 @@ export type RewardRedemptionCreateWithoutReward_catalogInput = {
     id?: string;
     pointsSpent: number;
     status?: string;
+    shipmentNo?: string | null;
+    trackingLink?: string | null;
     fulfilledAt?: Date | string | null;
     idempotencyKey?: string | null;
     createdAt?: Date | string;
@@ -588,6 +644,8 @@ export type RewardRedemptionUncheckedCreateWithoutReward_catalogInput = {
     customerId: string;
     pointsSpent: number;
     status?: string;
+    shipmentNo?: string | null;
+    trackingLink?: string | null;
     fulfilledAt?: Date | string | null;
     idempotencyKey?: string | null;
     createdAt?: Date | string;
@@ -620,6 +678,8 @@ export type RewardRedemptionCreateManyCustomerInput = {
     rewardId: string;
     pointsSpent: number;
     status?: string;
+    shipmentNo?: string | null;
+    trackingLink?: string | null;
     fulfilledAt?: Date | string | null;
     idempotencyKey?: string | null;
     createdAt?: Date | string;
@@ -629,6 +689,8 @@ export type RewardRedemptionUpdateWithoutCustomerInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     pointsSpent?: Prisma.IntFieldUpdateOperationsInput | number;
     status?: Prisma.StringFieldUpdateOperationsInput | string;
+    shipmentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    trackingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     fulfilledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     idempotencyKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -642,6 +704,8 @@ export type RewardRedemptionUncheckedUpdateWithoutCustomerInput = {
     rewardId?: Prisma.StringFieldUpdateOperationsInput | string;
     pointsSpent?: Prisma.IntFieldUpdateOperationsInput | number;
     status?: Prisma.StringFieldUpdateOperationsInput | string;
+    shipmentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    trackingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     fulfilledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     idempotencyKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -653,6 +717,8 @@ export type RewardRedemptionUncheckedUpdateManyWithoutCustomerInput = {
     rewardId?: Prisma.StringFieldUpdateOperationsInput | string;
     pointsSpent?: Prisma.IntFieldUpdateOperationsInput | number;
     status?: Prisma.StringFieldUpdateOperationsInput | string;
+    shipmentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    trackingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     fulfilledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     idempotencyKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -664,6 +730,8 @@ export type RewardRedemptionCreateManyLoyalty_accountInput = {
     rewardId: string;
     pointsSpent: number;
     status?: string;
+    shipmentNo?: string | null;
+    trackingLink?: string | null;
     fulfilledAt?: Date | string | null;
     idempotencyKey?: string | null;
     createdAt?: Date | string;
@@ -673,6 +741,8 @@ export type RewardRedemptionUpdateWithoutLoyalty_accountInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     pointsSpent?: Prisma.IntFieldUpdateOperationsInput | number;
     status?: Prisma.StringFieldUpdateOperationsInput | string;
+    shipmentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    trackingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     fulfilledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     idempotencyKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -686,6 +756,8 @@ export type RewardRedemptionUncheckedUpdateWithoutLoyalty_accountInput = {
     rewardId?: Prisma.StringFieldUpdateOperationsInput | string;
     pointsSpent?: Prisma.IntFieldUpdateOperationsInput | number;
     status?: Prisma.StringFieldUpdateOperationsInput | string;
+    shipmentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    trackingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     fulfilledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     idempotencyKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -697,6 +769,8 @@ export type RewardRedemptionUncheckedUpdateManyWithoutLoyalty_accountInput = {
     rewardId?: Prisma.StringFieldUpdateOperationsInput | string;
     pointsSpent?: Prisma.IntFieldUpdateOperationsInput | number;
     status?: Prisma.StringFieldUpdateOperationsInput | string;
+    shipmentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    trackingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     fulfilledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     idempotencyKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -708,6 +782,8 @@ export type RewardRedemptionCreateManyReward_catalogInput = {
     customerId: string;
     pointsSpent: number;
     status?: string;
+    shipmentNo?: string | null;
+    trackingLink?: string | null;
     fulfilledAt?: Date | string | null;
     idempotencyKey?: string | null;
     createdAt?: Date | string;
@@ -717,6 +793,8 @@ export type RewardRedemptionUpdateWithoutReward_catalogInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     pointsSpent?: Prisma.IntFieldUpdateOperationsInput | number;
     status?: Prisma.StringFieldUpdateOperationsInput | string;
+    shipmentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    trackingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     fulfilledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     idempotencyKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -730,6 +808,8 @@ export type RewardRedemptionUncheckedUpdateWithoutReward_catalogInput = {
     customerId?: Prisma.StringFieldUpdateOperationsInput | string;
     pointsSpent?: Prisma.IntFieldUpdateOperationsInput | number;
     status?: Prisma.StringFieldUpdateOperationsInput | string;
+    shipmentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    trackingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     fulfilledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     idempotencyKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -741,6 +821,8 @@ export type RewardRedemptionUncheckedUpdateManyWithoutReward_catalogInput = {
     customerId?: Prisma.StringFieldUpdateOperationsInput | string;
     pointsSpent?: Prisma.IntFieldUpdateOperationsInput | number;
     status?: Prisma.StringFieldUpdateOperationsInput | string;
+    shipmentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    trackingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     fulfilledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     idempotencyKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -753,6 +835,8 @@ export type RewardRedemptionSelect<ExtArgs extends runtime.Types.Extensions.Inte
     rewardId?: boolean;
     pointsSpent?: boolean;
     status?: boolean;
+    shipmentNo?: boolean;
+    trackingLink?: boolean;
     fulfilledAt?: boolean;
     idempotencyKey?: boolean;
     createdAt?: boolean;
@@ -768,6 +852,8 @@ export type RewardRedemptionSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
     rewardId?: boolean;
     pointsSpent?: boolean;
     status?: boolean;
+    shipmentNo?: boolean;
+    trackingLink?: boolean;
     fulfilledAt?: boolean;
     idempotencyKey?: boolean;
     createdAt?: boolean;
@@ -783,6 +869,8 @@ export type RewardRedemptionSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
     rewardId?: boolean;
     pointsSpent?: boolean;
     status?: boolean;
+    shipmentNo?: boolean;
+    trackingLink?: boolean;
     fulfilledAt?: boolean;
     idempotencyKey?: boolean;
     createdAt?: boolean;
@@ -798,12 +886,14 @@ export type RewardRedemptionSelectScalar = {
     rewardId?: boolean;
     pointsSpent?: boolean;
     status?: boolean;
+    shipmentNo?: boolean;
+    trackingLink?: boolean;
     fulfilledAt?: boolean;
     idempotencyKey?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
 };
-export type RewardRedemptionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "loyaltyAccountId" | "customerId" | "rewardId" | "pointsSpent" | "status" | "fulfilledAt" | "idempotencyKey" | "createdAt" | "updatedAt", ExtArgs["result"]["rewardRedemption"]>;
+export type RewardRedemptionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "loyaltyAccountId" | "customerId" | "rewardId" | "pointsSpent" | "status" | "shipmentNo" | "trackingLink" | "fulfilledAt" | "idempotencyKey" | "createdAt" | "updatedAt", ExtArgs["result"]["rewardRedemption"]>;
 export type RewardRedemptionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     customer?: boolean | Prisma.CustomerDefaultArgs<ExtArgs>;
     loyalty_account?: boolean | Prisma.LoyaltyAccountDefaultArgs<ExtArgs>;
@@ -833,6 +923,8 @@ export type $RewardRedemptionPayload<ExtArgs extends runtime.Types.Extensions.In
         rewardId: string;
         pointsSpent: number;
         status: string;
+        shipmentNo: string | null;
+        trackingLink: string | null;
         fulfilledAt: Date | null;
         idempotencyKey: string | null;
         createdAt: Date;
@@ -903,6 +995,8 @@ export interface RewardRedemptionFieldRefs {
     readonly rewardId: Prisma.FieldRef<"RewardRedemption", 'String'>;
     readonly pointsSpent: Prisma.FieldRef<"RewardRedemption", 'Int'>;
     readonly status: Prisma.FieldRef<"RewardRedemption", 'String'>;
+    readonly shipmentNo: Prisma.FieldRef<"RewardRedemption", 'String'>;
+    readonly trackingLink: Prisma.FieldRef<"RewardRedemption", 'String'>;
     readonly fulfilledAt: Prisma.FieldRef<"RewardRedemption", 'DateTime'>;
     readonly idempotencyKey: Prisma.FieldRef<"RewardRedemption", 'String'>;
     readonly createdAt: Prisma.FieldRef<"RewardRedemption", 'DateTime'>;

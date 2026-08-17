@@ -116,6 +116,9 @@ let PrismaService = class PrismaService {
     get subscription_item() { return this._client.subscription_item; }
     get warranty_registration() { return this._client.warranty_registration; }
     get webhook_inbox() { return this._client.webhook_inbox; }
+    get supportTicket() { return this._client.supportTicket; }
+    get customerDevice() { return this._client.customerDevice; }
+    get adminNotification() { return this._client.adminNotification; }
     get $executeRaw() { return this._client.$executeRaw.bind(this._client); }
     get $queryRaw() { return this._client.$queryRaw.bind(this._client); }
     get $transaction() { return this._client.$transaction.bind(this._client); }

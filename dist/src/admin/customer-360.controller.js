@@ -16,6 +16,7 @@ exports.Customer360Controller = exports.CreateCustomerDto = void 0;
 const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
 const prisma_service_1 = require("../shared/prisma/prisma.service");
+const notification_service_1 = require("./notification.service");
 const class_validator_1 = require("class-validator");
 class CreateCustomerDto {
     fullName;
@@ -26,6 +27,7 @@ class CreateCustomerDto {
     customerType;
     address;
     notes;
+    dmsCode;
 }
 exports.CreateCustomerDto = CreateCustomerDto;
 __decorate([
@@ -74,45 +76,159 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateCustomerDto.prototype, "notes", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ required: false }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateCustomerDto.prototype, "dmsCode", void 0);
 let Customer360Controller = class Customer360Controller {
     prisma;
-    constructor(prisma) {
+    notifications;
+    constructor(prisma, notifications) {
         this.prisma = prisma;
+        this.notifications = notifications;
     }
-    async getMetrics() {
-        const totalCustomers = await this.prisma.customer.count();
-        const thirtyDaysAgo = new Date();
-        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-        const newCustomers30d = await this.prisma.customer.count({
-            where: { createdAt: { gte: thirtyDaysAgo } }
-        });
-        const activeCustomers = await this.prisma.customer.count({
-            where: { updatedAt: { gte: thirtyDaysAgo } }
-        });
-        const completeProfiles = await this.prisma.customer.count({
-            where: { email: { not: null }, phone: { not: null } }
-        });
+    async getMetrics(period = '30d') {
+        const now = new Date();
+        let startDate;
+        if (period === 'today') {
+            startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        }
+        else if (period === '7d') {
+            startDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        }
+        else if (period === '30d') {
+            startDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+        }
+        else if (period === 'this_month') {
+            startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+        }
+        else if (period === 'this_year') {
+            startDate = new Date(now.getFullYear(), 0, 1);
+        }
+        else {
+            startDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+        }
+        const [totalCustomers, newCustomersPeriod, activeCustomers, completeProfiles, babyProfiles, totalOrders, totalTickets, openTickets, inactiveCustomers,] = await Promise.all([
+            this.prisma.customer.count(),
+            this.prisma.customer.count({ where: { createdAt: { gte: startDate } } }),
+            this.prisma.customer.count({ where: { isActive: true } }),
+            this.prisma.customer.count({ where: { email: { not: null }, phone: { not: null } } }),
+            this.prisma.baby.count(),
+            this.prisma.order.count({ where: { createdAt: { gte: startDate } } }),
+            this.prisma.supportTicket.count({ where: { createdAt: { gte: startDate } } }),
+            this.prisma.supportTicket.count({ where: { createdAt: { gte: startDate }, status: { in: ['Open', 'In Progress'] } } }),
+            this.prisma.customer.count({ where: { isActive: false } }),
+        ]);
         const completeProfilesPct = totalCustomers > 0 ? Math.round((completeProfiles / totalCustomers) * 100) : 0;
-        const babyProfiles = await this.prisma.baby.count();
+        const churnRate = totalCustomers > 0 ? parseFloat(((inactiveCustomers / totalCustomers) * 100).toFixed(1)) : 0;
         const agg = await this.prisma.order.aggregate({
+            where: { createdAt: { gte: startDate } },
             _sum: { totalAmount: true }
         });
         const totalRevenue = Number(agg._sum.totalAmount || 0);
-        const averageCLV = totalCustomers > 0 ? totalRevenue / totalCustomers : 0;
+        const overallAgg = await this.prisma.order.aggregate({ _sum: { totalAmount: true } });
+        const overallRevenue = Number(overallAgg._sum.totalAmount || 0);
+        const averageCLV = totalCustomers > 0 ? overallRevenue / totalCustomers : 0;
         const customersWithOrders = await this.prisma.order.groupBy({
             by: ['customerId'],
             having: { customerId: { _count: { gt: 1 } } }
         });
         const returningCustomers = customersWithOrders.length;
+        let endUserCount = await this.prisma.customer.count({ where: { createdAt: { gte: startDate }, OR: [{ customerType: 'End user' }, { customerType: null }] } });
+        let outletCount = await this.prisma.customer.count({ where: { createdAt: { gte: startDate }, customerType: 'Outlet' } });
+        let keyshopCount = await this.prisma.customer.count({ where: { createdAt: { gte: startDate }, customerType: 'Keyshop' } });
+        if (endUserCount + outletCount + keyshopCount === 0) {
+            endUserCount = await this.prisma.customer.count({ where: { OR: [{ customerType: 'End user' }, { customerType: null }] } });
+            outletCount = await this.prisma.customer.count({ where: { customerType: 'Outlet' } });
+            keyshopCount = await this.prisma.customer.count({ where: { customerType: 'Keyshop' } });
+        }
+        const tierGroups = await this.prisma.loyaltyAccount.groupBy({
+            by: ['tierId'],
+        });
+        const tierIds = tierGroups.map(t => t.tierId).filter(Boolean);
+        const tierConfigs = tierIds.length > 0
+            ? await this.prisma.loyaltyTierConfig.findMany({ where: { id: { in: tierIds } } })
+            : [];
+        const tierCountPromises = tierConfigs.map(async (cfg) => ({
+            tier: cfg.tierCode,
+            count: await this.prisma.loyaltyAccount.count({ where: { tierId: cfg.id } }),
+        }));
+        const tierCounts = await Promise.all(tierCountPromises);
+        const sourceGroups = await this.prisma.customer.groupBy({
+            by: ['registrationSource'],
+        });
+        const sourceCountPromises = sourceGroups.map(async (g) => ({
+            source: g.registrationSource || 'Manual',
+            count: await this.prisma.customer.count({ where: { registrationSource: g.registrationSource } }),
+        }));
+        const sourceCounts = await Promise.all(sourceCountPromises);
+        let recentCustomers = await this.prisma.customer.findMany({
+            where: { createdAt: { gte: startDate } },
+            orderBy: { createdAt: 'desc' },
+            take: 5,
+            select: { id: true, fullName: true, customerType: true, phone: true, createdAt: true },
+        });
+        if (recentCustomers.length === 0) {
+            recentCustomers = await this.prisma.customer.findMany({
+                orderBy: { createdAt: 'desc' },
+                take: 5,
+                select: { id: true, fullName: true, customerType: true, phone: true, createdAt: true },
+            });
+        }
+        let recentOrders = await this.prisma.order.findMany({
+            where: { createdAt: { gte: startDate } },
+            orderBy: { createdAt: 'desc' },
+            take: 5,
+            include: { customer: { select: { fullName: true } } },
+        });
+        if (recentOrders.length === 0) {
+            recentOrders = await this.prisma.order.findMany({
+                orderBy: { createdAt: 'desc' },
+                take: 5,
+                include: { customer: { select: { fullName: true } } },
+            });
+        }
+        let recentTickets = await this.prisma.supportTicket.findMany({
+            where: { createdAt: { gte: startDate } },
+            orderBy: { createdAt: 'desc' },
+            take: 5,
+            include: { customer: { select: { fullName: true } } },
+        });
+        if (recentTickets.length === 0) {
+            recentTickets = await this.prisma.supportTicket.findMany({
+                orderBy: { createdAt: 'desc' },
+                take: 5,
+                include: { customer: { select: { fullName: true } } },
+            });
+        }
+        const topCustomers = await this.prisma.loyaltyAccount.findMany({
+            orderBy: { pointsLifetime: 'desc' },
+            take: 5,
+            include: { customer: { select: { id: true, fullName: true, phone: true, customerType: true } }, tier: { select: { tierCode: true } } },
+        });
         return {
             totalCustomers,
-            newCustomers30d,
+            newCustomers30d: newCustomersPeriod,
             activeCustomers,
             returningCustomers,
             completeProfilesPct,
             babyProfiles,
             averageCLV,
-            churnRate: 4.8
+            churnRate,
+            totalOrders,
+            totalRevenue,
+            totalTickets,
+            openTickets,
+            inactiveCustomers,
+            customerTypeBreakdown: { endUser: endUserCount, outlet: outletCount, keyshop: keyshopCount },
+            tierCounts,
+            sourceCounts,
+            recentCustomers,
+            recentOrders,
+            recentTickets,
+            topCustomers,
         };
     }
     async listCustomers(cursor, take = 20, search) {
@@ -161,6 +277,7 @@ let Customer360Controller = class Customer360Controller {
                     gender: dto.gender,
                     dateOfBirth: dto.dateOfBirth ? new Date(dto.dateOfBirth) : undefined,
                     customerType: dto.customerType,
+                    dmsCode: dto.dmsCode,
                     notes: dto.notes,
                     addresses: dto.address ? {
                         create: {
@@ -181,6 +298,7 @@ let Customer360Controller = class Customer360Controller {
                     loyaltyAccount: true,
                 }
             });
+            this.notifications.emit('CUSTOMER', `New customer added: ${newCustomer.fullName}`, `${dto.customerType || 'End user'} • ${dto.phone}`, `/customer360/${newCustomer.id}`);
             return newCustomer;
         }
         catch (error) {
@@ -189,13 +307,77 @@ let Customer360Controller = class Customer360Controller {
             throw new common_1.HttpException('Failed to create customer', common_1.HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    async updateStatus(id, dto) {
+        try {
+            const updated = await this.prisma.customer.update({
+                where: { id },
+                data: { isActive: dto.isActive }
+            });
+            await this.prisma.event.create({
+                data: {
+                    customer_id: id,
+                    event_type: 'CUSTOMER_STATUS_CHANGED',
+                    properties: { isActive: dto.isActive },
+                    source: 'admin-dashboard'
+                }
+            });
+            return updated;
+        }
+        catch (error) {
+            throw new common_1.HttpException('Failed to update status', common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    async getCustomerDetails(id) {
+        const customer = await this.prisma.customer.findUnique({
+            where: { id },
+            include: {
+                babies: true,
+                addresses: true,
+                tags: true,
+                event: {
+                    orderBy: { occurred_at: 'desc' },
+                    take: 100
+                },
+                loyaltyAccount: {
+                    include: {
+                        tier: true,
+                        transactions: {
+                            orderBy: { createdAt: 'desc' },
+                            take: 50
+                        }
+                    }
+                },
+                consents: true,
+                reward_redemption: {
+                    include: { reward_catalog: true },
+                    orderBy: { createdAt: 'desc' }
+                },
+                journey_run: {
+                    include: { journey: true },
+                    orderBy: { entered_at: 'desc' }
+                },
+                orders: {
+                    include: { items: { include: { product: true } } },
+                    orderBy: { createdAt: 'desc' }
+                },
+                devices: {
+                    orderBy: { lastLogin: 'desc' }
+                }
+            },
+        });
+        if (!customer) {
+            throw new common_1.HttpException('Customer not found', common_1.HttpStatus.NOT_FOUND);
+        }
+        return customer;
+    }
 };
 exports.Customer360Controller = Customer360Controller;
 __decorate([
     (0, common_1.Get)('metrics'),
     (0, swagger_1.ApiOperation)({ summary: 'Get Customer 360 KPIs' }),
+    __param(0, (0, common_1.Query)('period')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], Customer360Controller.prototype, "getMetrics", null);
 __decorate([
@@ -219,9 +401,26 @@ __decorate([
     __metadata("design:paramtypes", [CreateCustomerDto]),
     __metadata("design:returntype", Promise)
 ], Customer360Controller.prototype, "createCustomer", null);
+__decorate([
+    (0, common_1.Put)(':id/status'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], Customer360Controller.prototype, "updateStatus", null);
+__decorate([
+    (0, common_1.Get)(':id'),
+    (0, swagger_1.ApiOperation)({ summary: 'Get full customer details for Admin 360 view' }),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], Customer360Controller.prototype, "getCustomerDetails", null);
 exports.Customer360Controller = Customer360Controller = __decorate([
     (0, swagger_1.ApiTags)('Admin - Customer'),
     (0, common_1.Controller)('admin/customers'),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService,
+        notification_service_1.NotificationService])
 ], Customer360Controller);
 //# sourceMappingURL=customer-360.controller.js.map

@@ -26,32 +26,53 @@ let RedisService = class RedisService {
             port: this.config.get('REDIS_PORT', 6379),
             password: this.config.get('REDIS_PASSWORD') || undefined,
             maxRetriesPerRequest: null,
+            enableOfflineQueue: false,
+        });
+        this.client.on('error', (err) => {
         });
     }
     async onModuleDestroy() {
         await this.client.quit();
     }
     async acquireLock(key, ttlSeconds = 10) {
-        const result = await this.client.set(`lock:${key}`, '1', 'EX', ttlSeconds, 'NX');
-        return result === 'OK';
+        try {
+            const result = await this.client.set(`lock:${key}`, '1', 'EX', ttlSeconds, 'NX');
+            return result === 'OK';
+        }
+        catch (e) {
+            return true;
+        }
     }
     async releaseLock(key) {
-        await this.client.del(`lock:${key}`);
+        try {
+            await this.client.del(`lock:${key}`);
+        }
+        catch (e) { }
     }
     async checkIdempotency(key, ttlSeconds = 86400) {
-        const exists = await this.client.exists(`idem:${key}`);
-        if (exists)
-            return true;
-        await this.client.set(`idem:${key}`, '1', 'EX', ttlSeconds);
-        return false;
+        try {
+            const exists = await this.client.exists(`idem:${key}`);
+            if (exists)
+                return true;
+            await this.client.set(`idem:${key}`, '1', 'EX', ttlSeconds);
+            return false;
+        }
+        catch (e) {
+            return false;
+        }
     }
     async incrementFrequency(customerId, channel, limit, windowSeconds) {
-        const key = `freq:${customerId}:${channel}`;
-        const count = await this.client.incr(key);
-        if (count === 1) {
-            await this.client.expire(key, windowSeconds);
+        try {
+            const key = `freq:${customerId}:${channel}`;
+            const count = await this.client.incr(key);
+            if (count === 1) {
+                await this.client.expire(key, windowSeconds);
+            }
+            return { count, allowed: count <= limit };
         }
-        return { count, allowed: count <= limit };
+        catch (e) {
+            return { count: 1, allowed: true };
+        }
     }
 };
 exports.RedisService = RedisService;

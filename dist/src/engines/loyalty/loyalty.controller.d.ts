@@ -24,7 +24,6 @@ export declare class LoyaltyController {
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            isDefault: boolean;
             tierCode: string;
             tierName: string;
             tierOrder: number;
@@ -32,6 +31,7 @@ export declare class LoyaltyController {
             minDistinctMonths: number;
             pointsMultiplier: import("@prisma/client-runtime-utils").Decimal;
             benefits: import("@prisma/client/runtime/client").JsonValue | null;
+            isDefault: boolean;
         } | null;
     } & {
         id: string;

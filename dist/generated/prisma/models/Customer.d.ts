@@ -17,9 +17,11 @@ export type CustomerMinAggregateOutputType = {
     avatarUrl: string | null;
     registrationSource: string | null;
     customerType: string | null;
+    dmsCode: string | null;
     notes: string | null;
     dataQualityFlag: string | null;
     isMerged: boolean | null;
+    isActive: boolean | null;
     mergedIntoId: string | null;
     createdAt: Date | null;
     updatedAt: Date | null;
@@ -35,9 +37,11 @@ export type CustomerMaxAggregateOutputType = {
     avatarUrl: string | null;
     registrationSource: string | null;
     customerType: string | null;
+    dmsCode: string | null;
     notes: string | null;
     dataQualityFlag: string | null;
     isMerged: boolean | null;
+    isActive: boolean | null;
     mergedIntoId: string | null;
     createdAt: Date | null;
     updatedAt: Date | null;
@@ -53,9 +57,11 @@ export type CustomerCountAggregateOutputType = {
     avatarUrl: number;
     registrationSource: number;
     customerType: number;
+    dmsCode: number;
     notes: number;
     dataQualityFlag: number;
     isMerged: number;
+    isActive: number;
     mergedIntoId: number;
     createdAt: number;
     updatedAt: number;
@@ -72,9 +78,11 @@ export type CustomerMinAggregateInputType = {
     avatarUrl?: true;
     registrationSource?: true;
     customerType?: true;
+    dmsCode?: true;
     notes?: true;
     dataQualityFlag?: true;
     isMerged?: true;
+    isActive?: true;
     mergedIntoId?: true;
     createdAt?: true;
     updatedAt?: true;
@@ -90,9 +98,11 @@ export type CustomerMaxAggregateInputType = {
     avatarUrl?: true;
     registrationSource?: true;
     customerType?: true;
+    dmsCode?: true;
     notes?: true;
     dataQualityFlag?: true;
     isMerged?: true;
+    isActive?: true;
     mergedIntoId?: true;
     createdAt?: true;
     updatedAt?: true;
@@ -108,9 +118,11 @@ export type CustomerCountAggregateInputType = {
     avatarUrl?: true;
     registrationSource?: true;
     customerType?: true;
+    dmsCode?: true;
     notes?: true;
     dataQualityFlag?: true;
     isMerged?: true;
+    isActive?: true;
     mergedIntoId?: true;
     createdAt?: true;
     updatedAt?: true;
@@ -151,9 +163,11 @@ export type CustomerGroupByOutputType = {
     avatarUrl: string | null;
     registrationSource: string | null;
     customerType: string | null;
+    dmsCode: string | null;
     notes: string | null;
     dataQualityFlag: string | null;
     isMerged: boolean;
+    isActive: boolean;
     mergedIntoId: string | null;
     createdAt: Date;
     updatedAt: Date;
@@ -178,9 +192,11 @@ export type CustomerWhereInput = {
     avatarUrl?: Prisma.StringNullableFilter<"Customer"> | string | null;
     registrationSource?: Prisma.StringNullableFilter<"Customer"> | string | null;
     customerType?: Prisma.StringNullableFilter<"Customer"> | string | null;
+    dmsCode?: Prisma.StringNullableFilter<"Customer"> | string | null;
     notes?: Prisma.StringNullableFilter<"Customer"> | string | null;
     dataQualityFlag?: Prisma.StringNullableFilter<"Customer"> | string | null;
     isMerged?: Prisma.BoolFilter<"Customer"> | boolean;
+    isActive?: Prisma.BoolFilter<"Customer"> | boolean;
     mergedIntoId?: Prisma.UuidNullableFilter<"Customer"> | string | null;
     createdAt?: Prisma.DateTimeFilter<"Customer"> | Date | string;
     updatedAt?: Prisma.DateTimeFilter<"Customer"> | Date | string;
@@ -222,6 +238,8 @@ export type CustomerWhereInput = {
     session?: Prisma.SessionListRelationFilter;
     subscription?: Prisma.SubscriptionListRelationFilter;
     warranty_registration?: Prisma.Warranty_registrationListRelationFilter;
+    support_ticket?: Prisma.SupportTicketListRelationFilter;
+    devices?: Prisma.CustomerDeviceListRelationFilter;
 };
 export type CustomerOrderByWithRelationInput = {
     id?: Prisma.SortOrder;
@@ -234,9 +252,11 @@ export type CustomerOrderByWithRelationInput = {
     avatarUrl?: Prisma.SortOrderInput | Prisma.SortOrder;
     registrationSource?: Prisma.SortOrderInput | Prisma.SortOrder;
     customerType?: Prisma.SortOrderInput | Prisma.SortOrder;
+    dmsCode?: Prisma.SortOrderInput | Prisma.SortOrder;
     notes?: Prisma.SortOrderInput | Prisma.SortOrder;
     dataQualityFlag?: Prisma.SortOrderInput | Prisma.SortOrder;
     isMerged?: Prisma.SortOrder;
+    isActive?: Prisma.SortOrder;
     mergedIntoId?: Prisma.SortOrderInput | Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
@@ -278,6 +298,8 @@ export type CustomerOrderByWithRelationInput = {
     session?: Prisma.sessionOrderByRelationAggregateInput;
     subscription?: Prisma.subscriptionOrderByRelationAggregateInput;
     warranty_registration?: Prisma.warranty_registrationOrderByRelationAggregateInput;
+    support_ticket?: Prisma.SupportTicketOrderByRelationAggregateInput;
+    devices?: Prisma.CustomerDeviceOrderByRelationAggregateInput;
 };
 export type CustomerWhereUniqueInput = Prisma.AtLeast<{
     id?: string;
@@ -293,9 +315,11 @@ export type CustomerWhereUniqueInput = Prisma.AtLeast<{
     avatarUrl?: Prisma.StringNullableFilter<"Customer"> | string | null;
     registrationSource?: Prisma.StringNullableFilter<"Customer"> | string | null;
     customerType?: Prisma.StringNullableFilter<"Customer"> | string | null;
+    dmsCode?: Prisma.StringNullableFilter<"Customer"> | string | null;
     notes?: Prisma.StringNullableFilter<"Customer"> | string | null;
     dataQualityFlag?: Prisma.StringNullableFilter<"Customer"> | string | null;
     isMerged?: Prisma.BoolFilter<"Customer"> | boolean;
+    isActive?: Prisma.BoolFilter<"Customer"> | boolean;
     mergedIntoId?: Prisma.UuidNullableFilter<"Customer"> | string | null;
     createdAt?: Prisma.DateTimeFilter<"Customer"> | Date | string;
     updatedAt?: Prisma.DateTimeFilter<"Customer"> | Date | string;
@@ -337,6 +361,8 @@ export type CustomerWhereUniqueInput = Prisma.AtLeast<{
     session?: Prisma.SessionListRelationFilter;
     subscription?: Prisma.SubscriptionListRelationFilter;
     warranty_registration?: Prisma.Warranty_registrationListRelationFilter;
+    support_ticket?: Prisma.SupportTicketListRelationFilter;
+    devices?: Prisma.CustomerDeviceListRelationFilter;
 }, "id" | "customerCode" | "phone">;
 export type CustomerOrderByWithAggregationInput = {
     id?: Prisma.SortOrder;
@@ -349,9 +375,11 @@ export type CustomerOrderByWithAggregationInput = {
     avatarUrl?: Prisma.SortOrderInput | Prisma.SortOrder;
     registrationSource?: Prisma.SortOrderInput | Prisma.SortOrder;
     customerType?: Prisma.SortOrderInput | Prisma.SortOrder;
+    dmsCode?: Prisma.SortOrderInput | Prisma.SortOrder;
     notes?: Prisma.SortOrderInput | Prisma.SortOrder;
     dataQualityFlag?: Prisma.SortOrderInput | Prisma.SortOrder;
     isMerged?: Prisma.SortOrder;
+    isActive?: Prisma.SortOrder;
     mergedIntoId?: Prisma.SortOrderInput | Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
@@ -373,9 +401,11 @@ export type CustomerScalarWhereWithAggregatesInput = {
     avatarUrl?: Prisma.StringNullableWithAggregatesFilter<"Customer"> | string | null;
     registrationSource?: Prisma.StringNullableWithAggregatesFilter<"Customer"> | string | null;
     customerType?: Prisma.StringNullableWithAggregatesFilter<"Customer"> | string | null;
+    dmsCode?: Prisma.StringNullableWithAggregatesFilter<"Customer"> | string | null;
     notes?: Prisma.StringNullableWithAggregatesFilter<"Customer"> | string | null;
     dataQualityFlag?: Prisma.StringNullableWithAggregatesFilter<"Customer"> | string | null;
     isMerged?: Prisma.BoolWithAggregatesFilter<"Customer"> | boolean;
+    isActive?: Prisma.BoolWithAggregatesFilter<"Customer"> | boolean;
     mergedIntoId?: Prisma.UuidNullableWithAggregatesFilter<"Customer"> | string | null;
     createdAt?: Prisma.DateTimeWithAggregatesFilter<"Customer"> | Date | string;
     updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Customer"> | Date | string;
@@ -391,9 +421,11 @@ export type CustomerCreateInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
@@ -434,6 +466,8 @@ export type CustomerCreateInput = {
     session?: Prisma.sessionCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerUncheckedCreateInput = {
     id?: string;
@@ -446,9 +480,11 @@ export type CustomerUncheckedCreateInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -489,6 +525,8 @@ export type CustomerUncheckedCreateInput = {
     session?: Prisma.sessionUncheckedCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionUncheckedCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceUncheckedCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerUpdateInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -501,9 +539,11 @@ export type CustomerUpdateInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
@@ -544,6 +584,8 @@ export type CustomerUpdateInput = {
     session?: Prisma.sessionUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerUncheckedUpdateInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -556,9 +598,11 @@ export type CustomerUncheckedUpdateInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -599,6 +643,8 @@ export type CustomerUncheckedUpdateInput = {
     session?: Prisma.sessionUncheckedUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUncheckedUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUncheckedUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUncheckedUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerCreateManyInput = {
     id?: string;
@@ -611,9 +657,11 @@ export type CustomerCreateManyInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -629,9 +677,11 @@ export type CustomerUpdateManyMutationInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
@@ -646,9 +696,11 @@ export type CustomerUncheckedUpdateManyInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -676,9 +728,11 @@ export type CustomerCountOrderByAggregateInput = {
     avatarUrl?: Prisma.SortOrder;
     registrationSource?: Prisma.SortOrder;
     customerType?: Prisma.SortOrder;
+    dmsCode?: Prisma.SortOrder;
     notes?: Prisma.SortOrder;
     dataQualityFlag?: Prisma.SortOrder;
     isMerged?: Prisma.SortOrder;
+    isActive?: Prisma.SortOrder;
     mergedIntoId?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
@@ -694,9 +748,11 @@ export type CustomerMaxOrderByAggregateInput = {
     avatarUrl?: Prisma.SortOrder;
     registrationSource?: Prisma.SortOrder;
     customerType?: Prisma.SortOrder;
+    dmsCode?: Prisma.SortOrder;
     notes?: Prisma.SortOrder;
     dataQualityFlag?: Prisma.SortOrder;
     isMerged?: Prisma.SortOrder;
+    isActive?: Prisma.SortOrder;
     mergedIntoId?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
@@ -712,9 +768,11 @@ export type CustomerMinOrderByAggregateInput = {
     avatarUrl?: Prisma.SortOrder;
     registrationSource?: Prisma.SortOrder;
     customerType?: Prisma.SortOrder;
+    dmsCode?: Prisma.SortOrder;
     notes?: Prisma.SortOrder;
     dataQualityFlag?: Prisma.SortOrder;
     isMerged?: Prisma.SortOrder;
+    isActive?: Prisma.SortOrder;
     mergedIntoId?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
@@ -1232,6 +1290,30 @@ export type CustomerUpdateOneRequiredWithoutWarranty_registrationNestedInput = {
     connect?: Prisma.CustomerWhereUniqueInput;
     update?: Prisma.XOR<Prisma.XOR<Prisma.CustomerUpdateToOneWithWhereWithoutWarranty_registrationInput, Prisma.CustomerUpdateWithoutWarranty_registrationInput>, Prisma.CustomerUncheckedUpdateWithoutWarranty_registrationInput>;
 };
+export type CustomerCreateNestedOneWithoutSupport_ticketInput = {
+    create?: Prisma.XOR<Prisma.CustomerCreateWithoutSupport_ticketInput, Prisma.CustomerUncheckedCreateWithoutSupport_ticketInput>;
+    connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutSupport_ticketInput;
+    connect?: Prisma.CustomerWhereUniqueInput;
+};
+export type CustomerUpdateOneRequiredWithoutSupport_ticketNestedInput = {
+    create?: Prisma.XOR<Prisma.CustomerCreateWithoutSupport_ticketInput, Prisma.CustomerUncheckedCreateWithoutSupport_ticketInput>;
+    connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutSupport_ticketInput;
+    upsert?: Prisma.CustomerUpsertWithoutSupport_ticketInput;
+    connect?: Prisma.CustomerWhereUniqueInput;
+    update?: Prisma.XOR<Prisma.XOR<Prisma.CustomerUpdateToOneWithWhereWithoutSupport_ticketInput, Prisma.CustomerUpdateWithoutSupport_ticketInput>, Prisma.CustomerUncheckedUpdateWithoutSupport_ticketInput>;
+};
+export type CustomerCreateNestedOneWithoutDevicesInput = {
+    create?: Prisma.XOR<Prisma.CustomerCreateWithoutDevicesInput, Prisma.CustomerUncheckedCreateWithoutDevicesInput>;
+    connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutDevicesInput;
+    connect?: Prisma.CustomerWhereUniqueInput;
+};
+export type CustomerUpdateOneRequiredWithoutDevicesNestedInput = {
+    create?: Prisma.XOR<Prisma.CustomerCreateWithoutDevicesInput, Prisma.CustomerUncheckedCreateWithoutDevicesInput>;
+    connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutDevicesInput;
+    upsert?: Prisma.CustomerUpsertWithoutDevicesInput;
+    connect?: Prisma.CustomerWhereUniqueInput;
+    update?: Prisma.XOR<Prisma.XOR<Prisma.CustomerUpdateToOneWithWhereWithoutDevicesInput, Prisma.CustomerUpdateWithoutDevicesInput>, Prisma.CustomerUncheckedUpdateWithoutDevicesInput>;
+};
 export type CustomerCreateWithoutMergedFromInput = {
     id?: string;
     customerCode?: string | null;
@@ -1243,9 +1325,11 @@ export type CustomerCreateWithoutMergedFromInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
@@ -1285,6 +1369,8 @@ export type CustomerCreateWithoutMergedFromInput = {
     session?: Prisma.sessionCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerUncheckedCreateWithoutMergedFromInput = {
     id?: string;
@@ -1297,9 +1383,11 @@ export type CustomerUncheckedCreateWithoutMergedFromInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -1339,6 +1427,8 @@ export type CustomerUncheckedCreateWithoutMergedFromInput = {
     session?: Prisma.sessionUncheckedCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionUncheckedCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceUncheckedCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerCreateOrConnectWithoutMergedFromInput = {
     where: Prisma.CustomerWhereUniqueInput;
@@ -1355,9 +1445,11 @@ export type CustomerCreateWithoutMergedIntoInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
@@ -1397,6 +1489,8 @@ export type CustomerCreateWithoutMergedIntoInput = {
     session?: Prisma.sessionCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerUncheckedCreateWithoutMergedIntoInput = {
     id?: string;
@@ -1409,9 +1503,11 @@ export type CustomerUncheckedCreateWithoutMergedIntoInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     babies?: Prisma.BabyUncheckedCreateNestedManyWithoutCustomerInput;
@@ -1451,6 +1547,8 @@ export type CustomerUncheckedCreateWithoutMergedIntoInput = {
     session?: Prisma.sessionUncheckedCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionUncheckedCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceUncheckedCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerCreateOrConnectWithoutMergedIntoInput = {
     where: Prisma.CustomerWhereUniqueInput;
@@ -1480,9 +1578,11 @@ export type CustomerUpdateWithoutMergedFromInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
@@ -1522,6 +1622,8 @@ export type CustomerUpdateWithoutMergedFromInput = {
     session?: Prisma.sessionUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerUncheckedUpdateWithoutMergedFromInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -1534,9 +1636,11 @@ export type CustomerUncheckedUpdateWithoutMergedFromInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1576,6 +1680,8 @@ export type CustomerUncheckedUpdateWithoutMergedFromInput = {
     session?: Prisma.sessionUncheckedUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUncheckedUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUncheckedUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUncheckedUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerUpsertWithWhereUniqueWithoutMergedIntoInput = {
     where: Prisma.CustomerWhereUniqueInput;
@@ -1604,9 +1710,11 @@ export type CustomerScalarWhereInput = {
     avatarUrl?: Prisma.StringNullableFilter<"Customer"> | string | null;
     registrationSource?: Prisma.StringNullableFilter<"Customer"> | string | null;
     customerType?: Prisma.StringNullableFilter<"Customer"> | string | null;
+    dmsCode?: Prisma.StringNullableFilter<"Customer"> | string | null;
     notes?: Prisma.StringNullableFilter<"Customer"> | string | null;
     dataQualityFlag?: Prisma.StringNullableFilter<"Customer"> | string | null;
     isMerged?: Prisma.BoolFilter<"Customer"> | boolean;
+    isActive?: Prisma.BoolFilter<"Customer"> | boolean;
     mergedIntoId?: Prisma.UuidNullableFilter<"Customer"> | string | null;
     createdAt?: Prisma.DateTimeFilter<"Customer"> | Date | string;
     updatedAt?: Prisma.DateTimeFilter<"Customer"> | Date | string;
@@ -1622,9 +1730,11 @@ export type CustomerCreateWithoutIdentitiesInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
@@ -1664,6 +1774,8 @@ export type CustomerCreateWithoutIdentitiesInput = {
     session?: Prisma.sessionCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerUncheckedCreateWithoutIdentitiesInput = {
     id?: string;
@@ -1676,9 +1788,11 @@ export type CustomerUncheckedCreateWithoutIdentitiesInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -1718,6 +1832,8 @@ export type CustomerUncheckedCreateWithoutIdentitiesInput = {
     session?: Prisma.sessionUncheckedCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionUncheckedCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceUncheckedCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerCreateOrConnectWithoutIdentitiesInput = {
     where: Prisma.CustomerWhereUniqueInput;
@@ -1743,9 +1859,11 @@ export type CustomerUpdateWithoutIdentitiesInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
@@ -1785,6 +1903,8 @@ export type CustomerUpdateWithoutIdentitiesInput = {
     session?: Prisma.sessionUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerUncheckedUpdateWithoutIdentitiesInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -1797,9 +1917,11 @@ export type CustomerUncheckedUpdateWithoutIdentitiesInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1839,6 +1961,8 @@ export type CustomerUncheckedUpdateWithoutIdentitiesInput = {
     session?: Prisma.sessionUncheckedUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUncheckedUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUncheckedUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUncheckedUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerCreateWithoutMerge_candidate_merge_candidate_customer_id_aTocustomerInput = {
     id?: string;
@@ -1851,9 +1975,11 @@ export type CustomerCreateWithoutMerge_candidate_merge_candidate_customer_id_aTo
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
@@ -1893,6 +2019,8 @@ export type CustomerCreateWithoutMerge_candidate_merge_candidate_customer_id_aTo
     session?: Prisma.sessionCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerUncheckedCreateWithoutMerge_candidate_merge_candidate_customer_id_aTocustomerInput = {
     id?: string;
@@ -1905,9 +2033,11 @@ export type CustomerUncheckedCreateWithoutMerge_candidate_merge_candidate_custom
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -1947,6 +2077,8 @@ export type CustomerUncheckedCreateWithoutMerge_candidate_merge_candidate_custom
     session?: Prisma.sessionUncheckedCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionUncheckedCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceUncheckedCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerCreateOrConnectWithoutMerge_candidate_merge_candidate_customer_id_aTocustomerInput = {
     where: Prisma.CustomerWhereUniqueInput;
@@ -1963,9 +2095,11 @@ export type CustomerCreateWithoutMerge_candidate_merge_candidate_customer_id_bTo
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
@@ -2005,6 +2139,8 @@ export type CustomerCreateWithoutMerge_candidate_merge_candidate_customer_id_bTo
     session?: Prisma.sessionCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerUncheckedCreateWithoutMerge_candidate_merge_candidate_customer_id_bTocustomerInput = {
     id?: string;
@@ -2017,9 +2153,11 @@ export type CustomerUncheckedCreateWithoutMerge_candidate_merge_candidate_custom
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -2059,6 +2197,8 @@ export type CustomerUncheckedCreateWithoutMerge_candidate_merge_candidate_custom
     session?: Prisma.sessionUncheckedCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionUncheckedCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceUncheckedCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerCreateOrConnectWithoutMerge_candidate_merge_candidate_customer_id_bTocustomerInput = {
     where: Prisma.CustomerWhereUniqueInput;
@@ -2084,9 +2224,11 @@ export type CustomerUpdateWithoutMerge_candidate_merge_candidate_customer_id_aTo
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
@@ -2126,6 +2268,8 @@ export type CustomerUpdateWithoutMerge_candidate_merge_candidate_customer_id_aTo
     session?: Prisma.sessionUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerUncheckedUpdateWithoutMerge_candidate_merge_candidate_customer_id_aTocustomerInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -2138,9 +2282,11 @@ export type CustomerUncheckedUpdateWithoutMerge_candidate_merge_candidate_custom
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -2180,6 +2326,8 @@ export type CustomerUncheckedUpdateWithoutMerge_candidate_merge_candidate_custom
     session?: Prisma.sessionUncheckedUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUncheckedUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUncheckedUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUncheckedUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerUpsertWithoutMerge_candidate_merge_candidate_customer_id_bTocustomerInput = {
     update: Prisma.XOR<Prisma.CustomerUpdateWithoutMerge_candidate_merge_candidate_customer_id_bTocustomerInput, Prisma.CustomerUncheckedUpdateWithoutMerge_candidate_merge_candidate_customer_id_bTocustomerInput>;
@@ -2201,9 +2349,11 @@ export type CustomerUpdateWithoutMerge_candidate_merge_candidate_customer_id_bTo
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
@@ -2243,6 +2393,8 @@ export type CustomerUpdateWithoutMerge_candidate_merge_candidate_customer_id_bTo
     session?: Prisma.sessionUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerUncheckedUpdateWithoutMerge_candidate_merge_candidate_customer_id_bTocustomerInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -2255,9 +2407,11 @@ export type CustomerUncheckedUpdateWithoutMerge_candidate_merge_candidate_custom
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -2297,6 +2451,8 @@ export type CustomerUncheckedUpdateWithoutMerge_candidate_merge_candidate_custom
     session?: Prisma.sessionUncheckedUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUncheckedUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUncheckedUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUncheckedUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerCreateWithoutAddressesInput = {
     id?: string;
@@ -2309,9 +2465,11 @@ export type CustomerCreateWithoutAddressesInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
@@ -2351,6 +2509,8 @@ export type CustomerCreateWithoutAddressesInput = {
     session?: Prisma.sessionCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerUncheckedCreateWithoutAddressesInput = {
     id?: string;
@@ -2363,9 +2523,11 @@ export type CustomerUncheckedCreateWithoutAddressesInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -2405,6 +2567,8 @@ export type CustomerUncheckedCreateWithoutAddressesInput = {
     session?: Prisma.sessionUncheckedCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionUncheckedCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceUncheckedCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerCreateOrConnectWithoutAddressesInput = {
     where: Prisma.CustomerWhereUniqueInput;
@@ -2430,9 +2594,11 @@ export type CustomerUpdateWithoutAddressesInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
@@ -2472,6 +2638,8 @@ export type CustomerUpdateWithoutAddressesInput = {
     session?: Prisma.sessionUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerUncheckedUpdateWithoutAddressesInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -2484,9 +2652,11 @@ export type CustomerUncheckedUpdateWithoutAddressesInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -2526,6 +2696,8 @@ export type CustomerUncheckedUpdateWithoutAddressesInput = {
     session?: Prisma.sessionUncheckedUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUncheckedUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUncheckedUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUncheckedUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerCreateWithoutTagsInput = {
     id?: string;
@@ -2538,9 +2710,11 @@ export type CustomerCreateWithoutTagsInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
@@ -2580,6 +2754,8 @@ export type CustomerCreateWithoutTagsInput = {
     session?: Prisma.sessionCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerUncheckedCreateWithoutTagsInput = {
     id?: string;
@@ -2592,9 +2768,11 @@ export type CustomerUncheckedCreateWithoutTagsInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -2634,6 +2812,8 @@ export type CustomerUncheckedCreateWithoutTagsInput = {
     session?: Prisma.sessionUncheckedCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionUncheckedCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceUncheckedCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerCreateOrConnectWithoutTagsInput = {
     where: Prisma.CustomerWhereUniqueInput;
@@ -2659,9 +2839,11 @@ export type CustomerUpdateWithoutTagsInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
@@ -2701,6 +2883,8 @@ export type CustomerUpdateWithoutTagsInput = {
     session?: Prisma.sessionUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerUncheckedUpdateWithoutTagsInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -2713,9 +2897,11 @@ export type CustomerUncheckedUpdateWithoutTagsInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -2755,6 +2941,8 @@ export type CustomerUncheckedUpdateWithoutTagsInput = {
     session?: Prisma.sessionUncheckedUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUncheckedUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUncheckedUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUncheckedUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerCreateWithoutBabiesInput = {
     id?: string;
@@ -2767,9 +2955,11 @@ export type CustomerCreateWithoutBabiesInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     campaign_control_group?: Prisma.campaign_control_groupCreateNestedManyWithoutCustomerInput;
@@ -2809,6 +2999,8 @@ export type CustomerCreateWithoutBabiesInput = {
     session?: Prisma.sessionCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerUncheckedCreateWithoutBabiesInput = {
     id?: string;
@@ -2821,9 +3013,11 @@ export type CustomerUncheckedCreateWithoutBabiesInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -2863,6 +3057,8 @@ export type CustomerUncheckedCreateWithoutBabiesInput = {
     session?: Prisma.sessionUncheckedCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionUncheckedCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceUncheckedCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerCreateOrConnectWithoutBabiesInput = {
     where: Prisma.CustomerWhereUniqueInput;
@@ -2888,9 +3084,11 @@ export type CustomerUpdateWithoutBabiesInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     campaign_control_group?: Prisma.campaign_control_groupUpdateManyWithoutCustomerNestedInput;
@@ -2930,6 +3128,8 @@ export type CustomerUpdateWithoutBabiesInput = {
     session?: Prisma.sessionUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerUncheckedUpdateWithoutBabiesInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -2942,9 +3142,11 @@ export type CustomerUncheckedUpdateWithoutBabiesInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -2984,6 +3186,8 @@ export type CustomerUncheckedUpdateWithoutBabiesInput = {
     session?: Prisma.sessionUncheckedUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUncheckedUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUncheckedUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUncheckedUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerCreateWithoutConsentsInput = {
     id?: string;
@@ -2996,9 +3200,11 @@ export type CustomerCreateWithoutConsentsInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
@@ -3038,6 +3244,8 @@ export type CustomerCreateWithoutConsentsInput = {
     session?: Prisma.sessionCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerUncheckedCreateWithoutConsentsInput = {
     id?: string;
@@ -3050,9 +3258,11 @@ export type CustomerUncheckedCreateWithoutConsentsInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -3092,6 +3302,8 @@ export type CustomerUncheckedCreateWithoutConsentsInput = {
     session?: Prisma.sessionUncheckedCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionUncheckedCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceUncheckedCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerCreateOrConnectWithoutConsentsInput = {
     where: Prisma.CustomerWhereUniqueInput;
@@ -3117,9 +3329,11 @@ export type CustomerUpdateWithoutConsentsInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
@@ -3159,6 +3373,8 @@ export type CustomerUpdateWithoutConsentsInput = {
     session?: Prisma.sessionUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerUncheckedUpdateWithoutConsentsInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -3171,9 +3387,11 @@ export type CustomerUncheckedUpdateWithoutConsentsInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -3213,6 +3431,8 @@ export type CustomerUncheckedUpdateWithoutConsentsInput = {
     session?: Prisma.sessionUncheckedUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUncheckedUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUncheckedUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUncheckedUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerCreateWithoutOrdersInput = {
     id?: string;
@@ -3225,9 +3445,11 @@ export type CustomerCreateWithoutOrdersInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
@@ -3267,6 +3489,8 @@ export type CustomerCreateWithoutOrdersInput = {
     session?: Prisma.sessionCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerUncheckedCreateWithoutOrdersInput = {
     id?: string;
@@ -3279,9 +3503,11 @@ export type CustomerUncheckedCreateWithoutOrdersInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -3321,6 +3547,8 @@ export type CustomerUncheckedCreateWithoutOrdersInput = {
     session?: Prisma.sessionUncheckedCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionUncheckedCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceUncheckedCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerCreateOrConnectWithoutOrdersInput = {
     where: Prisma.CustomerWhereUniqueInput;
@@ -3346,9 +3574,11 @@ export type CustomerUpdateWithoutOrdersInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
@@ -3388,6 +3618,8 @@ export type CustomerUpdateWithoutOrdersInput = {
     session?: Prisma.sessionUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerUncheckedUpdateWithoutOrdersInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -3400,9 +3632,11 @@ export type CustomerUncheckedUpdateWithoutOrdersInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -3442,6 +3676,8 @@ export type CustomerUncheckedUpdateWithoutOrdersInput = {
     session?: Prisma.sessionUncheckedUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUncheckedUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUncheckedUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUncheckedUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerCreateWithoutProduct_exchangeInput = {
     id?: string;
@@ -3454,9 +3690,11 @@ export type CustomerCreateWithoutProduct_exchangeInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
@@ -3496,6 +3734,8 @@ export type CustomerCreateWithoutProduct_exchangeInput = {
     session?: Prisma.sessionCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerUncheckedCreateWithoutProduct_exchangeInput = {
     id?: string;
@@ -3508,9 +3748,11 @@ export type CustomerUncheckedCreateWithoutProduct_exchangeInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -3550,6 +3792,8 @@ export type CustomerUncheckedCreateWithoutProduct_exchangeInput = {
     session?: Prisma.sessionUncheckedCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionUncheckedCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceUncheckedCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerCreateOrConnectWithoutProduct_exchangeInput = {
     where: Prisma.CustomerWhereUniqueInput;
@@ -3575,9 +3819,11 @@ export type CustomerUpdateWithoutProduct_exchangeInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
@@ -3617,6 +3863,8 @@ export type CustomerUpdateWithoutProduct_exchangeInput = {
     session?: Prisma.sessionUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerUncheckedUpdateWithoutProduct_exchangeInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -3629,9 +3877,11 @@ export type CustomerUncheckedUpdateWithoutProduct_exchangeInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -3671,6 +3921,8 @@ export type CustomerUncheckedUpdateWithoutProduct_exchangeInput = {
     session?: Prisma.sessionUncheckedUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUncheckedUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUncheckedUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUncheckedUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerCreateWithoutReviewsInput = {
     id?: string;
@@ -3683,9 +3935,11 @@ export type CustomerCreateWithoutReviewsInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
@@ -3725,6 +3979,8 @@ export type CustomerCreateWithoutReviewsInput = {
     session?: Prisma.sessionCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerUncheckedCreateWithoutReviewsInput = {
     id?: string;
@@ -3737,9 +3993,11 @@ export type CustomerUncheckedCreateWithoutReviewsInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -3779,6 +4037,8 @@ export type CustomerUncheckedCreateWithoutReviewsInput = {
     session?: Prisma.sessionUncheckedCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionUncheckedCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceUncheckedCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerCreateOrConnectWithoutReviewsInput = {
     where: Prisma.CustomerWhereUniqueInput;
@@ -3804,9 +4064,11 @@ export type CustomerUpdateWithoutReviewsInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
@@ -3846,6 +4108,8 @@ export type CustomerUpdateWithoutReviewsInput = {
     session?: Prisma.sessionUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerUncheckedUpdateWithoutReviewsInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -3858,9 +4122,11 @@ export type CustomerUncheckedUpdateWithoutReviewsInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -3900,6 +4166,8 @@ export type CustomerUncheckedUpdateWithoutReviewsInput = {
     session?: Prisma.sessionUncheckedUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUncheckedUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUncheckedUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUncheckedUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerCreateWithoutLoyaltyAccountInput = {
     id?: string;
@@ -3912,9 +4180,11 @@ export type CustomerCreateWithoutLoyaltyAccountInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
@@ -3954,6 +4224,8 @@ export type CustomerCreateWithoutLoyaltyAccountInput = {
     session?: Prisma.sessionCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerUncheckedCreateWithoutLoyaltyAccountInput = {
     id?: string;
@@ -3966,9 +4238,11 @@ export type CustomerUncheckedCreateWithoutLoyaltyAccountInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -4008,6 +4282,8 @@ export type CustomerUncheckedCreateWithoutLoyaltyAccountInput = {
     session?: Prisma.sessionUncheckedCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionUncheckedCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceUncheckedCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerCreateOrConnectWithoutLoyaltyAccountInput = {
     where: Prisma.CustomerWhereUniqueInput;
@@ -4033,9 +4309,11 @@ export type CustomerUpdateWithoutLoyaltyAccountInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
@@ -4075,6 +4353,8 @@ export type CustomerUpdateWithoutLoyaltyAccountInput = {
     session?: Prisma.sessionUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerUncheckedUpdateWithoutLoyaltyAccountInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -4087,9 +4367,11 @@ export type CustomerUncheckedUpdateWithoutLoyaltyAccountInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -4129,6 +4411,8 @@ export type CustomerUncheckedUpdateWithoutLoyaltyAccountInput = {
     session?: Prisma.sessionUncheckedUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUncheckedUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUncheckedUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUncheckedUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerCreateWithoutLoyalty_transactionInput = {
     id?: string;
@@ -4141,9 +4425,11 @@ export type CustomerCreateWithoutLoyalty_transactionInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
@@ -4183,6 +4469,8 @@ export type CustomerCreateWithoutLoyalty_transactionInput = {
     session?: Prisma.sessionCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerUncheckedCreateWithoutLoyalty_transactionInput = {
     id?: string;
@@ -4195,9 +4483,11 @@ export type CustomerUncheckedCreateWithoutLoyalty_transactionInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -4237,6 +4527,8 @@ export type CustomerUncheckedCreateWithoutLoyalty_transactionInput = {
     session?: Prisma.sessionUncheckedCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionUncheckedCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceUncheckedCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerCreateOrConnectWithoutLoyalty_transactionInput = {
     where: Prisma.CustomerWhereUniqueInput;
@@ -4262,9 +4554,11 @@ export type CustomerUpdateWithoutLoyalty_transactionInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
@@ -4304,6 +4598,8 @@ export type CustomerUpdateWithoutLoyalty_transactionInput = {
     session?: Prisma.sessionUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerUncheckedUpdateWithoutLoyalty_transactionInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -4316,9 +4612,11 @@ export type CustomerUncheckedUpdateWithoutLoyalty_transactionInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -4358,6 +4656,8 @@ export type CustomerUncheckedUpdateWithoutLoyalty_transactionInput = {
     session?: Prisma.sessionUncheckedUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUncheckedUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUncheckedUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUncheckedUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerCreateWithoutReward_redemptionInput = {
     id?: string;
@@ -4370,9 +4670,11 @@ export type CustomerCreateWithoutReward_redemptionInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
@@ -4412,6 +4714,8 @@ export type CustomerCreateWithoutReward_redemptionInput = {
     session?: Prisma.sessionCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerUncheckedCreateWithoutReward_redemptionInput = {
     id?: string;
@@ -4424,9 +4728,11 @@ export type CustomerUncheckedCreateWithoutReward_redemptionInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -4466,6 +4772,8 @@ export type CustomerUncheckedCreateWithoutReward_redemptionInput = {
     session?: Prisma.sessionUncheckedCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionUncheckedCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceUncheckedCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerCreateOrConnectWithoutReward_redemptionInput = {
     where: Prisma.CustomerWhereUniqueInput;
@@ -4491,9 +4799,11 @@ export type CustomerUpdateWithoutReward_redemptionInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
@@ -4533,6 +4843,8 @@ export type CustomerUpdateWithoutReward_redemptionInput = {
     session?: Prisma.sessionUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerUncheckedUpdateWithoutReward_redemptionInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -4545,9 +4857,11 @@ export type CustomerUncheckedUpdateWithoutReward_redemptionInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -4587,6 +4901,8 @@ export type CustomerUncheckedUpdateWithoutReward_redemptionInput = {
     session?: Prisma.sessionUncheckedUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUncheckedUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUncheckedUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUncheckedUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerCreateWithoutCampaign_control_groupInput = {
     id?: string;
@@ -4599,9 +4915,11 @@ export type CustomerCreateWithoutCampaign_control_groupInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
@@ -4641,6 +4959,8 @@ export type CustomerCreateWithoutCampaign_control_groupInput = {
     session?: Prisma.sessionCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerUncheckedCreateWithoutCampaign_control_groupInput = {
     id?: string;
@@ -4653,9 +4973,11 @@ export type CustomerUncheckedCreateWithoutCampaign_control_groupInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -4695,6 +5017,8 @@ export type CustomerUncheckedCreateWithoutCampaign_control_groupInput = {
     session?: Prisma.sessionUncheckedCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionUncheckedCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceUncheckedCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerCreateOrConnectWithoutCampaign_control_groupInput = {
     where: Prisma.CustomerWhereUniqueInput;
@@ -4720,9 +5044,11 @@ export type CustomerUpdateWithoutCampaign_control_groupInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
@@ -4762,6 +5088,8 @@ export type CustomerUpdateWithoutCampaign_control_groupInput = {
     session?: Prisma.sessionUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerUncheckedUpdateWithoutCampaign_control_groupInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -4774,9 +5102,11 @@ export type CustomerUncheckedUpdateWithoutCampaign_control_groupInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -4816,6 +5146,8 @@ export type CustomerUncheckedUpdateWithoutCampaign_control_groupInput = {
     session?: Prisma.sessionUncheckedUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUncheckedUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUncheckedUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUncheckedUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerCreateWithoutChecklist_progressInput = {
     id?: string;
@@ -4828,9 +5160,11 @@ export type CustomerCreateWithoutChecklist_progressInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
@@ -4870,6 +5204,8 @@ export type CustomerCreateWithoutChecklist_progressInput = {
     session?: Prisma.sessionCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerUncheckedCreateWithoutChecklist_progressInput = {
     id?: string;
@@ -4882,9 +5218,11 @@ export type CustomerUncheckedCreateWithoutChecklist_progressInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -4924,6 +5262,8 @@ export type CustomerUncheckedCreateWithoutChecklist_progressInput = {
     session?: Prisma.sessionUncheckedCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionUncheckedCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceUncheckedCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerCreateOrConnectWithoutChecklist_progressInput = {
     where: Prisma.CustomerWhereUniqueInput;
@@ -4949,9 +5289,11 @@ export type CustomerUpdateWithoutChecklist_progressInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
@@ -4991,6 +5333,8 @@ export type CustomerUpdateWithoutChecklist_progressInput = {
     session?: Prisma.sessionUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerUncheckedUpdateWithoutChecklist_progressInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -5003,9 +5347,11 @@ export type CustomerUncheckedUpdateWithoutChecklist_progressInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -5045,6 +5391,8 @@ export type CustomerUncheckedUpdateWithoutChecklist_progressInput = {
     session?: Prisma.sessionUncheckedUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUncheckedUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUncheckedUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUncheckedUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerCreateWithoutCustomer_metrics_dailyInput = {
     id?: string;
@@ -5057,9 +5405,11 @@ export type CustomerCreateWithoutCustomer_metrics_dailyInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
@@ -5099,6 +5449,8 @@ export type CustomerCreateWithoutCustomer_metrics_dailyInput = {
     session?: Prisma.sessionCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerUncheckedCreateWithoutCustomer_metrics_dailyInput = {
     id?: string;
@@ -5111,9 +5463,11 @@ export type CustomerUncheckedCreateWithoutCustomer_metrics_dailyInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -5153,6 +5507,8 @@ export type CustomerUncheckedCreateWithoutCustomer_metrics_dailyInput = {
     session?: Prisma.sessionUncheckedCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionUncheckedCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceUncheckedCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerCreateOrConnectWithoutCustomer_metrics_dailyInput = {
     where: Prisma.CustomerWhereUniqueInput;
@@ -5178,9 +5534,11 @@ export type CustomerUpdateWithoutCustomer_metrics_dailyInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
@@ -5220,6 +5578,8 @@ export type CustomerUpdateWithoutCustomer_metrics_dailyInput = {
     session?: Prisma.sessionUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerUncheckedUpdateWithoutCustomer_metrics_dailyInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -5232,9 +5592,11 @@ export type CustomerUncheckedUpdateWithoutCustomer_metrics_dailyInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -5274,6 +5636,8 @@ export type CustomerUncheckedUpdateWithoutCustomer_metrics_dailyInput = {
     session?: Prisma.sessionUncheckedUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUncheckedUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUncheckedUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUncheckedUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerCreateWithoutData_quality_flag_logInput = {
     id?: string;
@@ -5286,9 +5650,11 @@ export type CustomerCreateWithoutData_quality_flag_logInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
@@ -5328,6 +5694,8 @@ export type CustomerCreateWithoutData_quality_flag_logInput = {
     session?: Prisma.sessionCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerUncheckedCreateWithoutData_quality_flag_logInput = {
     id?: string;
@@ -5340,9 +5708,11 @@ export type CustomerUncheckedCreateWithoutData_quality_flag_logInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -5382,6 +5752,8 @@ export type CustomerUncheckedCreateWithoutData_quality_flag_logInput = {
     session?: Prisma.sessionUncheckedCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionUncheckedCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceUncheckedCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerCreateOrConnectWithoutData_quality_flag_logInput = {
     where: Prisma.CustomerWhereUniqueInput;
@@ -5407,9 +5779,11 @@ export type CustomerUpdateWithoutData_quality_flag_logInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
@@ -5449,6 +5823,8 @@ export type CustomerUpdateWithoutData_quality_flag_logInput = {
     session?: Prisma.sessionUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerUncheckedUpdateWithoutData_quality_flag_logInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -5461,9 +5837,11 @@ export type CustomerUncheckedUpdateWithoutData_quality_flag_logInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -5503,6 +5881,8 @@ export type CustomerUncheckedUpdateWithoutData_quality_flag_logInput = {
     session?: Prisma.sessionUncheckedUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUncheckedUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUncheckedUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUncheckedUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerCreateWithoutDsr_requestInput = {
     id?: string;
@@ -5515,9 +5895,11 @@ export type CustomerCreateWithoutDsr_requestInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
@@ -5557,6 +5939,8 @@ export type CustomerCreateWithoutDsr_requestInput = {
     session?: Prisma.sessionCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerUncheckedCreateWithoutDsr_requestInput = {
     id?: string;
@@ -5569,9 +5953,11 @@ export type CustomerUncheckedCreateWithoutDsr_requestInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -5611,6 +5997,8 @@ export type CustomerUncheckedCreateWithoutDsr_requestInput = {
     session?: Prisma.sessionUncheckedCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionUncheckedCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceUncheckedCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerCreateOrConnectWithoutDsr_requestInput = {
     where: Prisma.CustomerWhereUniqueInput;
@@ -5636,9 +6024,11 @@ export type CustomerUpdateWithoutDsr_requestInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
@@ -5678,6 +6068,8 @@ export type CustomerUpdateWithoutDsr_requestInput = {
     session?: Prisma.sessionUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerUncheckedUpdateWithoutDsr_requestInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -5690,9 +6082,11 @@ export type CustomerUncheckedUpdateWithoutDsr_requestInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -5732,6 +6126,8 @@ export type CustomerUncheckedUpdateWithoutDsr_requestInput = {
     session?: Prisma.sessionUncheckedUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUncheckedUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUncheckedUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUncheckedUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerCreateWithoutEventInput = {
     id?: string;
@@ -5744,9 +6140,11 @@ export type CustomerCreateWithoutEventInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
@@ -5786,6 +6184,8 @@ export type CustomerCreateWithoutEventInput = {
     session?: Prisma.sessionCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerUncheckedCreateWithoutEventInput = {
     id?: string;
@@ -5798,9 +6198,11 @@ export type CustomerUncheckedCreateWithoutEventInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -5840,6 +6242,8 @@ export type CustomerUncheckedCreateWithoutEventInput = {
     session?: Prisma.sessionUncheckedCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionUncheckedCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceUncheckedCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerCreateOrConnectWithoutEventInput = {
     where: Prisma.CustomerWhereUniqueInput;
@@ -5865,9 +6269,11 @@ export type CustomerUpdateWithoutEventInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
@@ -5907,6 +6313,8 @@ export type CustomerUpdateWithoutEventInput = {
     session?: Prisma.sessionUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerUncheckedUpdateWithoutEventInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -5919,9 +6327,11 @@ export type CustomerUncheckedUpdateWithoutEventInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -5961,6 +6371,8 @@ export type CustomerUncheckedUpdateWithoutEventInput = {
     session?: Prisma.sessionUncheckedUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUncheckedUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUncheckedUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUncheckedUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerCreateWithoutExpert_bookingInput = {
     id?: string;
@@ -5973,9 +6385,11 @@ export type CustomerCreateWithoutExpert_bookingInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
@@ -6015,6 +6429,8 @@ export type CustomerCreateWithoutExpert_bookingInput = {
     session?: Prisma.sessionCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerUncheckedCreateWithoutExpert_bookingInput = {
     id?: string;
@@ -6027,9 +6443,11 @@ export type CustomerUncheckedCreateWithoutExpert_bookingInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -6069,6 +6487,8 @@ export type CustomerUncheckedCreateWithoutExpert_bookingInput = {
     session?: Prisma.sessionUncheckedCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionUncheckedCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceUncheckedCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerCreateOrConnectWithoutExpert_bookingInput = {
     where: Prisma.CustomerWhereUniqueInput;
@@ -6094,9 +6514,11 @@ export type CustomerUpdateWithoutExpert_bookingInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
@@ -6136,6 +6558,8 @@ export type CustomerUpdateWithoutExpert_bookingInput = {
     session?: Prisma.sessionUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerUncheckedUpdateWithoutExpert_bookingInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -6148,9 +6572,11 @@ export type CustomerUncheckedUpdateWithoutExpert_bookingInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -6190,6 +6616,8 @@ export type CustomerUncheckedUpdateWithoutExpert_bookingInput = {
     session?: Prisma.sessionUncheckedUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUncheckedUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUncheckedUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUncheckedUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerCreateWithoutFrequency_counterInput = {
     id?: string;
@@ -6202,9 +6630,11 @@ export type CustomerCreateWithoutFrequency_counterInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
@@ -6244,6 +6674,8 @@ export type CustomerCreateWithoutFrequency_counterInput = {
     session?: Prisma.sessionCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerUncheckedCreateWithoutFrequency_counterInput = {
     id?: string;
@@ -6256,9 +6688,11 @@ export type CustomerUncheckedCreateWithoutFrequency_counterInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -6298,6 +6732,8 @@ export type CustomerUncheckedCreateWithoutFrequency_counterInput = {
     session?: Prisma.sessionUncheckedCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionUncheckedCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceUncheckedCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerCreateOrConnectWithoutFrequency_counterInput = {
     where: Prisma.CustomerWhereUniqueInput;
@@ -6323,9 +6759,11 @@ export type CustomerUpdateWithoutFrequency_counterInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
@@ -6365,6 +6803,8 @@ export type CustomerUpdateWithoutFrequency_counterInput = {
     session?: Prisma.sessionUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerUncheckedUpdateWithoutFrequency_counterInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -6377,9 +6817,11 @@ export type CustomerUncheckedUpdateWithoutFrequency_counterInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -6419,6 +6861,8 @@ export type CustomerUncheckedUpdateWithoutFrequency_counterInput = {
     session?: Prisma.sessionUncheckedUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUncheckedUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUncheckedUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUncheckedUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerCreateWithoutJourney_runInput = {
     id?: string;
@@ -6431,9 +6875,11 @@ export type CustomerCreateWithoutJourney_runInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
@@ -6473,6 +6919,8 @@ export type CustomerCreateWithoutJourney_runInput = {
     session?: Prisma.sessionCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerUncheckedCreateWithoutJourney_runInput = {
     id?: string;
@@ -6485,9 +6933,11 @@ export type CustomerUncheckedCreateWithoutJourney_runInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -6527,6 +6977,8 @@ export type CustomerUncheckedCreateWithoutJourney_runInput = {
     session?: Prisma.sessionUncheckedCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionUncheckedCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceUncheckedCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerCreateOrConnectWithoutJourney_runInput = {
     where: Prisma.CustomerWhereUniqueInput;
@@ -6552,9 +7004,11 @@ export type CustomerUpdateWithoutJourney_runInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
@@ -6594,6 +7048,8 @@ export type CustomerUpdateWithoutJourney_runInput = {
     session?: Prisma.sessionUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerUncheckedUpdateWithoutJourney_runInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -6606,9 +7062,11 @@ export type CustomerUncheckedUpdateWithoutJourney_runInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -6648,6 +7106,8 @@ export type CustomerUncheckedUpdateWithoutJourney_runInput = {
     session?: Prisma.sessionUncheckedUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUncheckedUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUncheckedUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUncheckedUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerCreateWithoutMessage_logInput = {
     id?: string;
@@ -6660,9 +7120,11 @@ export type CustomerCreateWithoutMessage_logInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
@@ -6702,6 +7164,8 @@ export type CustomerCreateWithoutMessage_logInput = {
     session?: Prisma.sessionCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerUncheckedCreateWithoutMessage_logInput = {
     id?: string;
@@ -6714,9 +7178,11 @@ export type CustomerUncheckedCreateWithoutMessage_logInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -6756,6 +7222,8 @@ export type CustomerUncheckedCreateWithoutMessage_logInput = {
     session?: Prisma.sessionUncheckedCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionUncheckedCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceUncheckedCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerCreateOrConnectWithoutMessage_logInput = {
     where: Prisma.CustomerWhereUniqueInput;
@@ -6781,9 +7249,11 @@ export type CustomerUpdateWithoutMessage_logInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
@@ -6823,6 +7293,8 @@ export type CustomerUpdateWithoutMessage_logInput = {
     session?: Prisma.sessionUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerUncheckedUpdateWithoutMessage_logInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -6835,9 +7307,11 @@ export type CustomerUncheckedUpdateWithoutMessage_logInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -6877,6 +7351,8 @@ export type CustomerUncheckedUpdateWithoutMessage_logInput = {
     session?: Prisma.sessionUncheckedUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUncheckedUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUncheckedUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUncheckedUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerCreateWithoutMilestone_progressInput = {
     id?: string;
@@ -6889,9 +7365,11 @@ export type CustomerCreateWithoutMilestone_progressInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
@@ -6931,6 +7409,8 @@ export type CustomerCreateWithoutMilestone_progressInput = {
     session?: Prisma.sessionCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerUncheckedCreateWithoutMilestone_progressInput = {
     id?: string;
@@ -6943,9 +7423,11 @@ export type CustomerUncheckedCreateWithoutMilestone_progressInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -6985,6 +7467,8 @@ export type CustomerUncheckedCreateWithoutMilestone_progressInput = {
     session?: Prisma.sessionUncheckedCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionUncheckedCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceUncheckedCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerCreateOrConnectWithoutMilestone_progressInput = {
     where: Prisma.CustomerWhereUniqueInput;
@@ -7010,9 +7494,11 @@ export type CustomerUpdateWithoutMilestone_progressInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
@@ -7052,6 +7538,8 @@ export type CustomerUpdateWithoutMilestone_progressInput = {
     session?: Prisma.sessionUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerUncheckedUpdateWithoutMilestone_progressInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -7064,9 +7552,11 @@ export type CustomerUncheckedUpdateWithoutMilestone_progressInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -7106,6 +7596,8 @@ export type CustomerUncheckedUpdateWithoutMilestone_progressInput = {
     session?: Prisma.sessionUncheckedUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUncheckedUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUncheckedUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUncheckedUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerCreateWithoutProduct_serialInput = {
     id?: string;
@@ -7118,9 +7610,11 @@ export type CustomerCreateWithoutProduct_serialInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
@@ -7160,6 +7654,8 @@ export type CustomerCreateWithoutProduct_serialInput = {
     session?: Prisma.sessionCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerUncheckedCreateWithoutProduct_serialInput = {
     id?: string;
@@ -7172,9 +7668,11 @@ export type CustomerUncheckedCreateWithoutProduct_serialInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -7214,6 +7712,8 @@ export type CustomerUncheckedCreateWithoutProduct_serialInput = {
     session?: Prisma.sessionUncheckedCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionUncheckedCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceUncheckedCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerCreateOrConnectWithoutProduct_serialInput = {
     where: Prisma.CustomerWhereUniqueInput;
@@ -7239,9 +7739,11 @@ export type CustomerUpdateWithoutProduct_serialInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
@@ -7281,6 +7783,8 @@ export type CustomerUpdateWithoutProduct_serialInput = {
     session?: Prisma.sessionUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerUncheckedUpdateWithoutProduct_serialInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -7293,9 +7797,11 @@ export type CustomerUncheckedUpdateWithoutProduct_serialInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -7335,6 +7841,8 @@ export type CustomerUncheckedUpdateWithoutProduct_serialInput = {
     session?: Prisma.sessionUncheckedUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUncheckedUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUncheckedUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUncheckedUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerCreateWithoutQuiz_responseInput = {
     id?: string;
@@ -7347,9 +7855,11 @@ export type CustomerCreateWithoutQuiz_responseInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
@@ -7389,6 +7899,8 @@ export type CustomerCreateWithoutQuiz_responseInput = {
     session?: Prisma.sessionCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerUncheckedCreateWithoutQuiz_responseInput = {
     id?: string;
@@ -7401,9 +7913,11 @@ export type CustomerUncheckedCreateWithoutQuiz_responseInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -7443,6 +7957,8 @@ export type CustomerUncheckedCreateWithoutQuiz_responseInput = {
     session?: Prisma.sessionUncheckedCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionUncheckedCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceUncheckedCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerCreateOrConnectWithoutQuiz_responseInput = {
     where: Prisma.CustomerWhereUniqueInput;
@@ -7468,9 +7984,11 @@ export type CustomerUpdateWithoutQuiz_responseInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
@@ -7510,6 +8028,8 @@ export type CustomerUpdateWithoutQuiz_responseInput = {
     session?: Prisma.sessionUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerUncheckedUpdateWithoutQuiz_responseInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -7522,9 +8042,11 @@ export type CustomerUncheckedUpdateWithoutQuiz_responseInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -7564,6 +8086,8 @@ export type CustomerUncheckedUpdateWithoutQuiz_responseInput = {
     session?: Prisma.sessionUncheckedUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUncheckedUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUncheckedUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUncheckedUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerCreateWithoutReferral_codeInput = {
     id?: string;
@@ -7576,9 +8100,11 @@ export type CustomerCreateWithoutReferral_codeInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
@@ -7618,6 +8144,8 @@ export type CustomerCreateWithoutReferral_codeInput = {
     session?: Prisma.sessionCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerUncheckedCreateWithoutReferral_codeInput = {
     id?: string;
@@ -7630,9 +8158,11 @@ export type CustomerUncheckedCreateWithoutReferral_codeInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -7672,6 +8202,8 @@ export type CustomerUncheckedCreateWithoutReferral_codeInput = {
     session?: Prisma.sessionUncheckedCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionUncheckedCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceUncheckedCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerCreateOrConnectWithoutReferral_codeInput = {
     where: Prisma.CustomerWhereUniqueInput;
@@ -7697,9 +8229,11 @@ export type CustomerUpdateWithoutReferral_codeInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
@@ -7739,6 +8273,8 @@ export type CustomerUpdateWithoutReferral_codeInput = {
     session?: Prisma.sessionUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerUncheckedUpdateWithoutReferral_codeInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -7751,9 +8287,11 @@ export type CustomerUncheckedUpdateWithoutReferral_codeInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -7793,6 +8331,8 @@ export type CustomerUncheckedUpdateWithoutReferral_codeInput = {
     session?: Prisma.sessionUncheckedUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUncheckedUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUncheckedUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUncheckedUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerCreateWithoutReferral_conversion_referral_conversion_referred_idTocustomerInput = {
     id?: string;
@@ -7805,9 +8345,11 @@ export type CustomerCreateWithoutReferral_conversion_referral_conversion_referre
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
@@ -7847,6 +8389,8 @@ export type CustomerCreateWithoutReferral_conversion_referral_conversion_referre
     session?: Prisma.sessionCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerUncheckedCreateWithoutReferral_conversion_referral_conversion_referred_idTocustomerInput = {
     id?: string;
@@ -7859,9 +8403,11 @@ export type CustomerUncheckedCreateWithoutReferral_conversion_referral_conversio
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -7901,6 +8447,8 @@ export type CustomerUncheckedCreateWithoutReferral_conversion_referral_conversio
     session?: Prisma.sessionUncheckedCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionUncheckedCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceUncheckedCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerCreateOrConnectWithoutReferral_conversion_referral_conversion_referred_idTocustomerInput = {
     where: Prisma.CustomerWhereUniqueInput;
@@ -7917,9 +8465,11 @@ export type CustomerCreateWithoutReferral_conversion_referral_conversion_referre
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
@@ -7959,6 +8509,8 @@ export type CustomerCreateWithoutReferral_conversion_referral_conversion_referre
     session?: Prisma.sessionCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerUncheckedCreateWithoutReferral_conversion_referral_conversion_referrer_idTocustomerInput = {
     id?: string;
@@ -7971,9 +8523,11 @@ export type CustomerUncheckedCreateWithoutReferral_conversion_referral_conversio
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -8013,6 +8567,8 @@ export type CustomerUncheckedCreateWithoutReferral_conversion_referral_conversio
     session?: Prisma.sessionUncheckedCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionUncheckedCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceUncheckedCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerCreateOrConnectWithoutReferral_conversion_referral_conversion_referrer_idTocustomerInput = {
     where: Prisma.CustomerWhereUniqueInput;
@@ -8038,9 +8594,11 @@ export type CustomerUpdateWithoutReferral_conversion_referral_conversion_referre
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
@@ -8080,6 +8638,8 @@ export type CustomerUpdateWithoutReferral_conversion_referral_conversion_referre
     session?: Prisma.sessionUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerUncheckedUpdateWithoutReferral_conversion_referral_conversion_referred_idTocustomerInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -8092,9 +8652,11 @@ export type CustomerUncheckedUpdateWithoutReferral_conversion_referral_conversio
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -8134,6 +8696,8 @@ export type CustomerUncheckedUpdateWithoutReferral_conversion_referral_conversio
     session?: Prisma.sessionUncheckedUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUncheckedUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUncheckedUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUncheckedUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerUpsertWithoutReferral_conversion_referral_conversion_referrer_idTocustomerInput = {
     update: Prisma.XOR<Prisma.CustomerUpdateWithoutReferral_conversion_referral_conversion_referrer_idTocustomerInput, Prisma.CustomerUncheckedUpdateWithoutReferral_conversion_referral_conversion_referrer_idTocustomerInput>;
@@ -8155,9 +8719,11 @@ export type CustomerUpdateWithoutReferral_conversion_referral_conversion_referre
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
@@ -8197,6 +8763,8 @@ export type CustomerUpdateWithoutReferral_conversion_referral_conversion_referre
     session?: Prisma.sessionUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerUncheckedUpdateWithoutReferral_conversion_referral_conversion_referrer_idTocustomerInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -8209,9 +8777,11 @@ export type CustomerUncheckedUpdateWithoutReferral_conversion_referral_conversio
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -8251,6 +8821,8 @@ export type CustomerUncheckedUpdateWithoutReferral_conversion_referral_conversio
     session?: Prisma.sessionUncheckedUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUncheckedUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUncheckedUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUncheckedUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerCreateWithoutReplenishment_scheduleInput = {
     id?: string;
@@ -8263,9 +8835,11 @@ export type CustomerCreateWithoutReplenishment_scheduleInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
@@ -8305,6 +8879,8 @@ export type CustomerCreateWithoutReplenishment_scheduleInput = {
     session?: Prisma.sessionCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerUncheckedCreateWithoutReplenishment_scheduleInput = {
     id?: string;
@@ -8317,9 +8893,11 @@ export type CustomerUncheckedCreateWithoutReplenishment_scheduleInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -8359,6 +8937,8 @@ export type CustomerUncheckedCreateWithoutReplenishment_scheduleInput = {
     session?: Prisma.sessionUncheckedCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionUncheckedCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceUncheckedCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerCreateOrConnectWithoutReplenishment_scheduleInput = {
     where: Prisma.CustomerWhereUniqueInput;
@@ -8384,9 +8964,11 @@ export type CustomerUpdateWithoutReplenishment_scheduleInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
@@ -8426,6 +9008,8 @@ export type CustomerUpdateWithoutReplenishment_scheduleInput = {
     session?: Prisma.sessionUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerUncheckedUpdateWithoutReplenishment_scheduleInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -8438,9 +9022,11 @@ export type CustomerUncheckedUpdateWithoutReplenishment_scheduleInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -8480,6 +9066,8 @@ export type CustomerUncheckedUpdateWithoutReplenishment_scheduleInput = {
     session?: Prisma.sessionUncheckedUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUncheckedUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUncheckedUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUncheckedUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerCreateWithoutRfm_snapshotInput = {
     id?: string;
@@ -8492,9 +9080,11 @@ export type CustomerCreateWithoutRfm_snapshotInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
@@ -8534,6 +9124,8 @@ export type CustomerCreateWithoutRfm_snapshotInput = {
     session?: Prisma.sessionCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerUncheckedCreateWithoutRfm_snapshotInput = {
     id?: string;
@@ -8546,9 +9138,11 @@ export type CustomerUncheckedCreateWithoutRfm_snapshotInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -8588,6 +9182,8 @@ export type CustomerUncheckedCreateWithoutRfm_snapshotInput = {
     session?: Prisma.sessionUncheckedCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionUncheckedCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceUncheckedCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerCreateOrConnectWithoutRfm_snapshotInput = {
     where: Prisma.CustomerWhereUniqueInput;
@@ -8613,9 +9209,11 @@ export type CustomerUpdateWithoutRfm_snapshotInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
@@ -8655,6 +9253,8 @@ export type CustomerUpdateWithoutRfm_snapshotInput = {
     session?: Prisma.sessionUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerUncheckedUpdateWithoutRfm_snapshotInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -8667,9 +9267,11 @@ export type CustomerUncheckedUpdateWithoutRfm_snapshotInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -8709,6 +9311,8 @@ export type CustomerUncheckedUpdateWithoutRfm_snapshotInput = {
     session?: Prisma.sessionUncheckedUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUncheckedUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUncheckedUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUncheckedUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerCreateWithoutSegment_membershipInput = {
     id?: string;
@@ -8721,9 +9325,11 @@ export type CustomerCreateWithoutSegment_membershipInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
@@ -8763,6 +9369,8 @@ export type CustomerCreateWithoutSegment_membershipInput = {
     session?: Prisma.sessionCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerUncheckedCreateWithoutSegment_membershipInput = {
     id?: string;
@@ -8775,9 +9383,11 @@ export type CustomerUncheckedCreateWithoutSegment_membershipInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -8817,6 +9427,8 @@ export type CustomerUncheckedCreateWithoutSegment_membershipInput = {
     session?: Prisma.sessionUncheckedCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionUncheckedCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceUncheckedCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerCreateOrConnectWithoutSegment_membershipInput = {
     where: Prisma.CustomerWhereUniqueInput;
@@ -8842,9 +9454,11 @@ export type CustomerUpdateWithoutSegment_membershipInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
@@ -8884,6 +9498,8 @@ export type CustomerUpdateWithoutSegment_membershipInput = {
     session?: Prisma.sessionUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerUncheckedUpdateWithoutSegment_membershipInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -8896,9 +9512,11 @@ export type CustomerUncheckedUpdateWithoutSegment_membershipInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -8938,6 +9556,8 @@ export type CustomerUncheckedUpdateWithoutSegment_membershipInput = {
     session?: Prisma.sessionUncheckedUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUncheckedUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUncheckedUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUncheckedUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerCreateWithoutSerial_scanInput = {
     id?: string;
@@ -8950,9 +9570,11 @@ export type CustomerCreateWithoutSerial_scanInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
@@ -8992,6 +9614,8 @@ export type CustomerCreateWithoutSerial_scanInput = {
     session?: Prisma.sessionCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerUncheckedCreateWithoutSerial_scanInput = {
     id?: string;
@@ -9004,9 +9628,11 @@ export type CustomerUncheckedCreateWithoutSerial_scanInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -9046,6 +9672,8 @@ export type CustomerUncheckedCreateWithoutSerial_scanInput = {
     session?: Prisma.sessionUncheckedCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionUncheckedCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceUncheckedCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerCreateOrConnectWithoutSerial_scanInput = {
     where: Prisma.CustomerWhereUniqueInput;
@@ -9071,9 +9699,11 @@ export type CustomerUpdateWithoutSerial_scanInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
@@ -9113,6 +9743,8 @@ export type CustomerUpdateWithoutSerial_scanInput = {
     session?: Prisma.sessionUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerUncheckedUpdateWithoutSerial_scanInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -9125,9 +9757,11 @@ export type CustomerUncheckedUpdateWithoutSerial_scanInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -9167,6 +9801,8 @@ export type CustomerUncheckedUpdateWithoutSerial_scanInput = {
     session?: Prisma.sessionUncheckedUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUncheckedUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUncheckedUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUncheckedUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerCreateWithoutSessionInput = {
     id?: string;
@@ -9179,9 +9815,11 @@ export type CustomerCreateWithoutSessionInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
@@ -9221,6 +9859,8 @@ export type CustomerCreateWithoutSessionInput = {
     serial_scan?: Prisma.serial_scanCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerUncheckedCreateWithoutSessionInput = {
     id?: string;
@@ -9233,9 +9873,11 @@ export type CustomerUncheckedCreateWithoutSessionInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -9275,6 +9917,8 @@ export type CustomerUncheckedCreateWithoutSessionInput = {
     serial_scan?: Prisma.serial_scanUncheckedCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionUncheckedCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceUncheckedCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerCreateOrConnectWithoutSessionInput = {
     where: Prisma.CustomerWhereUniqueInput;
@@ -9300,9 +9944,11 @@ export type CustomerUpdateWithoutSessionInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
@@ -9342,6 +9988,8 @@ export type CustomerUpdateWithoutSessionInput = {
     serial_scan?: Prisma.serial_scanUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerUncheckedUpdateWithoutSessionInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -9354,9 +10002,11 @@ export type CustomerUncheckedUpdateWithoutSessionInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -9396,6 +10046,8 @@ export type CustomerUncheckedUpdateWithoutSessionInput = {
     serial_scan?: Prisma.serial_scanUncheckedUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUncheckedUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUncheckedUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUncheckedUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerCreateWithoutSubscriptionInput = {
     id?: string;
@@ -9408,9 +10060,11 @@ export type CustomerCreateWithoutSubscriptionInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
@@ -9450,6 +10104,8 @@ export type CustomerCreateWithoutSubscriptionInput = {
     serial_scan?: Prisma.serial_scanCreateNestedManyWithoutCustomerInput;
     session?: Prisma.sessionCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerUncheckedCreateWithoutSubscriptionInput = {
     id?: string;
@@ -9462,9 +10118,11 @@ export type CustomerUncheckedCreateWithoutSubscriptionInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -9504,6 +10162,8 @@ export type CustomerUncheckedCreateWithoutSubscriptionInput = {
     serial_scan?: Prisma.serial_scanUncheckedCreateNestedManyWithoutCustomerInput;
     session?: Prisma.sessionUncheckedCreateNestedManyWithoutCustomerInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceUncheckedCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerCreateOrConnectWithoutSubscriptionInput = {
     where: Prisma.CustomerWhereUniqueInput;
@@ -9529,9 +10189,11 @@ export type CustomerUpdateWithoutSubscriptionInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
@@ -9571,6 +10233,8 @@ export type CustomerUpdateWithoutSubscriptionInput = {
     serial_scan?: Prisma.serial_scanUpdateManyWithoutCustomerNestedInput;
     session?: Prisma.sessionUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerUncheckedUpdateWithoutSubscriptionInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -9583,9 +10247,11 @@ export type CustomerUncheckedUpdateWithoutSubscriptionInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -9625,6 +10291,8 @@ export type CustomerUncheckedUpdateWithoutSubscriptionInput = {
     serial_scan?: Prisma.serial_scanUncheckedUpdateManyWithoutCustomerNestedInput;
     session?: Prisma.sessionUncheckedUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUncheckedUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUncheckedUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerCreateWithoutWarranty_registrationInput = {
     id?: string;
@@ -9637,9 +10305,11 @@ export type CustomerCreateWithoutWarranty_registrationInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
@@ -9679,6 +10349,8 @@ export type CustomerCreateWithoutWarranty_registrationInput = {
     serial_scan?: Prisma.serial_scanCreateNestedManyWithoutCustomerInput;
     session?: Prisma.sessionCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerUncheckedCreateWithoutWarranty_registrationInput = {
     id?: string;
@@ -9691,9 +10363,11 @@ export type CustomerUncheckedCreateWithoutWarranty_registrationInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -9733,6 +10407,8 @@ export type CustomerUncheckedCreateWithoutWarranty_registrationInput = {
     serial_scan?: Prisma.serial_scanUncheckedCreateNestedManyWithoutCustomerInput;
     session?: Prisma.sessionUncheckedCreateNestedManyWithoutCustomerInput;
     subscription?: Prisma.subscriptionUncheckedCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceUncheckedCreateNestedManyWithoutCustomerInput;
 };
 export type CustomerCreateOrConnectWithoutWarranty_registrationInput = {
     where: Prisma.CustomerWhereUniqueInput;
@@ -9758,9 +10434,11 @@ export type CustomerUpdateWithoutWarranty_registrationInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
@@ -9800,6 +10478,8 @@ export type CustomerUpdateWithoutWarranty_registrationInput = {
     serial_scan?: Prisma.serial_scanUpdateManyWithoutCustomerNestedInput;
     session?: Prisma.sessionUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerUncheckedUpdateWithoutWarranty_registrationInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -9812,9 +10492,11 @@ export type CustomerUncheckedUpdateWithoutWarranty_registrationInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -9854,8 +10536,10 @@ export type CustomerUncheckedUpdateWithoutWarranty_registrationInput = {
     serial_scan?: Prisma.serial_scanUncheckedUpdateManyWithoutCustomerNestedInput;
     session?: Prisma.sessionUncheckedUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUncheckedUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUncheckedUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUncheckedUpdateManyWithoutCustomerNestedInput;
 };
-export type CustomerCreateManyMergedIntoInput = {
+export type CustomerCreateWithoutSupport_ticketInput = {
     id?: string;
     customerCode?: string | null;
     phone?: string | null;
@@ -9866,13 +10550,125 @@ export type CustomerCreateManyMergedIntoInput = {
     avatarUrl?: string | null;
     registrationSource?: string | null;
     customerType?: string | null;
+    dmsCode?: string | null;
     notes?: string | null;
     dataQualityFlag?: string | null;
     isMerged?: boolean;
+    isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
+    campaign_control_group?: Prisma.campaign_control_groupCreateNestedManyWithoutCustomerInput;
+    checklist_progress?: Prisma.checklist_progressCreateNestedManyWithoutCustomerInput;
+    consents?: Prisma.ConsentCreateNestedManyWithoutCustomerInput;
+    mergedInto?: Prisma.CustomerCreateNestedOneWithoutMergedFromInput;
+    mergedFrom?: Prisma.CustomerCreateNestedManyWithoutMergedIntoInput;
+    addresses?: Prisma.CustomerAddressCreateNestedManyWithoutCustomerInput;
+    identities?: Prisma.CustomerIdentityCreateNestedManyWithoutCustomerInput;
+    customer_metrics_daily?: Prisma.customer_metrics_dailyCreateNestedManyWithoutCustomerInput;
+    tags?: Prisma.CustomerTagCreateNestedManyWithoutCustomerInput;
+    data_quality_flag_log?: Prisma.data_quality_flag_logCreateNestedManyWithoutCustomerInput;
+    dsr_request?: Prisma.dsr_requestCreateNestedManyWithoutCustomerInput;
+    event?: Prisma.eventCreateNestedManyWithoutCustomerInput;
+    expert_booking?: Prisma.expert_bookingCreateNestedManyWithoutCustomerInput;
+    frequency_counter?: Prisma.frequency_counterCreateNestedManyWithoutCustomerInput;
+    journey_run?: Prisma.journey_runCreateNestedManyWithoutCustomerInput;
+    loyaltyAccount?: Prisma.LoyaltyAccountCreateNestedOneWithoutCustomerInput;
+    loyalty_transaction?: Prisma.LoyaltyTransactionCreateNestedManyWithoutCustomerInput;
+    merge_candidate_merge_candidate_customer_id_aTocustomer?: Prisma.MergeCandidateCreateNestedManyWithoutCustomer_merge_candidate_customer_id_aTocustomerInput;
+    merge_candidate_merge_candidate_customer_id_bTocustomer?: Prisma.MergeCandidateCreateNestedManyWithoutCustomer_merge_candidate_customer_id_bTocustomerInput;
+    message_log?: Prisma.message_logCreateNestedManyWithoutCustomerInput;
+    milestone_progress?: Prisma.milestone_progressCreateNestedManyWithoutCustomerInput;
+    orders?: Prisma.OrderCreateNestedManyWithoutCustomerInput;
+    product_exchange?: Prisma.ProductExchangeCreateNestedManyWithoutCustomerInput;
+    product_serial?: Prisma.product_serialCreateNestedManyWithoutCustomerInput;
+    quiz_response?: Prisma.quiz_responseCreateNestedManyWithoutCustomerInput;
+    referral_code?: Prisma.referral_codeCreateNestedManyWithoutCustomerInput;
+    referral_conversion_referral_conversion_referred_idTocustomer?: Prisma.referral_conversionCreateNestedManyWithoutCustomer_referral_conversion_referred_idTocustomerInput;
+    referral_conversion_referral_conversion_referrer_idTocustomer?: Prisma.referral_conversionCreateNestedManyWithoutCustomer_referral_conversion_referrer_idTocustomerInput;
+    replenishment_schedule?: Prisma.replenishment_scheduleCreateNestedManyWithoutCustomerInput;
+    reviews?: Prisma.ReviewCreateNestedManyWithoutCustomerInput;
+    reward_redemption?: Prisma.RewardRedemptionCreateNestedManyWithoutCustomerInput;
+    rfm_snapshot?: Prisma.rfm_snapshotCreateNestedManyWithoutCustomerInput;
+    segment_membership?: Prisma.segment_membershipCreateNestedManyWithoutCustomerInput;
+    serial_scan?: Prisma.serial_scanCreateNestedManyWithoutCustomerInput;
+    session?: Prisma.sessionCreateNestedManyWithoutCustomerInput;
+    subscription?: Prisma.subscriptionCreateNestedManyWithoutCustomerInput;
+    warranty_registration?: Prisma.warranty_registrationCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceCreateNestedManyWithoutCustomerInput;
 };
-export type CustomerUpdateWithoutMergedIntoInput = {
+export type CustomerUncheckedCreateWithoutSupport_ticketInput = {
+    id?: string;
+    customerCode?: string | null;
+    phone?: string | null;
+    email?: string | null;
+    fullName?: string | null;
+    gender?: string | null;
+    dateOfBirth?: Date | string | null;
+    avatarUrl?: string | null;
+    registrationSource?: string | null;
+    customerType?: string | null;
+    dmsCode?: string | null;
+    notes?: string | null;
+    dataQualityFlag?: string | null;
+    isMerged?: boolean;
+    isActive?: boolean;
+    mergedIntoId?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    babies?: Prisma.BabyUncheckedCreateNestedManyWithoutCustomerInput;
+    campaign_control_group?: Prisma.campaign_control_groupUncheckedCreateNestedManyWithoutCustomerInput;
+    checklist_progress?: Prisma.checklist_progressUncheckedCreateNestedManyWithoutCustomerInput;
+    consents?: Prisma.ConsentUncheckedCreateNestedManyWithoutCustomerInput;
+    mergedFrom?: Prisma.CustomerUncheckedCreateNestedManyWithoutMergedIntoInput;
+    addresses?: Prisma.CustomerAddressUncheckedCreateNestedManyWithoutCustomerInput;
+    identities?: Prisma.CustomerIdentityUncheckedCreateNestedManyWithoutCustomerInput;
+    customer_metrics_daily?: Prisma.customer_metrics_dailyUncheckedCreateNestedManyWithoutCustomerInput;
+    tags?: Prisma.CustomerTagUncheckedCreateNestedManyWithoutCustomerInput;
+    data_quality_flag_log?: Prisma.data_quality_flag_logUncheckedCreateNestedManyWithoutCustomerInput;
+    dsr_request?: Prisma.dsr_requestUncheckedCreateNestedManyWithoutCustomerInput;
+    event?: Prisma.eventUncheckedCreateNestedManyWithoutCustomerInput;
+    expert_booking?: Prisma.expert_bookingUncheckedCreateNestedManyWithoutCustomerInput;
+    frequency_counter?: Prisma.frequency_counterUncheckedCreateNestedManyWithoutCustomerInput;
+    journey_run?: Prisma.journey_runUncheckedCreateNestedManyWithoutCustomerInput;
+    loyaltyAccount?: Prisma.LoyaltyAccountUncheckedCreateNestedOneWithoutCustomerInput;
+    loyalty_transaction?: Prisma.LoyaltyTransactionUncheckedCreateNestedManyWithoutCustomerInput;
+    merge_candidate_merge_candidate_customer_id_aTocustomer?: Prisma.MergeCandidateUncheckedCreateNestedManyWithoutCustomer_merge_candidate_customer_id_aTocustomerInput;
+    merge_candidate_merge_candidate_customer_id_bTocustomer?: Prisma.MergeCandidateUncheckedCreateNestedManyWithoutCustomer_merge_candidate_customer_id_bTocustomerInput;
+    message_log?: Prisma.message_logUncheckedCreateNestedManyWithoutCustomerInput;
+    milestone_progress?: Prisma.milestone_progressUncheckedCreateNestedManyWithoutCustomerInput;
+    orders?: Prisma.OrderUncheckedCreateNestedManyWithoutCustomerInput;
+    product_exchange?: Prisma.ProductExchangeUncheckedCreateNestedManyWithoutCustomerInput;
+    product_serial?: Prisma.product_serialUncheckedCreateNestedManyWithoutCustomerInput;
+    quiz_response?: Prisma.quiz_responseUncheckedCreateNestedManyWithoutCustomerInput;
+    referral_code?: Prisma.referral_codeUncheckedCreateNestedManyWithoutCustomerInput;
+    referral_conversion_referral_conversion_referred_idTocustomer?: Prisma.referral_conversionUncheckedCreateNestedManyWithoutCustomer_referral_conversion_referred_idTocustomerInput;
+    referral_conversion_referral_conversion_referrer_idTocustomer?: Prisma.referral_conversionUncheckedCreateNestedManyWithoutCustomer_referral_conversion_referrer_idTocustomerInput;
+    replenishment_schedule?: Prisma.replenishment_scheduleUncheckedCreateNestedManyWithoutCustomerInput;
+    reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutCustomerInput;
+    reward_redemption?: Prisma.RewardRedemptionUncheckedCreateNestedManyWithoutCustomerInput;
+    rfm_snapshot?: Prisma.rfm_snapshotUncheckedCreateNestedManyWithoutCustomerInput;
+    segment_membership?: Prisma.segment_membershipUncheckedCreateNestedManyWithoutCustomerInput;
+    serial_scan?: Prisma.serial_scanUncheckedCreateNestedManyWithoutCustomerInput;
+    session?: Prisma.sessionUncheckedCreateNestedManyWithoutCustomerInput;
+    subscription?: Prisma.subscriptionUncheckedCreateNestedManyWithoutCustomerInput;
+    warranty_registration?: Prisma.warranty_registrationUncheckedCreateNestedManyWithoutCustomerInput;
+    devices?: Prisma.CustomerDeviceUncheckedCreateNestedManyWithoutCustomerInput;
+};
+export type CustomerCreateOrConnectWithoutSupport_ticketInput = {
+    where: Prisma.CustomerWhereUniqueInput;
+    create: Prisma.XOR<Prisma.CustomerCreateWithoutSupport_ticketInput, Prisma.CustomerUncheckedCreateWithoutSupport_ticketInput>;
+};
+export type CustomerUpsertWithoutSupport_ticketInput = {
+    update: Prisma.XOR<Prisma.CustomerUpdateWithoutSupport_ticketInput, Prisma.CustomerUncheckedUpdateWithoutSupport_ticketInput>;
+    create: Prisma.XOR<Prisma.CustomerCreateWithoutSupport_ticketInput, Prisma.CustomerUncheckedCreateWithoutSupport_ticketInput>;
+    where?: Prisma.CustomerWhereInput;
+};
+export type CustomerUpdateToOneWithWhereWithoutSupport_ticketInput = {
+    where?: Prisma.CustomerWhereInput;
+    data: Prisma.XOR<Prisma.CustomerUpdateWithoutSupport_ticketInput, Prisma.CustomerUncheckedUpdateWithoutSupport_ticketInput>;
+};
+export type CustomerUpdateWithoutSupport_ticketInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     customerCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -9883,15 +10679,18 @@ export type CustomerUpdateWithoutMergedIntoInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUpdateManyWithoutCustomerNestedInput;
     consents?: Prisma.ConsentUpdateManyWithoutCustomerNestedInput;
+    mergedInto?: Prisma.CustomerUpdateOneWithoutMergedFromNestedInput;
     mergedFrom?: Prisma.CustomerUpdateManyWithoutMergedIntoNestedInput;
     addresses?: Prisma.CustomerAddressUpdateManyWithoutCustomerNestedInput;
     identities?: Prisma.CustomerIdentityUpdateManyWithoutCustomerNestedInput;
@@ -9925,8 +10724,9 @@ export type CustomerUpdateWithoutMergedIntoInput = {
     session?: Prisma.sessionUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUpdateManyWithoutCustomerNestedInput;
 };
-export type CustomerUncheckedUpdateWithoutMergedIntoInput = {
+export type CustomerUncheckedUpdateWithoutSupport_ticketInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     customerCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -9937,9 +10737,12 @@ export type CustomerUncheckedUpdateWithoutMergedIntoInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     babies?: Prisma.BabyUncheckedUpdateManyWithoutCustomerNestedInput;
@@ -9979,6 +10782,387 @@ export type CustomerUncheckedUpdateWithoutMergedIntoInput = {
     session?: Prisma.sessionUncheckedUpdateManyWithoutCustomerNestedInput;
     subscription?: Prisma.subscriptionUncheckedUpdateManyWithoutCustomerNestedInput;
     warranty_registration?: Prisma.warranty_registrationUncheckedUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUncheckedUpdateManyWithoutCustomerNestedInput;
+};
+export type CustomerCreateWithoutDevicesInput = {
+    id?: string;
+    customerCode?: string | null;
+    phone?: string | null;
+    email?: string | null;
+    fullName?: string | null;
+    gender?: string | null;
+    dateOfBirth?: Date | string | null;
+    avatarUrl?: string | null;
+    registrationSource?: string | null;
+    customerType?: string | null;
+    dmsCode?: string | null;
+    notes?: string | null;
+    dataQualityFlag?: string | null;
+    isMerged?: boolean;
+    isActive?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
+    campaign_control_group?: Prisma.campaign_control_groupCreateNestedManyWithoutCustomerInput;
+    checklist_progress?: Prisma.checklist_progressCreateNestedManyWithoutCustomerInput;
+    consents?: Prisma.ConsentCreateNestedManyWithoutCustomerInput;
+    mergedInto?: Prisma.CustomerCreateNestedOneWithoutMergedFromInput;
+    mergedFrom?: Prisma.CustomerCreateNestedManyWithoutMergedIntoInput;
+    addresses?: Prisma.CustomerAddressCreateNestedManyWithoutCustomerInput;
+    identities?: Prisma.CustomerIdentityCreateNestedManyWithoutCustomerInput;
+    customer_metrics_daily?: Prisma.customer_metrics_dailyCreateNestedManyWithoutCustomerInput;
+    tags?: Prisma.CustomerTagCreateNestedManyWithoutCustomerInput;
+    data_quality_flag_log?: Prisma.data_quality_flag_logCreateNestedManyWithoutCustomerInput;
+    dsr_request?: Prisma.dsr_requestCreateNestedManyWithoutCustomerInput;
+    event?: Prisma.eventCreateNestedManyWithoutCustomerInput;
+    expert_booking?: Prisma.expert_bookingCreateNestedManyWithoutCustomerInput;
+    frequency_counter?: Prisma.frequency_counterCreateNestedManyWithoutCustomerInput;
+    journey_run?: Prisma.journey_runCreateNestedManyWithoutCustomerInput;
+    loyaltyAccount?: Prisma.LoyaltyAccountCreateNestedOneWithoutCustomerInput;
+    loyalty_transaction?: Prisma.LoyaltyTransactionCreateNestedManyWithoutCustomerInput;
+    merge_candidate_merge_candidate_customer_id_aTocustomer?: Prisma.MergeCandidateCreateNestedManyWithoutCustomer_merge_candidate_customer_id_aTocustomerInput;
+    merge_candidate_merge_candidate_customer_id_bTocustomer?: Prisma.MergeCandidateCreateNestedManyWithoutCustomer_merge_candidate_customer_id_bTocustomerInput;
+    message_log?: Prisma.message_logCreateNestedManyWithoutCustomerInput;
+    milestone_progress?: Prisma.milestone_progressCreateNestedManyWithoutCustomerInput;
+    orders?: Prisma.OrderCreateNestedManyWithoutCustomerInput;
+    product_exchange?: Prisma.ProductExchangeCreateNestedManyWithoutCustomerInput;
+    product_serial?: Prisma.product_serialCreateNestedManyWithoutCustomerInput;
+    quiz_response?: Prisma.quiz_responseCreateNestedManyWithoutCustomerInput;
+    referral_code?: Prisma.referral_codeCreateNestedManyWithoutCustomerInput;
+    referral_conversion_referral_conversion_referred_idTocustomer?: Prisma.referral_conversionCreateNestedManyWithoutCustomer_referral_conversion_referred_idTocustomerInput;
+    referral_conversion_referral_conversion_referrer_idTocustomer?: Prisma.referral_conversionCreateNestedManyWithoutCustomer_referral_conversion_referrer_idTocustomerInput;
+    replenishment_schedule?: Prisma.replenishment_scheduleCreateNestedManyWithoutCustomerInput;
+    reviews?: Prisma.ReviewCreateNestedManyWithoutCustomerInput;
+    reward_redemption?: Prisma.RewardRedemptionCreateNestedManyWithoutCustomerInput;
+    rfm_snapshot?: Prisma.rfm_snapshotCreateNestedManyWithoutCustomerInput;
+    segment_membership?: Prisma.segment_membershipCreateNestedManyWithoutCustomerInput;
+    serial_scan?: Prisma.serial_scanCreateNestedManyWithoutCustomerInput;
+    session?: Prisma.sessionCreateNestedManyWithoutCustomerInput;
+    subscription?: Prisma.subscriptionCreateNestedManyWithoutCustomerInput;
+    warranty_registration?: Prisma.warranty_registrationCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketCreateNestedManyWithoutCustomerInput;
+};
+export type CustomerUncheckedCreateWithoutDevicesInput = {
+    id?: string;
+    customerCode?: string | null;
+    phone?: string | null;
+    email?: string | null;
+    fullName?: string | null;
+    gender?: string | null;
+    dateOfBirth?: Date | string | null;
+    avatarUrl?: string | null;
+    registrationSource?: string | null;
+    customerType?: string | null;
+    dmsCode?: string | null;
+    notes?: string | null;
+    dataQualityFlag?: string | null;
+    isMerged?: boolean;
+    isActive?: boolean;
+    mergedIntoId?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    babies?: Prisma.BabyUncheckedCreateNestedManyWithoutCustomerInput;
+    campaign_control_group?: Prisma.campaign_control_groupUncheckedCreateNestedManyWithoutCustomerInput;
+    checklist_progress?: Prisma.checklist_progressUncheckedCreateNestedManyWithoutCustomerInput;
+    consents?: Prisma.ConsentUncheckedCreateNestedManyWithoutCustomerInput;
+    mergedFrom?: Prisma.CustomerUncheckedCreateNestedManyWithoutMergedIntoInput;
+    addresses?: Prisma.CustomerAddressUncheckedCreateNestedManyWithoutCustomerInput;
+    identities?: Prisma.CustomerIdentityUncheckedCreateNestedManyWithoutCustomerInput;
+    customer_metrics_daily?: Prisma.customer_metrics_dailyUncheckedCreateNestedManyWithoutCustomerInput;
+    tags?: Prisma.CustomerTagUncheckedCreateNestedManyWithoutCustomerInput;
+    data_quality_flag_log?: Prisma.data_quality_flag_logUncheckedCreateNestedManyWithoutCustomerInput;
+    dsr_request?: Prisma.dsr_requestUncheckedCreateNestedManyWithoutCustomerInput;
+    event?: Prisma.eventUncheckedCreateNestedManyWithoutCustomerInput;
+    expert_booking?: Prisma.expert_bookingUncheckedCreateNestedManyWithoutCustomerInput;
+    frequency_counter?: Prisma.frequency_counterUncheckedCreateNestedManyWithoutCustomerInput;
+    journey_run?: Prisma.journey_runUncheckedCreateNestedManyWithoutCustomerInput;
+    loyaltyAccount?: Prisma.LoyaltyAccountUncheckedCreateNestedOneWithoutCustomerInput;
+    loyalty_transaction?: Prisma.LoyaltyTransactionUncheckedCreateNestedManyWithoutCustomerInput;
+    merge_candidate_merge_candidate_customer_id_aTocustomer?: Prisma.MergeCandidateUncheckedCreateNestedManyWithoutCustomer_merge_candidate_customer_id_aTocustomerInput;
+    merge_candidate_merge_candidate_customer_id_bTocustomer?: Prisma.MergeCandidateUncheckedCreateNestedManyWithoutCustomer_merge_candidate_customer_id_bTocustomerInput;
+    message_log?: Prisma.message_logUncheckedCreateNestedManyWithoutCustomerInput;
+    milestone_progress?: Prisma.milestone_progressUncheckedCreateNestedManyWithoutCustomerInput;
+    orders?: Prisma.OrderUncheckedCreateNestedManyWithoutCustomerInput;
+    product_exchange?: Prisma.ProductExchangeUncheckedCreateNestedManyWithoutCustomerInput;
+    product_serial?: Prisma.product_serialUncheckedCreateNestedManyWithoutCustomerInput;
+    quiz_response?: Prisma.quiz_responseUncheckedCreateNestedManyWithoutCustomerInput;
+    referral_code?: Prisma.referral_codeUncheckedCreateNestedManyWithoutCustomerInput;
+    referral_conversion_referral_conversion_referred_idTocustomer?: Prisma.referral_conversionUncheckedCreateNestedManyWithoutCustomer_referral_conversion_referred_idTocustomerInput;
+    referral_conversion_referral_conversion_referrer_idTocustomer?: Prisma.referral_conversionUncheckedCreateNestedManyWithoutCustomer_referral_conversion_referrer_idTocustomerInput;
+    replenishment_schedule?: Prisma.replenishment_scheduleUncheckedCreateNestedManyWithoutCustomerInput;
+    reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutCustomerInput;
+    reward_redemption?: Prisma.RewardRedemptionUncheckedCreateNestedManyWithoutCustomerInput;
+    rfm_snapshot?: Prisma.rfm_snapshotUncheckedCreateNestedManyWithoutCustomerInput;
+    segment_membership?: Prisma.segment_membershipUncheckedCreateNestedManyWithoutCustomerInput;
+    serial_scan?: Prisma.serial_scanUncheckedCreateNestedManyWithoutCustomerInput;
+    session?: Prisma.sessionUncheckedCreateNestedManyWithoutCustomerInput;
+    subscription?: Prisma.subscriptionUncheckedCreateNestedManyWithoutCustomerInput;
+    warranty_registration?: Prisma.warranty_registrationUncheckedCreateNestedManyWithoutCustomerInput;
+    support_ticket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCustomerInput;
+};
+export type CustomerCreateOrConnectWithoutDevicesInput = {
+    where: Prisma.CustomerWhereUniqueInput;
+    create: Prisma.XOR<Prisma.CustomerCreateWithoutDevicesInput, Prisma.CustomerUncheckedCreateWithoutDevicesInput>;
+};
+export type CustomerUpsertWithoutDevicesInput = {
+    update: Prisma.XOR<Prisma.CustomerUpdateWithoutDevicesInput, Prisma.CustomerUncheckedUpdateWithoutDevicesInput>;
+    create: Prisma.XOR<Prisma.CustomerCreateWithoutDevicesInput, Prisma.CustomerUncheckedCreateWithoutDevicesInput>;
+    where?: Prisma.CustomerWhereInput;
+};
+export type CustomerUpdateToOneWithWhereWithoutDevicesInput = {
+    where?: Prisma.CustomerWhereInput;
+    data: Prisma.XOR<Prisma.CustomerUpdateWithoutDevicesInput, Prisma.CustomerUncheckedUpdateWithoutDevicesInput>;
+};
+export type CustomerUpdateWithoutDevicesInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    customerCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
+    campaign_control_group?: Prisma.campaign_control_groupUpdateManyWithoutCustomerNestedInput;
+    checklist_progress?: Prisma.checklist_progressUpdateManyWithoutCustomerNestedInput;
+    consents?: Prisma.ConsentUpdateManyWithoutCustomerNestedInput;
+    mergedInto?: Prisma.CustomerUpdateOneWithoutMergedFromNestedInput;
+    mergedFrom?: Prisma.CustomerUpdateManyWithoutMergedIntoNestedInput;
+    addresses?: Prisma.CustomerAddressUpdateManyWithoutCustomerNestedInput;
+    identities?: Prisma.CustomerIdentityUpdateManyWithoutCustomerNestedInput;
+    customer_metrics_daily?: Prisma.customer_metrics_dailyUpdateManyWithoutCustomerNestedInput;
+    tags?: Prisma.CustomerTagUpdateManyWithoutCustomerNestedInput;
+    data_quality_flag_log?: Prisma.data_quality_flag_logUpdateManyWithoutCustomerNestedInput;
+    dsr_request?: Prisma.dsr_requestUpdateManyWithoutCustomerNestedInput;
+    event?: Prisma.eventUpdateManyWithoutCustomerNestedInput;
+    expert_booking?: Prisma.expert_bookingUpdateManyWithoutCustomerNestedInput;
+    frequency_counter?: Prisma.frequency_counterUpdateManyWithoutCustomerNestedInput;
+    journey_run?: Prisma.journey_runUpdateManyWithoutCustomerNestedInput;
+    loyaltyAccount?: Prisma.LoyaltyAccountUpdateOneWithoutCustomerNestedInput;
+    loyalty_transaction?: Prisma.LoyaltyTransactionUpdateManyWithoutCustomerNestedInput;
+    merge_candidate_merge_candidate_customer_id_aTocustomer?: Prisma.MergeCandidateUpdateManyWithoutCustomer_merge_candidate_customer_id_aTocustomerNestedInput;
+    merge_candidate_merge_candidate_customer_id_bTocustomer?: Prisma.MergeCandidateUpdateManyWithoutCustomer_merge_candidate_customer_id_bTocustomerNestedInput;
+    message_log?: Prisma.message_logUpdateManyWithoutCustomerNestedInput;
+    milestone_progress?: Prisma.milestone_progressUpdateManyWithoutCustomerNestedInput;
+    orders?: Prisma.OrderUpdateManyWithoutCustomerNestedInput;
+    product_exchange?: Prisma.ProductExchangeUpdateManyWithoutCustomerNestedInput;
+    product_serial?: Prisma.product_serialUpdateManyWithoutCustomerNestedInput;
+    quiz_response?: Prisma.quiz_responseUpdateManyWithoutCustomerNestedInput;
+    referral_code?: Prisma.referral_codeUpdateManyWithoutCustomerNestedInput;
+    referral_conversion_referral_conversion_referred_idTocustomer?: Prisma.referral_conversionUpdateManyWithoutCustomer_referral_conversion_referred_idTocustomerNestedInput;
+    referral_conversion_referral_conversion_referrer_idTocustomer?: Prisma.referral_conversionUpdateManyWithoutCustomer_referral_conversion_referrer_idTocustomerNestedInput;
+    replenishment_schedule?: Prisma.replenishment_scheduleUpdateManyWithoutCustomerNestedInput;
+    reviews?: Prisma.ReviewUpdateManyWithoutCustomerNestedInput;
+    reward_redemption?: Prisma.RewardRedemptionUpdateManyWithoutCustomerNestedInput;
+    rfm_snapshot?: Prisma.rfm_snapshotUpdateManyWithoutCustomerNestedInput;
+    segment_membership?: Prisma.segment_membershipUpdateManyWithoutCustomerNestedInput;
+    serial_scan?: Prisma.serial_scanUpdateManyWithoutCustomerNestedInput;
+    session?: Prisma.sessionUpdateManyWithoutCustomerNestedInput;
+    subscription?: Prisma.subscriptionUpdateManyWithoutCustomerNestedInput;
+    warranty_registration?: Prisma.warranty_registrationUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUpdateManyWithoutCustomerNestedInput;
+};
+export type CustomerUncheckedUpdateWithoutDevicesInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    customerCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    babies?: Prisma.BabyUncheckedUpdateManyWithoutCustomerNestedInput;
+    campaign_control_group?: Prisma.campaign_control_groupUncheckedUpdateManyWithoutCustomerNestedInput;
+    checklist_progress?: Prisma.checklist_progressUncheckedUpdateManyWithoutCustomerNestedInput;
+    consents?: Prisma.ConsentUncheckedUpdateManyWithoutCustomerNestedInput;
+    mergedFrom?: Prisma.CustomerUncheckedUpdateManyWithoutMergedIntoNestedInput;
+    addresses?: Prisma.CustomerAddressUncheckedUpdateManyWithoutCustomerNestedInput;
+    identities?: Prisma.CustomerIdentityUncheckedUpdateManyWithoutCustomerNestedInput;
+    customer_metrics_daily?: Prisma.customer_metrics_dailyUncheckedUpdateManyWithoutCustomerNestedInput;
+    tags?: Prisma.CustomerTagUncheckedUpdateManyWithoutCustomerNestedInput;
+    data_quality_flag_log?: Prisma.data_quality_flag_logUncheckedUpdateManyWithoutCustomerNestedInput;
+    dsr_request?: Prisma.dsr_requestUncheckedUpdateManyWithoutCustomerNestedInput;
+    event?: Prisma.eventUncheckedUpdateManyWithoutCustomerNestedInput;
+    expert_booking?: Prisma.expert_bookingUncheckedUpdateManyWithoutCustomerNestedInput;
+    frequency_counter?: Prisma.frequency_counterUncheckedUpdateManyWithoutCustomerNestedInput;
+    journey_run?: Prisma.journey_runUncheckedUpdateManyWithoutCustomerNestedInput;
+    loyaltyAccount?: Prisma.LoyaltyAccountUncheckedUpdateOneWithoutCustomerNestedInput;
+    loyalty_transaction?: Prisma.LoyaltyTransactionUncheckedUpdateManyWithoutCustomerNestedInput;
+    merge_candidate_merge_candidate_customer_id_aTocustomer?: Prisma.MergeCandidateUncheckedUpdateManyWithoutCustomer_merge_candidate_customer_id_aTocustomerNestedInput;
+    merge_candidate_merge_candidate_customer_id_bTocustomer?: Prisma.MergeCandidateUncheckedUpdateManyWithoutCustomer_merge_candidate_customer_id_bTocustomerNestedInput;
+    message_log?: Prisma.message_logUncheckedUpdateManyWithoutCustomerNestedInput;
+    milestone_progress?: Prisma.milestone_progressUncheckedUpdateManyWithoutCustomerNestedInput;
+    orders?: Prisma.OrderUncheckedUpdateManyWithoutCustomerNestedInput;
+    product_exchange?: Prisma.ProductExchangeUncheckedUpdateManyWithoutCustomerNestedInput;
+    product_serial?: Prisma.product_serialUncheckedUpdateManyWithoutCustomerNestedInput;
+    quiz_response?: Prisma.quiz_responseUncheckedUpdateManyWithoutCustomerNestedInput;
+    referral_code?: Prisma.referral_codeUncheckedUpdateManyWithoutCustomerNestedInput;
+    referral_conversion_referral_conversion_referred_idTocustomer?: Prisma.referral_conversionUncheckedUpdateManyWithoutCustomer_referral_conversion_referred_idTocustomerNestedInput;
+    referral_conversion_referral_conversion_referrer_idTocustomer?: Prisma.referral_conversionUncheckedUpdateManyWithoutCustomer_referral_conversion_referrer_idTocustomerNestedInput;
+    replenishment_schedule?: Prisma.replenishment_scheduleUncheckedUpdateManyWithoutCustomerNestedInput;
+    reviews?: Prisma.ReviewUncheckedUpdateManyWithoutCustomerNestedInput;
+    reward_redemption?: Prisma.RewardRedemptionUncheckedUpdateManyWithoutCustomerNestedInput;
+    rfm_snapshot?: Prisma.rfm_snapshotUncheckedUpdateManyWithoutCustomerNestedInput;
+    segment_membership?: Prisma.segment_membershipUncheckedUpdateManyWithoutCustomerNestedInput;
+    serial_scan?: Prisma.serial_scanUncheckedUpdateManyWithoutCustomerNestedInput;
+    session?: Prisma.sessionUncheckedUpdateManyWithoutCustomerNestedInput;
+    subscription?: Prisma.subscriptionUncheckedUpdateManyWithoutCustomerNestedInput;
+    warranty_registration?: Prisma.warranty_registrationUncheckedUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUncheckedUpdateManyWithoutCustomerNestedInput;
+};
+export type CustomerCreateManyMergedIntoInput = {
+    id?: string;
+    customerCode?: string | null;
+    phone?: string | null;
+    email?: string | null;
+    fullName?: string | null;
+    gender?: string | null;
+    dateOfBirth?: Date | string | null;
+    avatarUrl?: string | null;
+    registrationSource?: string | null;
+    customerType?: string | null;
+    dmsCode?: string | null;
+    notes?: string | null;
+    dataQualityFlag?: string | null;
+    isMerged?: boolean;
+    isActive?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+};
+export type CustomerUpdateWithoutMergedIntoInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    customerCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
+    campaign_control_group?: Prisma.campaign_control_groupUpdateManyWithoutCustomerNestedInput;
+    checklist_progress?: Prisma.checklist_progressUpdateManyWithoutCustomerNestedInput;
+    consents?: Prisma.ConsentUpdateManyWithoutCustomerNestedInput;
+    mergedFrom?: Prisma.CustomerUpdateManyWithoutMergedIntoNestedInput;
+    addresses?: Prisma.CustomerAddressUpdateManyWithoutCustomerNestedInput;
+    identities?: Prisma.CustomerIdentityUpdateManyWithoutCustomerNestedInput;
+    customer_metrics_daily?: Prisma.customer_metrics_dailyUpdateManyWithoutCustomerNestedInput;
+    tags?: Prisma.CustomerTagUpdateManyWithoutCustomerNestedInput;
+    data_quality_flag_log?: Prisma.data_quality_flag_logUpdateManyWithoutCustomerNestedInput;
+    dsr_request?: Prisma.dsr_requestUpdateManyWithoutCustomerNestedInput;
+    event?: Prisma.eventUpdateManyWithoutCustomerNestedInput;
+    expert_booking?: Prisma.expert_bookingUpdateManyWithoutCustomerNestedInput;
+    frequency_counter?: Prisma.frequency_counterUpdateManyWithoutCustomerNestedInput;
+    journey_run?: Prisma.journey_runUpdateManyWithoutCustomerNestedInput;
+    loyaltyAccount?: Prisma.LoyaltyAccountUpdateOneWithoutCustomerNestedInput;
+    loyalty_transaction?: Prisma.LoyaltyTransactionUpdateManyWithoutCustomerNestedInput;
+    merge_candidate_merge_candidate_customer_id_aTocustomer?: Prisma.MergeCandidateUpdateManyWithoutCustomer_merge_candidate_customer_id_aTocustomerNestedInput;
+    merge_candidate_merge_candidate_customer_id_bTocustomer?: Prisma.MergeCandidateUpdateManyWithoutCustomer_merge_candidate_customer_id_bTocustomerNestedInput;
+    message_log?: Prisma.message_logUpdateManyWithoutCustomerNestedInput;
+    milestone_progress?: Prisma.milestone_progressUpdateManyWithoutCustomerNestedInput;
+    orders?: Prisma.OrderUpdateManyWithoutCustomerNestedInput;
+    product_exchange?: Prisma.ProductExchangeUpdateManyWithoutCustomerNestedInput;
+    product_serial?: Prisma.product_serialUpdateManyWithoutCustomerNestedInput;
+    quiz_response?: Prisma.quiz_responseUpdateManyWithoutCustomerNestedInput;
+    referral_code?: Prisma.referral_codeUpdateManyWithoutCustomerNestedInput;
+    referral_conversion_referral_conversion_referred_idTocustomer?: Prisma.referral_conversionUpdateManyWithoutCustomer_referral_conversion_referred_idTocustomerNestedInput;
+    referral_conversion_referral_conversion_referrer_idTocustomer?: Prisma.referral_conversionUpdateManyWithoutCustomer_referral_conversion_referrer_idTocustomerNestedInput;
+    replenishment_schedule?: Prisma.replenishment_scheduleUpdateManyWithoutCustomerNestedInput;
+    reviews?: Prisma.ReviewUpdateManyWithoutCustomerNestedInput;
+    reward_redemption?: Prisma.RewardRedemptionUpdateManyWithoutCustomerNestedInput;
+    rfm_snapshot?: Prisma.rfm_snapshotUpdateManyWithoutCustomerNestedInput;
+    segment_membership?: Prisma.segment_membershipUpdateManyWithoutCustomerNestedInput;
+    serial_scan?: Prisma.serial_scanUpdateManyWithoutCustomerNestedInput;
+    session?: Prisma.sessionUpdateManyWithoutCustomerNestedInput;
+    subscription?: Prisma.subscriptionUpdateManyWithoutCustomerNestedInput;
+    warranty_registration?: Prisma.warranty_registrationUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUpdateManyWithoutCustomerNestedInput;
+};
+export type CustomerUncheckedUpdateWithoutMergedIntoInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    customerCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    babies?: Prisma.BabyUncheckedUpdateManyWithoutCustomerNestedInput;
+    campaign_control_group?: Prisma.campaign_control_groupUncheckedUpdateManyWithoutCustomerNestedInput;
+    checklist_progress?: Prisma.checklist_progressUncheckedUpdateManyWithoutCustomerNestedInput;
+    consents?: Prisma.ConsentUncheckedUpdateManyWithoutCustomerNestedInput;
+    mergedFrom?: Prisma.CustomerUncheckedUpdateManyWithoutMergedIntoNestedInput;
+    addresses?: Prisma.CustomerAddressUncheckedUpdateManyWithoutCustomerNestedInput;
+    identities?: Prisma.CustomerIdentityUncheckedUpdateManyWithoutCustomerNestedInput;
+    customer_metrics_daily?: Prisma.customer_metrics_dailyUncheckedUpdateManyWithoutCustomerNestedInput;
+    tags?: Prisma.CustomerTagUncheckedUpdateManyWithoutCustomerNestedInput;
+    data_quality_flag_log?: Prisma.data_quality_flag_logUncheckedUpdateManyWithoutCustomerNestedInput;
+    dsr_request?: Prisma.dsr_requestUncheckedUpdateManyWithoutCustomerNestedInput;
+    event?: Prisma.eventUncheckedUpdateManyWithoutCustomerNestedInput;
+    expert_booking?: Prisma.expert_bookingUncheckedUpdateManyWithoutCustomerNestedInput;
+    frequency_counter?: Prisma.frequency_counterUncheckedUpdateManyWithoutCustomerNestedInput;
+    journey_run?: Prisma.journey_runUncheckedUpdateManyWithoutCustomerNestedInput;
+    loyaltyAccount?: Prisma.LoyaltyAccountUncheckedUpdateOneWithoutCustomerNestedInput;
+    loyalty_transaction?: Prisma.LoyaltyTransactionUncheckedUpdateManyWithoutCustomerNestedInput;
+    merge_candidate_merge_candidate_customer_id_aTocustomer?: Prisma.MergeCandidateUncheckedUpdateManyWithoutCustomer_merge_candidate_customer_id_aTocustomerNestedInput;
+    merge_candidate_merge_candidate_customer_id_bTocustomer?: Prisma.MergeCandidateUncheckedUpdateManyWithoutCustomer_merge_candidate_customer_id_bTocustomerNestedInput;
+    message_log?: Prisma.message_logUncheckedUpdateManyWithoutCustomerNestedInput;
+    milestone_progress?: Prisma.milestone_progressUncheckedUpdateManyWithoutCustomerNestedInput;
+    orders?: Prisma.OrderUncheckedUpdateManyWithoutCustomerNestedInput;
+    product_exchange?: Prisma.ProductExchangeUncheckedUpdateManyWithoutCustomerNestedInput;
+    product_serial?: Prisma.product_serialUncheckedUpdateManyWithoutCustomerNestedInput;
+    quiz_response?: Prisma.quiz_responseUncheckedUpdateManyWithoutCustomerNestedInput;
+    referral_code?: Prisma.referral_codeUncheckedUpdateManyWithoutCustomerNestedInput;
+    referral_conversion_referral_conversion_referred_idTocustomer?: Prisma.referral_conversionUncheckedUpdateManyWithoutCustomer_referral_conversion_referred_idTocustomerNestedInput;
+    referral_conversion_referral_conversion_referrer_idTocustomer?: Prisma.referral_conversionUncheckedUpdateManyWithoutCustomer_referral_conversion_referrer_idTocustomerNestedInput;
+    replenishment_schedule?: Prisma.replenishment_scheduleUncheckedUpdateManyWithoutCustomerNestedInput;
+    reviews?: Prisma.ReviewUncheckedUpdateManyWithoutCustomerNestedInput;
+    reward_redemption?: Prisma.RewardRedemptionUncheckedUpdateManyWithoutCustomerNestedInput;
+    rfm_snapshot?: Prisma.rfm_snapshotUncheckedUpdateManyWithoutCustomerNestedInput;
+    segment_membership?: Prisma.segment_membershipUncheckedUpdateManyWithoutCustomerNestedInput;
+    serial_scan?: Prisma.serial_scanUncheckedUpdateManyWithoutCustomerNestedInput;
+    session?: Prisma.sessionUncheckedUpdateManyWithoutCustomerNestedInput;
+    subscription?: Prisma.subscriptionUncheckedUpdateManyWithoutCustomerNestedInput;
+    warranty_registration?: Prisma.warranty_registrationUncheckedUpdateManyWithoutCustomerNestedInput;
+    support_ticket?: Prisma.SupportTicketUncheckedUpdateManyWithoutCustomerNestedInput;
+    devices?: Prisma.CustomerDeviceUncheckedUpdateManyWithoutCustomerNestedInput;
 };
 export type CustomerUncheckedUpdateManyWithoutMergedIntoInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -9991,9 +11175,11 @@ export type CustomerUncheckedUpdateManyWithoutMergedIntoInput = {
     avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     registrationSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     customerType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    dmsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     dataQualityFlag?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isMerged?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
@@ -10034,6 +11220,8 @@ export type CustomerCountOutputType = {
     session: number;
     subscription: number;
     warranty_registration: number;
+    support_ticket: number;
+    devices: number;
 };
 export type CustomerCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     babies?: boolean | CustomerCountOutputTypeCountBabiesArgs;
@@ -10072,6 +11260,8 @@ export type CustomerCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensio
     session?: boolean | CustomerCountOutputTypeCountSessionArgs;
     subscription?: boolean | CustomerCountOutputTypeCountSubscriptionArgs;
     warranty_registration?: boolean | CustomerCountOutputTypeCountWarranty_registrationArgs;
+    support_ticket?: boolean | CustomerCountOutputTypeCountSupport_ticketArgs;
+    devices?: boolean | CustomerCountOutputTypeCountDevicesArgs;
 };
 export type CustomerCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     select?: Prisma.CustomerCountOutputTypeSelect<ExtArgs> | null;
@@ -10184,6 +11374,12 @@ export type CustomerCountOutputTypeCountSubscriptionArgs<ExtArgs extends runtime
 export type CustomerCountOutputTypeCountWarranty_registrationArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     where?: Prisma.warranty_registrationWhereInput;
 };
+export type CustomerCountOutputTypeCountSupport_ticketArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    where?: Prisma.SupportTicketWhereInput;
+};
+export type CustomerCountOutputTypeCountDevicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    where?: Prisma.CustomerDeviceWhereInput;
+};
 export type CustomerSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
     customerCode?: boolean;
@@ -10195,9 +11391,11 @@ export type CustomerSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
     avatarUrl?: boolean;
     registrationSource?: boolean;
     customerType?: boolean;
+    dmsCode?: boolean;
     notes?: boolean;
     dataQualityFlag?: boolean;
     isMerged?: boolean;
+    isActive?: boolean;
     mergedIntoId?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
@@ -10239,6 +11437,8 @@ export type CustomerSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
     session?: boolean | Prisma.Customer$sessionArgs<ExtArgs>;
     subscription?: boolean | Prisma.Customer$subscriptionArgs<ExtArgs>;
     warranty_registration?: boolean | Prisma.Customer$warranty_registrationArgs<ExtArgs>;
+    support_ticket?: boolean | Prisma.Customer$support_ticketArgs<ExtArgs>;
+    devices?: boolean | Prisma.Customer$devicesArgs<ExtArgs>;
     _count?: boolean | Prisma.CustomerCountOutputTypeDefaultArgs<ExtArgs>;
 }, ExtArgs["result"]["customer"]>;
 export type CustomerSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -10252,9 +11452,11 @@ export type CustomerSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
     avatarUrl?: boolean;
     registrationSource?: boolean;
     customerType?: boolean;
+    dmsCode?: boolean;
     notes?: boolean;
     dataQualityFlag?: boolean;
     isMerged?: boolean;
+    isActive?: boolean;
     mergedIntoId?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
@@ -10271,9 +11473,11 @@ export type CustomerSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
     avatarUrl?: boolean;
     registrationSource?: boolean;
     customerType?: boolean;
+    dmsCode?: boolean;
     notes?: boolean;
     dataQualityFlag?: boolean;
     isMerged?: boolean;
+    isActive?: boolean;
     mergedIntoId?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
@@ -10290,14 +11494,16 @@ export type CustomerSelectScalar = {
     avatarUrl?: boolean;
     registrationSource?: boolean;
     customerType?: boolean;
+    dmsCode?: boolean;
     notes?: boolean;
     dataQualityFlag?: boolean;
     isMerged?: boolean;
+    isActive?: boolean;
     mergedIntoId?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
 };
-export type CustomerOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "customerCode" | "phone" | "email" | "fullName" | "gender" | "dateOfBirth" | "avatarUrl" | "registrationSource" | "customerType" | "notes" | "dataQualityFlag" | "isMerged" | "mergedIntoId" | "createdAt" | "updatedAt", ExtArgs["result"]["customer"]>;
+export type CustomerOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "customerCode" | "phone" | "email" | "fullName" | "gender" | "dateOfBirth" | "avatarUrl" | "registrationSource" | "customerType" | "dmsCode" | "notes" | "dataQualityFlag" | "isMerged" | "isActive" | "mergedIntoId" | "createdAt" | "updatedAt", ExtArgs["result"]["customer"]>;
 export type CustomerInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     babies?: boolean | Prisma.Customer$babiesArgs<ExtArgs>;
     campaign_control_group?: boolean | Prisma.Customer$campaign_control_groupArgs<ExtArgs>;
@@ -10337,6 +11543,8 @@ export type CustomerInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
     session?: boolean | Prisma.Customer$sessionArgs<ExtArgs>;
     subscription?: boolean | Prisma.Customer$subscriptionArgs<ExtArgs>;
     warranty_registration?: boolean | Prisma.Customer$warranty_registrationArgs<ExtArgs>;
+    support_ticket?: boolean | Prisma.Customer$support_ticketArgs<ExtArgs>;
+    devices?: boolean | Prisma.Customer$devicesArgs<ExtArgs>;
     _count?: boolean | Prisma.CustomerCountOutputTypeDefaultArgs<ExtArgs>;
 };
 export type CustomerIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -10386,6 +11594,8 @@ export type $CustomerPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
         session: Prisma.$sessionPayload<ExtArgs>[];
         subscription: Prisma.$subscriptionPayload<ExtArgs>[];
         warranty_registration: Prisma.$warranty_registrationPayload<ExtArgs>[];
+        support_ticket: Prisma.$SupportTicketPayload<ExtArgs>[];
+        devices: Prisma.$CustomerDevicePayload<ExtArgs>[];
     };
     scalars: runtime.Types.Extensions.GetPayloadResult<{
         id: string;
@@ -10398,9 +11608,11 @@ export type $CustomerPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
         avatarUrl: string | null;
         registrationSource: string | null;
         customerType: string | null;
+        dmsCode: string | null;
         notes: string | null;
         dataQualityFlag: string | null;
         isMerged: boolean;
+        isActive: boolean;
         mergedIntoId: string | null;
         createdAt: Date;
         updatedAt: Date;
@@ -10494,6 +11706,8 @@ export interface Prisma__CustomerClient<T, Null = never, ExtArgs extends runtime
     session<T extends Prisma.Customer$sessionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Customer$sessionArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$sessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
     subscription<T extends Prisma.Customer$subscriptionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Customer$subscriptionArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$subscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
     warranty_registration<T extends Prisma.Customer$warranty_registrationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Customer$warranty_registrationArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$warranty_registrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+    support_ticket<T extends Prisma.Customer$support_ticketArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Customer$support_ticketArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+    devices<T extends Prisma.Customer$devicesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Customer$devicesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CustomerDevicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
     then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): runtime.Types.Utils.JsPromise<TResult1 | TResult2>;
     catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): runtime.Types.Utils.JsPromise<T | TResult>;
     finally(onfinally?: (() => void) | undefined | null): runtime.Types.Utils.JsPromise<T>;
@@ -10509,9 +11723,11 @@ export interface CustomerFieldRefs {
     readonly avatarUrl: Prisma.FieldRef<"Customer", 'String'>;
     readonly registrationSource: Prisma.FieldRef<"Customer", 'String'>;
     readonly customerType: Prisma.FieldRef<"Customer", 'String'>;
+    readonly dmsCode: Prisma.FieldRef<"Customer", 'String'>;
     readonly notes: Prisma.FieldRef<"Customer", 'String'>;
     readonly dataQualityFlag: Prisma.FieldRef<"Customer", 'String'>;
     readonly isMerged: Prisma.FieldRef<"Customer", 'Boolean'>;
+    readonly isActive: Prisma.FieldRef<"Customer", 'Boolean'>;
     readonly mergedIntoId: Prisma.FieldRef<"Customer", 'String'>;
     readonly createdAt: Prisma.FieldRef<"Customer", 'DateTime'>;
     readonly updatedAt: Prisma.FieldRef<"Customer", 'DateTime'>;
@@ -11023,6 +12239,28 @@ export type Customer$warranty_registrationArgs<ExtArgs extends runtime.Types.Ext
     take?: number;
     skip?: number;
     distinct?: Prisma.Warranty_registrationScalarFieldEnum | Prisma.Warranty_registrationScalarFieldEnum[];
+};
+export type Customer$support_ticketArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.SupportTicketSelect<ExtArgs> | null;
+    omit?: Prisma.SupportTicketOmit<ExtArgs> | null;
+    include?: Prisma.SupportTicketInclude<ExtArgs> | null;
+    where?: Prisma.SupportTicketWhereInput;
+    orderBy?: Prisma.SupportTicketOrderByWithRelationInput | Prisma.SupportTicketOrderByWithRelationInput[];
+    cursor?: Prisma.SupportTicketWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: Prisma.SupportTicketScalarFieldEnum | Prisma.SupportTicketScalarFieldEnum[];
+};
+export type Customer$devicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.CustomerDeviceSelect<ExtArgs> | null;
+    omit?: Prisma.CustomerDeviceOmit<ExtArgs> | null;
+    include?: Prisma.CustomerDeviceInclude<ExtArgs> | null;
+    where?: Prisma.CustomerDeviceWhereInput;
+    orderBy?: Prisma.CustomerDeviceOrderByWithRelationInput | Prisma.CustomerDeviceOrderByWithRelationInput[];
+    cursor?: Prisma.CustomerDeviceWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: Prisma.CustomerDeviceScalarFieldEnum | Prisma.CustomerDeviceScalarFieldEnum[];
 };
 export type CustomerDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     select?: Prisma.CustomerSelect<ExtArgs> | null;

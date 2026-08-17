@@ -219,13 +219,45 @@ export class LoyaltyService {
 
   // ─── Redemptions ──────────────────────────────────────
   async listRedemptions(take = 20) {
-    return this.prisma.rewardRedemption.findMany({
+    const redemptions = await this.prisma.rewardRedemption.findMany({
       take,
       orderBy: { createdAt: 'desc' },
       include: {
         customer: { select: { id: true, fullName: true, phone: true } },
-        reward_catalog: { select: { code: true, name: true } },
+        reward_catalog: { select: { code: true, name: true, category: true } },
       },
     });
+
+    const orders = await this.prisma.order.findMany({
+      where: { isInternal: true },
+      take,
+      orderBy: { createdAt: 'desc' },
+      include: {
+        customer: { select: { id: true, fullName: true, phone: true } },
+        items: { include: { product: true } }
+      }
+    });
+
+    const formattedOrders = orders.map(o => ({
+      id: o.id,
+      customerId: o.customerId,
+      status: o.status,
+      createdAt: o.createdAt,
+      shipmentNo: o.shipmentNo,
+      trackingLink: o.trackingLink,
+      customer: o.customer,
+      type: 'order', // Flag to differentiate from redemptions
+      reward_catalog: {
+        code: o.items[0]?.product?.sku || 'PRODUCT',
+        name: o.items[0]?.product?.name || 'Unknown Product',
+        category: 'product'
+      }
+    }));
+
+    const combined = [...redemptions.map(r => ({ ...r, type: 'redemption' })), ...formattedOrders]
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+      .slice(0, take);
+
+    return combined;
   }
 }

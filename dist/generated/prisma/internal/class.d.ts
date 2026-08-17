@@ -258,5 +258,14 @@ export interface PrismaClient<in LogOpts extends Prisma.LogLevel = never, in out
     get zaloMiniApp(): Prisma.ZaloMiniAppDelegate<ExtArgs, {
         omit: OmitOpts;
     }>;
+    get supportTicket(): Prisma.SupportTicketDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
+    get customerDevice(): Prisma.CustomerDeviceDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
+    get adminNotification(): Prisma.AdminNotificationDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
 }
 export declare function getPrismaClientClass(): PrismaClientConstructor;

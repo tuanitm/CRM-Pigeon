@@ -33,6 +33,8 @@ export type OrderMinAggregateOutputType = {
     channel: string | null;
     isGwp: boolean | null;
     isInternal: boolean | null;
+    shipmentNo: string | null;
+    trackingLink: string | null;
     orderedAt: Date | null;
     createdAt: Date | null;
     updatedAt: Date | null;
@@ -50,6 +52,8 @@ export type OrderMaxAggregateOutputType = {
     channel: string | null;
     isGwp: boolean | null;
     isInternal: boolean | null;
+    shipmentNo: string | null;
+    trackingLink: string | null;
     orderedAt: Date | null;
     createdAt: Date | null;
     updatedAt: Date | null;
@@ -67,6 +71,8 @@ export type OrderCountAggregateOutputType = {
     channel: number;
     isGwp: number;
     isInternal: number;
+    shipmentNo: number;
+    trackingLink: number;
     orderedAt: number;
     createdAt: number;
     updatedAt: number;
@@ -97,6 +103,8 @@ export type OrderMinAggregateInputType = {
     channel?: true;
     isGwp?: true;
     isInternal?: true;
+    shipmentNo?: true;
+    trackingLink?: true;
     orderedAt?: true;
     createdAt?: true;
     updatedAt?: true;
@@ -114,6 +122,8 @@ export type OrderMaxAggregateInputType = {
     channel?: true;
     isGwp?: true;
     isInternal?: true;
+    shipmentNo?: true;
+    trackingLink?: true;
     orderedAt?: true;
     createdAt?: true;
     updatedAt?: true;
@@ -131,6 +141,8 @@ export type OrderCountAggregateInputType = {
     channel?: true;
     isGwp?: true;
     isInternal?: true;
+    shipmentNo?: true;
+    trackingLink?: true;
     orderedAt?: true;
     createdAt?: true;
     updatedAt?: true;
@@ -177,6 +189,8 @@ export type OrderGroupByOutputType = {
     channel: string | null;
     isGwp: boolean;
     isInternal: boolean;
+    shipmentNo: string | null;
+    trackingLink: string | null;
     orderedAt: Date;
     createdAt: Date;
     updatedAt: Date;
@@ -205,6 +219,8 @@ export type OrderWhereInput = {
     channel?: Prisma.StringNullableFilter<"Order"> | string | null;
     isGwp?: Prisma.BoolFilter<"Order"> | boolean;
     isInternal?: Prisma.BoolFilter<"Order"> | boolean;
+    shipmentNo?: Prisma.StringNullableFilter<"Order"> | string | null;
+    trackingLink?: Prisma.StringNullableFilter<"Order"> | string | null;
     orderedAt?: Prisma.DateTimeFilter<"Order"> | Date | string;
     createdAt?: Prisma.DateTimeFilter<"Order"> | Date | string;
     updatedAt?: Prisma.DateTimeFilter<"Order"> | Date | string;
@@ -227,6 +243,8 @@ export type OrderOrderByWithRelationInput = {
     channel?: Prisma.SortOrderInput | Prisma.SortOrder;
     isGwp?: Prisma.SortOrder;
     isInternal?: Prisma.SortOrder;
+    shipmentNo?: Prisma.SortOrderInput | Prisma.SortOrder;
+    trackingLink?: Prisma.SortOrderInput | Prisma.SortOrder;
     orderedAt?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
@@ -252,6 +270,8 @@ export type OrderWhereUniqueInput = Prisma.AtLeast<{
     channel?: Prisma.StringNullableFilter<"Order"> | string | null;
     isGwp?: Prisma.BoolFilter<"Order"> | boolean;
     isInternal?: Prisma.BoolFilter<"Order"> | boolean;
+    shipmentNo?: Prisma.StringNullableFilter<"Order"> | string | null;
+    trackingLink?: Prisma.StringNullableFilter<"Order"> | string | null;
     orderedAt?: Prisma.DateTimeFilter<"Order"> | Date | string;
     createdAt?: Prisma.DateTimeFilter<"Order"> | Date | string;
     updatedAt?: Prisma.DateTimeFilter<"Order"> | Date | string;
@@ -274,6 +294,8 @@ export type OrderOrderByWithAggregationInput = {
     channel?: Prisma.SortOrderInput | Prisma.SortOrder;
     isGwp?: Prisma.SortOrder;
     isInternal?: Prisma.SortOrder;
+    shipmentNo?: Prisma.SortOrderInput | Prisma.SortOrder;
+    trackingLink?: Prisma.SortOrderInput | Prisma.SortOrder;
     orderedAt?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
@@ -299,6 +321,8 @@ export type OrderScalarWhereWithAggregatesInput = {
     channel?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null;
     isGwp?: Prisma.BoolWithAggregatesFilter<"Order"> | boolean;
     isInternal?: Prisma.BoolWithAggregatesFilter<"Order"> | boolean;
+    shipmentNo?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null;
+    trackingLink?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null;
     orderedAt?: Prisma.DateTimeWithAggregatesFilter<"Order"> | Date | string;
     createdAt?: Prisma.DateTimeWithAggregatesFilter<"Order"> | Date | string;
     updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Order"> | Date | string;
@@ -315,6 +339,8 @@ export type OrderCreateInput = {
     channel?: string | null;
     isGwp?: boolean;
     isInternal?: boolean;
+    shipmentNo?: string | null;
+    trackingLink?: string | null;
     orderedAt: Date | string;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -337,6 +363,8 @@ export type OrderUncheckedCreateInput = {
     channel?: string | null;
     isGwp?: boolean;
     isInternal?: boolean;
+    shipmentNo?: string | null;
+    trackingLink?: string | null;
     orderedAt: Date | string;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -357,6 +385,8 @@ export type OrderUpdateInput = {
     channel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isGwp?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     isInternal?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    shipmentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    trackingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     orderedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -379,6 +409,8 @@ export type OrderUncheckedUpdateInput = {
     channel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isGwp?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     isInternal?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    shipmentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    trackingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     orderedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -400,6 +432,8 @@ export type OrderCreateManyInput = {
     channel?: string | null;
     isGwp?: boolean;
     isInternal?: boolean;
+    shipmentNo?: string | null;
+    trackingLink?: string | null;
     orderedAt: Date | string;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -416,6 +450,8 @@ export type OrderUpdateManyMutationInput = {
     channel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isGwp?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     isInternal?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    shipmentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    trackingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     orderedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -433,6 +469,8 @@ export type OrderUncheckedUpdateManyInput = {
     channel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isGwp?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     isInternal?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    shipmentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    trackingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     orderedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -458,6 +496,8 @@ export type OrderCountOrderByAggregateInput = {
     channel?: Prisma.SortOrder;
     isGwp?: Prisma.SortOrder;
     isInternal?: Prisma.SortOrder;
+    shipmentNo?: Prisma.SortOrder;
+    trackingLink?: Prisma.SortOrder;
     orderedAt?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
@@ -481,6 +521,8 @@ export type OrderMaxOrderByAggregateInput = {
     channel?: Prisma.SortOrder;
     isGwp?: Prisma.SortOrder;
     isInternal?: Prisma.SortOrder;
+    shipmentNo?: Prisma.SortOrder;
+    trackingLink?: Prisma.SortOrder;
     orderedAt?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
@@ -498,6 +540,8 @@ export type OrderMinOrderByAggregateInput = {
     channel?: Prisma.SortOrder;
     isGwp?: Prisma.SortOrder;
     isInternal?: Prisma.SortOrder;
+    shipmentNo?: Prisma.SortOrder;
+    trackingLink?: Prisma.SortOrder;
     orderedAt?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
@@ -627,6 +671,8 @@ export type OrderCreateWithoutCustomerInput = {
     channel?: string | null;
     isGwp?: boolean;
     isInternal?: boolean;
+    shipmentNo?: string | null;
+    trackingLink?: string | null;
     orderedAt: Date | string;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -647,6 +693,8 @@ export type OrderUncheckedCreateWithoutCustomerInput = {
     channel?: string | null;
     isGwp?: boolean;
     isInternal?: boolean;
+    shipmentNo?: string | null;
+    trackingLink?: string | null;
     orderedAt: Date | string;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -692,6 +740,8 @@ export type OrderScalarWhereInput = {
     channel?: Prisma.StringNullableFilter<"Order"> | string | null;
     isGwp?: Prisma.BoolFilter<"Order"> | boolean;
     isInternal?: Prisma.BoolFilter<"Order"> | boolean;
+    shipmentNo?: Prisma.StringNullableFilter<"Order"> | string | null;
+    trackingLink?: Prisma.StringNullableFilter<"Order"> | string | null;
     orderedAt?: Prisma.DateTimeFilter<"Order"> | Date | string;
     createdAt?: Prisma.DateTimeFilter<"Order"> | Date | string;
     updatedAt?: Prisma.DateTimeFilter<"Order"> | Date | string;
@@ -708,6 +758,8 @@ export type OrderCreateWithoutItemsInput = {
     channel?: string | null;
     isGwp?: boolean;
     isInternal?: boolean;
+    shipmentNo?: string | null;
+    trackingLink?: string | null;
     orderedAt: Date | string;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -729,6 +781,8 @@ export type OrderUncheckedCreateWithoutItemsInput = {
     channel?: string | null;
     isGwp?: boolean;
     isInternal?: boolean;
+    shipmentNo?: string | null;
+    trackingLink?: string | null;
     orderedAt: Date | string;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -761,6 +815,8 @@ export type OrderUpdateWithoutItemsInput = {
     channel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isGwp?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     isInternal?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    shipmentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    trackingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     orderedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -782,6 +838,8 @@ export type OrderUncheckedUpdateWithoutItemsInput = {
     channel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isGwp?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     isInternal?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    shipmentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    trackingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     orderedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -801,6 +859,8 @@ export type OrderCreateWithoutProduct_exchangeInput = {
     channel?: string | null;
     isGwp?: boolean;
     isInternal?: boolean;
+    shipmentNo?: string | null;
+    trackingLink?: string | null;
     orderedAt: Date | string;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -822,6 +882,8 @@ export type OrderUncheckedCreateWithoutProduct_exchangeInput = {
     channel?: string | null;
     isGwp?: boolean;
     isInternal?: boolean;
+    shipmentNo?: string | null;
+    trackingLink?: string | null;
     orderedAt: Date | string;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -854,6 +916,8 @@ export type OrderUpdateWithoutProduct_exchangeInput = {
     channel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isGwp?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     isInternal?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    shipmentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    trackingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     orderedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -875,6 +939,8 @@ export type OrderUncheckedUpdateWithoutProduct_exchangeInput = {
     channel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isGwp?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     isInternal?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    shipmentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    trackingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     orderedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -894,6 +960,8 @@ export type OrderCreateWithoutReviewInput = {
     channel?: string | null;
     isGwp?: boolean;
     isInternal?: boolean;
+    shipmentNo?: string | null;
+    trackingLink?: string | null;
     orderedAt: Date | string;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -915,6 +983,8 @@ export type OrderUncheckedCreateWithoutReviewInput = {
     channel?: string | null;
     isGwp?: boolean;
     isInternal?: boolean;
+    shipmentNo?: string | null;
+    trackingLink?: string | null;
     orderedAt: Date | string;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -947,6 +1017,8 @@ export type OrderUpdateWithoutReviewInput = {
     channel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isGwp?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     isInternal?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    shipmentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    trackingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     orderedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -968,6 +1040,8 @@ export type OrderUncheckedUpdateWithoutReviewInput = {
     channel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isGwp?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     isInternal?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    shipmentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    trackingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     orderedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -987,6 +1061,8 @@ export type OrderCreateWithoutSubscription_deliveryInput = {
     channel?: string | null;
     isGwp?: boolean;
     isInternal?: boolean;
+    shipmentNo?: string | null;
+    trackingLink?: string | null;
     orderedAt: Date | string;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -1008,6 +1084,8 @@ export type OrderUncheckedCreateWithoutSubscription_deliveryInput = {
     channel?: string | null;
     isGwp?: boolean;
     isInternal?: boolean;
+    shipmentNo?: string | null;
+    trackingLink?: string | null;
     orderedAt: Date | string;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -1040,6 +1118,8 @@ export type OrderUpdateWithoutSubscription_deliveryInput = {
     channel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isGwp?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     isInternal?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    shipmentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    trackingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     orderedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1061,6 +1141,8 @@ export type OrderUncheckedUpdateWithoutSubscription_deliveryInput = {
     channel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isGwp?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     isInternal?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    shipmentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    trackingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     orderedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1080,6 +1162,8 @@ export type OrderCreateManyCustomerInput = {
     channel?: string | null;
     isGwp?: boolean;
     isInternal?: boolean;
+    shipmentNo?: string | null;
+    trackingLink?: string | null;
     orderedAt: Date | string;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -1096,6 +1180,8 @@ export type OrderUpdateWithoutCustomerInput = {
     channel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isGwp?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     isInternal?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    shipmentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    trackingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     orderedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1116,6 +1202,8 @@ export type OrderUncheckedUpdateWithoutCustomerInput = {
     channel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isGwp?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     isInternal?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    shipmentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    trackingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     orderedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1136,6 +1224,8 @@ export type OrderUncheckedUpdateManyWithoutCustomerInput = {
     channel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isGwp?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     isInternal?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    shipmentNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    trackingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     orderedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1180,6 +1270,8 @@ export type OrderSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
     channel?: boolean;
     isGwp?: boolean;
     isInternal?: boolean;
+    shipmentNo?: boolean;
+    trackingLink?: boolean;
     orderedAt?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
@@ -1203,6 +1295,8 @@ export type OrderSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
     channel?: boolean;
     isGwp?: boolean;
     isInternal?: boolean;
+    shipmentNo?: boolean;
+    trackingLink?: boolean;
     orderedAt?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
@@ -1221,6 +1315,8 @@ export type OrderSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
     channel?: boolean;
     isGwp?: boolean;
     isInternal?: boolean;
+    shipmentNo?: boolean;
+    trackingLink?: boolean;
     orderedAt?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
@@ -1239,11 +1335,13 @@ export type OrderSelectScalar = {
     channel?: boolean;
     isGwp?: boolean;
     isInternal?: boolean;
+    shipmentNo?: boolean;
+    trackingLink?: boolean;
     orderedAt?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
 };
-export type OrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "customerId" | "wooOrderId" | "orderNumber" | "status" | "totalAmount" | "discountAmount" | "netAmount" | "currency" | "channel" | "isGwp" | "isInternal" | "orderedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["order"]>;
+export type OrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "customerId" | "wooOrderId" | "orderNumber" | "status" | "totalAmount" | "discountAmount" | "netAmount" | "currency" | "channel" | "isGwp" | "isInternal" | "shipmentNo" | "trackingLink" | "orderedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["order"]>;
 export type OrderInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     customer?: boolean | Prisma.CustomerDefaultArgs<ExtArgs>;
     items?: boolean | Prisma.Order$itemsArgs<ExtArgs>;
@@ -1280,6 +1378,8 @@ export type $OrderPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
         channel: string | null;
         isGwp: boolean;
         isInternal: boolean;
+        shipmentNo: string | null;
+        trackingLink: string | null;
         orderedAt: Date;
         createdAt: Date;
         updatedAt: Date;
@@ -1357,6 +1457,8 @@ export interface OrderFieldRefs {
     readonly channel: Prisma.FieldRef<"Order", 'String'>;
     readonly isGwp: Prisma.FieldRef<"Order", 'Boolean'>;
     readonly isInternal: Prisma.FieldRef<"Order", 'Boolean'>;
+    readonly shipmentNo: Prisma.FieldRef<"Order", 'String'>;
+    readonly trackingLink: Prisma.FieldRef<"Order", 'String'>;
     readonly orderedAt: Prisma.FieldRef<"Order", 'DateTime'>;
     readonly createdAt: Prisma.FieldRef<"Order", 'DateTime'>;
     readonly updatedAt: Prisma.FieldRef<"Order", 'DateTime'>;

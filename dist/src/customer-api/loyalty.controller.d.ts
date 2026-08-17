@@ -9,7 +9,6 @@ export declare class LoyaltyController {
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            isDefault: boolean;
             tierCode: string;
             tierName: string;
             tierOrder: number;
@@ -17,21 +16,22 @@ export declare class LoyaltyController {
             minDistinctMonths: number;
             pointsMultiplier: import("@prisma/client-runtime-utils").Decimal;
             benefits: import("@prisma/client/runtime/client").JsonValue | null;
+            isDefault: boolean;
         } | null;
         transactions: {
             id: string;
             createdAt: Date;
-            customerId: string;
-            source: string;
-            loyaltyAccountId: string;
             type: string;
+            description: string | null;
+            customerId: string;
+            idempotencyKey: string | null;
+            source: string;
             points: number;
-            balanceAfter: number;
             referenceType: string | null;
             referenceId: string | null;
-            description: string | null;
+            balanceAfter: number;
             expiresAt: Date | null;
-            idempotencyKey: string | null;
+            loyaltyAccountId: string;
         }[];
     } & {
         id: string;
@@ -49,15 +49,15 @@ export declare class LoyaltyController {
     }) | null>;
     getRewards(customerId: string): Promise<{
         id: string;
+        isActive: boolean;
         createdAt: Date;
         updatedAt: Date;
         name: string;
-        category: string | null;
-        isActive: boolean;
+        code: string;
         description: string | null;
         validFrom: Date | null;
         validUntil: Date | null;
-        code: string;
+        category: string | null;
         pointsCost: number;
         stock: number | null;
         imageUrl: string | null;

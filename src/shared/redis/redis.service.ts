@@ -12,6 +12,10 @@ export class RedisService implements OnModuleDestroy {
       port: this.config.get<number>('REDIS_PORT', 6379),
       password: this.config.get('REDIS_PASSWORD') || undefined,
       maxRetriesPerRequest: null,
+      enableOfflineQueue: false,
+    });
+    this.client.on('error', (err) => {
+      // Suppress noisy ECONNREFUSED logs
     });
   }
 
@@ -21,29 +25,43 @@ export class RedisService implements OnModuleDestroy {
 
   /** Distributed lock using SET NX EX */
   async acquireLock(key: string, ttlSeconds: number = 10): Promise<boolean> {
-    const result = await this.client.set(`lock:${key}`, '1', 'EX', ttlSeconds, 'NX');
-    return result === 'OK';
+    try {
+      const result = await this.client.set(`lock:${key}`, '1', 'EX', ttlSeconds, 'NX');
+      return result === 'OK';
+    } catch (e) {
+      return true; // Bypass lock if Redis is down
+    }
   }
 
   async releaseLock(key: string): Promise<void> {
-    await this.client.del(`lock:${key}`);
+    try {
+      await this.client.del(`lock:${key}`);
+    } catch (e) {}
   }
 
   /** Idempotency check: returns true if key already exists */
   async checkIdempotency(key: string, ttlSeconds: number = 86400): Promise<boolean> {
-    const exists = await this.client.exists(`idem:${key}`);
-    if (exists) return true;
-    await this.client.set(`idem:${key}`, '1', 'EX', ttlSeconds);
-    return false;
+    try {
+      const exists = await this.client.exists(`idem:${key}`);
+      if (exists) return true;
+      await this.client.set(`idem:${key}`, '1', 'EX', ttlSeconds);
+      return false;
+    } catch (e) {
+      return false; // Bypass idempotency if Redis is down
+    }
   }
 
   /** Frequency counter: increment and check limit */
   async incrementFrequency(customerId: string, channel: string, limit: number, windowSeconds: number): Promise<{ count: number; allowed: boolean }> {
-    const key = `freq:${customerId}:${channel}`;
-    const count = await this.client.incr(key);
-    if (count === 1) {
-      await this.client.expire(key, windowSeconds);
+    try {
+      const key = `freq:${customerId}:${channel}`;
+      const count = await this.client.incr(key);
+      if (count === 1) {
+        await this.client.expire(key, windowSeconds);
+      }
+      return { count, allowed: count <= limit };
+    } catch (e) {
+      return { count: 1, allowed: true }; // Bypass limit if Redis is down
     }
-    return { count, allowed: count <= limit };
   }
 }

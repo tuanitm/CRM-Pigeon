@@ -3,13 +3,13 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { 
   Typography, Card, Avatar, Tag, Row, Col, Space, Tabs, 
   Descriptions, Button, Statistic, Spin, Divider, Empty, Timeline,
-  Modal, Form, Input, Select, DatePicker, message, Radio
+  Modal, Form, Input, Select, DatePicker, message, Radio, List, Table, Popconfirm
 } from 'antd';
 import { 
   UserOutlined, ArrowLeftOutlined, MailOutlined, PhoneOutlined, 
-  EnvironmentOutlined, CalendarOutlined, HeartOutlined, ShoppingCartOutlined, EditOutlined, DeleteOutlined, PlusOutlined, NodeIndexOutlined, GiftOutlined
+  EnvironmentOutlined, CalendarOutlined, HeartOutlined, ShoppingCartOutlined, EditOutlined, DeleteOutlined, PlusOutlined, NodeIndexOutlined, GiftOutlined, ShopOutlined, EyeOutlined, ReloadOutlined
 } from '@ant-design/icons';
-import { customerApi, productApi } from '../services/api';
+import { customerApi, productApi, supportApi } from '../services/api';
 import dayjs from 'dayjs';
 
 const { Title, Text } = Typography;
@@ -22,18 +22,36 @@ export default function CustomerDetail360Page() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isBabyModalOpen, setIsBabyModalOpen] = useState(false);
   const [editingBaby, setEditingBaby] = useState<any>(null);
+  const [viewingBaby, setViewingBaby] = useState<any>(null);
+  const [isViewBabyModalOpen, setIsViewBabyModalOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [form] = Form.useForm();
   const [babyForm] = Form.useForm();
+  const selectedCustomerType = Form.useWatch('customerType', form);
+  const isEndUser = selectedCustomerType !== 'Outlet' && selectedCustomerType !== 'Keyshop' && selectedCustomerType !== 'Key shop';
+  const isCustomerEndUser = customer?.customerType !== 'Outlet' && customer?.customerType !== 'Keyshop' && customer?.customerType !== 'Key shop';
+  const hasDmsOrders = (customer?.orders || []).some((o: any) => o.channel === 'DMS');
 
   const [products, setProducts] = useState<any[]>([]);
+  const [tickets, setTickets] = useState<any[]>([]);
+  const [replyMessage, setReplyMessage] = useState('');
 
   useEffect(() => {
     if (id) {
       loadCustomer();
+      loadTickets();
     }
     loadProducts();
   }, [id]);
+
+  const loadTickets = async () => {
+    try {
+      const data = await supportApi.getByCustomer(id!);
+      setTickets(data);
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   const loadProducts = async () => {
     try {
@@ -95,6 +113,11 @@ export default function CustomerDetail360Page() {
     }
   };
 
+  const handleViewBaby = (baby: any) => {
+    setViewingBaby(baby);
+    setIsViewBabyModalOpen(true);
+  };
+
   const handleEditBaby = (baby: any) => {
     setEditingBaby(baby);
     babyForm.setFieldsValue({
@@ -132,6 +155,29 @@ export default function CustomerDetail360Page() {
     }
   };
 
+  const handleDeleteBaby = async (babyId: string) => {
+    try {
+      const remainingBabies = customer.babies.filter((b: any) => b.id !== babyId);
+      await customerApi.update(id!, { babies: remainingBabies });
+      message.success('Child deleted successfully!');
+      if (isBabyModalOpen) setIsBabyModalOpen(false);
+      loadCustomer();
+    } catch (err: any) {
+      message.error(err.message || 'Failed to delete child');
+    }
+  };
+
+  const handleToggleStatus = async () => {
+    try {
+      const newStatus = customer.isActive === false ? true : false;
+      await customerApi.updateStatus(id!, newStatus);
+      message.success(`Customer ${newStatus ? 'activated' : 'deactivated'} successfully`);
+      loadCustomer();
+    } catch (e: any) {
+      message.error(e.message || 'Failed to update status');
+    }
+  };
+
   if (loading) {
     return <div style={{ padding: 40, textAlign: 'center' }}><Spin size="large" /></div>;
   }
@@ -143,12 +189,31 @@ export default function CustomerDetail360Page() {
   const tier = customer.tier || customer.loyaltyAccount?.tier?.tierCode || 'MEMBER';
   const tierColor = tier === 'GOLD' ? '#f59e0b' : tier === 'SILVER' ? '#94a3b8' : '#3b82f6';
 
+  const combinedPurchaseHistory = [
+    ...(customer.orders || []).map((o: any) => ({
+      ...o,
+      historyType: 'purchase',
+      sortDate: o.orderedAt || o.createdAt,
+    })),
+    ...(customer.reward_redemption || []).map((r: any) => ({
+      ...r,
+      historyType: 'redemption',
+      sortDate: r.createdAt,
+    })),
+  ].sort((a: any, b: any) => new Date(b.sortDate).getTime() - new Date(a.sortDate).getTime());
+
   return (
     <div style={{ padding: '0 24px', maxWidth: 1200, margin: '0 auto' }}>
       <div style={{ marginBottom: 24, display: 'flex', alignItems: 'center', gap: 12 }}>
         <Button icon={<ArrowLeftOutlined />} onClick={() => navigate('/customer360')} type="text" />
         <Title level={4} style={{ margin: 0, fontWeight: 700, flex: 1 }}>Customer 360° Portrait</Title>
-        <Button type="primary" icon={<EditOutlined />} onClick={handleOpenEdit}>Modify</Button>
+        <Button 
+          danger={customer?.isActive !== false} 
+          onClick={handleToggleStatus}
+        >
+          {customer?.isActive !== false ? 'Deactivate' : 'Activate'}
+        </Button>
+        <Button type="primary" icon={<EditOutlined />} onClick={handleOpenEdit} disabled={customer?.isActive === false}>Modify</Button>
       </div>
 
       <Row gutter={24}>
@@ -156,11 +221,16 @@ export default function CustomerDetail360Page() {
         <Col xs={24} md={8} lg={7}>
           <div className="profile-card" style={{ position: 'sticky', top: 24 }}>
             <div className="profile-avatar-wrapper">
-              <Avatar size={96} style={{ background: tierColor }} icon={<UserOutlined />} />
+              <Avatar size={96} style={{ background: tierColor }} icon={(customer.customerType === 'Outlet' || customer.customerType === 'Keyshop') ? <ShopOutlined /> : <UserOutlined />} />
             </div>
             
             <div style={{ textAlign: 'center', marginBottom: 24 }}>
-              <Title level={4} style={{ margin: 0, fontWeight: 700 }}>{customer.fullName || 'Customer'}</Title>
+              <Title level={4} style={{ margin: 0, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+                {customer.fullName || 'Customer'}
+                <Tag color={customer.isActive !== false ? 'success' : 'error'} style={{ margin: 0 }}>
+                  {customer.isActive !== false ? 'Active' : 'Inactive'}
+                </Tag>
+              </Title>
               <Text type="secondary" style={{ fontSize: 13, display: 'block', marginTop: 4 }}>
                 {customer.customerCode ? `#${customer.customerCode}` : `#${customer.id.substring(0, 8)}`}
               </Text>
@@ -202,6 +272,15 @@ export default function CustomerDetail360Page() {
                   <Text>{customer.dateOfBirth ? dayjs(customer.dateOfBirth).format('DD/MM/YYYY') : '—'}</Text>
                 </div>
               </Space>
+              {!isCustomerEndUser && (
+                <Space align="start">
+                  <ShopOutlined style={{ color: '#9ca3af', marginTop: 4 }} />
+                  <div>
+                    <Text type="secondary" style={{ fontSize: 11, display: 'block' }}>DMS Code</Text>
+                    <Text strong>{customer.dmsCode || '—'}</Text>
+                  </div>
+                </Space>
+              )}
             </div>
 
             <Divider style={{ margin: '16px 0' }} />
@@ -247,7 +326,18 @@ export default function CustomerDetail360Page() {
         {/* Main Content Area */}
         <Col xs={24} md={16} lg={17}>
           <Card variant="outlined" style={{ borderRadius: 12, borderColor: '#e5e7eb', minHeight: 600 }}>
-            <Tabs className="detail-tabs" defaultActiveKey="overview" items={[
+            <Tabs 
+              className="detail-tabs" 
+              defaultActiveKey="overview" 
+              centered 
+              onChange={(activeKey) => {
+                if (activeKey === 'support_tickets') {
+                  loadTickets();
+                } else if (activeKey === 'overview' || activeKey === 'orders') {
+                  loadCustomer();
+                }
+              }}
+              items={[
               {
                 key: 'overview',
                 label: 'Overview',
@@ -320,15 +410,103 @@ export default function CustomerDetail360Page() {
                 label: 'Purchase History',
                 children: (
                   <div style={{ paddingTop: 16 }}>
-                    <Empty 
-                      image={<ShoppingCartOutlined style={{ fontSize: 48, color: '#d1d5db' }}/>} 
-                      description="No recent orders found." 
-                      style={{ marginTop: 40 }}
-                    />
+                    {combinedPurchaseHistory.length > 0 ? (
+                      <Table
+                        dataSource={combinedPurchaseHistory}
+                        rowKey="id"
+                        pagination={{ pageSize: 5 }}
+                        expandable={{
+                          expandedRowRender: (record: any) => {
+                            if (record.historyType === 'purchase') {
+                              return (
+                                <List
+                                  size="small"
+                                  dataSource={record.items || []}
+                                  renderItem={(item: any) => (
+                                    <List.Item>
+                                      <List.Item.Meta
+                                        title={<Text strong>{item.product?.name || item.sku || 'Unknown Product'}</Text>}
+                                        description={`Quantity: ${item.quantity} | Unit Price: ${Number(item.unitPrice).toLocaleString()} ${record.currency || 'VND'}`}
+                                      />
+                                      <div><Text strong>{Number(item.totalPrice).toLocaleString()} {record.currency || 'VND'}</Text></div>
+                                    </List.Item>
+                                  )}
+                                />
+                              );
+                            } else {
+                              return (
+                                <div style={{ padding: '8px 16px' }}>
+                                  <Text strong>Redeemed Gift:</Text> {record.reward_catalog?.name || 'Unknown Reward'}
+                                </div>
+                              );
+                            }
+                          }
+                        }}
+                        columns={[
+                          {
+                            title: 'Type',
+                            dataIndex: 'historyType',
+                            key: 'historyType',
+                            render: (type: string, record: any) => (
+                              <Tag color={type === 'purchase' ? (record.isInternal ? 'geekblue' : 'cyan') : 'magenta'}>
+                                {type === 'purchase' ? (record.channel === 'DMS' ? 'DMS Order' : 'Standard Purchase') : 'Redeemed Gift'}
+                              </Tag>
+                            )
+                          },
+                          {
+                            title: 'Order/Ref No',
+                            key: 'refNo',
+                            render: (_, record: any) => (
+                              <Text strong>
+                                {record.historyType === 'purchase' ? (record.orderNumber || record.id.substring(0, 8)) : `#GIFT-${record.id.substring(0, 5)}`}
+                              </Text>
+                            )
+                          },
+                          {
+                            title: 'Date',
+                            dataIndex: 'sortDate',
+                            key: 'sortDate',
+                            render: (date: string) => dayjs(date).format('DD/MM/YYYY HH:mm')
+                          },
+                          {
+                            title: 'Status',
+                            dataIndex: 'status',
+                            key: 'status',
+                            render: (status: string) => {
+                              let color = 'default';
+                              const s = status?.toUpperCase() || '';
+                              if (s.includes('COMPLETED') || s.includes('DELIVERED')) color = 'success';
+                              else if (s.includes('PENDING') || s.includes('PROCESSING')) color = 'warning';
+                              else if (s.includes('CANCELLED') || s.includes('FAILED')) color = 'error';
+                              else if (s.includes('SHIPPED')) color = 'processing';
+                              return <Tag color={color}>{status || 'UNKNOWN'}</Tag>;
+                            }
+                          },
+                          {
+                            title: 'Amount / Points',
+                            key: 'amount',
+                            align: 'right',
+                            render: (_, record: any) => {
+                              if (record.historyType === 'purchase') {
+                                return <Text strong>{Number(record.netAmount || 0).toLocaleString()} {record.currency || 'VND'}</Text>;
+                              } else {
+                                return <Text strong style={{ color: '#db2777' }}>-{record.points_spent || 0} pts</Text>;
+                              }
+                            }
+                          }
+                        ]}
+                      />
+                    ) : (
+                      <Empty 
+                        image={<ShoppingCartOutlined style={{ fontSize: 48, color: '#d1d5db' }}/>} 
+                        description="No recent orders or redemptions found." 
+                        style={{ marginTop: 40 }}
+                      />
+                    )}
                   </div>
                 )
               },
-              {
+              isCustomerEndUser ? {
                 key: 'babies',
                 label: 'Family & Babies',
                 children: (
@@ -340,7 +518,15 @@ export default function CustomerDetail360Page() {
                             <Card 
                               size="small" 
                               style={{ borderRadius: 8, background: '#f8fafc', border: '1px solid #e2e8f0' }}
-                              extra={<Button type="text" size="small" icon={<EditOutlined />} onClick={() => handleEditBaby(b)} />}
+                              extra={
+                                <Space size="small">
+                                  <Button type="text" size="small" icon={<EyeOutlined />} onClick={() => handleViewBaby(b)} title="View Details" />
+                                  <Button type="text" size="small" icon={<EditOutlined />} onClick={() => handleEditBaby(b)} title="Edit Details" />
+                                  <Popconfirm title="Delete this child info?" onConfirm={() => handleDeleteBaby(b.id)} okText="Yes" cancelText="No">
+                                    <Button type="text" danger size="small" icon={<DeleteOutlined />} />
+                                  </Popconfirm>
+                                </Space>
+                              }
                             >
                               <Space align="start">
                                 <Avatar style={{ background: '#f472b6' }}>{b.name.charAt(0)}</Avatar>
@@ -355,6 +541,65 @@ export default function CustomerDetail360Page() {
                       </Row>
                     ) : (
                       <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="No family info found" style={{ marginTop: 40 }} />
+                    )}
+                  </div>
+                )
+              } : null,
+              {
+                key: 'activity_log',
+                label: 'Activity Log',
+                children: (
+                  <div style={{ paddingTop: 16 }}>
+                    {customer.event && customer.event.length > 0 ? (
+                      <Timeline
+                        mode="left"
+                        items={customer.event.map((evt: any) => {
+                          let color = 'blue';
+                          let title = evt.event_type;
+                          let desc = '';
+
+                          if (evt.event_type === 'PROFILE_UPDATED' || evt.event_type === 'EMAIL_UPDATED' || evt.event_type === 'ADDRESS_UPDATED') {
+                            color = 'blue';
+                            title = 'Profile Updated';
+                            desc = JSON.stringify(evt.properties);
+                          } else if (evt.event_type.startsWith('CHILD_')) {
+                            color = 'pink';
+                            title = 'Family Info Updated';
+                            desc = `Child: ${evt.properties?.name || ''}`;
+                          } else if (evt.event_type === 'REWARD_REDEEMED') {
+                            color = 'orange';
+                            title = 'Reward Redeemed';
+                            desc = `Redeemed ${evt.properties?.rewardName} for ${evt.properties?.pointsSpent} points`;
+                          } else if (evt.event_type === 'POINTS_EARNED') {
+                            color = 'green';
+                            title = 'Points Earned';
+                            desc = `Earned ${evt.properties?.points} points (Scan: ${evt.properties?.productName || evt.properties?.serialCode})`;
+                          } else if (evt.event_type === 'CUSTOMER_STATUS_CHANGED') {
+                            color = evt.properties?.isActive ? 'green' : 'red';
+                            title = evt.properties?.isActive ? 'Customer Activated' : 'Customer Deactivated';
+                          }
+
+                          return {
+                            color,
+                            children: (
+                              <>
+                                <Text strong>{title}</Text>
+                                <br />
+                                <Text type="secondary" style={{ fontSize: 12 }}>
+                                  {dayjs(evt.occurred_at).format('DD/MM/YYYY HH:mm')} - Source: {evt.source}
+                                </Text>
+                                {desc && (
+                                  <div style={{ marginTop: 4 }}>
+                                    <Text type="secondary" style={{ fontSize: 13 }}>{desc}</Text>
+                                  </div>
+                                )}
+                              </>
+                            ),
+                          };
+                        })}
+                      />
+                    ) : (
+                      <Empty description="No activities recorded yet." style={{ marginTop: 40 }} />
                     )}
                   </div>
                 )
@@ -539,11 +784,122 @@ export default function CustomerDetail360Page() {
                 )
               },
               {
+                key: 'support_tickets',
+                label: 'Support Tickets',
+                children: (
+                  <div style={{ paddingTop: 16 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                      <Text type="secondary" style={{ fontSize: 13 }}>Live customer tickets and reply history</Text>
+                      <Button size="small" icon={<ReloadOutlined />} onClick={loadTickets} style={{ borderRadius: 6 }}>
+                        Refresh Tickets
+                      </Button>
+                    </div>
+                    {tickets.length > 0 ? (
+                      <Timeline mode="left" style={{ marginTop: 20 }}>
+                        {tickets.map(ticket => (
+                          <Timeline.Item key={ticket.id} color={ticket.status === 'Resolved' ? 'green' : 'blue'}>
+                            <Card size="small" style={{ marginBottom: 16 }}>
+                              <Space align="baseline" style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                                <div>
+                                  <Text strong>{ticket.subject}</Text>
+                                  <div style={{ fontSize: 12, color: 'gray' }}>{ticket.category} • {new Date(ticket.createdAt).toLocaleString()}</div>
+                                </div>
+                                <Select 
+                                  value={ticket.status} 
+                                  size="small"
+                                  onChange={async (val) => {
+                                    await supportApi.updateStatus(ticket.id, val);
+                                    loadTickets();
+                                  }}
+                                  options={[
+                                    { value: 'Open', label: 'Open' },
+                                    { value: 'In Progress', label: 'In Progress' },
+                                    { value: 'Resolved', label: 'Resolved' }
+                                  ]}
+                                />
+                              </Space>
+                              <Divider style={{ margin: '12px 0' }} />
+                              <div style={{ maxHeight: 300, overflowY: 'auto', padding: '0 8px', display: 'flex', flexDirection: 'column', gap: 12 }}>
+                                {ticket.messages?.map((msg: any, i: number) => (
+                                  <div key={i} style={{ alignSelf: msg.sender === 'admin' ? 'flex-end' : 'flex-start', maxWidth: '80%' }}>
+                                    <div style={{ fontSize: 11, color: 'gray', marginBottom: 2 }}>{msg.sender === 'admin' ? msg.adminName : 'Customer'} • {new Date(msg.timestamp).toLocaleString()}</div>
+                                    <div style={{ 
+                                      padding: '8px 12px', 
+                                      background: msg.sender === 'admin' ? '#e6f7ff' : '#f5f5f5',
+                                      borderRadius: 8,
+                                      border: msg.sender === 'admin' ? '1px solid #91d5ff' : '1px solid #d9d9d9',
+                                      whiteSpace: 'pre-wrap'
+                                    }}>
+                                      {msg.message}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                              <Divider style={{ margin: '12px 0' }} />
+                              <div style={{ display: 'flex', gap: 8 }}>
+                                <Input 
+                                  placeholder="Type your reply..." 
+                                  value={replyMessage}
+                                  onChange={e => setReplyMessage(e.target.value)}
+                                  onPressEnter={async () => {
+                                    if (!replyMessage.trim()) return;
+                                    await supportApi.reply(ticket.id, replyMessage, 'Support Admin');
+                                    setReplyMessage('');
+                                    loadTickets();
+                                  }}
+                                />
+                                <Button type="primary" onClick={async () => {
+                                  if (!replyMessage.trim()) return;
+                                  await supportApi.reply(ticket.id, replyMessage, 'Support Admin');
+                                  setReplyMessage('');
+                                  loadTickets();
+                                }}>Reply</Button>
+                              </div>
+                            </Card>
+                          </Timeline.Item>
+                        ))}
+                      </Timeline>
+                    ) : (
+                      <Empty description="No support tickets." style={{ marginTop: 40 }} />
+                    )}
+                  </div>
+                )
+              },
+              {
                 key: 'devices',
                 label: 'Devices',
                 children: (
                   <div style={{ paddingTop: 16 }}>
-                    <Empty description="No device information found." style={{ marginTop: 40 }} />
+                    {customer.devices && customer.devices.length > 0 ? (
+                      <List
+                        itemLayout="horizontal"
+                        dataSource={customer.devices}
+                        renderItem={(device: any) => (
+                          <List.Item>
+                            <List.Item.Meta
+                              avatar={
+                                <Avatar 
+                                  shape="square" 
+                                  size={48} 
+                                  style={{ background: device.deviceType === 'Mobile' ? '#e0e7ff' : '#dcfce7', color: device.deviceType === 'Mobile' ? '#4f46e5' : '#16a34a' }}
+                                >
+                                  {device.deviceType === 'Mobile' ? '📱' : device.deviceType === 'Zalo MiniApp' ? '💬' : '💻'}
+                                </Avatar>
+                              }
+                              title={<Text strong>{device.browser} on {device.os}</Text>}
+                              description={
+                                <div>
+                                  <div><Text type="secondary" style={{ fontSize: 12 }}>{device.deviceType}</Text></div>
+                                  <div><Text type="secondary" style={{ fontSize: 12 }}>Last Login: {new Date(device.lastLogin).toLocaleString()}</Text></div>
+                                </div>
+                              }
+                            />
+                          </List.Item>
+                        )}
+                      />
+                    ) : (
+                      <Empty description="No device information found." style={{ marginTop: 40 }} />
+                    )}
                   </div>
                 )
               },
@@ -555,9 +911,8 @@ export default function CustomerDetail360Page() {
                     <Empty description="No active goals." style={{ marginTop: 40 }} />
                   </div>
                 )
-              },
-
-            ]} />
+              }
+            ].filter(Boolean) as any} />
           </Card>
         </Col>
       </Row>
@@ -574,6 +929,13 @@ export default function CustomerDetail360Page() {
           layout="vertical"
           onFinish={handleUpdate}
         >
+          <Form.Item name="customerType" label="Customer Type">
+            <Select placeholder="Select customer type" disabled>
+              <Select.Option value="End user">End user</Select.Option>
+              <Select.Option value="Outlet">Outlet</Select.Option>
+              <Select.Option value="Keyshop">Keyshop</Select.Option>
+            </Select>
+          </Form.Item>
           <Form.Item
             name="fullName"
             label="Full Name"
@@ -581,115 +943,120 @@ export default function CustomerDetail360Page() {
           >
             <Input placeholder="Enter full name" />
           </Form.Item>
+          {isEndUser && (
+            <>
+              <Form.Item name="gender" label="Gender">
+                <Select placeholder="Select gender" allowClear>
+                  <Select.Option value="male">Male</Select.Option>
+                  <Select.Option value="female">Female</Select.Option>
+                  <Select.Option value="other">Other</Select.Option>
+                </Select>
+              </Form.Item>
+              <Form.Item name="dateOfBirth" label="Date of Birth">
+                <DatePicker style={{ width: '100%' }} format="DD/MM/YYYY" />
+              </Form.Item>
+            </>
+          )}
           <Form.Item
             name="phone"
             label="Phone Number"
             rules={[{ required: true, message: 'Please enter phone number' }]}
           >
-            <Input placeholder="Enter phone number" />
+            <Input placeholder="Enter phone number" disabled />
           </Form.Item>
           <Form.Item
             name="email"
             label="Email"
             rules={[{ type: 'email', message: 'Invalid email' }]}
           >
-            <Input placeholder="Enter email (optional)" />
-          </Form.Item>
-          <Form.Item name="gender" label="Gender">
-            <Select placeholder="Select gender" allowClear>
-              <Select.Option value="male">Male</Select.Option>
-              <Select.Option value="female">Female</Select.Option>
-              <Select.Option value="other">Other</Select.Option>
-            </Select>
-          </Form.Item>
-          <Form.Item name="dateOfBirth" label="Date of Birth">
-            <DatePicker style={{ width: '100%' }} format="DD/MM/YYYY" />
-          </Form.Item>
-          <Form.Item name="customerType" label="Customer Type">
-            <Select placeholder="Select customer type" allowClear>
-              <Select.Option value="End user">End user</Select.Option>
-              <Select.Option value="Outlet">Outlet</Select.Option>
-              <Select.Option value="Keyshop">Keyshop</Select.Option>
-            </Select>
+            <Input placeholder="Enter email (optional)" disabled />
           </Form.Item>
           <Form.Item name="address" label="Address">
             <Input placeholder="Enter address" />
           </Form.Item>
+          {!isEndUser && (
+            <Form.Item 
+              name="dmsCode" 
+              label="DMS Code"
+              tooltip={hasDmsOrders ? 'Cannot change DMS Code — this customer already has synced DMS purchase orders.' : undefined}
+            >
+              <Input placeholder="Enter DMS Code" disabled={hasDmsOrders} />
+            </Form.Item>
+          )}
           <Form.Item name="notes" label="Notes">
             <Input.TextArea placeholder="Enter notes" rows={3} />
           </Form.Item>
-
-          <Divider style={{ margin: '12px 0' }} orientation="left">Children Information</Divider>
-          <Form.List name="babies">
-            {(fields, { add, remove }) => (
-              <>
-                {fields.map(({ key, name, ...restField }) => (
-                  <Card size="small" key={key} style={{ marginBottom: 12, background: '#f9fafb' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-                      <Text strong>Child #{name + 1}</Text>
-                      <Button type="text" danger icon={<DeleteOutlined />} onClick={() => remove(name)} />
-                    </div>
-                    <Row gutter={12}>
-                      <Col span={12}>
-                        <Form.Item {...restField} name={[name, 'name']} label="Child Name" rules={[{ required: true, message: 'Missing name' }]}>
-                          <Input placeholder="Name" />
-                        </Form.Item>
-                      </Col>
-                      <Col span={24}>
-                        <Form.Item {...restField} name={[name, 'isBorn']} label="Date Type" initialValue={true}>
-                          <Radio.Group>
-                            <Radio value={true}>Date of Birth</Radio>
-                            <Radio value={false}>Due Date</Radio>
-                          </Radio.Group>
-                        </Form.Item>
-                      </Col>
-                      <Col span={12}>
-                        <Form.Item
-                          noStyle
-                          shouldUpdate={(prevValues, currentValues) => prevValues.babies?.[name]?.isBorn !== currentValues.babies?.[name]?.isBorn}
-                        >
-                          {({ getFieldValue }) => {
-                            const isBorn = getFieldValue(['babies', name, 'isBorn']) !== false;
-                            return isBorn ? (
-                              <Form.Item {...restField} name={[name, 'dateOfBirth']} label="Date of Birth" rules={[{ required: true, message: 'Missing date' }]}>
-                                <DatePicker style={{ width: '100%' }} format="DD/MM/YYYY" disabledDate={d => d && d.isAfter(dayjs())} />
-                              </Form.Item>
-                            ) : (
-                              <Form.Item {...restField} name={[name, 'dueDate']} label="Due Date" rules={[{ required: true, message: 'Missing date' }]}>
-                                <DatePicker style={{ width: '100%' }} format="DD/MM/YYYY" disabledDate={d => d && d.isSameOrBefore(dayjs())} />
-                              </Form.Item>
-                            );
-                          }}
-                        </Form.Item>
-                      </Col>
-                      <Col span={12}>
-                        <Form.Item {...restField} name={[name, 'gender']} label="Gender" rules={[{ required: true, message: 'Missing gender' }]}>
-                          <Select placeholder="Gender" allowClear>
-                            <Select.Option value="male">Male</Select.Option>
-                            <Select.Option value="female">Female</Select.Option>
-                          </Select>
-                        </Form.Item>
-                      </Col>
-                      <Col span={12}>
-                        <Form.Item {...restField} name={[name, 'stageCode']} label="Stage">
-                          <Select placeholder="Stage" allowClear>
-                            <Select.Option value="NEWBORN">Newborn</Select.Option>
-                            <Select.Option value="INFANT">Infant</Select.Option>
-                            <Select.Option value="TODDLER">Toddler</Select.Option>
-                          </Select>
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                  </Card>
-                ))}
-                <Form.Item>
-                  <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
-                    Add Child
-                  </Button>
-                </Form.Item>
-              </>
-            )}
-          </Form.List>
+          {isEndUser && (
+            <>
+              <Divider style={{ margin: '12px 0' }} orientation="left">Children Information</Divider>
+              <Form.List name="babies">
+                {(fields, { add, remove }) => (
+                  <>
+                    {fields.map(({ key, name, ...restField }) => (
+                      <Card size="small" key={key} style={{ marginBottom: 12, background: '#f9fafb' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                          <Text strong>Child #{name + 1}</Text>
+                          <Button type="text" danger icon={<DeleteOutlined />} onClick={() => remove(name)} />
+                        </div>
+                        <Row gutter={12}>
+                          <Col span={12}>
+                            <Form.Item {...restField} name={[name, 'name']} label="Child Name" rules={[{ required: true, message: 'Missing name' }]}>
+                              <Input placeholder="Name" />
+                            </Form.Item>
+                          </Col>
+                          <Col span={24}>
+                            <Form.Item {...restField} name={[name, 'isBorn']} label="Date Type" initialValue={true}>
+                              <Radio.Group>
+                                <Radio value={true}>Date of Birth</Radio>
+                                <Radio value={false}>Due Date</Radio>
+                              </Radio.Group>
+                            </Form.Item>
+                          </Col>
+                          <Col span={12}>
+                            <Form.Item
+                              noStyle
+                              shouldUpdate={(prevValues, currentValues) => prevValues.babies?.[name]?.isBorn !== currentValues.babies?.[name]?.isBorn}
+                            >
+                              {() => (
+                                <Form.Item
+                                  {...restField}
+                                  name={[name, form.getFieldValue(['babies', name, 'isBorn']) !== false ? 'dateOfBirth' : 'dueDate']}
+                                  label={form.getFieldValue(['babies', name, 'isBorn']) !== false ? "Date of Birth" : "Due Date"}
+                                  rules={[{ required: true, message: 'Missing date' }]}
+                                >
+                                  <DatePicker style={{ width: '100%' }} format="DD/MM/YYYY" />
+                                </Form.Item>
+                              )}
+                            </Form.Item>
+                          </Col>
+                          <Col span={12}>
+                            <Form.Item {...restField} name={[name, 'gender']} label="Gender" rules={[{ required: true, message: 'Missing gender' }]}>
+                              <Select placeholder="Gender" allowClear>
+                                <Select.Option value="male">Boy</Select.Option>
+                                <Select.Option value="female">Girl</Select.Option>
+                              </Select>
+                            </Form.Item>
+                          </Col>
+                          <Col span={12}>
+                            <Form.Item {...restField} name={[name, 'stageCode']} label="Stage" rules={[{ required: true, message: 'Missing stage' }]}>
+                              <Select placeholder="Stage" allowClear>
+                                <Select.Option value="NEWBORN">Newborn</Select.Option>
+                                <Select.Option value="INFANT">Infant</Select.Option>
+                                <Select.Option value="TODDLER">Toddler</Select.Option>
+                              </Select>
+                            </Form.Item>
+                          </Col>
+                        </Row>
+                      </Card>
+                    ))}
+                    <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                      Add Child
+                    </Button>
+                  </>
+                )}
+              </Form.List>
+            </>
+          )}
         </Form>
       </Modal>
 
@@ -731,13 +1098,13 @@ export default function CustomerDetail360Page() {
               );
             }}
           </Form.Item>
-          <Form.Item name="gender" label="Gender">
+          <Form.Item name="gender" label="Gender" rules={[{ required: true, message: 'Missing gender' }]}>
             <Select placeholder="Gender" allowClear>
               <Select.Option value="male">Male</Select.Option>
               <Select.Option value="female">Female</Select.Option>
             </Select>
           </Form.Item>
-          <Form.Item name="stageCode" label="Stage">
+          <Form.Item name="stageCode" label="Stage" rules={[{ required: true, message: 'Missing stage' }]}>
             <Select placeholder="Stage" allowClear>
               <Select.Option value="NEWBORN">Newborn</Select.Option>
               <Select.Option value="INFANT">Infant</Select.Option>
@@ -745,6 +1112,59 @@ export default function CustomerDetail360Page() {
             </Select>
           </Form.Item>
         </Form>
+      </Modal>
+
+      {/* View Child Modal */}
+      <Modal
+        title="Child Information"
+        open={isViewBabyModalOpen}
+        onCancel={() => setIsViewBabyModalOpen(false)}
+        footer={[
+          <Button 
+            key="edit" 
+            type="primary" 
+            icon={<EditOutlined />} 
+            onClick={() => {
+              setIsViewBabyModalOpen(false);
+              handleEditBaby(viewingBaby);
+            }}
+          >
+            Edit Child
+          </Button>,
+          <Button key="close" onClick={() => setIsViewBabyModalOpen(false)}>
+            Close
+          </Button>
+        ]}
+      >
+        {viewingBaby && (
+          <Descriptions column={1} bordered size="small" style={{ marginTop: 12 }}>
+            <Descriptions.Item label="Child Name">
+              <Text strong>{viewingBaby.name}</Text>
+            </Descriptions.Item>
+            <Descriptions.Item label="Gender">
+              <Tag color={viewingBaby.gender === 'male' || viewingBaby.gender === 'Boy' ? 'blue' : viewingBaby.gender === 'female' || viewingBaby.gender === 'Girl' ? 'pink' : 'default'}>
+                {viewingBaby.gender === 'male' || viewingBaby.gender === 'Boy' ? 'Boy 👦' : viewingBaby.gender === 'female' || viewingBaby.gender === 'Girl' ? 'Girl 👧' : viewingBaby.gender || '—'}
+              </Tag>
+            </Descriptions.Item>
+            <Descriptions.Item label={viewingBaby.isBorn !== false && viewingBaby.dateOfBirth ? "Date of Birth" : "Due Date"}>
+              {viewingBaby.dateOfBirth ? dayjs(viewingBaby.dateOfBirth).format('DD/MM/YYYY') : viewingBaby.dueDate ? dayjs(viewingBaby.dueDate).format('DD/MM/YYYY') : '—'}
+            </Descriptions.Item>
+            <Descriptions.Item label="Stage">
+              <Tag color="purple">{viewingBaby.stageCode || '—'}</Tag>
+            </Descriptions.Item>
+            {viewingBaby.dateOfBirth && (
+              <Descriptions.Item label="Age">
+                {(() => {
+                  const birth = dayjs(viewingBaby.dateOfBirth);
+                  const months = dayjs().diff(birth, 'month');
+                  if (months < 12) return `${months} month${months !== 1 ? 's' : ''} old`;
+                  const years = (months / 12).toFixed(1);
+                  return `${years} years old`;
+                })()}
+              </Descriptions.Item>
+            )}
+          </Descriptions>
+        )}
       </Modal>
     </div>
   );

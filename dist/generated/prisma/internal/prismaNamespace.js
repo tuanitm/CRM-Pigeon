@@ -34,8 +34,8 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Checklist_progressScalarFieldEnum = exports.Checklist_definitionScalarFieldEnum = exports.Campaign_control_groupScalarFieldEnum = exports.AuditLogScalarFieldEnum = exports.AdminUserScalarFieldEnum = exports.RoleScalarFieldEnum = exports.MessageTemplateScalarFieldEnum = exports.JourneyScalarFieldEnum = exports.SegmentScalarFieldEnum = exports.RewardRedemptionScalarFieldEnum = exports.RewardCatalogScalarFieldEnum = exports.LoyaltyEarnRuleScalarFieldEnum = exports.LoyaltyTransactionScalarFieldEnum = exports.LoyaltyAccountScalarFieldEnum = exports.LoyaltyTierConfigScalarFieldEnum = exports.ReviewScalarFieldEnum = exports.ProductExchangeScalarFieldEnum = exports.OrderItemScalarFieldEnum = exports.OrderScalarFieldEnum = exports.ProductLifecycleRuleScalarFieldEnum = exports.ProductScalarFieldEnum = exports.ConsentScalarFieldEnum = exports.ConsentDocumentVersionScalarFieldEnum = exports.BabyStageHistoryScalarFieldEnum = exports.BabyGrowthLogScalarFieldEnum = exports.BabyScalarFieldEnum = exports.CustomerTagScalarFieldEnum = exports.CustomerAddressScalarFieldEnum = exports.MergeCandidateScalarFieldEnum = exports.CustomerIdentityScalarFieldEnum = exports.CustomerScalarFieldEnum = exports.TransactionIsolationLevel = exports.ModelName = exports.AnyNull = exports.JsonNull = exports.DbNull = exports.NullTypes = exports.prismaVersion = exports.getExtensionContext = exports.Decimal = exports.Sql = exports.raw = exports.join = exports.empty = exports.sql = exports.PrismaClientValidationError = exports.PrismaClientInitializationError = exports.PrismaClientRustPanicError = exports.PrismaClientUnknownRequestError = exports.PrismaClientKnownRequestError = void 0;
-exports.NullsOrder = exports.QueryMode = exports.JsonNullValueInput = exports.NullableJsonNullValueInput = exports.SortOrder = exports.ZaloMiniAppScalarFieldEnum = exports.ZaloOAScalarFieldEnum = exports.DataHubRecordScalarFieldEnum = exports.DataHubColumnScalarFieldEnum = exports.DataHubTableScalarFieldEnum = exports.DynamicActionComponentScalarFieldEnum = exports.DynamicActionPageScalarFieldEnum = exports.DynamicActionScalarFieldEnum = exports.DataHubScalarFieldEnum = exports.SystemConfigScalarFieldEnum = exports.Webhook_inboxScalarFieldEnum = exports.Warranty_registrationScalarFieldEnum = exports.Subscription_itemScalarFieldEnum = exports.Subscription_deliveryScalarFieldEnum = exports.SubscriptionScalarFieldEnum = exports.SessionScalarFieldEnum = exports.Serial_scanScalarFieldEnum = exports.Serial_batchScalarFieldEnum = exports.Segment_membershipScalarFieldEnum = exports.Rfm_snapshotScalarFieldEnum = exports.Replenishment_scheduleScalarFieldEnum = exports.Referral_conversionScalarFieldEnum = exports.Referral_codeScalarFieldEnum = exports.Quiz_responseScalarFieldEnum = exports.Quiz_definitionScalarFieldEnum = exports.Product_serialScalarFieldEnum = exports.Product_purchase_cycleScalarFieldEnum = exports.Points_liability_snapshotScalarFieldEnum = exports.Milestone_progressScalarFieldEnum = exports.Milestone_definitionScalarFieldEnum = exports.Message_logScalarFieldEnum = exports.Kpi_daily_snapshotScalarFieldEnum = exports.Journey_step_logScalarFieldEnum = exports.Journey_runScalarFieldEnum = exports.Integration_jobScalarFieldEnum = exports.Frequency_counterScalarFieldEnum = exports.Expert_topicScalarFieldEnum = exports.Expert_slotScalarFieldEnum = exports.Expert_bookingScalarFieldEnum = exports.EventScalarFieldEnum = exports.Dsr_requestScalarFieldEnum = exports.Data_quality_ruleScalarFieldEnum = exports.Data_quality_flag_logScalarFieldEnum = exports.Data_layer_definitionScalarFieldEnum = exports.Customer_metrics_dailyScalarFieldEnum = void 0;
-exports.defineExtension = exports.JsonNullValueFilter = void 0;
+exports.NullableJsonNullValueInput = exports.SortOrder = exports.AdminNotificationScalarFieldEnum = exports.CustomerDeviceScalarFieldEnum = exports.SupportTicketScalarFieldEnum = exports.ZaloMiniAppScalarFieldEnum = exports.ZaloOAScalarFieldEnum = exports.DataHubRecordScalarFieldEnum = exports.DataHubColumnScalarFieldEnum = exports.DataHubTableScalarFieldEnum = exports.DynamicActionComponentScalarFieldEnum = exports.DynamicActionPageScalarFieldEnum = exports.DynamicActionScalarFieldEnum = exports.DataHubScalarFieldEnum = exports.SystemConfigScalarFieldEnum = exports.Webhook_inboxScalarFieldEnum = exports.Warranty_registrationScalarFieldEnum = exports.Subscription_itemScalarFieldEnum = exports.Subscription_deliveryScalarFieldEnum = exports.SubscriptionScalarFieldEnum = exports.SessionScalarFieldEnum = exports.Serial_scanScalarFieldEnum = exports.Serial_batchScalarFieldEnum = exports.Segment_membershipScalarFieldEnum = exports.Rfm_snapshotScalarFieldEnum = exports.Replenishment_scheduleScalarFieldEnum = exports.Referral_conversionScalarFieldEnum = exports.Referral_codeScalarFieldEnum = exports.Quiz_responseScalarFieldEnum = exports.Quiz_definitionScalarFieldEnum = exports.Product_serialScalarFieldEnum = exports.Product_purchase_cycleScalarFieldEnum = exports.Points_liability_snapshotScalarFieldEnum = exports.Milestone_progressScalarFieldEnum = exports.Milestone_definitionScalarFieldEnum = exports.Message_logScalarFieldEnum = exports.Kpi_daily_snapshotScalarFieldEnum = exports.Journey_step_logScalarFieldEnum = exports.Journey_runScalarFieldEnum = exports.Integration_jobScalarFieldEnum = exports.Frequency_counterScalarFieldEnum = exports.Expert_topicScalarFieldEnum = exports.Expert_slotScalarFieldEnum = exports.Expert_bookingScalarFieldEnum = exports.EventScalarFieldEnum = exports.Dsr_requestScalarFieldEnum = exports.Data_quality_ruleScalarFieldEnum = exports.Data_quality_flag_logScalarFieldEnum = exports.Data_layer_definitionScalarFieldEnum = exports.Customer_metrics_dailyScalarFieldEnum = void 0;
+exports.defineExtension = exports.JsonNullValueFilter = exports.NullsOrder = exports.QueryMode = exports.JsonNullValueInput = void 0;
 const runtime = __importStar(require("@prisma/client/runtime/client"));
 exports.PrismaClientKnownRequestError = runtime.PrismaClientKnownRequestError;
 exports.PrismaClientUnknownRequestError = runtime.PrismaClientUnknownRequestError;
@@ -137,7 +137,10 @@ exports.ModelName = {
     DataHubColumn: 'DataHubColumn',
     DataHubRecord: 'DataHubRecord',
     ZaloOA: 'ZaloOA',
-    ZaloMiniApp: 'ZaloMiniApp'
+    ZaloMiniApp: 'ZaloMiniApp',
+    SupportTicket: 'SupportTicket',
+    CustomerDevice: 'CustomerDevice',
+    AdminNotification: 'AdminNotification'
 };
 exports.TransactionIsolationLevel = runtime.makeStrictEnum({
     ReadUncommitted: 'ReadUncommitted',
@@ -156,9 +159,11 @@ exports.CustomerScalarFieldEnum = {
     avatarUrl: 'avatarUrl',
     registrationSource: 'registrationSource',
     customerType: 'customerType',
+    dmsCode: 'dmsCode',
     notes: 'notes',
     dataQualityFlag: 'dataQualityFlag',
     isMerged: 'isMerged',
+    isActive: 'isActive',
     mergedIntoId: 'mergedIntoId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -293,6 +298,8 @@ exports.OrderScalarFieldEnum = {
     channel: 'channel',
     isGwp: 'isGwp',
     isInternal: 'isInternal',
+    shipmentNo: 'shipmentNo',
+    trackingLink: 'trackingLink',
     orderedAt: 'orderedAt',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -405,6 +412,8 @@ exports.RewardRedemptionScalarFieldEnum = {
     rewardId: 'rewardId',
     pointsSpent: 'pointsSpent',
     status: 'status',
+    shipmentNo: 'shipmentNo',
+    trackingLink: 'trackingLink',
     fulfilledAt: 'fulfilledAt',
     idempotencyKey: 'idempotencyKey',
     createdAt: 'createdAt',
@@ -983,6 +992,35 @@ exports.ZaloMiniAppScalarFieldEnum = {
     ownerId: 'ownerId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
+};
+exports.SupportTicketScalarFieldEnum = {
+    id: 'id',
+    customerId: 'customerId',
+    subject: 'subject',
+    category: 'category',
+    status: 'status',
+    messages: 'messages',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+};
+exports.CustomerDeviceScalarFieldEnum = {
+    id: 'id',
+    customerId: 'customerId',
+    deviceType: 'deviceType',
+    browser: 'browser',
+    os: 'os',
+    userAgent: 'userAgent',
+    lastLogin: 'lastLogin',
+    createdAt: 'createdAt'
+};
+exports.AdminNotificationScalarFieldEnum = {
+    id: 'id',
+    category: 'category',
+    title: 'title',
+    body: 'body',
+    link: 'link',
+    isRead: 'isRead',
+    createdAt: 'createdAt'
 };
 exports.SortOrder = {
     asc: 'asc',

@@ -87,6 +87,9 @@ export declare const ModelName: {
     readonly DataHubRecord: "DataHubRecord";
     readonly ZaloOA: "ZaloOA";
     readonly ZaloMiniApp: "ZaloMiniApp";
+    readonly SupportTicket: "SupportTicket";
+    readonly CustomerDevice: "CustomerDevice";
+    readonly AdminNotification: "AdminNotification";
 };
 export type ModelName = (typeof ModelName)[keyof typeof ModelName];
 export declare const TransactionIsolationLevel: {
@@ -107,9 +110,11 @@ export declare const CustomerScalarFieldEnum: {
     readonly avatarUrl: "avatarUrl";
     readonly registrationSource: "registrationSource";
     readonly customerType: "customerType";
+    readonly dmsCode: "dmsCode";
     readonly notes: "notes";
     readonly dataQualityFlag: "dataQualityFlag";
     readonly isMerged: "isMerged";
+    readonly isActive: "isActive";
     readonly mergedIntoId: "mergedIntoId";
     readonly createdAt: "createdAt";
     readonly updatedAt: "updatedAt";
@@ -256,6 +261,8 @@ export declare const OrderScalarFieldEnum: {
     readonly channel: "channel";
     readonly isGwp: "isGwp";
     readonly isInternal: "isInternal";
+    readonly shipmentNo: "shipmentNo";
+    readonly trackingLink: "trackingLink";
     readonly orderedAt: "orderedAt";
     readonly createdAt: "createdAt";
     readonly updatedAt: "updatedAt";
@@ -377,6 +384,8 @@ export declare const RewardRedemptionScalarFieldEnum: {
     readonly rewardId: "rewardId";
     readonly pointsSpent: "pointsSpent";
     readonly status: "status";
+    readonly shipmentNo: "shipmentNo";
+    readonly trackingLink: "trackingLink";
     readonly fulfilledAt: "fulfilledAt";
     readonly idempotencyKey: "idempotencyKey";
     readonly createdAt: "createdAt";
@@ -1011,6 +1020,38 @@ export declare const ZaloMiniAppScalarFieldEnum: {
     readonly updatedAt: "updatedAt";
 };
 export type ZaloMiniAppScalarFieldEnum = (typeof ZaloMiniAppScalarFieldEnum)[keyof typeof ZaloMiniAppScalarFieldEnum];
+export declare const SupportTicketScalarFieldEnum: {
+    readonly id: "id";
+    readonly customerId: "customerId";
+    readonly subject: "subject";
+    readonly category: "category";
+    readonly status: "status";
+    readonly messages: "messages";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
+};
+export type SupportTicketScalarFieldEnum = (typeof SupportTicketScalarFieldEnum)[keyof typeof SupportTicketScalarFieldEnum];
+export declare const CustomerDeviceScalarFieldEnum: {
+    readonly id: "id";
+    readonly customerId: "customerId";
+    readonly deviceType: "deviceType";
+    readonly browser: "browser";
+    readonly os: "os";
+    readonly userAgent: "userAgent";
+    readonly lastLogin: "lastLogin";
+    readonly createdAt: "createdAt";
+};
+export type CustomerDeviceScalarFieldEnum = (typeof CustomerDeviceScalarFieldEnum)[keyof typeof CustomerDeviceScalarFieldEnum];
+export declare const AdminNotificationScalarFieldEnum: {
+    readonly id: "id";
+    readonly category: "category";
+    readonly title: "title";
+    readonly body: "body";
+    readonly link: "link";
+    readonly isRead: "isRead";
+    readonly createdAt: "createdAt";
+};
+export type AdminNotificationScalarFieldEnum = (typeof AdminNotificationScalarFieldEnum)[keyof typeof AdminNotificationScalarFieldEnum];
 export declare const SortOrder: {
     readonly asc: "asc";
     readonly desc: "desc";

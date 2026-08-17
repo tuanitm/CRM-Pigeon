@@ -99,6 +99,18 @@ export class SerialController {
     });
 
     if (result.success) {
+      await this.prisma.event.create({
+        data: {
+          customer_id: data.customerId,
+          event_type: 'POINTS_EARNED',
+          properties: {
+            points: 100,
+            productName: serial.product.name,
+            serialCode: data.serialCode
+          },
+          source: 'customer-portal'
+        }
+      });
       return { status: 'claimed', message: 'Points awarded successfully', newBalance: result.newBalance };
     } else {
       return { status: 'error', message: result.error };

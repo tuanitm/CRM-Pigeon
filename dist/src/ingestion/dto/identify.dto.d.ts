@@ -11,4 +11,5 @@ export declare class IdentifyDto {
         gender: string;
         stageCode?: string;
     }>;
+    userAgent?: string;
 }

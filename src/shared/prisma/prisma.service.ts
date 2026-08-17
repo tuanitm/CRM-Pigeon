@@ -118,6 +118,9 @@ export class PrismaService implements OnModuleInit, OnModuleDestroy {
   get subscription_item() { return this._client.subscription_item; }
   get warranty_registration() { return this._client.warranty_registration; }
   get webhook_inbox() { return this._client.webhook_inbox; }
+  get supportTicket() { return this._client.supportTicket; }
+  get customerDevice() { return this._client.customerDevice; }
+  get adminNotification() { return this._client.adminNotification; }
 
   // Expose raw query methods
   get $executeRaw() { return this._client.$executeRaw.bind(this._client); }

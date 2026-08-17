@@ -24,16 +24,28 @@ export const customerApi = {
       `/admin/customers?${qs.toString()}`
     );
   },
-  get: (id: string) => request<any>(`/customers/${id}`),
-  updateRewardStatus: (id: string, redemptionId: string, status: string) =>
-    request<any>(`/customers/${id}/reward-redemptions/${redemptionId}/status`, { method: 'PATCH', body: JSON.stringify({ status }) }),
-  updateOrderStatus: (id: string, orderId: string, status: string) =>
-    request<any>(`/customers/${id}/orders/${orderId}/status`, { method: 'PATCH', body: JSON.stringify({ status }) }),
+  get: (id: string) => request<any>(`/admin/customers/${id}`),
+  updateRewardStatus: (id: string, redemptionId: string, payload: { status: string; shipmentNo?: string; trackingLink?: string }) =>
+    request<any>(`/customers/${id}/reward-redemptions/${redemptionId}/status`, { method: 'PATCH', body: JSON.stringify(payload) }),
+  updateOrderStatus: (id: string, orderId: string, payload: { status: string; shipmentNo?: string; trackingLink?: string }) =>
+    request<any>(`/customers/${id}/orders/${orderId}/status`, { method: 'PATCH', body: JSON.stringify(payload) }),
   create: (data: any) => 
     request<any>('/admin/customers', { method: 'POST', body: JSON.stringify(data) }),
   update: (id: string, data: any) =>
     request<any>(`/customers/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
-  getMetrics: () => request<any>('/admin/customers/metrics'),
+  updateStatus: (id: string, isActive: boolean) =>
+    request<any>(`/admin/customers/${id}/status`, { method: 'PUT', body: JSON.stringify({ isActive }) }),
+  getMetrics: (period?: string) => request<any>(`/admin/customers/metrics${period ? `?period=${period}` : ''}`),
+};
+
+// Support Ticket APIs
+export const supportApi = {
+  getAll: () => request<any[]>('/admin/support/tickets'),
+  getByCustomer: (customerId: string) => request<any[]>(`/admin/support/tickets/customer/${customerId}`),
+  updateStatus: (ticketId: string, status: string) => 
+    request<any>(`/admin/support/tickets/${ticketId}`, { method: 'PATCH', body: JSON.stringify({ status }) }),
+  reply: (ticketId: string, message: string, adminName: string) =>
+    request<any>(`/admin/support/tickets/${ticketId}/reply`, { method: 'POST', body: JSON.stringify({ message, adminName }) }),
 };
 
 // Baby APIs
@@ -196,4 +208,14 @@ export const loyaltyApi = {
     request<any[]>(`/admin/loyalty/transactions${take ? `?take=${take}` : ''}`),
   listRedemptions: (take?: number) =>
     request<any[]>(`/admin/loyalty/redemptions${take ? `?take=${take}` : ''}`),
+};
+
+// Notification APIs
+export const notificationApi = {
+  list: (take = 30) =>
+    request<{ items: any[]; unreadCount: number }>(`/admin/notifications?take=${take}`),
+  markRead: (id: string) =>
+    request<any>(`/admin/notifications/${id}/read`, { method: 'PATCH' }),
+  markAllRead: () =>
+    request<any>('/admin/notifications/read-all', { method: 'PATCH' }),
 };

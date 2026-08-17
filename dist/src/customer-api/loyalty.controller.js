@@ -81,6 +81,53 @@ let LoyaltyController = class LoyaltyController {
                     idempotencyKey: data.idempotencyKey,
                 },
             });
+            if (reward.category === 'product') {
+                const product = await this.prisma.product.findFirst({ where: { sku: reward.code } });
+                await this.prisma.order.create({
+                    data: {
+                        customerId,
+                        status: 'pending',
+                        totalAmount: 0,
+                        isInternal: true,
+                        isGwp: false,
+                        orderedAt: new Date(),
+                        items: {
+                            create: {
+                                productId: product?.id,
+                                sku: reward.code,
+                                quantity: 1,
+                                unitPrice: 0,
+                                totalPrice: 0
+                            }
+                        }
+                    }
+                });
+            }
+            else {
+                await this.prisma.rewardRedemption.create({
+                    data: {
+                        customerId,
+                        loyaltyAccountId: account.id,
+                        rewardId: reward.id,
+                        pointsSpent: reward.pointsCost,
+                        status: 'pending',
+                        idempotencyKey: data.idempotencyKey
+                    }
+                });
+            }
+            await this.prisma.event.create({
+                data: {
+                    customer_id: customerId,
+                    event_type: 'REWARD_REDEEMED',
+                    properties: {
+                        rewardCode: reward.code,
+                        rewardName: reward.name,
+                        pointsSpent: reward.pointsCost,
+                        category: reward.category
+                    },
+                    source: 'customer-portal'
+                }
+            });
             return { status: 'redeemed', pointsSpent: reward.pointsCost, newBalance };
         }
         finally {

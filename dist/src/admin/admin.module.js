@@ -21,6 +21,9 @@ const loyalty_controller_1 = require("./loyalty.controller");
 const loyalty_service_1 = require("./loyalty.service");
 const product_controller_1 = require("./product.controller");
 const product_service_1 = require("./product.service");
+const support_controller_1 = require("./support.controller");
+const notification_controller_1 = require("./notification.controller");
+const notification_service_1 = require("./notification.service");
 let AdminModule = class AdminModule {
 };
 exports.AdminModule = AdminModule;
@@ -34,6 +37,8 @@ exports.AdminModule = AdminModule = __decorate([
             zalo_mini_app_controller_1.ZaloMiniAppController,
             loyalty_controller_1.LoyaltyController,
             product_controller_1.ProductController,
+            support_controller_1.AdminSupportController,
+            notification_controller_1.NotificationController,
         ],
         providers: [
             data_hub_service_1.DataHubService,
@@ -42,7 +47,9 @@ exports.AdminModule = AdminModule = __decorate([
             zalo_mini_app_service_1.ZaloMiniAppService,
             loyalty_service_1.LoyaltyService,
             product_service_1.ProductService,
+            notification_service_1.NotificationService,
         ],
+        exports: [notification_service_1.NotificationService],
     })
 ], AdminModule);
 //# sourceMappingURL=admin.module.js.map

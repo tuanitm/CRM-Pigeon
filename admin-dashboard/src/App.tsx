@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Layout, Menu, Typography, theme, ConfigProvider, Button, Avatar, Space, Badge, Dropdown, Tooltip } from 'antd';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Layout, Menu, Typography, theme, ConfigProvider, Button, Avatar, Space, Badge, Dropdown, Tooltip, Popover, List, Empty, Tag, Divider } from 'antd';
 import {
   DashboardOutlined,
   UserOutlined,
@@ -21,6 +21,11 @@ import {
   TrophyOutlined,
   QuestionCircleOutlined,
   MessageOutlined,
+  CheckOutlined,
+  ShoppingCartOutlined,
+  CustomerServiceOutlined,
+  UserAddOutlined,
+  ThunderboltOutlined as JourneyIcon,
 } from '@ant-design/icons';
 import { BrowserRouter, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 
@@ -40,6 +45,7 @@ import DynamicActionDetailPage from './pages/DynamicActionDetailPage';
 import StoragePage from './pages/StoragePage';
 import ZaloOAPage from './pages/ZaloOAPage';
 import ZaloMiniAppPage from './pages/ZaloMiniAppPage';
+import { notificationApi } from './services/api';
 
 const { Header, Sider, Content } = Layout;
 const { Text } = Typography;
@@ -97,8 +103,47 @@ const menuItems = [
 
 function AppLayout() {
   const [collapsed, setCollapsed] = useState(false);
+  const [notifOpen, setNotifOpen] = useState(false);
+  const [notifications, setNotifications] = useState<any[]>([]);
+  const [unreadCount, setUnreadCount] = useState(0);
   const navigate = useNavigate();
   const location = useLocation();
+
+  const fetchNotifications = useCallback(async () => {
+    try {
+      const res = await notificationApi.list(30);
+      setNotifications(res.items);
+      setUnreadCount(res.unreadCount);
+    } catch { /* API not ready yet */ }
+  }, []);
+
+  useEffect(() => {
+    fetchNotifications();
+    const interval = setInterval(fetchNotifications, 30_000);
+    return () => clearInterval(interval);
+  }, [fetchNotifications]);
+
+  const handleMarkAllRead = async () => {
+    await notificationApi.markAllRead();
+    fetchNotifications();
+  };
+
+  const handleNotifClick = async (item: any) => {
+    if (!item.isRead) {
+      await notificationApi.markRead(item.id);
+    }
+    setNotifOpen(false);
+    if (item.link) navigate(item.link);
+    fetchNotifications();
+  };
+
+  const categoryConfig: Record<string, { icon: React.ReactNode; color: string }> = {
+    CUSTOMER: { icon: <UserAddOutlined />, color: '#3b82f6' },
+    TICKET:   { icon: <CustomerServiceOutlined />, color: '#f59e0b' },
+    ORDER:    { icon: <ShoppingCartOutlined />, color: '#10b981' },
+    JOURNEY:  { icon: <JourneyIcon />, color: '#8b5cf6' },
+    SYSTEM:   { icon: <SettingOutlined />, color: '#6b7280' },
+  };
 
   const getSelectedKeys = () => {
     const path = location.pathname;
@@ -243,60 +288,83 @@ function AppLayout() {
           </Space>
 
           <Space size={4}>
-            {/* Credit/Token Counters (CNV CDP style) */}
-            <div style={{
-              display: 'flex',
-              border: '1px solid #e5e7eb',
-              borderRadius: 8,
-              overflow: 'hidden',
-              marginRight: 8,
-            }}>
-              <Tooltip title="Số Credit còn lại">
-                <div style={{
-                  padding: '4px 14px',
-                  borderRight: '1px solid #e5e7eb',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  lineHeight: 1.2,
-                }}>
-                  <span style={{ fontSize: 9, color: '#6b7280', fontWeight: 500 }}>Credits</span>
-                  <span style={{ fontSize: 13, color: '#1f2937', fontWeight: 700 }}>5g</span>
-                </div>
-              </Tooltip>
-              <Tooltip title="Số Token còn lại">
-                <div style={{
-                  padding: '4px 14px',
-                  borderRight: '1px solid #e5e7eb',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  lineHeight: 1.2,
-                }}>
-                  <span style={{ fontSize: 9, color: '#6b7280', fontWeight: 500 }}>Tokens</span>
-                  <span style={{ fontSize: 13, color: '#1f2937', fontWeight: 700 }}>20.4M</span>
-                </div>
-              </Tooltip>
-              <Tooltip title="AI Credit còn lại">
-                <div style={{
-                  padding: '4px 14px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  lineHeight: 1.2,
-                }}>
-                  <span style={{ fontSize: 9, color: '#6b7280', fontWeight: 500 }}>AI</span>
-                  <span style={{ fontSize: 13, color: '#1f2937', fontWeight: 700 }}>50</span>
-                </div>
-              </Tooltip>
-            </div>
-
             <Tooltip title="Help">
               <Button type="text" icon={<QuestionCircleOutlined />} style={{ color: '#6b7280' }} />
             </Tooltip>
-            <Badge count={3} size="small" offset={[-4, 4]}>
-              <Button type="text" icon={<BellOutlined />} style={{ color: '#6b7280' }} />
-            </Badge>
+            <Popover
+              open={notifOpen}
+              onOpenChange={setNotifOpen}
+              trigger="click"
+              placement="bottomRight"
+              arrow={false}
+              overlayInnerStyle={{ padding: 0, borderRadius: 12, overflow: 'hidden', width: 380 }}
+              content={
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 16px 10px' }}>
+                    <span style={{ fontWeight: 700, fontSize: 15 }}>Notifications</span>
+                    {unreadCount > 0 && (
+                      <Button type="link" size="small" icon={<CheckOutlined />} onClick={handleMarkAllRead}>
+                        Mark all read
+                      </Button>
+                    )}
+                  </div>
+                  <Divider style={{ margin: 0 }} />
+                  {notifications.length === 0 ? (
+                    <Empty description="No notifications yet" style={{ padding: '32px 0' }} />
+                  ) : (
+                    <div style={{ maxHeight: 420, overflowY: 'auto' }}>
+                      {notifications.map((n) => {
+                        const cfg = categoryConfig[n.category] || categoryConfig.SYSTEM;
+                        return (
+                          <div
+                            key={n.id}
+                            onClick={() => handleNotifClick(n)}
+                            style={{
+                              display: 'flex', gap: 10, padding: '10px 16px',
+                              cursor: n.link ? 'pointer' : 'default',
+                              background: n.isRead ? 'transparent' : '#f0f5ff',
+                              borderBottom: '1px solid #f3f4f6',
+                              transition: 'background 0.15s',
+                            }}
+                            onMouseEnter={(e) => (e.currentTarget.style.background = '#f9fafb')}
+                            onMouseLeave={(e) => (e.currentTarget.style.background = n.isRead ? 'transparent' : '#f0f5ff')}
+                          >
+                            <div style={{
+                              width: 32, height: 32, borderRadius: 8,
+                              background: `${cfg.color}15`, color: cfg.color,
+                              display: 'flex', alignItems: 'center', justifyContent: 'center',
+                              fontSize: 15, flexShrink: 0, marginTop: 2,
+                            }}>
+                              {cfg.icon}
+                            </div>
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                              <div style={{ fontSize: 13, fontWeight: n.isRead ? 400 : 600, color: '#1f2937', lineHeight: 1.3 }}>
+                                {n.title}
+                              </div>
+                              {n.body && (
+                                <div style={{ fontSize: 11, color: '#6b7280', marginTop: 2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                  {n.body}
+                                </div>
+                              )}
+                              <div style={{ fontSize: 10, color: '#9ca3af', marginTop: 3 }}>
+                                {new Date(n.createdAt).toLocaleString('vi-VN', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}
+                              </div>
+                            </div>
+                            {!n.isRead && (
+                              <div style={{ width: 8, height: 8, borderRadius: 4, background: '#3b82f6', marginTop: 6, flexShrink: 0 }} />
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              }
+            >
+              <Badge count={unreadCount} size="small" offset={[-4, 4]}>
+                <Button type="text" icon={<BellOutlined />} style={{ color: '#6b7280' }} />
+              </Badge>
+            </Popover>
 
             <div style={{
               display: 'flex',

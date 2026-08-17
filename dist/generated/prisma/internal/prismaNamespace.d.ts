@@ -236,6 +236,9 @@ export declare const ModelName: {
     readonly DataHubRecord: "DataHubRecord";
     readonly ZaloOA: "ZaloOA";
     readonly ZaloMiniApp: "ZaloMiniApp";
+    readonly SupportTicket: "SupportTicket";
+    readonly CustomerDevice: "CustomerDevice";
+    readonly AdminNotification: "AdminNotification";
 };
 export type ModelName = (typeof ModelName)[keyof typeof ModelName];
 export interface TypeMapCb<GlobalOmitOptions = {}> extends runtime.Types.Utils.Fn<{
@@ -248,7 +251,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         omit: GlobalOmitOptions;
     };
     meta: {
-        modelProps: "customer" | "customerIdentity" | "mergeCandidate" | "customerAddress" | "customerTag" | "baby" | "babyGrowthLog" | "babyStageHistory" | "consentDocumentVersion" | "consent" | "product" | "productLifecycleRule" | "order" | "orderItem" | "productExchange" | "review" | "loyaltyTierConfig" | "loyaltyAccount" | "loyaltyTransaction" | "loyaltyEarnRule" | "rewardCatalog" | "rewardRedemption" | "segment" | "journey" | "messageTemplate" | "role" | "adminUser" | "auditLog" | "campaign_control_group" | "checklist_definition" | "checklist_progress" | "customer_metrics_daily" | "data_layer_definition" | "data_quality_flag_log" | "data_quality_rule" | "dsr_request" | "event" | "expert_booking" | "expert_slot" | "expert_topic" | "frequency_counter" | "integration_job" | "journey_run" | "journey_step_log" | "kpi_daily_snapshot" | "message_log" | "milestone_definition" | "milestone_progress" | "points_liability_snapshot" | "product_purchase_cycle" | "product_serial" | "quiz_definition" | "quiz_response" | "referral_code" | "referral_conversion" | "replenishment_schedule" | "rfm_snapshot" | "segment_membership" | "serial_batch" | "serial_scan" | "session" | "subscription" | "subscription_delivery" | "subscription_item" | "warranty_registration" | "webhook_inbox" | "systemConfig" | "dataHub" | "dynamicAction" | "dynamicActionPage" | "dynamicActionComponent" | "dataHubTable" | "dataHubColumn" | "dataHubRecord" | "zaloOA" | "zaloMiniApp";
+        modelProps: "customer" | "customerIdentity" | "mergeCandidate" | "customerAddress" | "customerTag" | "baby" | "babyGrowthLog" | "babyStageHistory" | "consentDocumentVersion" | "consent" | "product" | "productLifecycleRule" | "order" | "orderItem" | "productExchange" | "review" | "loyaltyTierConfig" | "loyaltyAccount" | "loyaltyTransaction" | "loyaltyEarnRule" | "rewardCatalog" | "rewardRedemption" | "segment" | "journey" | "messageTemplate" | "role" | "adminUser" | "auditLog" | "campaign_control_group" | "checklist_definition" | "checklist_progress" | "customer_metrics_daily" | "data_layer_definition" | "data_quality_flag_log" | "data_quality_rule" | "dsr_request" | "event" | "expert_booking" | "expert_slot" | "expert_topic" | "frequency_counter" | "integration_job" | "journey_run" | "journey_step_log" | "kpi_daily_snapshot" | "message_log" | "milestone_definition" | "milestone_progress" | "points_liability_snapshot" | "product_purchase_cycle" | "product_serial" | "quiz_definition" | "quiz_response" | "referral_code" | "referral_conversion" | "replenishment_schedule" | "rfm_snapshot" | "segment_membership" | "serial_batch" | "serial_scan" | "session" | "subscription" | "subscription_delivery" | "subscription_item" | "warranty_registration" | "webhook_inbox" | "systemConfig" | "dataHub" | "dynamicAction" | "dynamicActionPage" | "dynamicActionComponent" | "dataHubTable" | "dataHubColumn" | "dataHubRecord" | "zaloOA" | "zaloMiniApp" | "supportTicket" | "customerDevice" | "adminNotification";
         txIsolationLevel: TransactionIsolationLevel;
     };
     model: {
@@ -5876,6 +5879,228 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
                 };
             };
         };
+        SupportTicket: {
+            payload: Prisma.$SupportTicketPayload<ExtArgs>;
+            fields: Prisma.SupportTicketFieldRefs;
+            operations: {
+                findUnique: {
+                    args: Prisma.SupportTicketFindUniqueArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$SupportTicketPayload> | null;
+                };
+                findUniqueOrThrow: {
+                    args: Prisma.SupportTicketFindUniqueOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$SupportTicketPayload>;
+                };
+                findFirst: {
+                    args: Prisma.SupportTicketFindFirstArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$SupportTicketPayload> | null;
+                };
+                findFirstOrThrow: {
+                    args: Prisma.SupportTicketFindFirstOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$SupportTicketPayload>;
+                };
+                findMany: {
+                    args: Prisma.SupportTicketFindManyArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$SupportTicketPayload>[];
+                };
+                create: {
+                    args: Prisma.SupportTicketCreateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$SupportTicketPayload>;
+                };
+                createMany: {
+                    args: Prisma.SupportTicketCreateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                createManyAndReturn: {
+                    args: Prisma.SupportTicketCreateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$SupportTicketPayload>[];
+                };
+                delete: {
+                    args: Prisma.SupportTicketDeleteArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$SupportTicketPayload>;
+                };
+                update: {
+                    args: Prisma.SupportTicketUpdateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$SupportTicketPayload>;
+                };
+                deleteMany: {
+                    args: Prisma.SupportTicketDeleteManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateMany: {
+                    args: Prisma.SupportTicketUpdateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateManyAndReturn: {
+                    args: Prisma.SupportTicketUpdateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$SupportTicketPayload>[];
+                };
+                upsert: {
+                    args: Prisma.SupportTicketUpsertArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$SupportTicketPayload>;
+                };
+                aggregate: {
+                    args: Prisma.SupportTicketAggregateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.AggregateSupportTicket>;
+                };
+                groupBy: {
+                    args: Prisma.SupportTicketGroupByArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.SupportTicketGroupByOutputType>[];
+                };
+                count: {
+                    args: Prisma.SupportTicketCountArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.SupportTicketCountAggregateOutputType> | number;
+                };
+            };
+        };
+        CustomerDevice: {
+            payload: Prisma.$CustomerDevicePayload<ExtArgs>;
+            fields: Prisma.CustomerDeviceFieldRefs;
+            operations: {
+                findUnique: {
+                    args: Prisma.CustomerDeviceFindUniqueArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerDevicePayload> | null;
+                };
+                findUniqueOrThrow: {
+                    args: Prisma.CustomerDeviceFindUniqueOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerDevicePayload>;
+                };
+                findFirst: {
+                    args: Prisma.CustomerDeviceFindFirstArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerDevicePayload> | null;
+                };
+                findFirstOrThrow: {
+                    args: Prisma.CustomerDeviceFindFirstOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerDevicePayload>;
+                };
+                findMany: {
+                    args: Prisma.CustomerDeviceFindManyArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerDevicePayload>[];
+                };
+                create: {
+                    args: Prisma.CustomerDeviceCreateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerDevicePayload>;
+                };
+                createMany: {
+                    args: Prisma.CustomerDeviceCreateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                createManyAndReturn: {
+                    args: Prisma.CustomerDeviceCreateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerDevicePayload>[];
+                };
+                delete: {
+                    args: Prisma.CustomerDeviceDeleteArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerDevicePayload>;
+                };
+                update: {
+                    args: Prisma.CustomerDeviceUpdateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerDevicePayload>;
+                };
+                deleteMany: {
+                    args: Prisma.CustomerDeviceDeleteManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateMany: {
+                    args: Prisma.CustomerDeviceUpdateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateManyAndReturn: {
+                    args: Prisma.CustomerDeviceUpdateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerDevicePayload>[];
+                };
+                upsert: {
+                    args: Prisma.CustomerDeviceUpsertArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerDevicePayload>;
+                };
+                aggregate: {
+                    args: Prisma.CustomerDeviceAggregateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.AggregateCustomerDevice>;
+                };
+                groupBy: {
+                    args: Prisma.CustomerDeviceGroupByArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.CustomerDeviceGroupByOutputType>[];
+                };
+                count: {
+                    args: Prisma.CustomerDeviceCountArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.CustomerDeviceCountAggregateOutputType> | number;
+                };
+            };
+        };
+        AdminNotification: {
+            payload: Prisma.$AdminNotificationPayload<ExtArgs>;
+            fields: Prisma.AdminNotificationFieldRefs;
+            operations: {
+                findUnique: {
+                    args: Prisma.AdminNotificationFindUniqueArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminNotificationPayload> | null;
+                };
+                findUniqueOrThrow: {
+                    args: Prisma.AdminNotificationFindUniqueOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminNotificationPayload>;
+                };
+                findFirst: {
+                    args: Prisma.AdminNotificationFindFirstArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminNotificationPayload> | null;
+                };
+                findFirstOrThrow: {
+                    args: Prisma.AdminNotificationFindFirstOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminNotificationPayload>;
+                };
+                findMany: {
+                    args: Prisma.AdminNotificationFindManyArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminNotificationPayload>[];
+                };
+                create: {
+                    args: Prisma.AdminNotificationCreateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminNotificationPayload>;
+                };
+                createMany: {
+                    args: Prisma.AdminNotificationCreateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                createManyAndReturn: {
+                    args: Prisma.AdminNotificationCreateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminNotificationPayload>[];
+                };
+                delete: {
+                    args: Prisma.AdminNotificationDeleteArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminNotificationPayload>;
+                };
+                update: {
+                    args: Prisma.AdminNotificationUpdateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminNotificationPayload>;
+                };
+                deleteMany: {
+                    args: Prisma.AdminNotificationDeleteManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateMany: {
+                    args: Prisma.AdminNotificationUpdateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateManyAndReturn: {
+                    args: Prisma.AdminNotificationUpdateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminNotificationPayload>[];
+                };
+                upsert: {
+                    args: Prisma.AdminNotificationUpsertArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminNotificationPayload>;
+                };
+                aggregate: {
+                    args: Prisma.AdminNotificationAggregateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.AggregateAdminNotification>;
+                };
+                groupBy: {
+                    args: Prisma.AdminNotificationGroupByArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.AdminNotificationGroupByOutputType>[];
+                };
+                count: {
+                    args: Prisma.AdminNotificationCountArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.AdminNotificationCountAggregateOutputType> | number;
+                };
+            };
+        };
     };
 } & {
     other: {
@@ -5918,9 +6143,11 @@ export declare const CustomerScalarFieldEnum: {
     readonly avatarUrl: "avatarUrl";
     readonly registrationSource: "registrationSource";
     readonly customerType: "customerType";
+    readonly dmsCode: "dmsCode";
     readonly notes: "notes";
     readonly dataQualityFlag: "dataQualityFlag";
     readonly isMerged: "isMerged";
+    readonly isActive: "isActive";
     readonly mergedIntoId: "mergedIntoId";
     readonly createdAt: "createdAt";
     readonly updatedAt: "updatedAt";
@@ -6067,6 +6294,8 @@ export declare const OrderScalarFieldEnum: {
     readonly channel: "channel";
     readonly isGwp: "isGwp";
     readonly isInternal: "isInternal";
+    readonly shipmentNo: "shipmentNo";
+    readonly trackingLink: "trackingLink";
     readonly orderedAt: "orderedAt";
     readonly createdAt: "createdAt";
     readonly updatedAt: "updatedAt";
@@ -6188,6 +6417,8 @@ export declare const RewardRedemptionScalarFieldEnum: {
     readonly rewardId: "rewardId";
     readonly pointsSpent: "pointsSpent";
     readonly status: "status";
+    readonly shipmentNo: "shipmentNo";
+    readonly trackingLink: "trackingLink";
     readonly fulfilledAt: "fulfilledAt";
     readonly idempotencyKey: "idempotencyKey";
     readonly createdAt: "createdAt";
@@ -6822,6 +7053,38 @@ export declare const ZaloMiniAppScalarFieldEnum: {
     readonly updatedAt: "updatedAt";
 };
 export type ZaloMiniAppScalarFieldEnum = (typeof ZaloMiniAppScalarFieldEnum)[keyof typeof ZaloMiniAppScalarFieldEnum];
+export declare const SupportTicketScalarFieldEnum: {
+    readonly id: "id";
+    readonly customerId: "customerId";
+    readonly subject: "subject";
+    readonly category: "category";
+    readonly status: "status";
+    readonly messages: "messages";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
+};
+export type SupportTicketScalarFieldEnum = (typeof SupportTicketScalarFieldEnum)[keyof typeof SupportTicketScalarFieldEnum];
+export declare const CustomerDeviceScalarFieldEnum: {
+    readonly id: "id";
+    readonly customerId: "customerId";
+    readonly deviceType: "deviceType";
+    readonly browser: "browser";
+    readonly os: "os";
+    readonly userAgent: "userAgent";
+    readonly lastLogin: "lastLogin";
+    readonly createdAt: "createdAt";
+};
+export type CustomerDeviceScalarFieldEnum = (typeof CustomerDeviceScalarFieldEnum)[keyof typeof CustomerDeviceScalarFieldEnum];
+export declare const AdminNotificationScalarFieldEnum: {
+    readonly id: "id";
+    readonly category: "category";
+    readonly title: "title";
+    readonly body: "body";
+    readonly link: "link";
+    readonly isRead: "isRead";
+    readonly createdAt: "createdAt";
+};
+export type AdminNotificationScalarFieldEnum = (typeof AdminNotificationScalarFieldEnum)[keyof typeof AdminNotificationScalarFieldEnum];
 export declare const SortOrder: {
     readonly asc: "asc";
     readonly desc: "desc";
@@ -6971,6 +7234,9 @@ export type GlobalOmitConfig = {
     dataHubRecord?: Prisma.DataHubRecordOmit;
     zaloOA?: Prisma.ZaloOAOmit;
     zaloMiniApp?: Prisma.ZaloMiniAppOmit;
+    supportTicket?: Prisma.SupportTicketOmit;
+    customerDevice?: Prisma.CustomerDeviceOmit;
+    adminNotification?: Prisma.AdminNotificationOmit;
 };
 export type LogLevel = 'info' | 'query' | 'warn' | 'error';
 export type LogDefinition = {

@@ -7,11 +7,11 @@ export declare class BabyController {
             id: string;
             notes: string | null;
             createdAt: Date;
-            babyId: string;
             recordedAt: Date;
             weightKg: import("@prisma/client-runtime-utils").Decimal | null;
             heightCm: import("@prisma/client-runtime-utils").Decimal | null;
             headCircumferenceCm: import("@prisma/client-runtime-utils").Decimal | null;
+            babyId: string;
         }[];
     } & {
         id: string;
@@ -19,8 +19,8 @@ export declare class BabyController {
         dateOfBirth: Date | null;
         createdAt: Date;
         updatedAt: Date;
-        customerId: string;
         name: string | null;
+        customerId: string;
         dueDate: Date | null;
         isBorn: boolean;
         stageCode: string | null;
@@ -32,8 +32,8 @@ export declare class BabyController {
         dateOfBirth: Date | null;
         createdAt: Date;
         updatedAt: Date;
-        customerId: string;
         name: string | null;
+        customerId: string;
         dueDate: Date | null;
         isBorn: boolean;
         stageCode: string | null;
@@ -45,8 +45,8 @@ export declare class BabyController {
         dateOfBirth: Date | null;
         createdAt: Date;
         updatedAt: Date;
-        customerId: string;
         name: string | null;
+        customerId: string;
         dueDate: Date | null;
         isBorn: boolean;
         stageCode: string | null;
@@ -58,8 +58,8 @@ export declare class BabyController {
         dateOfBirth: Date | null;
         createdAt: Date;
         updatedAt: Date;
-        customerId: string;
         name: string | null;
+        customerId: string;
         dueDate: Date | null;
         isBorn: boolean;
         stageCode: string | null;

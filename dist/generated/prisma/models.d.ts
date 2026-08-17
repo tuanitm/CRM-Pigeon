@@ -74,4 +74,7 @@ export type * from './models/DataHubColumn.js';
 export type * from './models/DataHubRecord.js';
 export type * from './models/ZaloOA.js';
 export type * from './models/ZaloMiniApp.js';
+export type * from './models/SupportTicket.js';
+export type * from './models/CustomerDevice.js';
+export type * from './models/AdminNotification.js';
 export type * from './commonInputTypes.js';

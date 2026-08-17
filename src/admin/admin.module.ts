@@ -12,6 +12,9 @@ import { LoyaltyController } from './loyalty.controller';
 import { LoyaltyService } from './loyalty.service';
 import { ProductController } from './product.controller';
 import { ProductService } from './product.service';
+import { AdminSupportController } from './support.controller';
+import { NotificationController } from './notification.controller';
+import { NotificationService } from './notification.service';
 
 @Module({
   controllers: [
@@ -22,6 +25,8 @@ import { ProductService } from './product.service';
     ZaloMiniAppController,
     LoyaltyController,
     ProductController,
+    AdminSupportController,
+    NotificationController,
   ],
   providers: [
     DataHubService,
@@ -30,6 +35,8 @@ import { ProductService } from './product.service';
     ZaloMiniAppService,
     LoyaltyService,
     ProductService,
+    NotificationService,
   ],
+  exports: [NotificationService],
 })
 export class AdminModule {}

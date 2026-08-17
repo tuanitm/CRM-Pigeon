@@ -297,6 +297,19 @@ export default function CustomersPage() {
           <Form.Item name="address" label="Address">
             <Input placeholder="Enter address" />
           </Form.Item>
+          <Form.Item noStyle dependencies={['customerType']}>
+            {({ getFieldValue }) => {
+              const type = getFieldValue('customerType');
+              if (type === 'Outlet' || type === 'Keyshop') {
+                return (
+                  <Form.Item name="dmsCode" label="DMS Code">
+                    <Input placeholder="Enter DMS Code" />
+                  </Form.Item>
+                );
+              }
+              return null;
+            }}
+          </Form.Item>
           <Form.Item name="notes" label="Notes">
             <Input.TextArea placeholder="Enter notes" rows={3} />
           </Form.Item>

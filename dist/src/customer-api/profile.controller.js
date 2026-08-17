@@ -28,6 +28,10 @@ let ProfileController = class ProfileController {
                 babies: true,
                 addresses: true,
                 tags: true,
+                event: {
+                    orderBy: { occurred_at: 'desc' },
+                    take: 100
+                },
                 loyaltyAccount: {
                     include: {
                         tier: true,
@@ -50,6 +54,9 @@ let ProfileController = class ProfileController {
                     where: { isInternal: true },
                     include: { items: { include: { product: true } } },
                     orderBy: { createdAt: 'desc' }
+                },
+                devices: {
+                    orderBy: { lastLogin: 'desc' }
                 }
             },
         });
@@ -62,6 +69,13 @@ let ProfileController = class ProfileController {
             if (existing)
                 throw new Error('Phone number already in use');
         }
+        const oldCustomer = await this.prisma.customer.findUnique({
+            where: { id },
+            include: { addresses: true }
+        });
+        const oldEmail = oldCustomer?.email;
+        const oldAddress = oldCustomer?.addresses?.[0]?.addressLine1;
+        let eventsToLog = [];
         if (data.babies) {
             const existingBabies = await this.prisma.baby.findMany({ where: { customerId: id } });
             const incomingIds = data.babies.filter((b) => b.id).map((b) => b.id);
@@ -80,9 +94,11 @@ let ProfileController = class ProfileController {
                 };
                 if (b.id) {
                     await this.prisma.baby.update({ where: { id: b.id }, data: babyData });
+                    eventsToLog.push({ type: 'CHILD_MODIFIED', props: { babyId: b.id, name: b.name } });
                 }
                 else {
-                    await this.prisma.baby.create({ data: { ...babyData, customerId: id } });
+                    const newBaby = await this.prisma.baby.create({ data: { ...babyData, customerId: id } });
+                    eventsToLog.push({ type: 'CHILD_ADDED', props: { babyId: newBaby.id, name: b.name } });
                 }
             }
         }
@@ -94,6 +110,7 @@ let ProfileController = class ProfileController {
                 email: data.email,
                 gender: data.gender,
                 customerType: data.customerType,
+                dmsCode: data.dmsCode,
                 notes: data.notes,
                 dateOfBirth: data.dateOfBirth ? new Date(data.dateOfBirth) : undefined,
                 avatarUrl: data.avatarUrl,
@@ -103,12 +120,34 @@ let ProfileController = class ProfileController {
                 } : undefined,
             },
         });
+        if (data.email && data.email !== oldEmail) {
+            eventsToLog.push({ type: 'EMAIL_UPDATED', props: { oldEmail, newEmail: data.email } });
+        }
+        if (data.address !== undefined && data.address !== oldAddress) {
+            eventsToLog.push({ type: 'ADDRESS_UPDATED', props: { oldAddress, newAddress: data.address } });
+        }
+        if (data.fullName && data.fullName !== oldCustomer?.fullName) {
+            eventsToLog.push({ type: 'PROFILE_UPDATED', props: { updatedFields: ['fullName'] } });
+        }
+        for (const evt of eventsToLog) {
+            await this.prisma.event.create({
+                data: {
+                    customer_id: id,
+                    event_type: evt.type,
+                    properties: evt.props,
+                    source: 'customer-api'
+                }
+            });
+        }
         if (data.isOnboardingCompletion) {
             await this.evaluateWelcomeBonus(id);
         }
         return updatedCustomer;
     }
     async evaluateWelcomeBonus(customerId) {
+        const customer = await this.prisma.customer.findUnique({ where: { id: customerId }, select: { customerType: true } });
+        if (customer?.customerType && customer.customerType !== 'End user')
+            return;
         const welcomeRule = await this.prisma.loyaltyEarnRule.findFirst({
             where: { source: 'welcome_bonus', ruleName: 'Welcome Onboarding', isActive: true },
         });
@@ -239,13 +278,22 @@ let ProfileController = class ProfileController {
     async updateRewardRedemptionStatus(id, redemptionId, data) {
         return this.prisma.rewardRedemption.update({
             where: { id: redemptionId, customerId: id },
-            data: { status: data.status, fulfilledAt: data.status === 'fulfilled' ? new Date() : null }
+            data: {
+                status: data.status,
+                fulfilledAt: data.status === 'fulfilled' ? new Date() : null,
+                shipmentNo: data.shipmentNo,
+                trackingLink: data.trackingLink
+            }
         });
     }
     async updateOrderStatus(id, orderId, data) {
         return this.prisma.order.update({
             where: { id: orderId, customerId: id },
-            data: { status: data.status }
+            data: {
+                status: data.status,
+                shipmentNo: data.shipmentNo,
+                trackingLink: data.trackingLink
+            }
         });
     }
 };

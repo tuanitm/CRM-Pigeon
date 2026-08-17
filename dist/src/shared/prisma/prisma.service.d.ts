@@ -232,6 +232,15 @@ export declare class PrismaService implements OnModuleInit, OnModuleDestroy {
     get webhook_inbox(): import("../../../generated/prisma/models").webhook_inboxDelegate<import("@prisma/client/runtime/client").InternalArgs, {
         omit: import("../../../generated/prisma/internal/prismaNamespace").GlobalOmitConfig | undefined;
     }>;
+    get supportTicket(): import("../../../generated/prisma/models").SupportTicketDelegate<import("@prisma/client/runtime/client").InternalArgs, {
+        omit: import("../../../generated/prisma/internal/prismaNamespace").GlobalOmitConfig | undefined;
+    }>;
+    get customerDevice(): import("../../../generated/prisma/models").CustomerDeviceDelegate<import("@prisma/client/runtime/client").InternalArgs, {
+        omit: import("../../../generated/prisma/internal/prismaNamespace").GlobalOmitConfig | undefined;
+    }>;
+    get adminNotification(): import("../../../generated/prisma/models").AdminNotificationDelegate<import("@prisma/client/runtime/client").InternalArgs, {
+        omit: import("../../../generated/prisma/internal/prismaNamespace").GlobalOmitConfig | undefined;
+    }>;
     get $executeRaw(): <T = unknown>(query: TemplateStringsArray | import("../../../generated/prisma/internal/prismaNamespace").Sql, ...values: any[]) => import("../../../generated/prisma/internal/prismaNamespace").PrismaPromise<number>;
     get $queryRaw(): <T = unknown>(query: TemplateStringsArray | import("../../../generated/prisma/internal/prismaNamespace").Sql, ...values: any[]) => import("../../../generated/prisma/internal/prismaNamespace").PrismaPromise<T>;
     get $transaction(): {

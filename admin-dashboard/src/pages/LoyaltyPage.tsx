@@ -7,7 +7,7 @@ import {
 import {
   GiftOutlined, TrophyOutlined, StarOutlined, CrownOutlined,
   FireOutlined, PlusOutlined, EditOutlined, DeleteOutlined,
-  HistoryOutlined, ShoppingOutlined, ReloadOutlined,
+  HistoryOutlined, ShoppingOutlined, ReloadOutlined, UndoOutlined
 } from '@ant-design/icons';
 import { loyaltyApi, customerApi } from '../services/api';
 
@@ -26,6 +26,43 @@ export default function LoyaltyPage() {
   const [transactions, setTransactions] = useState<any[]>([]);
   const [redemptions, setRedemptions] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState('overview');
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+  const [trackingModal, setTrackingModal] = useState(false);
+  const [trackingItem, setTrackingItem] = useState<any>(null);
+  const [trackingForm] = Form.useForm();
+
+  const handleStatusUpdate = async (item: any, newStatus: string, trackingData?: { shipmentNo?: string; trackingLink?: string }) => {
+    try {
+      const payload = { status: newStatus, ...trackingData };
+      if (item.type === 'order') {
+        await customerApi.updateOrderStatus(item.customerId, item.id, payload);
+      } else {
+        await customerApi.updateRewardStatus(item.customerId, item.id, payload);
+      }
+      message.success(`Item marked as ${newStatus}`);
+      loadAll();
+    } catch (e: any) {
+      message.error(`Failed to mark as ${newStatus}`);
+    }
+  };
+
+  const handleBatchStatusUpdate = async (newStatus: string) => {
+    if (selectedRowKeys.length === 0) return;
+    try {
+      const itemsToUpdate = redemptions.filter((r: any) => selectedRowKeys.includes(r.id));
+      await Promise.all(itemsToUpdate.map((item: any) => {
+        if (item.type === 'order') {
+          return customerApi.updateOrderStatus(item.customerId, item.id, { status: newStatus });
+        }
+        return customerApi.updateRewardStatus(item.customerId, item.id, { status: newStatus });
+      }));
+      message.success(`Batch updated ${itemsToUpdate.length} items to ${newStatus} successfully`);
+      setSelectedRowKeys([]);
+      loadAll();
+    } catch (e: any) {
+      message.error(e.message || 'Failed to update some items');
+    }
+  };
 
   // Modal states
   const [tierModal, setTierModal] = useState(false);
@@ -343,33 +380,6 @@ export default function LoyaltyPage() {
         {activeTab === 'fulfillment' && (
           <div style={{ padding: 16 }}>
             {(() => {
-              const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-
-              const handleFulfillSingle = async (customerId: string, redemptionId: string) => {
-                try {
-                  await customerApi.updateRewardStatus(customerId, redemptionId, 'fulfilled');
-                  message.success('Item marked as fulfilled');
-                  loadData();
-                } catch (e: any) {
-                  message.error('Failed to fulfill item');
-                }
-              };
-
-              const handleBatchFulfill = async () => {
-                if (selectedRowKeys.length === 0) return;
-                try {
-                  const itemsToFulfill = redemptions.filter((r: any) => selectedRowKeys.includes(r.id) && r.status === 'pending');
-                  await Promise.all(itemsToFulfill.map((item: any) => 
-                    customerApi.updateRewardStatus(item.customerId, item.id, 'fulfilled')
-                  ));
-                  message.success(`Batch fulfilled ${itemsToFulfill.length} items successfully`);
-                  setSelectedRowKeys([]);
-                  loadData();
-                } catch (e: any) {
-                  message.error(e.message || 'Failed to fulfill some items');
-                }
-              };
-
               const columns = [
                 {
                   title: 'Customer',
@@ -406,22 +416,62 @@ export default function LoyaltyPage() {
                   render: () => <Text>1</Text>
                 },
                 {
+                  title: 'Tracking Info',
+                  key: 'tracking',
+                  render: (_: any, r: any) => (
+                    <Space direction="vertical" size={0}>
+                      {r.shipmentNo && <Text type="secondary" style={{ fontSize: 11 }}># {r.shipmentNo}</Text>}
+                      {r.trackingLink && <a href={r.trackingLink} target="_blank" rel="noopener noreferrer" style={{ fontSize: 11 }}>Track Order</a>}
+                      {!r.shipmentNo && !r.trackingLink && <Text type="secondary" style={{ fontSize: 11 }}>—</Text>}
+                    </Space>
+                  )
+                },
+                {
                   title: 'Status',
                   dataIndex: 'status',
                   key: 'status',
                   filters: [
                     { text: 'Pending', value: 'pending' },
-                    { text: 'Fulfilled', value: 'fulfilled' },
+                    { text: 'Processing', value: 'processing' },
+                    { text: 'Packed', value: 'packed' },
+                    { text: 'Shipped', value: 'shipped' },
                   ],
                   onFilter: (value: any, record: any) => record.status === value,
-                  render: (s: string) => <Tag color={s === 'pending' ? 'warning' : 'success'}>{s.toUpperCase()}</Tag>
+                  render: (s: string, r: any) => {
+                    const color = s === 'pending' ? 'warning' : s === 'processing' ? 'processing' : s === 'packed' ? 'geekblue' : 'success';
+                    let displayStatus = s;
+                    if (s === 'pending') {
+                      if (r.type === 'order') {
+                        displayStatus = r.isGwp ? 'earned' : 'redeemed';
+                      } else {
+                        displayStatus = (r.pointsSpent && r.pointsSpent > 0) ? 'redeemed' : 'earned';
+                      }
+                    }
+                    return <Tag color={color}>{displayStatus.toUpperCase()}</Tag>;
+                  }
                 },
                 {
                   title: 'Action',
                   key: 'action',
-                  render: (_: any, r: any) => r.status === 'pending' ? (
-                    <Button size="small" type="primary" onClick={() => handleFulfillSingle(r.customerId, r.id)}>Mark Shipped</Button>
-                  ) : null
+                  render: (_: any, r: any) => {
+                    const getPrev = (s: string) => s === 'shipped' ? 'packed' : s === 'packed' ? 'processing' : 'pending';
+                    return (
+                      <Space>
+                        {r.status === 'pending' && <Button size="small" type="primary" onClick={() => handleStatusUpdate(r, 'processing')}>Mark Processing</Button>}
+                        {r.status === 'processing' && <Button size="small" type="primary" onClick={() => handleStatusUpdate(r, 'packed')}>Mark Packed</Button>}
+                        {r.status === 'packed' && <Button size="small" type="primary" onClick={() => {
+                          setTrackingItem(r);
+                          trackingForm.resetFields();
+                          setTrackingModal(true);
+                        }}>Mark Shipped</Button>}
+                        {r.status !== 'pending' && (
+                          <Tooltip title={`Revert to ${getPrev(r.status).toUpperCase()}`}>
+                            <Button size="small" type="default" danger icon={<UndoOutlined />} onClick={() => handleStatusUpdate(r, getPrev(r.status))} />
+                          </Tooltip>
+                        )}
+                      </Space>
+                    );
+                  }
                 }
               ];
 
@@ -430,13 +480,17 @@ export default function LoyaltyPage() {
                   title="Warehouse Fulfillment" 
                   size="small"
                   extra={
-                    <Button 
-                      type="primary" 
-                      onClick={handleBatchFulfill} 
-                      disabled={selectedRowKeys.length === 0}
-                    >
-                      Batch Fulfill Selected ({selectedRowKeys.length})
-                    </Button>
+                    <Space>
+                      <Button onClick={() => handleBatchStatusUpdate('processing')} disabled={selectedRowKeys.length === 0}>
+                        Batch Processing
+                      </Button>
+                      <Button onClick={() => handleBatchStatusUpdate('packed')} disabled={selectedRowKeys.length === 0}>
+                        Batch Packed
+                      </Button>
+                      <Button type="primary" onClick={() => handleBatchStatusUpdate('shipped')} disabled={selectedRowKeys.length === 0}>
+                        Batch Shipped
+                      </Button>
+                    </Space>
                   }
                   style={{ background: '#f8fafc', border: '1px solid #cbd5e1', borderRadius: 8 }}
                 >
@@ -455,15 +509,6 @@ export default function LoyaltyPage() {
                     size="small"
                   />
                 </Card>
-              );
-            })()}
-          </div>
-        )}
-                        </Card>
-                      </Col>
-                    );
-                  })}
-                </Row>
               );
             })()}
           </div>
@@ -604,6 +649,21 @@ export default function LoyaltyPage() {
           </Row>
           <Form.Item name="isActive" label="Active" valuePropName="checked" initialValue={true}>
             <Switch />
+          </Form.Item>
+        </Form>
+      </Modal>
+      <Modal title="Add Tracking Information" open={trackingModal}
+        onCancel={() => setTrackingModal(false)}
+        onOk={() => trackingForm.submit()} okText="Mark as Shipped">
+        <Form form={trackingForm} layout="vertical" onFinish={(v) => {
+          handleStatusUpdate(trackingItem, 'shipped', v);
+          setTrackingModal(false);
+        }}>
+          <Form.Item name="shipmentNo" label="Shipment No. (Optional)">
+            <Input placeholder="e.g. VNPOST-123456" />
+          </Form.Item>
+          <Form.Item name="trackingLink" label="Delivery Tracking Link (Optional)">
+            <Input placeholder="https://tracking.example.com/..." />
           </Form.Item>
         </Form>
       </Modal>

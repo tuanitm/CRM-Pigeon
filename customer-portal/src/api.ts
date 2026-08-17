@@ -1,13 +1,16 @@
 const BASE_URL = 'http://localhost:3000/v1';
 
 export const api = {
-  identify: async (phone: string, fullName?: string) => {
+  identify: async (phone: string, fullName?: string, userAgent?: string) => {
     const res = await fetch(`${BASE_URL}/identify`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ phone, fullName }),
+      body: JSON.stringify({ phone, fullName, userAgent }),
     });
-    if (!res.ok) throw new Error('Identify failed');
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => ({}));
+      throw new Error(errorData.message || 'Identify failed');
+    }
     const text = await res.text();
     return text ? JSON.parse(text) : null;
   },
@@ -54,5 +57,39 @@ export const api = {
     const data = await res.json();
     if (data.error) throw new Error(data.error);
     return data;
+  },
+
+  // Support Tickets
+  getTickets: async (customerId: string) => {
+    const res = await fetch(`${BASE_URL}/support/tickets/customer/${customerId}`);
+    if (!res.ok) throw new Error('Failed to fetch tickets');
+    return res.json();
+  },
+  createTicket: async (customerId: string, subject: string, category: string, message: string) => {
+    const res = await fetch(`${BASE_URL}/support/tickets`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ customerId, subject, category, message }),
+    });
+    if (!res.ok) throw new Error('Failed to create ticket');
+    return res.json();
+  },
+  replyTicket: async (ticketId: string, message: string) => {
+    const res = await fetch(`${BASE_URL}/support/tickets/${ticketId}/reply`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message }),
+    });
+    if (!res.ok) throw new Error('Failed to send reply');
+    return res.json();
+  },
+  resolveTicket: async (ticketId: string) => {
+    const res = await fetch(`${BASE_URL}/support/tickets/${ticketId}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status: 'Resolved' }),
+    });
+    if (!res.ok) throw new Error('Failed to resolve ticket');
+    return res.json();
   }
 };
