@@ -12,4 +12,5 @@ export declare class IdentifyDto {
         stageCode?: string;
     }>;
     userAgent?: string;
+    source?: string;
 }

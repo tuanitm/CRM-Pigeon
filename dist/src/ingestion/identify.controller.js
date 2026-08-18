@@ -48,7 +48,7 @@ let IdentifyController = IdentifyController_1 = class IdentifyController {
                         email: dto.email,
                         fullName: dto.fullName,
                         customerCode: Math.floor(10000000 + Math.random() * 90000000).toString(),
-                        registrationSource: 'api',
+                        registrationSource: dto.source || 'api',
                     },
                 });
                 isNew = true;

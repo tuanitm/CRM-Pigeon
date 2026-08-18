@@ -55,4 +55,9 @@ export class IdentifyDto {
   @IsOptional()
   @IsString()
   userAgent?: string;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsString()
+  source?: string;
 }
