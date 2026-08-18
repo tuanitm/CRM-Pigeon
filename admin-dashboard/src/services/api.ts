@@ -60,48 +60,26 @@ export const eventApi = {
     request<any>('/events', { method: 'POST', body: JSON.stringify({ events }) }),
 };
 
+// Condition Dictionary APIs
+export const conditionDefinitionApi = {
+  list: () => request<any[]>('/admin/conditions'),
+  create: (data: any) => request<any>('/admin/conditions', { method: 'POST', body: JSON.stringify(data) }),
+  update: (id: string, data: any) => request<any>(`/admin/conditions/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  delete: (id: string) => request<any>(`/admin/conditions/${id}`, { method: 'DELETE' }),
+};
+
 // Serial verification
 export const serialApi = {
   verify: (serialCode: string) =>
     request<any>('/serials/verify', { method: 'POST', body: JSON.stringify({ serialCode }) }),
 };
 
-// Data Hub APIs
-export const dataHubApi = {
-  list: () => request<any[]>('/admin/data-hubs'),
-  get: (id: string) => request<any>(`/admin/data-hubs/${id}`),
-  create: (data: { name: string; source: string; ownerId?: string }) => 
-    request<any>('/admin/data-hubs', { method: 'POST', body: JSON.stringify(data) }),
-  update: (id: string, data: { name?: string; source?: string }) =>
-    request<any>(`/admin/data-hubs/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
-  delete: (id: string) =>
-    request<any>(`/admin/data-hubs/${id}`, { method: 'DELETE' }),
-
-  // Tables
-  addTable: (hubId: string, name: string) =>
-    request<any>(`/admin/data-hubs/${hubId}/tables`, { method: 'POST', body: JSON.stringify({ name }) }),
-  updateTable: (tableId: string, name: string) =>
-    request<any>(`/admin/data-hubs/tables/${tableId}`, { method: 'PATCH', body: JSON.stringify({ name }) }),
-  deleteTable: (tableId: string) =>
-    request<any>(`/admin/data-hubs/tables/${tableId}`, { method: 'DELETE' }),
-
-  // Columns
-  addColumn: (tableId: string, name: string, dataType: string) =>
-    request<any>(`/admin/data-hubs/tables/${tableId}/columns`, { method: 'POST', body: JSON.stringify({ name, dataType }) }),
-  updateColumn: (colId: string, data: { name?: string; dataType?: string }) =>
-    request<any>(`/admin/data-hubs/columns/${colId}`, { method: 'PATCH', body: JSON.stringify(data) }),
-  deleteColumn: (colId: string) =>
-    request<any>(`/admin/data-hubs/columns/${colId}`, { method: 'DELETE' }),
-
-  // Records
-  getRecords: (tableId: string) =>
-    request<any[]>(`/admin/data-hubs/tables/${tableId}/records`),
-  addRecord: (tableId: string, data: any) =>
-    request<any>(`/admin/data-hubs/tables/${tableId}/records`, { method: 'POST', body: JSON.stringify({ data }) }),
-  updateRecord: (recordId: string, data: any) =>
-    request<any>(`/admin/data-hubs/records/${recordId}`, { method: 'PATCH', body: JSON.stringify({ data }) }),
-  deleteRecord: (recordId: string) =>
-    request<any>(`/admin/data-hubs/records/${recordId}`, { method: 'DELETE' }),
+// Journey APIs
+export const journeyApi = {
+  list: () => request<any[]>('/journey/list'),
+  create: (data: any) => request<any>('/journey', { method: 'POST', body: JSON.stringify(data) }),
+  update: (id: string, data: any) =>
+    request<any>(`/journey/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
 };
 
 // Dynamic Action APIs
@@ -116,22 +94,6 @@ export const dynamicActionApi = {
     request<any>(`/admin/dynamic-actions/${id}/status`, { method: 'PATCH', body: JSON.stringify({ status }) }),
   delete: (id: string) =>
     request<any>(`/admin/dynamic-actions/${id}`, { method: 'DELETE' }),
-
-  // Pages
-  addPage: (actionId: string, data: any) =>
-    request<any>(`/admin/dynamic-actions/${actionId}/pages`, { method: 'POST', body: JSON.stringify(data) }),
-  updatePage: (pageId: string, data: any) =>
-    request<any>(`/admin/dynamic-actions/pages/${pageId}`, { method: 'PATCH', body: JSON.stringify(data) }),
-  deletePage: (pageId: string) =>
-    request<any>(`/admin/dynamic-actions/pages/${pageId}`, { method: 'DELETE' }),
-
-  // Components
-  addComponent: (pageId: string, data: any) =>
-    request<any>(`/admin/dynamic-actions/pages/${pageId}/components`, { method: 'POST', body: JSON.stringify(data) }),
-  updateComponent: (compId: string, data: any) =>
-    request<any>(`/admin/dynamic-actions/components/${compId}`, { method: 'PATCH', body: JSON.stringify(data) }),
-  deleteComponent: (compId: string) =>
-    request<any>(`/admin/dynamic-actions/components/${compId}`, { method: 'DELETE' }),
 };
 
 // Zalo OA APIs

@@ -14,7 +14,11 @@ async function bootstrap() {
     app.use((0, helmet_1.default)());
     app.use((0, compression_1.default)());
     app.enableCors({
-        origin: process.env.CORS_ORIGINS?.split(',') || ['http://localhost:3001', 'http://localhost:5173', 'http://localhost:5174'],
+        origin: process.env.CORS_ORIGINS?.split(',') || [
+            'http://localhost:3001',
+            'http://localhost:5173',
+            'http://localhost:5174',
+        ],
         credentials: true,
     });
     app.useGlobalPipes(new common_1.ValidationPipe({

@@ -124,7 +124,9 @@ let RuleEvaluatorService = RuleEvaluatorService_1 = class RuleEvaluatorService {
                 }
                 return null;
             case 'loyalty_account':
-                return ctx.loyaltyAccount ? this.getNestedValue(ctx.loyaltyAccount, field) : null;
+                return ctx.loyaltyAccount
+                    ? this.getNestedValue(ctx.loyaltyAccount, field)
+                    : null;
             default:
                 return this.getNestedValue(ctx.customer, fieldPath);
         }
@@ -134,17 +136,28 @@ let RuleEvaluatorService = RuleEvaluatorService_1 = class RuleEvaluatorService {
     }
     compareValues(actual, op, expected) {
         switch (op) {
-            case 'eq': return actual === expected;
-            case 'neq': return actual !== expected;
-            case 'gt': return actual > expected;
-            case 'gte': return actual >= expected;
-            case 'lt': return actual < expected;
-            case 'lte': return actual <= expected;
-            case 'in': return Array.isArray(expected) && expected.includes(actual);
-            case 'not_in': return Array.isArray(expected) && !expected.includes(actual);
-            case 'contains': return typeof actual === 'string' && actual.includes(expected);
-            case 'is_null': return actual === null || actual === undefined;
-            case 'is_not_null': return actual !== null && actual !== undefined;
+            case 'eq':
+                return actual === expected;
+            case 'neq':
+                return actual !== expected;
+            case 'gt':
+                return actual > expected;
+            case 'gte':
+                return actual >= expected;
+            case 'lt':
+                return actual < expected;
+            case 'lte':
+                return actual <= expected;
+            case 'in':
+                return Array.isArray(expected) && expected.includes(actual);
+            case 'not_in':
+                return Array.isArray(expected) && !expected.includes(actual);
+            case 'contains':
+                return typeof actual === 'string' && actual.includes(expected);
+            case 'is_null':
+                return actual === null || actual === undefined;
+            case 'is_not_null':
+                return actual !== null && actual !== undefined;
             default:
                 this.logger.warn(`Unknown operator: ${op}`);
                 return false;

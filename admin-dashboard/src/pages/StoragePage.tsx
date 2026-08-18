@@ -144,11 +144,11 @@ export default function StoragePage() {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
           <Space>
             <CloudOutlined style={{ color: '#3b82f6' }} />
-            <Text strong>Tất cả file</Text>
+            <Text strong>All files</Text>
           </Space>
           <Space>
             <Input
-              placeholder="Tìm theo tên file, nhãn, người tải lên..."
+              placeholder="Search by file name, tag, uploader..."
               prefix={<SearchOutlined />}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -156,11 +156,11 @@ export default function StoragePage() {
               allowClear
             />
             <Select defaultValue="folder" style={{ width: 100 }} options={[
-              { value: 'folder', label: 'Thư mục' },
-              { value: 'type', label: 'Loại' },
+              { value: 'folder', label: 'Folder' },
+              { value: 'type', label: 'Type' },
             ]} />
-            <Button icon={<FilterOutlined />}>Bộ lọc</Button>
-            <Button icon={<SortAscendingOutlined />}>Mới nhất trước</Button>
+            <Button icon={<FilterOutlined />}>Filter</Button>
+            <Button icon={<SortAscendingOutlined />}>Newest first</Button>
             <Button
               type={viewMode === 'grid' ? 'primary' : 'default'}
               icon={<AppstoreOutlined />}
@@ -241,9 +241,9 @@ export default function StoragePage() {
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid #e5e7eb' }}>
-                  <th style={{ textAlign: 'left', padding: '10px 16px', fontSize: 12, color: '#6b7280', fontWeight: 600 }}>Tên file</th>
-                  <th style={{ textAlign: 'left', padding: '10px 16px', fontSize: 12, color: '#6b7280', fontWeight: 600 }}>Loại</th>
-                  <th style={{ textAlign: 'left', padding: '10px 16px', fontSize: 12, color: '#6b7280', fontWeight: 600 }}>Dung lượng</th>
+                  <th style={{ textAlign: 'left', padding: '10px 16px', fontSize: 12, color: '#6b7280', fontWeight: 600 }}>File Name</th>
+                  <th style={{ textAlign: 'left', padding: '10px 16px', fontSize: 12, color: '#6b7280', fontWeight: 600 }}>Type</th>
+                  <th style={{ textAlign: 'left', padding: '10px 16px', fontSize: 12, color: '#6b7280', fontWeight: 600 }}>Size</th>
                 </tr>
               </thead>
               <tbody>
@@ -269,7 +269,7 @@ export default function StoragePage() {
         )}
 
         <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 12 }}>
-          <Text type="secondary" style={{ fontSize: 12 }}>Trang 1/1 · {filtered.length} mục</Text>
+          <Text type="secondary" style={{ fontSize: 12 }}>Page 1/1 · {filtered.length} items</Text>
         </div>
       </div>
     </div>

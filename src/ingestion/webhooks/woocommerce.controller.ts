@@ -1,4 +1,14 @@
-import { Controller, Post, Body, HttpCode, HttpStatus, Headers, Logger, RawBodyRequest, Req } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  HttpCode,
+  HttpStatus,
+  Headers,
+  Logger,
+  RawBodyRequest,
+  Req,
+} from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 import { InjectQueue } from '@nestjs/bullmq';
@@ -31,7 +41,7 @@ export class WooCommerceWebhookController {
       INSERT INTO webhook_inbox (id, source, event_type, payload, signature_valid, received_at)
       VALUES (uuid_generate_v4(), 'woocommerce', ${topic}, ${JSON.stringify(payload)}::jsonb, ${!!signature}, NOW())
       RETURNING id
-    ` as any[];
+    `;
 
     // Enqueue for async processing (must respond within 2 seconds)
     await this.webhookQueue.add('woo-webhook', {

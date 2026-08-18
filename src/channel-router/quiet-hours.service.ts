@@ -17,7 +17,11 @@ export class QuietHoursService {
   isQuietHours(): boolean {
     const now = new Date();
     const vnHour = parseInt(
-      now.toLocaleString('en-US', { timeZone: this.timezone, hour: 'numeric', hour12: false }),
+      now.toLocaleString('en-US', {
+        timeZone: this.timezone,
+        hour: 'numeric',
+        hour12: false,
+      }),
     );
     // Quiet: 21:00-23:59 or 00:00-06:59
     return vnHour >= this.quietStart || vnHour < this.quietEnd;

@@ -42,17 +42,19 @@ let LoyaltyController = class LoyaltyController {
         this.prisma = prisma;
     }
     async getAccount(customerId) {
-        let account = await this.prisma.loyaltyAccount.findUnique({
+        const account = await this.prisma.loyaltyAccount.findUnique({
             where: { customerId },
             include: { tier: true },
         });
         if (!account) {
-            const defaultTier = await this.prisma.loyaltyTierConfig.findFirst({ where: { isDefault: true } });
+            const defaultTier = await this.prisma.loyaltyTierConfig.findFirst({
+                where: { isDefault: true },
+            });
             return {
                 customerId,
                 pointsBalance: 0,
                 pointsLifetime: 0,
-                tier: { tierCode: defaultTier?.tierCode || 'NONE' }
+                tier: { tierCode: defaultTier?.tierCode || 'NONE' },
             };
         }
         return account;

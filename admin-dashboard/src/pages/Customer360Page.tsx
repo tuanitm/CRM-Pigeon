@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import {
   Card, Typography, Row, Col, Statistic, Tag, Space, Table, Avatar,
   Input, Button, Badge, Descriptions, Tabs, Empty, Timeline, Select,
@@ -20,16 +20,17 @@ const { Title, Text } = Typography;
 const demoCustomers = [
   { id: 'a1b2c3d4', fullName: 'Nguyen Thi Mai', phone: '+84901234567', email: 'mai@example.com', gender: 'Female', source: 'Zalo OA', tier: 'GOLD', points: 2_450, orderCount: 12, totalSpend: 15_800_000, lastOrder: '28/07/2026', babies: [{ id: '1', name: 'Bé An', stageCode: 'INFANT' }], flag: null },
   { id: 'b2c3d4e5', fullName: 'Tran Van Duc', phone: '+84912345678', email: 'duc@example.com', gender: 'Male', source: 'Website', tier: 'SILVER', points: 890, orderCount: 5, totalSpend: 6_200_000, lastOrder: '25/07/2026', babies: [], flag: null },
-  { id: 'c3d4e5f6', fullName: 'Le Thi Hoa', phone: '+84923456789', email: null, gender: 'Female', source: 'QR Scan', tier: 'MEMBER', points: 120, orderCount: 1, totalSpend: 450_000, lastOrder: '20/07/2026', babies: [{ id: '2', name: 'Bé Bình', stageCode: 'NEWBORN' }, { id: '3', name: 'Bé Châu', stageCode: 'TODDLER' }], flag: 'missing_email' },
-  { id: 'd4e5f6a7', fullName: 'Pham Minh Tuan', phone: '+84934567890', email: 'tuan@example.com', gender: 'Male', source: 'Referral', tier: 'MEMBER', points: 50, orderCount: 0, totalSpend: 0, lastOrder: null, babies: [], flag: 'no_purchase' },
+  { id: 'c3d4e5f6', fullName: 'Le Thi Hoa', phone: '+84923456789', email: null, gender: 'Female', source: 'QR Scan', tier: 'BRONZE', points: 120, orderCount: 1, totalSpend: 450_000, lastOrder: '20/07/2026', babies: [{ id: '2', name: 'Bé Bình', stageCode: 'NEWBORN' }, { id: '3', name: 'Bé Châu', stageCode: 'TODDLER' }], flag: 'missing_email' },
+  { id: 'd4e5f6a7', fullName: 'Pham Minh Tuan', phone: '+84934567890', email: 'tuan@example.com', gender: 'Male', source: 'Referral', tier: 'BRONZE', points: 50, orderCount: 0, totalSpend: 0, lastOrder: null, babies: [], flag: 'no_purchase' },
   { id: 'e5f6a7b8', fullName: 'Vo Thi Lan', phone: '+84945678901', email: 'lan@example.com', gender: 'Female', source: 'Zalo Mini App', tier: 'SILVER', points: 1_580, orderCount: 8, totalSpend: 10_400_000, lastOrder: '27/07/2026', babies: [{ id: '4', name: 'Bé Dũng', stageCode: 'INFANT' }], flag: null },
   { id: 'f6a7b8c9', fullName: 'Hoang Van Nam', phone: '+84956789012', email: 'nam@example.com', gender: 'Male', source: 'Email Campaign', tier: 'GOLD', points: 3_200, orderCount: 15, totalSpend: 22_000_000, lastOrder: '29/07/2026', babies: [], flag: null },
-  { id: 'g7b8c9d0', fullName: 'Bui Thi Thuy', phone: '+84967890123', email: null, gender: 'Female', source: 'Walk-in', tier: 'MEMBER', points: 0, orderCount: 0, totalSpend: 0, lastOrder: null, babies: [], flag: 'no_email_no_purchase' },
+  { id: 'g7b8c9d0', fullName: 'Bui Thi Thuy', phone: '+84967890123', email: null, gender: 'Female', source: 'Walk-in', tier: 'BRONZE', points: 0, orderCount: 0, totalSpend: 0, lastOrder: null, babies: [], flag: 'no_email_no_purchase' },
 ];
 
 export default function Customer360Page() {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<'overview' | 'customers'>('overview');
+  const location = useLocation();
+  const [activeTab, setActiveTab] = useState<'overview' | 'customers'>(location.state?.tab || 'overview');
   const [search, setSearch] = useState('');
   const [selectedCustomer, setSelectedCustomer] = useState<any>(null);
   const [modalOpen, setModalOpen] = useState(false);
@@ -144,7 +145,7 @@ export default function Customer360Page() {
       title: 'Customer',
       key: 'name',
       render: (_: any, r: any) => {
-        const tier = r.tier || r.loyaltyAccount?.tierId || 'MEMBER';
+        const tier = r.tier || r.loyaltyAccount?.tierId || 'BRONZE';
         const color = tier === 'GOLD' ? '#f59e0b' : tier === 'SILVER' ? '#94a3b8' : '#3b82f6';
         const isShop = r.customerType === 'Outlet' || r.customerType === 'Keyshop';
         return (
@@ -338,7 +339,7 @@ export default function Customer360Page() {
                   <Title level={5} style={{ margin: 0, fontWeight: 700, marginBottom: 16 }}>Loyalty Tiers</Title>
                   {metrics?.tierCounts && metrics.tierCounts.length > 0 ? (() => {
                     const total = metrics.tierCounts.reduce((s: number, t: any) => s + t.count, 0) || 1;
-                    const tierColors: Record<string, string> = { GOLD: '#f59e0b', SILVER: '#94a3b8', MEMBER: '#3b82f6', PLATINUM: '#8b5cf6' };
+                    const tierColors: Record<string, string> = { GOLD: '#f59e0b', SILVER: '#94a3b8', BRONZE: '#3b82f6', PLATINUM: '#8b5cf6' };
                     return metrics.tierCounts.map((t: any) => (
                       <div key={t.tier} style={{ marginBottom: 12 }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>

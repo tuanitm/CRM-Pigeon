@@ -1,8 +1,98 @@
 import { PrismaService } from '../shared/prisma/prisma.service';
+import { JourneyEngineService } from '../engines/journey/journey-engine.service';
+import { JourneyRunService } from '../engines/journey/journey-run.service';
 export declare class ProfileController {
     private prisma;
-    constructor(prisma: PrismaService);
+    private journeyEngine;
+    private journeyRunService;
+    private readonly logger;
+    constructor(prisma: PrismaService, journeyEngine: JourneyEngineService, journeyRunService: JourneyRunService);
     getProfile(id: string): Promise<({
+        loyaltyAccount: ({
+            tier: {
+                id: string;
+                createdAt: Date;
+                updatedAt: Date;
+                tierCode: string;
+                tierName: string;
+                tierOrder: number;
+                minNetSpend: import("@prisma/client-runtime-utils").Decimal;
+                minDistinctMonths: number;
+                pointsMultiplier: import("@prisma/client-runtime-utils").Decimal;
+                benefits: import("@prisma/client/runtime/client").JsonValue | null;
+                isDefault: boolean;
+            } | null;
+            transactions: {
+                type: string;
+                id: string;
+                createdAt: Date;
+                description: string | null;
+                customerId: string;
+                idempotencyKey: string | null;
+                source: string;
+                points: number;
+                balanceAfter: number;
+                referenceType: string | null;
+                referenceId: string | null;
+                expiresAt: Date | null;
+                loyaltyAccountId: string;
+            }[];
+        } & {
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            customerId: string;
+            tierId: string | null;
+            pointsBalance: number;
+            pointsLifetime: number;
+            pointsRedeemed: number;
+            pointsExpired: number;
+            netSpend: import("@prisma/client-runtime-utils").Decimal;
+            distinctOrderMonths: number;
+            tierEvaluatedAt: Date | null;
+        }) | null;
+        event: {
+            id: string;
+            customer_id: string | null;
+            properties: import("@prisma/client/runtime/client").JsonValue;
+            context: import("@prisma/client/runtime/client").JsonValue | null;
+            source: string | null;
+            event_type: string;
+            anonymous_id: string | null;
+            occurred_at: Date;
+            idempotency_key: string | null;
+            received_at: Date;
+        }[];
+        journey_run: ({
+            journey: {
+                id: string;
+                createdAt: Date;
+                updatedAt: Date;
+                name: string;
+                code: string;
+                description: string | null;
+                graph: import("@prisma/client/runtime/client").JsonValue;
+                triggerEvent: string | null;
+                triggerSegmentId: string | null;
+                entryConditions: import("@prisma/client/runtime/client").JsonValue | null;
+                exitConditions: import("@prisma/client/runtime/client").JsonValue | null;
+                version: number;
+                status: string;
+                hasControlGroup: boolean;
+                controlGroupPct: import("@prisma/client-runtime-utils").Decimal | null;
+            };
+        } & {
+            id: string;
+            customer_id: string;
+            entered_at: Date;
+            exited_at: Date | null;
+            context: import("@prisma/client/runtime/client").JsonValue | null;
+            status: string;
+            journey_id: string;
+            current_node_id: string | null;
+            exit_reason: string | null;
+            journey_version: number;
+        })[];
         babies: {
             id: string;
             gender: string | null;
@@ -20,13 +110,13 @@ export declare class ProfileController {
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            ipAddress: string | null;
             customerId: string;
             channel: string;
             status: string;
             documentVersionId: string | null;
             grantedAt: Date | null;
             revokedAt: Date | null;
+            ipAddress: string | null;
         }[];
         addresses: {
             id: string;
@@ -49,91 +139,6 @@ export declare class ProfileController {
             source: string | null;
             tag: string;
         }[];
-        event: {
-            id: string;
-            customer_id: string | null;
-            properties: import("@prisma/client/runtime/client").JsonValue;
-            context: import("@prisma/client/runtime/client").JsonValue | null;
-            source: string | null;
-            event_type: string;
-            anonymous_id: string | null;
-            occurred_at: Date;
-            idempotency_key: string | null;
-            received_at: Date;
-        }[];
-        journey_run: ({
-            journey: {
-                id: string;
-                createdAt: Date;
-                updatedAt: Date;
-                name: string;
-                code: string;
-                description: string | null;
-                status: string;
-                graph: import("@prisma/client/runtime/client").JsonValue;
-                triggerEvent: string | null;
-                triggerSegmentId: string | null;
-                entryConditions: import("@prisma/client/runtime/client").JsonValue | null;
-                exitConditions: import("@prisma/client/runtime/client").JsonValue | null;
-                version: number;
-                hasControlGroup: boolean;
-                controlGroupPct: import("@prisma/client-runtime-utils").Decimal | null;
-            };
-        } & {
-            id: string;
-            customer_id: string;
-            entered_at: Date;
-            exited_at: Date | null;
-            context: import("@prisma/client/runtime/client").JsonValue | null;
-            status: string;
-            journey_id: string;
-            current_node_id: string | null;
-            exit_reason: string | null;
-            journey_version: number;
-        })[];
-        loyaltyAccount: ({
-            tier: {
-                id: string;
-                createdAt: Date;
-                updatedAt: Date;
-                tierCode: string;
-                tierName: string;
-                tierOrder: number;
-                minNetSpend: import("@prisma/client-runtime-utils").Decimal;
-                minDistinctMonths: number;
-                pointsMultiplier: import("@prisma/client-runtime-utils").Decimal;
-                benefits: import("@prisma/client/runtime/client").JsonValue | null;
-                isDefault: boolean;
-            } | null;
-            transactions: {
-                id: string;
-                createdAt: Date;
-                type: string;
-                description: string | null;
-                customerId: string;
-                idempotencyKey: string | null;
-                source: string;
-                points: number;
-                referenceType: string | null;
-                referenceId: string | null;
-                balanceAfter: number;
-                expiresAt: Date | null;
-                loyaltyAccountId: string;
-            }[];
-        } & {
-            id: string;
-            createdAt: Date;
-            updatedAt: Date;
-            customerId: string;
-            tierId: string | null;
-            pointsBalance: number;
-            pointsLifetime: number;
-            pointsRedeemed: number;
-            pointsExpired: number;
-            netSpend: import("@prisma/client-runtime-utils").Decimal;
-            distinctOrderMonths: number;
-            tierEvaluatedAt: Date | null;
-        }) | null;
         orders: ({
             items: ({
                 product: {
@@ -142,6 +147,7 @@ export declare class ProfileController {
                     createdAt: Date;
                     updatedAt: Date;
                     name: string;
+                    isGwp: boolean;
                     sku: string;
                     wooProductId: bigint | null;
                     category: string | null;
@@ -149,16 +155,15 @@ export declare class ProfileController {
                     brand: string | null;
                     stageCodes: import("@prisma/client/runtime/client").JsonValue | null;
                     price: import("@prisma/client-runtime-utils").Decimal | null;
-                    isGwp: boolean;
                 } | null;
             } & {
                 id: string;
                 createdAt: Date;
                 sku: string | null;
-                productId: string | null;
                 quantity: number;
                 unitPrice: import("@prisma/client-runtime-utils").Decimal;
                 totalPrice: import("@prisma/client-runtime-utils").Decimal;
+                productId: string | null;
                 orderId: string;
             })[];
         } & {
@@ -168,8 +173,6 @@ export declare class ProfileController {
             customerId: string;
             channel: string | null;
             status: string;
-            isGwp: boolean;
-            isInternal: boolean;
             shipmentNo: string | null;
             trackingLink: string | null;
             wooOrderId: bigint | null;
@@ -178,6 +181,8 @@ export declare class ProfileController {
             discountAmount: import("@prisma/client-runtime-utils").Decimal;
             netAmount: import("@prisma/client-runtime-utils").Decimal;
             currency: string;
+            isGwp: boolean;
+            isInternal: boolean;
             orderedAt: Date;
         })[];
         reward_redemption: ({
@@ -203,11 +208,11 @@ export declare class ProfileController {
             customerId: string;
             idempotencyKey: string | null;
             status: string;
-            loyaltyAccountId: string;
             pointsSpent: number;
             shipmentNo: string | null;
             trackingLink: string | null;
             fulfilledAt: Date | null;
+            loyaltyAccountId: string;
             rewardId: string;
         })[];
         devices: {
@@ -240,6 +245,9 @@ export declare class ProfileController {
         createdAt: Date;
         updatedAt: Date;
     }) | null>;
+    debugBabyJourney(id: string): Promise<{
+        success: boolean;
+    }>;
     updateProfile(id: string, data: any): Promise<{
         id: string;
         customerCode: string | null;
@@ -260,7 +268,6 @@ export declare class ProfileController {
         createdAt: Date;
         updatedAt: Date;
     }>;
-    private evaluateWelcomeBonus;
     updateRewardRedemptionStatus(id: string, redemptionId: string, data: {
         status: string;
         shipmentNo?: string;
@@ -272,11 +279,11 @@ export declare class ProfileController {
         customerId: string;
         idempotencyKey: string | null;
         status: string;
-        loyaltyAccountId: string;
         pointsSpent: number;
         shipmentNo: string | null;
         trackingLink: string | null;
         fulfilledAt: Date | null;
+        loyaltyAccountId: string;
         rewardId: string;
     }>;
     updateOrderStatus(id: string, orderId: string, data: {
@@ -290,8 +297,6 @@ export declare class ProfileController {
         customerId: string;
         channel: string | null;
         status: string;
-        isGwp: boolean;
-        isInternal: boolean;
         shipmentNo: string | null;
         trackingLink: string | null;
         wooOrderId: bigint | null;
@@ -300,6 +305,8 @@ export declare class ProfileController {
         discountAmount: import("@prisma/client-runtime-utils").Decimal;
         netAmount: import("@prisma/client-runtime-utils").Decimal;
         currency: string;
+        isGwp: boolean;
+        isInternal: boolean;
         orderedAt: Date;
     }>;
 }

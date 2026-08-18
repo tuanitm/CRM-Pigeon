@@ -1,4 +1,12 @@
-import { Controller, Post, Body, Get, Param, HttpCode, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Param,
+  HttpCode,
+  HttpStatus,
+} from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { PrismaService } from '../shared/prisma/prisma.service';
 import { PointsService } from '../engines/loyalty/points.service';
@@ -14,7 +22,9 @@ export class SerialController {
 
   @Post('verify')
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Verify product serial (public — no auth required)' })
+  @ApiOperation({
+    summary: 'Verify product serial (public — no auth required)',
+  })
   async verifySerial(@Body() data: { serialCode: string; ipAddress?: string }) {
     const serial = await this.prisma.$queryRaw`
       SELECT ps.*, p.name as product_name, p.category, sb.batch_code
@@ -22,11 +32,14 @@ export class SerialController {
       JOIN product p ON p.id = ps.product_id
       JOIN serial_batch sb ON sb.id = ps.batch_id
       WHERE ps.serial_code = ${data.serialCode}
-    ` as any[];
+    `;
 
     if (!serial.length) {
       // Log scan attempt
-      return { valid: false, message: 'Serial code not found. This product may not be authentic.' };
+      return {
+        valid: false,
+        message: 'Serial code not found. This product may not be authentic.',
+      };
     }
 
     const s = serial[0];
@@ -54,7 +67,7 @@ export class SerialController {
 
     const serials = await this.prisma.product_serial.findMany({
       where: { serial_code: data.serialCode },
-      include: { product: true }
+      include: { product: true },
     });
 
     if (!serials.length) {
@@ -64,7 +77,10 @@ export class SerialController {
     const serial = serials[0];
 
     if (serial.status !== 'active') {
-      return { status: 'error', message: 'This serial code has already been claimed.' };
+      return {
+        status: 'error',
+        message: 'This serial code has already been claimed.',
+      };
     }
 
     // Mark as claimed
@@ -74,7 +90,7 @@ export class SerialController {
         status: 'claimed',
         claimed_by: data.customerId,
         claimed_at: new Date(),
-      }
+      },
     });
 
     // Record the scan
@@ -83,7 +99,7 @@ export class SerialController {
         serial_id: serial.id,
         customer_id: data.customerId,
         scan_result: 'claimed',
-      }
+      },
     });
 
     // Award points
@@ -95,7 +111,7 @@ export class SerialController {
       referenceType: 'product_serial',
       referenceId: serial.id,
       description: `Claimed QR code for ${serial.product.name}`,
-      idempotencyKey: uuidv4()
+      idempotencyKey: uuidv4(),
     });
 
     if (result.success) {
@@ -106,12 +122,16 @@ export class SerialController {
           properties: {
             points: 100,
             productName: serial.product.name,
-            serialCode: data.serialCode
+            serialCode: data.serialCode,
           },
-          source: 'customer-portal'
-        }
+          source: 'customer-portal',
+        },
       });
-      return { status: 'claimed', message: 'Points awarded successfully', newBalance: result.newBalance };
+      return {
+        status: 'claimed',
+        message: 'Points awarded successfully',
+        newBalance: result.newBalance,
+      };
     } else {
       return { status: 'error', message: result.error };
     }

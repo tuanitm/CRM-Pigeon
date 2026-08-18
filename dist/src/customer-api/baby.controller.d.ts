@@ -1,17 +1,20 @@
 import { PrismaService } from '../shared/prisma/prisma.service';
+import { JourneyRunService } from '../engines/journey/journey-run.service';
 export declare class BabyController {
     private prisma;
-    constructor(prisma: PrismaService);
+    private journeyRunService;
+    private readonly logger;
+    constructor(prisma: PrismaService, journeyRunService: JourneyRunService);
     listBabies(customerId: string): Promise<({
         growthLogs: {
             id: string;
             notes: string | null;
             createdAt: Date;
+            babyId: string;
             recordedAt: Date;
             weightKg: import("@prisma/client-runtime-utils").Decimal | null;
             heightCm: import("@prisma/client-runtime-utils").Decimal | null;
             headCircumferenceCm: import("@prisma/client-runtime-utils").Decimal | null;
-            babyId: string;
         }[];
     } & {
         id: string;

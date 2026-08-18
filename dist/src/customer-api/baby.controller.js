@@ -11,15 +11,20 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+var BabyController_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BabyController = void 0;
 const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
 const prisma_service_1 = require("../shared/prisma/prisma.service");
-let BabyController = class BabyController {
+const journey_run_service_1 = require("../engines/journey/journey-run.service");
+let BabyController = BabyController_1 = class BabyController {
     prisma;
-    constructor(prisma) {
+    journeyRunService;
+    logger = new common_1.Logger(BabyController_1.name);
+    constructor(prisma, journeyRunService) {
         this.prisma = prisma;
+        this.journeyRunService = journeyRunService;
     }
     async listBabies(customerId) {
         return this.prisma.baby.findMany({
@@ -28,7 +33,7 @@ let BabyController = class BabyController {
         });
     }
     async createBaby(data) {
-        return this.prisma.baby.create({
+        const baby = await this.prisma.baby.create({
             data: {
                 customerId: data.customerId,
                 name: data.name,
@@ -39,6 +44,14 @@ let BabyController = class BabyController {
                 feedingType: data.feedingType,
             },
         });
+        try {
+            await this.journeyRunService.handleEventTrigger('baby.profile_created', data.customerId, { babyId: baby.id, babyName: baby.name });
+            this.logger.log(`Fired baby.profile_created event for customer ${data.customerId}`);
+        }
+        catch (err) {
+            this.logger.error(`Failed to fire baby.profile_created: ${err.message}`);
+        }
+        return baby;
     }
     async updateBaby(id, data) {
         return this.prisma.baby.update({ where: { id }, data });
@@ -81,9 +94,10 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], BabyController.prototype, "deleteBaby", null);
-exports.BabyController = BabyController = __decorate([
+exports.BabyController = BabyController = BabyController_1 = __decorate([
     (0, swagger_1.ApiTags)('Baby Profile'),
     (0, common_1.Controller)('babies'),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService,
+        journey_run_service_1.JourneyRunService])
 ], BabyController);
 //# sourceMappingURL=baby.controller.js.map

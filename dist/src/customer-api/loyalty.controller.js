@@ -27,7 +27,10 @@ let LoyaltyController = class LoyaltyController {
     async getLoyalty(customerId) {
         return this.prisma.loyaltyAccount.findUnique({
             where: { customerId },
-            include: { tier: true, transactions: { orderBy: { createdAt: 'desc' }, take: 20 } },
+            include: {
+                tier: true,
+                transactions: { orderBy: { createdAt: 'desc' }, take: 20 },
+            },
         });
     }
     async getRewards(customerId) {
@@ -37,7 +40,6 @@ let LoyaltyController = class LoyaltyController {
         return this.prisma.rewardCatalog.findMany({
             where: {
                 isActive: true,
-                pointsCost: { lte: account?.pointsBalance || 0 },
             },
             orderBy: { pointsCost: 'asc' },
         });
@@ -51,10 +53,14 @@ let LoyaltyController = class LoyaltyController {
             const isDup = await this.redis.checkIdempotency(data.idempotencyKey);
             if (isDup)
                 return { status: 'duplicate' };
-            const reward = await this.prisma.rewardCatalog.findUnique({ where: { code: data.rewardCode } });
+            const reward = await this.prisma.rewardCatalog.findUnique({
+                where: { code: data.rewardCode },
+            });
             if (!reward || !reward.isActive)
                 return { error: 'Reward not found or inactive' };
-            const account = await this.prisma.loyaltyAccount.findUnique({ where: { customerId } });
+            const account = await this.prisma.loyaltyAccount.findUnique({
+                where: { customerId },
+            });
             if (!account)
                 return { error: 'No loyalty account found' };
             if (account.pointsBalance < reward.pointsCost)
@@ -82,7 +88,9 @@ let LoyaltyController = class LoyaltyController {
                 },
             });
             if (reward.category === 'product') {
-                const product = await this.prisma.product.findFirst({ where: { sku: reward.code } });
+                const product = await this.prisma.product.findFirst({
+                    where: { sku: reward.code },
+                });
                 await this.prisma.order.create({
                     data: {
                         customerId,
@@ -97,10 +105,10 @@ let LoyaltyController = class LoyaltyController {
                                 sku: reward.code,
                                 quantity: 1,
                                 unitPrice: 0,
-                                totalPrice: 0
-                            }
-                        }
-                    }
+                                totalPrice: 0,
+                            },
+                        },
+                    },
                 });
             }
             else {
@@ -111,8 +119,8 @@ let LoyaltyController = class LoyaltyController {
                         rewardId: reward.id,
                         pointsSpent: reward.pointsCost,
                         status: 'pending',
-                        idempotencyKey: data.idempotencyKey
-                    }
+                        idempotencyKey: data.idempotencyKey,
+                    },
                 });
             }
             await this.prisma.event.create({
@@ -123,10 +131,10 @@ let LoyaltyController = class LoyaltyController {
                         rewardCode: reward.code,
                         rewardName: reward.name,
                         pointsSpent: reward.pointsCost,
-                        category: reward.category
+                        category: reward.category,
                     },
-                    source: 'customer-portal'
-                }
+                    source: 'customer-portal',
+                },
             });
             return { status: 'redeemed', pointsSpent: reward.pointsCost, newBalance };
         }

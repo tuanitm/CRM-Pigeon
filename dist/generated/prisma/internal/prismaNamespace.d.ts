@@ -193,6 +193,7 @@ export declare const ModelName: {
     readonly checklist_progress: "checklist_progress";
     readonly customer_metrics_daily: "customer_metrics_daily";
     readonly data_layer_definition: "data_layer_definition";
+    readonly ConditionDefinition: "ConditionDefinition";
     readonly data_quality_flag_log: "data_quality_flag_log";
     readonly data_quality_rule: "data_quality_rule";
     readonly dsr_request: "dsr_request";
@@ -227,13 +228,7 @@ export declare const ModelName: {
     readonly warranty_registration: "warranty_registration";
     readonly webhook_inbox: "webhook_inbox";
     readonly SystemConfig: "SystemConfig";
-    readonly DataHub: "DataHub";
     readonly DynamicAction: "DynamicAction";
-    readonly DynamicActionPage: "DynamicActionPage";
-    readonly DynamicActionComponent: "DynamicActionComponent";
-    readonly DataHubTable: "DataHubTable";
-    readonly DataHubColumn: "DataHubColumn";
-    readonly DataHubRecord: "DataHubRecord";
     readonly ZaloOA: "ZaloOA";
     readonly ZaloMiniApp: "ZaloMiniApp";
     readonly SupportTicket: "SupportTicket";
@@ -251,7 +246,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         omit: GlobalOmitOptions;
     };
     meta: {
-        modelProps: "customer" | "customerIdentity" | "mergeCandidate" | "customerAddress" | "customerTag" | "baby" | "babyGrowthLog" | "babyStageHistory" | "consentDocumentVersion" | "consent" | "product" | "productLifecycleRule" | "order" | "orderItem" | "productExchange" | "review" | "loyaltyTierConfig" | "loyaltyAccount" | "loyaltyTransaction" | "loyaltyEarnRule" | "rewardCatalog" | "rewardRedemption" | "segment" | "journey" | "messageTemplate" | "role" | "adminUser" | "auditLog" | "campaign_control_group" | "checklist_definition" | "checklist_progress" | "customer_metrics_daily" | "data_layer_definition" | "data_quality_flag_log" | "data_quality_rule" | "dsr_request" | "event" | "expert_booking" | "expert_slot" | "expert_topic" | "frequency_counter" | "integration_job" | "journey_run" | "journey_step_log" | "kpi_daily_snapshot" | "message_log" | "milestone_definition" | "milestone_progress" | "points_liability_snapshot" | "product_purchase_cycle" | "product_serial" | "quiz_definition" | "quiz_response" | "referral_code" | "referral_conversion" | "replenishment_schedule" | "rfm_snapshot" | "segment_membership" | "serial_batch" | "serial_scan" | "session" | "subscription" | "subscription_delivery" | "subscription_item" | "warranty_registration" | "webhook_inbox" | "systemConfig" | "dataHub" | "dynamicAction" | "dynamicActionPage" | "dynamicActionComponent" | "dataHubTable" | "dataHubColumn" | "dataHubRecord" | "zaloOA" | "zaloMiniApp" | "supportTicket" | "customerDevice" | "adminNotification";
+        modelProps: "customer" | "customerIdentity" | "mergeCandidate" | "customerAddress" | "customerTag" | "baby" | "babyGrowthLog" | "babyStageHistory" | "consentDocumentVersion" | "consent" | "product" | "productLifecycleRule" | "order" | "orderItem" | "productExchange" | "review" | "loyaltyTierConfig" | "loyaltyAccount" | "loyaltyTransaction" | "loyaltyEarnRule" | "rewardCatalog" | "rewardRedemption" | "segment" | "journey" | "messageTemplate" | "role" | "adminUser" | "auditLog" | "campaign_control_group" | "checklist_definition" | "checklist_progress" | "customer_metrics_daily" | "data_layer_definition" | "conditionDefinition" | "data_quality_flag_log" | "data_quality_rule" | "dsr_request" | "event" | "expert_booking" | "expert_slot" | "expert_topic" | "frequency_counter" | "integration_job" | "journey_run" | "journey_step_log" | "kpi_daily_snapshot" | "message_log" | "milestone_definition" | "milestone_progress" | "points_liability_snapshot" | "product_purchase_cycle" | "product_serial" | "quiz_definition" | "quiz_response" | "referral_code" | "referral_conversion" | "replenishment_schedule" | "rfm_snapshot" | "segment_membership" | "serial_batch" | "serial_scan" | "session" | "subscription" | "subscription_delivery" | "subscription_item" | "warranty_registration" | "webhook_inbox" | "systemConfig" | "dynamicAction" | "zaloOA" | "zaloMiniApp" | "supportTicket" | "customerDevice" | "adminNotification";
         txIsolationLevel: TransactionIsolationLevel;
     };
     model: {
@@ -2694,6 +2689,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
                 count: {
                     args: Prisma.data_layer_definitionCountArgs<ExtArgs>;
                     result: runtime.Types.Utils.Optional<Prisma.Data_layer_definitionCountAggregateOutputType> | number;
+                };
+            };
+        };
+        ConditionDefinition: {
+            payload: Prisma.$ConditionDefinitionPayload<ExtArgs>;
+            fields: Prisma.ConditionDefinitionFieldRefs;
+            operations: {
+                findUnique: {
+                    args: Prisma.ConditionDefinitionFindUniqueArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ConditionDefinitionPayload> | null;
+                };
+                findUniqueOrThrow: {
+                    args: Prisma.ConditionDefinitionFindUniqueOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ConditionDefinitionPayload>;
+                };
+                findFirst: {
+                    args: Prisma.ConditionDefinitionFindFirstArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ConditionDefinitionPayload> | null;
+                };
+                findFirstOrThrow: {
+                    args: Prisma.ConditionDefinitionFindFirstOrThrowArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ConditionDefinitionPayload>;
+                };
+                findMany: {
+                    args: Prisma.ConditionDefinitionFindManyArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ConditionDefinitionPayload>[];
+                };
+                create: {
+                    args: Prisma.ConditionDefinitionCreateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ConditionDefinitionPayload>;
+                };
+                createMany: {
+                    args: Prisma.ConditionDefinitionCreateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                createManyAndReturn: {
+                    args: Prisma.ConditionDefinitionCreateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ConditionDefinitionPayload>[];
+                };
+                delete: {
+                    args: Prisma.ConditionDefinitionDeleteArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ConditionDefinitionPayload>;
+                };
+                update: {
+                    args: Prisma.ConditionDefinitionUpdateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ConditionDefinitionPayload>;
+                };
+                deleteMany: {
+                    args: Prisma.ConditionDefinitionDeleteManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateMany: {
+                    args: Prisma.ConditionDefinitionUpdateManyArgs<ExtArgs>;
+                    result: BatchPayload;
+                };
+                updateManyAndReturn: {
+                    args: Prisma.ConditionDefinitionUpdateManyAndReturnArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ConditionDefinitionPayload>[];
+                };
+                upsert: {
+                    args: Prisma.ConditionDefinitionUpsertArgs<ExtArgs>;
+                    result: runtime.Types.Utils.PayloadToResult<Prisma.$ConditionDefinitionPayload>;
+                };
+                aggregate: {
+                    args: Prisma.ConditionDefinitionAggregateArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.AggregateConditionDefinition>;
+                };
+                groupBy: {
+                    args: Prisma.ConditionDefinitionGroupByArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.ConditionDefinitionGroupByOutputType>[];
+                };
+                count: {
+                    args: Prisma.ConditionDefinitionCountArgs<ExtArgs>;
+                    result: runtime.Types.Utils.Optional<Prisma.ConditionDefinitionCountAggregateOutputType> | number;
                 };
             };
         };
@@ -5213,80 +5282,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
                 };
             };
         };
-        DataHub: {
-            payload: Prisma.$DataHubPayload<ExtArgs>;
-            fields: Prisma.DataHubFieldRefs;
-            operations: {
-                findUnique: {
-                    args: Prisma.DataHubFindUniqueArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubPayload> | null;
-                };
-                findUniqueOrThrow: {
-                    args: Prisma.DataHubFindUniqueOrThrowArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubPayload>;
-                };
-                findFirst: {
-                    args: Prisma.DataHubFindFirstArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubPayload> | null;
-                };
-                findFirstOrThrow: {
-                    args: Prisma.DataHubFindFirstOrThrowArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubPayload>;
-                };
-                findMany: {
-                    args: Prisma.DataHubFindManyArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubPayload>[];
-                };
-                create: {
-                    args: Prisma.DataHubCreateArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubPayload>;
-                };
-                createMany: {
-                    args: Prisma.DataHubCreateManyArgs<ExtArgs>;
-                    result: BatchPayload;
-                };
-                createManyAndReturn: {
-                    args: Prisma.DataHubCreateManyAndReturnArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubPayload>[];
-                };
-                delete: {
-                    args: Prisma.DataHubDeleteArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubPayload>;
-                };
-                update: {
-                    args: Prisma.DataHubUpdateArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubPayload>;
-                };
-                deleteMany: {
-                    args: Prisma.DataHubDeleteManyArgs<ExtArgs>;
-                    result: BatchPayload;
-                };
-                updateMany: {
-                    args: Prisma.DataHubUpdateManyArgs<ExtArgs>;
-                    result: BatchPayload;
-                };
-                updateManyAndReturn: {
-                    args: Prisma.DataHubUpdateManyAndReturnArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubPayload>[];
-                };
-                upsert: {
-                    args: Prisma.DataHubUpsertArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubPayload>;
-                };
-                aggregate: {
-                    args: Prisma.DataHubAggregateArgs<ExtArgs>;
-                    result: runtime.Types.Utils.Optional<Prisma.AggregateDataHub>;
-                };
-                groupBy: {
-                    args: Prisma.DataHubGroupByArgs<ExtArgs>;
-                    result: runtime.Types.Utils.Optional<Prisma.DataHubGroupByOutputType>[];
-                };
-                count: {
-                    args: Prisma.DataHubCountArgs<ExtArgs>;
-                    result: runtime.Types.Utils.Optional<Prisma.DataHubCountAggregateOutputType> | number;
-                };
-            };
-        };
         DynamicAction: {
             payload: Prisma.$DynamicActionPayload<ExtArgs>;
             fields: Prisma.DynamicActionFieldRefs;
@@ -5358,376 +5353,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
                 count: {
                     args: Prisma.DynamicActionCountArgs<ExtArgs>;
                     result: runtime.Types.Utils.Optional<Prisma.DynamicActionCountAggregateOutputType> | number;
-                };
-            };
-        };
-        DynamicActionPage: {
-            payload: Prisma.$DynamicActionPagePayload<ExtArgs>;
-            fields: Prisma.DynamicActionPageFieldRefs;
-            operations: {
-                findUnique: {
-                    args: Prisma.DynamicActionPageFindUniqueArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionPagePayload> | null;
-                };
-                findUniqueOrThrow: {
-                    args: Prisma.DynamicActionPageFindUniqueOrThrowArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionPagePayload>;
-                };
-                findFirst: {
-                    args: Prisma.DynamicActionPageFindFirstArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionPagePayload> | null;
-                };
-                findFirstOrThrow: {
-                    args: Prisma.DynamicActionPageFindFirstOrThrowArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionPagePayload>;
-                };
-                findMany: {
-                    args: Prisma.DynamicActionPageFindManyArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionPagePayload>[];
-                };
-                create: {
-                    args: Prisma.DynamicActionPageCreateArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionPagePayload>;
-                };
-                createMany: {
-                    args: Prisma.DynamicActionPageCreateManyArgs<ExtArgs>;
-                    result: BatchPayload;
-                };
-                createManyAndReturn: {
-                    args: Prisma.DynamicActionPageCreateManyAndReturnArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionPagePayload>[];
-                };
-                delete: {
-                    args: Prisma.DynamicActionPageDeleteArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionPagePayload>;
-                };
-                update: {
-                    args: Prisma.DynamicActionPageUpdateArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionPagePayload>;
-                };
-                deleteMany: {
-                    args: Prisma.DynamicActionPageDeleteManyArgs<ExtArgs>;
-                    result: BatchPayload;
-                };
-                updateMany: {
-                    args: Prisma.DynamicActionPageUpdateManyArgs<ExtArgs>;
-                    result: BatchPayload;
-                };
-                updateManyAndReturn: {
-                    args: Prisma.DynamicActionPageUpdateManyAndReturnArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionPagePayload>[];
-                };
-                upsert: {
-                    args: Prisma.DynamicActionPageUpsertArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionPagePayload>;
-                };
-                aggregate: {
-                    args: Prisma.DynamicActionPageAggregateArgs<ExtArgs>;
-                    result: runtime.Types.Utils.Optional<Prisma.AggregateDynamicActionPage>;
-                };
-                groupBy: {
-                    args: Prisma.DynamicActionPageGroupByArgs<ExtArgs>;
-                    result: runtime.Types.Utils.Optional<Prisma.DynamicActionPageGroupByOutputType>[];
-                };
-                count: {
-                    args: Prisma.DynamicActionPageCountArgs<ExtArgs>;
-                    result: runtime.Types.Utils.Optional<Prisma.DynamicActionPageCountAggregateOutputType> | number;
-                };
-            };
-        };
-        DynamicActionComponent: {
-            payload: Prisma.$DynamicActionComponentPayload<ExtArgs>;
-            fields: Prisma.DynamicActionComponentFieldRefs;
-            operations: {
-                findUnique: {
-                    args: Prisma.DynamicActionComponentFindUniqueArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionComponentPayload> | null;
-                };
-                findUniqueOrThrow: {
-                    args: Prisma.DynamicActionComponentFindUniqueOrThrowArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionComponentPayload>;
-                };
-                findFirst: {
-                    args: Prisma.DynamicActionComponentFindFirstArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionComponentPayload> | null;
-                };
-                findFirstOrThrow: {
-                    args: Prisma.DynamicActionComponentFindFirstOrThrowArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionComponentPayload>;
-                };
-                findMany: {
-                    args: Prisma.DynamicActionComponentFindManyArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionComponentPayload>[];
-                };
-                create: {
-                    args: Prisma.DynamicActionComponentCreateArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionComponentPayload>;
-                };
-                createMany: {
-                    args: Prisma.DynamicActionComponentCreateManyArgs<ExtArgs>;
-                    result: BatchPayload;
-                };
-                createManyAndReturn: {
-                    args: Prisma.DynamicActionComponentCreateManyAndReturnArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionComponentPayload>[];
-                };
-                delete: {
-                    args: Prisma.DynamicActionComponentDeleteArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionComponentPayload>;
-                };
-                update: {
-                    args: Prisma.DynamicActionComponentUpdateArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionComponentPayload>;
-                };
-                deleteMany: {
-                    args: Prisma.DynamicActionComponentDeleteManyArgs<ExtArgs>;
-                    result: BatchPayload;
-                };
-                updateMany: {
-                    args: Prisma.DynamicActionComponentUpdateManyArgs<ExtArgs>;
-                    result: BatchPayload;
-                };
-                updateManyAndReturn: {
-                    args: Prisma.DynamicActionComponentUpdateManyAndReturnArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionComponentPayload>[];
-                };
-                upsert: {
-                    args: Prisma.DynamicActionComponentUpsertArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DynamicActionComponentPayload>;
-                };
-                aggregate: {
-                    args: Prisma.DynamicActionComponentAggregateArgs<ExtArgs>;
-                    result: runtime.Types.Utils.Optional<Prisma.AggregateDynamicActionComponent>;
-                };
-                groupBy: {
-                    args: Prisma.DynamicActionComponentGroupByArgs<ExtArgs>;
-                    result: runtime.Types.Utils.Optional<Prisma.DynamicActionComponentGroupByOutputType>[];
-                };
-                count: {
-                    args: Prisma.DynamicActionComponentCountArgs<ExtArgs>;
-                    result: runtime.Types.Utils.Optional<Prisma.DynamicActionComponentCountAggregateOutputType> | number;
-                };
-            };
-        };
-        DataHubTable: {
-            payload: Prisma.$DataHubTablePayload<ExtArgs>;
-            fields: Prisma.DataHubTableFieldRefs;
-            operations: {
-                findUnique: {
-                    args: Prisma.DataHubTableFindUniqueArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubTablePayload> | null;
-                };
-                findUniqueOrThrow: {
-                    args: Prisma.DataHubTableFindUniqueOrThrowArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubTablePayload>;
-                };
-                findFirst: {
-                    args: Prisma.DataHubTableFindFirstArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubTablePayload> | null;
-                };
-                findFirstOrThrow: {
-                    args: Prisma.DataHubTableFindFirstOrThrowArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubTablePayload>;
-                };
-                findMany: {
-                    args: Prisma.DataHubTableFindManyArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubTablePayload>[];
-                };
-                create: {
-                    args: Prisma.DataHubTableCreateArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubTablePayload>;
-                };
-                createMany: {
-                    args: Prisma.DataHubTableCreateManyArgs<ExtArgs>;
-                    result: BatchPayload;
-                };
-                createManyAndReturn: {
-                    args: Prisma.DataHubTableCreateManyAndReturnArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubTablePayload>[];
-                };
-                delete: {
-                    args: Prisma.DataHubTableDeleteArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubTablePayload>;
-                };
-                update: {
-                    args: Prisma.DataHubTableUpdateArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubTablePayload>;
-                };
-                deleteMany: {
-                    args: Prisma.DataHubTableDeleteManyArgs<ExtArgs>;
-                    result: BatchPayload;
-                };
-                updateMany: {
-                    args: Prisma.DataHubTableUpdateManyArgs<ExtArgs>;
-                    result: BatchPayload;
-                };
-                updateManyAndReturn: {
-                    args: Prisma.DataHubTableUpdateManyAndReturnArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubTablePayload>[];
-                };
-                upsert: {
-                    args: Prisma.DataHubTableUpsertArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubTablePayload>;
-                };
-                aggregate: {
-                    args: Prisma.DataHubTableAggregateArgs<ExtArgs>;
-                    result: runtime.Types.Utils.Optional<Prisma.AggregateDataHubTable>;
-                };
-                groupBy: {
-                    args: Prisma.DataHubTableGroupByArgs<ExtArgs>;
-                    result: runtime.Types.Utils.Optional<Prisma.DataHubTableGroupByOutputType>[];
-                };
-                count: {
-                    args: Prisma.DataHubTableCountArgs<ExtArgs>;
-                    result: runtime.Types.Utils.Optional<Prisma.DataHubTableCountAggregateOutputType> | number;
-                };
-            };
-        };
-        DataHubColumn: {
-            payload: Prisma.$DataHubColumnPayload<ExtArgs>;
-            fields: Prisma.DataHubColumnFieldRefs;
-            operations: {
-                findUnique: {
-                    args: Prisma.DataHubColumnFindUniqueArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubColumnPayload> | null;
-                };
-                findUniqueOrThrow: {
-                    args: Prisma.DataHubColumnFindUniqueOrThrowArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubColumnPayload>;
-                };
-                findFirst: {
-                    args: Prisma.DataHubColumnFindFirstArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubColumnPayload> | null;
-                };
-                findFirstOrThrow: {
-                    args: Prisma.DataHubColumnFindFirstOrThrowArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubColumnPayload>;
-                };
-                findMany: {
-                    args: Prisma.DataHubColumnFindManyArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubColumnPayload>[];
-                };
-                create: {
-                    args: Prisma.DataHubColumnCreateArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubColumnPayload>;
-                };
-                createMany: {
-                    args: Prisma.DataHubColumnCreateManyArgs<ExtArgs>;
-                    result: BatchPayload;
-                };
-                createManyAndReturn: {
-                    args: Prisma.DataHubColumnCreateManyAndReturnArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubColumnPayload>[];
-                };
-                delete: {
-                    args: Prisma.DataHubColumnDeleteArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubColumnPayload>;
-                };
-                update: {
-                    args: Prisma.DataHubColumnUpdateArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubColumnPayload>;
-                };
-                deleteMany: {
-                    args: Prisma.DataHubColumnDeleteManyArgs<ExtArgs>;
-                    result: BatchPayload;
-                };
-                updateMany: {
-                    args: Prisma.DataHubColumnUpdateManyArgs<ExtArgs>;
-                    result: BatchPayload;
-                };
-                updateManyAndReturn: {
-                    args: Prisma.DataHubColumnUpdateManyAndReturnArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubColumnPayload>[];
-                };
-                upsert: {
-                    args: Prisma.DataHubColumnUpsertArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubColumnPayload>;
-                };
-                aggregate: {
-                    args: Prisma.DataHubColumnAggregateArgs<ExtArgs>;
-                    result: runtime.Types.Utils.Optional<Prisma.AggregateDataHubColumn>;
-                };
-                groupBy: {
-                    args: Prisma.DataHubColumnGroupByArgs<ExtArgs>;
-                    result: runtime.Types.Utils.Optional<Prisma.DataHubColumnGroupByOutputType>[];
-                };
-                count: {
-                    args: Prisma.DataHubColumnCountArgs<ExtArgs>;
-                    result: runtime.Types.Utils.Optional<Prisma.DataHubColumnCountAggregateOutputType> | number;
-                };
-            };
-        };
-        DataHubRecord: {
-            payload: Prisma.$DataHubRecordPayload<ExtArgs>;
-            fields: Prisma.DataHubRecordFieldRefs;
-            operations: {
-                findUnique: {
-                    args: Prisma.DataHubRecordFindUniqueArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubRecordPayload> | null;
-                };
-                findUniqueOrThrow: {
-                    args: Prisma.DataHubRecordFindUniqueOrThrowArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubRecordPayload>;
-                };
-                findFirst: {
-                    args: Prisma.DataHubRecordFindFirstArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubRecordPayload> | null;
-                };
-                findFirstOrThrow: {
-                    args: Prisma.DataHubRecordFindFirstOrThrowArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubRecordPayload>;
-                };
-                findMany: {
-                    args: Prisma.DataHubRecordFindManyArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubRecordPayload>[];
-                };
-                create: {
-                    args: Prisma.DataHubRecordCreateArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubRecordPayload>;
-                };
-                createMany: {
-                    args: Prisma.DataHubRecordCreateManyArgs<ExtArgs>;
-                    result: BatchPayload;
-                };
-                createManyAndReturn: {
-                    args: Prisma.DataHubRecordCreateManyAndReturnArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubRecordPayload>[];
-                };
-                delete: {
-                    args: Prisma.DataHubRecordDeleteArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubRecordPayload>;
-                };
-                update: {
-                    args: Prisma.DataHubRecordUpdateArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubRecordPayload>;
-                };
-                deleteMany: {
-                    args: Prisma.DataHubRecordDeleteManyArgs<ExtArgs>;
-                    result: BatchPayload;
-                };
-                updateMany: {
-                    args: Prisma.DataHubRecordUpdateManyArgs<ExtArgs>;
-                    result: BatchPayload;
-                };
-                updateManyAndReturn: {
-                    args: Prisma.DataHubRecordUpdateManyAndReturnArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubRecordPayload>[];
-                };
-                upsert: {
-                    args: Prisma.DataHubRecordUpsertArgs<ExtArgs>;
-                    result: runtime.Types.Utils.PayloadToResult<Prisma.$DataHubRecordPayload>;
-                };
-                aggregate: {
-                    args: Prisma.DataHubRecordAggregateArgs<ExtArgs>;
-                    result: runtime.Types.Utils.Optional<Prisma.AggregateDataHubRecord>;
-                };
-                groupBy: {
-                    args: Prisma.DataHubRecordGroupByArgs<ExtArgs>;
-                    result: runtime.Types.Utils.Optional<Prisma.DataHubRecordGroupByOutputType>[];
-                };
-                count: {
-                    args: Prisma.DataHubRecordCountArgs<ExtArgs>;
-                    result: runtime.Types.Utils.Optional<Prisma.DataHubRecordCountAggregateOutputType> | number;
                 };
             };
         };
@@ -6558,6 +6183,18 @@ export declare const Data_layer_definitionScalarFieldEnum: {
     readonly created_at: "created_at";
 };
 export type Data_layer_definitionScalarFieldEnum = (typeof Data_layer_definitionScalarFieldEnum)[keyof typeof Data_layer_definitionScalarFieldEnum];
+export declare const ConditionDefinitionScalarFieldEnum: {
+    readonly id: "id";
+    readonly code: "code";
+    readonly name: "name";
+    readonly type: "type";
+    readonly source: "source";
+    readonly description: "description";
+    readonly isActive: "isActive";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
+};
+export type ConditionDefinitionScalarFieldEnum = (typeof ConditionDefinitionScalarFieldEnum)[keyof typeof ConditionDefinitionScalarFieldEnum];
 export declare const Data_quality_flag_logScalarFieldEnum: {
     readonly id: "id";
     readonly rule_id: "rule_id";
@@ -6950,15 +6587,6 @@ export declare const SystemConfigScalarFieldEnum: {
     readonly updatedAt: "updatedAt";
 };
 export type SystemConfigScalarFieldEnum = (typeof SystemConfigScalarFieldEnum)[keyof typeof SystemConfigScalarFieldEnum];
-export declare const DataHubScalarFieldEnum: {
-    readonly id: "id";
-    readonly name: "name";
-    readonly source: "source";
-    readonly ownerId: "ownerId";
-    readonly createdAt: "createdAt";
-    readonly updatedAt: "updatedAt";
-};
-export type DataHubScalarFieldEnum = (typeof DataHubScalarFieldEnum)[keyof typeof DataHubScalarFieldEnum];
 export declare const DynamicActionScalarFieldEnum: {
     readonly id: "id";
     readonly actionCode: "actionCode";
@@ -6968,60 +6596,12 @@ export declare const DynamicActionScalarFieldEnum: {
     readonly target: "target";
     readonly status: "status";
     readonly ownerId: "ownerId";
-    readonly dataHubId: "dataHubId";
     readonly startDate: "startDate";
     readonly endDate: "endDate";
     readonly createdAt: "createdAt";
     readonly updatedAt: "updatedAt";
 };
 export type DynamicActionScalarFieldEnum = (typeof DynamicActionScalarFieldEnum)[keyof typeof DynamicActionScalarFieldEnum];
-export declare const DynamicActionPageScalarFieldEnum: {
-    readonly id: "id";
-    readonly actionId: "actionId";
-    readonly pageOrder: "pageOrder";
-    readonly title: "title";
-    readonly headerConfig: "headerConfig";
-    readonly actionConfig: "actionConfig";
-    readonly dataHubTableId: "dataHubTableId";
-    readonly createdAt: "createdAt";
-    readonly updatedAt: "updatedAt";
-};
-export type DynamicActionPageScalarFieldEnum = (typeof DynamicActionPageScalarFieldEnum)[keyof typeof DynamicActionPageScalarFieldEnum];
-export declare const DynamicActionComponentScalarFieldEnum: {
-    readonly id: "id";
-    readonly pageId: "pageId";
-    readonly componentOrder: "componentOrder";
-    readonly type: "type";
-    readonly label: "label";
-    readonly placeholder: "placeholder";
-    readonly required: "required";
-    readonly options: "options";
-    readonly validation: "validation";
-    readonly dataHubColumnId: "dataHubColumnId";
-    readonly createdAt: "createdAt";
-    readonly updatedAt: "updatedAt";
-};
-export type DynamicActionComponentScalarFieldEnum = (typeof DynamicActionComponentScalarFieldEnum)[keyof typeof DynamicActionComponentScalarFieldEnum];
-export declare const DataHubTableScalarFieldEnum: {
-    readonly id: "id";
-    readonly dataHubId: "dataHubId";
-    readonly name: "name";
-};
-export type DataHubTableScalarFieldEnum = (typeof DataHubTableScalarFieldEnum)[keyof typeof DataHubTableScalarFieldEnum];
-export declare const DataHubColumnScalarFieldEnum: {
-    readonly id: "id";
-    readonly tableId: "tableId";
-    readonly name: "name";
-    readonly dataType: "dataType";
-};
-export type DataHubColumnScalarFieldEnum = (typeof DataHubColumnScalarFieldEnum)[keyof typeof DataHubColumnScalarFieldEnum];
-export declare const DataHubRecordScalarFieldEnum: {
-    readonly id: "id";
-    readonly tableId: "tableId";
-    readonly data: "data";
-    readonly createdAt: "createdAt";
-};
-export type DataHubRecordScalarFieldEnum = (typeof DataHubRecordScalarFieldEnum)[keyof typeof DataHubRecordScalarFieldEnum];
 export declare const ZaloOAScalarFieldEnum: {
     readonly id: "id";
     readonly oaId: "oaId";
@@ -7191,6 +6771,7 @@ export type GlobalOmitConfig = {
     checklist_progress?: Prisma.checklist_progressOmit;
     customer_metrics_daily?: Prisma.customer_metrics_dailyOmit;
     data_layer_definition?: Prisma.data_layer_definitionOmit;
+    conditionDefinition?: Prisma.ConditionDefinitionOmit;
     data_quality_flag_log?: Prisma.data_quality_flag_logOmit;
     data_quality_rule?: Prisma.data_quality_ruleOmit;
     dsr_request?: Prisma.dsr_requestOmit;
@@ -7225,13 +6806,7 @@ export type GlobalOmitConfig = {
     warranty_registration?: Prisma.warranty_registrationOmit;
     webhook_inbox?: Prisma.webhook_inboxOmit;
     systemConfig?: Prisma.SystemConfigOmit;
-    dataHub?: Prisma.DataHubOmit;
     dynamicAction?: Prisma.DynamicActionOmit;
-    dynamicActionPage?: Prisma.DynamicActionPageOmit;
-    dynamicActionComponent?: Prisma.DynamicActionComponentOmit;
-    dataHubTable?: Prisma.DataHubTableOmit;
-    dataHubColumn?: Prisma.DataHubColumnOmit;
-    dataHubRecord?: Prisma.DataHubRecordOmit;
     zaloOA?: Prisma.ZaloOAOmit;
     zaloMiniApp?: Prisma.ZaloMiniAppOmit;
     supportTicket?: Prisma.SupportTicketOmit;

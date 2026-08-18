@@ -57,7 +57,8 @@ let DataQualityService = DataQualityService_1 = class DataQualityService {
                 }
                 if (isFailed) {
                     failedRuleIds.push(rule.id);
-                    await this.prisma.data_quality_flag_log.upsert({
+                    await this.prisma.data_quality_flag_log
+                        .upsert({
                         where: {
                             id: '00000000-0000-0000-0000-000000000000',
                         },
@@ -70,10 +71,15 @@ let DataQualityService = DataQualityService_1 = class DataQualityService {
                         update: {
                             resolved: false,
                             flagged_at: new Date(),
-                        }
-                    }).catch(async () => {
+                        },
+                    })
+                        .catch(async () => {
                         const existing = await this.prisma.data_quality_flag_log.findFirst({
-                            where: { customer_id: customer.id, rule_id: rule.id, resolved: false }
+                            where: {
+                                customer_id: customer.id,
+                                rule_id: rule.id,
+                                resolved: false,
+                            },
                         });
                         if (!existing) {
                             await this.prisma.data_quality_flag_log.create({
@@ -82,20 +88,20 @@ let DataQualityService = DataQualityService_1 = class DataQualityService {
                                     rule_id: rule.id,
                                     flag_reason: `Failed rule ${rule.code}`,
                                     resolved: false,
-                                }
+                                },
                             });
                         }
                     });
                 }
             }
             const existingFlags = await this.prisma.data_quality_flag_log.findMany({
-                where: { customer_id: customer.id, resolved: false }
+                where: { customer_id: customer.id, resolved: false },
             });
             for (const flag of existingFlags) {
                 if (!failedRuleIds.includes(flag.rule_id)) {
                     await this.prisma.data_quality_flag_log.update({
                         where: { id: flag.id },
-                        data: { resolved: true, resolved_at: new Date() }
+                        data: { resolved: true, resolved_at: new Date() },
                     });
                 }
             }
@@ -103,7 +109,7 @@ let DataQualityService = DataQualityService_1 = class DataQualityService {
             if (customer.dataQualityFlag !== newStatus) {
                 await this.prisma.customer.update({
                     where: { id: customer.id },
-                    data: { dataQualityFlag: newStatus }
+                    data: { dataQualityFlag: newStatus },
                 });
             }
         }
@@ -118,22 +124,26 @@ let DataQualityService = DataQualityService_1 = class DataQualityService {
                 name: 'Baby Profile Incomplete',
                 rule_type: 'completeness',
                 conditions: { field: 'baby.dob', check: 'exists' },
-                severity: 'warning'
+                severity: 'warning',
             },
             {
                 code: 'INVALID_PHONE',
                 name: 'Invalid VN Phone Format',
                 rule_type: 'accuracy',
-                conditions: { field: 'customer.phone', check: 'regex', pattern: '^\\+84\\d{9}$' },
-                severity: 'critical'
+                conditions: {
+                    field: 'customer.phone',
+                    check: 'regex',
+                    pattern: '^\\+84\\d{9}$',
+                },
+                severity: 'critical',
             },
             {
                 code: 'MISSING_EMAIL_AND_PHONE',
                 name: 'Unreachable Customer',
                 rule_type: 'completeness',
                 conditions: { field: 'customer.contact', check: 'exists' },
-                severity: 'critical'
-            }
+                severity: 'critical',
+            },
         ];
         for (const rule of rules) {
             await this.prisma.data_quality_rule.upsert({

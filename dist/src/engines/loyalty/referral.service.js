@@ -36,7 +36,9 @@ let ReferralService = ReferralService_1 = class ReferralService {
         return code;
     }
     async processReferral(referralCode, referredCustomerId) {
-        const codeRecord = await this.prisma.referral_code.findUnique({ where: { code: referralCode } });
+        const codeRecord = await this.prisma.referral_code.findUnique({
+            where: { code: referralCode },
+        });
         if (!codeRecord || !codeRecord.is_active)
             return { success: false, error: 'Invalid referral code' };
         if (codeRecord.max_uses && codeRecord.current_uses >= codeRecord.max_uses) {
@@ -55,15 +57,23 @@ let ReferralService = ReferralService_1 = class ReferralService {
         });
         for (const ra of referrerAddresses) {
             for (const rd of referredAddresses) {
-                if (ra.addressLine1 && ra.addressLine1 === rd.addressLine1 &&
-                    ra.district === rd.district && ra.province === rd.province) {
+                if (ra.addressLine1 &&
+                    ra.addressLine1 === rd.addressLine1 &&
+                    ra.district === rd.district &&
+                    ra.province === rd.province) {
                     this.logger.warn(`Referral fraud suspected: same address for ${codeRecord.customer_id} and ${referredCustomerId}`);
-                    return { success: false, error: 'Referral rejected: address match detected' };
+                    return {
+                        success: false,
+                        error: 'Referral rejected: address match detected',
+                    };
                 }
             }
         }
         const existingConversion = await this.prisma.referral_conversion.findFirst({
-            where: { referral_code_id: codeRecord.id, referred_id: referredCustomerId },
+            where: {
+                referral_code_id: codeRecord.id,
+                referred_id: referredCustomerId,
+            },
         });
         if (existingConversion)
             return { success: false, error: 'Already referred' };

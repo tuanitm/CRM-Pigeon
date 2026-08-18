@@ -12,9 +12,9 @@ import { ConfigService } from '@nestjs/config';
  */
 
 export interface ZnsSendParams {
-  phone: string;               // E.164 format → strip +84 prefix for Zalo (use 84XXXXXXXXX)
-  templateId: string;          // Zalo ZNS template ID
-  templateData: Record<string, string>;  // Key-value pairs matching template variables
+  phone: string; // E.164 format → strip +84 prefix for Zalo (use 84XXXXXXXXX)
+  templateId: string; // Zalo ZNS template ID
+  templateData: Record<string, string>; // Key-value pairs matching template variables
 }
 
 export interface ZnsSendResult {
@@ -32,14 +32,19 @@ export class ZnsProviderService {
   private refreshToken: string;
 
   constructor(private config: ConfigService) {
-    this.apiUrl = this.config.get('ZNS_API_URL', 'https://business.zalo.me/openapi');
+    this.apiUrl = this.config.get(
+      'ZNS_API_URL',
+      'https://business.zalo.me/openapi',
+    );
     this.accessToken = this.config.get('ZNS_ACCESS_TOKEN', '');
     this.refreshToken = this.config.get('ZNS_REFRESH_TOKEN', '');
   }
 
   async send(params: ZnsSendParams): Promise<ZnsSendResult> {
     if (!this.accessToken) {
-      this.logger.warn('ZNS access token not configured — message will be logged only');
+      this.logger.warn(
+        'ZNS access token not configured — message will be logged only',
+      );
       return this.mockSend(params);
     }
 
@@ -51,7 +56,7 @@ export class ZnsProviderService {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'access_token': this.accessToken,
+          access_token: this.accessToken,
         },
         body: JSON.stringify({
           phone,
@@ -60,10 +65,12 @@ export class ZnsProviderService {
         }),
       });
 
-      const data = await response.json() as any;
+      const data = await response.json();
 
       if (data.error === 0) {
-        this.logger.log(`ZNS sent: ${phone} template=${params.templateId} msgId=${data.data?.msg_id}`);
+        this.logger.log(
+          `ZNS sent: ${phone} template=${params.templateId} msgId=${data.data?.msg_id}`,
+        );
         return { success: true, messageId: data.data?.msg_id };
       }
 
@@ -91,17 +98,20 @@ export class ZnsProviderService {
     if (!this.refreshToken) return false;
 
     try {
-      const response = await fetch('https://oauth.zaloapp.com/v4/oa/access_token', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({
-          refresh_token: this.refreshToken,
-          app_id: this.config.get('ZNS_APP_ID', ''),
-          grant_type: 'refresh_token',
-        }),
-      });
+      const response = await fetch(
+        'https://oauth.zaloapp.com/v4/oa/access_token',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams({
+            refresh_token: this.refreshToken,
+            app_id: this.config.get('ZNS_APP_ID', ''),
+            grant_type: 'refresh_token',
+          }),
+        },
+      );
 
-      const data = await response.json() as any;
+      const data = await response.json();
       if (data.access_token) {
         this.accessToken = data.access_token;
         if (data.refresh_token) this.refreshToken = data.refresh_token;
@@ -127,7 +137,9 @@ export class ZnsProviderService {
    */
   private mockSend(params: ZnsSendParams): ZnsSendResult {
     const mockId = `mock_zns_${Date.now()}`;
-    this.logger.log(`[MOCK ZNS] phone=${params.phone} template=${params.templateId} data=${JSON.stringify(params.templateData)} id=${mockId}`);
+    this.logger.log(
+      `[MOCK ZNS] phone=${params.phone} template=${params.templateId} data=${JSON.stringify(params.templateData)} id=${mockId}`,
+    );
     return { success: true, messageId: mockId };
   }
 }

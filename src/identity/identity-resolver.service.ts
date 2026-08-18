@@ -26,11 +26,16 @@ export class IdentityResolverService {
    * Resolve a customer from identity pairs, ordered by priority.
    * Returns existing customer_id or null.
    */
-  async resolve(identities: { type: string; value: string }[]): Promise<string | null> {
+  async resolve(
+    identities: { type: string; value: string }[],
+  ): Promise<string | null> {
     // Sort by priority (lowest number = highest priority)
     const sorted = identities
       .filter((i) => this.PRIORITY_MAP[i.type] !== undefined)
-      .sort((a, b) => (this.PRIORITY_MAP[a.type] || 99) - (this.PRIORITY_MAP[b.type] || 99));
+      .sort(
+        (a, b) =>
+          (this.PRIORITY_MAP[a.type] || 99) - (this.PRIORITY_MAP[b.type] || 99),
+      );
 
     for (const identity of sorted) {
       // Phone is checked directly on customer table (primary key)
@@ -62,10 +67,17 @@ export class IdentityResolverService {
    * Link an identity to a customer. If the identity already exists on another
    * customer, queue a merge candidate instead of auto-merging (SRS rule).
    */
-  async linkIdentity(customerId: string, type: string, value: string): Promise<void> {
+  async linkIdentity(
+    customerId: string,
+    type: string,
+    value: string,
+  ): Promise<void> {
     const existing = await this.prisma.customerIdentity.findUnique({
       where: {
-        identityType_identityValue: { identityType: type, identityValue: value },
+        identityType_identityValue: {
+          identityType: type,
+          identityValue: value,
+        },
       },
     });
 
@@ -80,7 +92,9 @@ export class IdentityResolverService {
           status: 'pending',
         },
       });
-      this.logger.warn(`Merge candidate queued: ${customerId} <-> ${existing.customerId} via ${type}`);
+      this.logger.warn(
+        `Merge candidate queued: ${customerId} <-> ${existing.customerId} via ${type}`,
+      );
       return;
     }
 

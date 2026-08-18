@@ -33,10 +33,12 @@ exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
             config_1.ConfigModule.forRoot({ isGlobal: true }),
-            throttler_1.ThrottlerModule.forRoot([{
+            throttler_1.ThrottlerModule.forRoot([
+                {
                     ttl: parseInt(process.env.THROTTLE_TTL || '60') * 1000,
                     limit: parseInt(process.env.THROTTLE_LIMIT || '60'),
-                }]),
+                },
+            ]),
             schedule_1.ScheduleModule.forRoot(),
             bullmq_1.BullModule.forRoot({
                 connection: {

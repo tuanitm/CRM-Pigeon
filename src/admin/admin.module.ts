@@ -1,7 +1,5 @@
 import { Module } from '@nestjs/common';
 import { Customer360Controller } from './customer-360.controller';
-import { DataHubController } from './data-hub.controller';
-import { DataHubService } from './data-hub.service';
 import { DynamicActionController } from './dynamic-action.controller';
 import { DynamicActionService } from './dynamic-action.service';
 import { ZaloOAController } from './zalo-oa.controller';
@@ -15,11 +13,12 @@ import { ProductService } from './product.service';
 import { AdminSupportController } from './support.controller';
 import { NotificationController } from './notification.controller';
 import { NotificationService } from './notification.service';
+import { ConditionDefinitionController } from './condition-definition.controller';
+import { ConditionDefinitionService } from './condition-definition.service';
 
 @Module({
   controllers: [
     Customer360Controller,
-    DataHubController,
     DynamicActionController,
     ZaloOAController,
     ZaloMiniAppController,
@@ -27,15 +26,16 @@ import { NotificationService } from './notification.service';
     ProductController,
     AdminSupportController,
     NotificationController,
+    ConditionDefinitionController,
   ],
   providers: [
-    DataHubService,
     DynamicActionService,
     ZaloOAService,
     ZaloMiniAppService,
     LoyaltyService,
     ProductService,
     NotificationService,
+    ConditionDefinitionService,
   ],
   exports: [NotificationService],
 })

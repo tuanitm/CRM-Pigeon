@@ -42,7 +42,7 @@ export interface RuleCondition {
   field?: string;
   event_type?: string;
   segment_code?: string;
-  op: string;          // eq, neq, gt, gte, lt, lte, in, not_in, contains, is_null, is_not_null, member_of, not_member_of, within_days, before_days
+  op: string; // eq, neq, gt, gte, lt, lte, in, not_in, contains, is_null, is_not_null, member_of, not_member_of, within_days, before_days
   value?: any;
   timeframe_days?: number;
 }
@@ -65,7 +65,10 @@ export class RuleEvaluatorService {
    * Evaluate a rule DSL against a single customer.
    * Returns true if the customer matches the rule.
    */
-  async evaluateForCustomer(customerId: string, rules: RuleGroup): Promise<boolean> {
+  async evaluateForCustomer(
+    customerId: string,
+    rules: RuleGroup,
+  ): Promise<boolean> {
     const context = await this.buildContext(customerId);
     return this.evaluateGroup(rules, context, 0);
   }
@@ -90,7 +93,9 @@ export class RuleEvaluatorService {
           matchingIds.push(customer.id);
         }
       } catch (err) {
-        this.logger.warn(`Rule evaluation failed for customer ${customer.id}: ${(err as Error).message}`);
+        this.logger.warn(
+          `Rule evaluation failed for customer ${customer.id}: ${(err as Error).message}`,
+        );
       }
     }
 
@@ -100,7 +105,10 @@ export class RuleEvaluatorService {
   /**
    * Preview mode: evaluate rules and return count + sample without persisting.
    */
-  async previewSegment(rules: RuleGroup, sampleSize: number = 10): Promise<{ count: number; sample: string[] }> {
+  async previewSegment(
+    rules: RuleGroup,
+    sampleSize: number = 10,
+  ): Promise<{ count: number; sample: string[] }> {
     const matchingIds = await this.evaluateForAllCustomers(rules);
     return {
       count: matchingIds.length,
@@ -110,7 +118,11 @@ export class RuleEvaluatorService {
 
   // ---------- Internal evaluation logic ----------
 
-  private evaluateGroup(group: RuleGroup, ctx: EvaluationContext, depth: number): boolean {
+  private evaluateGroup(
+    group: RuleGroup,
+    ctx: EvaluationContext,
+    depth: number,
+  ): boolean {
     if (depth > 4) {
       this.logger.warn('Rule nesting exceeds 4 levels — truncating');
       return false;
@@ -118,9 +130,9 @@ export class RuleEvaluatorService {
 
     const results = group.conditions.map((cond) => {
       if ('operator' in cond) {
-        return this.evaluateGroup(cond as RuleGroup, ctx, depth + 1);
+        return this.evaluateGroup(cond, ctx, depth + 1);
       }
-      return this.evaluateCondition(cond as RuleCondition, ctx);
+      return this.evaluateCondition(cond, ctx);
     });
 
     if (group.operator === 'AND') {
@@ -129,7 +141,10 @@ export class RuleEvaluatorService {
     return results.some(Boolean);
   }
 
-  private evaluateCondition(cond: RuleCondition, ctx: EvaluationContext): boolean {
+  private evaluateCondition(
+    cond: RuleCondition,
+    ctx: EvaluationContext,
+  ): boolean {
     switch (cond.type) {
       case 'attribute':
         return this.evaluateAttribute(cond, ctx);
@@ -145,7 +160,10 @@ export class RuleEvaluatorService {
     }
   }
 
-  private evaluateAttribute(cond: RuleCondition, ctx: EvaluationContext): boolean {
+  private evaluateAttribute(
+    cond: RuleCondition,
+    ctx: EvaluationContext,
+  ): boolean {
     const fieldValue = this.resolveField(cond.field!, ctx);
     return this.compareValues(fieldValue, cond.op, cond.value);
   }
@@ -155,20 +173,28 @@ export class RuleEvaluatorService {
     return this.compareValues(count, cond.op, cond.value);
   }
 
-  private evaluateSegment(cond: RuleCondition, ctx: EvaluationContext): boolean {
+  private evaluateSegment(
+    cond: RuleCondition,
+    ctx: EvaluationContext,
+  ): boolean {
     const isMember = ctx.segmentMemberships.has(cond.segment_code!);
     if (cond.op === 'member_of') return isMember;
     if (cond.op === 'not_member_of') return !isMember;
     return false;
   }
 
-  private evaluateRelativeDate(cond: RuleCondition, ctx: EvaluationContext): boolean {
+  private evaluateRelativeDate(
+    cond: RuleCondition,
+    ctx: EvaluationContext,
+  ): boolean {
     const dateValue = this.resolveField(cond.field!, ctx);
     if (!dateValue) return false;
 
     const date = new Date(dateValue);
     const now = new Date();
-    const diffDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
+    const diffDays = Math.floor(
+      (now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24),
+    );
 
     if (cond.op === 'within_days') return diffDays <= cond.value;
     if (cond.op === 'before_days') return diffDays > cond.value;
@@ -193,7 +219,9 @@ export class RuleEvaluatorService {
         }
         return null;
       case 'loyalty_account':
-        return ctx.loyaltyAccount ? this.getNestedValue(ctx.loyaltyAccount, field) : null;
+        return ctx.loyaltyAccount
+          ? this.getNestedValue(ctx.loyaltyAccount, field)
+          : null;
       default:
         return this.getNestedValue(ctx.customer, fieldPath);
     }
@@ -205,17 +233,28 @@ export class RuleEvaluatorService {
 
   private compareValues(actual: any, op: string, expected: any): boolean {
     switch (op) {
-      case 'eq':        return actual === expected;
-      case 'neq':       return actual !== expected;
-      case 'gt':        return actual > expected;
-      case 'gte':       return actual >= expected;
-      case 'lt':        return actual < expected;
-      case 'lte':       return actual <= expected;
-      case 'in':        return Array.isArray(expected) && expected.includes(actual);
-      case 'not_in':    return Array.isArray(expected) && !expected.includes(actual);
-      case 'contains':  return typeof actual === 'string' && actual.includes(expected);
-      case 'is_null':   return actual === null || actual === undefined;
-      case 'is_not_null': return actual !== null && actual !== undefined;
+      case 'eq':
+        return actual === expected;
+      case 'neq':
+        return actual !== expected;
+      case 'gt':
+        return actual > expected;
+      case 'gte':
+        return actual >= expected;
+      case 'lt':
+        return actual < expected;
+      case 'lte':
+        return actual <= expected;
+      case 'in':
+        return Array.isArray(expected) && expected.includes(actual);
+      case 'not_in':
+        return Array.isArray(expected) && !expected.includes(actual);
+      case 'contains':
+        return typeof actual === 'string' && actual.includes(expected);
+      case 'is_null':
+        return actual === null || actual === undefined;
+      case 'is_not_null':
+        return actual !== null && actual !== undefined;
       default:
         this.logger.warn(`Unknown operator: ${op}`);
         return false;
@@ -247,7 +286,7 @@ export class RuleEvaluatorService {
       WHERE customer_id = ${customerId}::uuid
         AND occurred_at >= NOW() - INTERVAL '365 days'
       GROUP BY event_type
-    ` as { event_type: string; count: number }[];
+    `;
 
     for (const row of eventAggregates) {
       eventCounts.set(row.event_type, row.count);

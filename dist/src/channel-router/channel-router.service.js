@@ -73,11 +73,13 @@ let ChannelRouterService = ChannelRouterService_1 = class ChannelRouterService {
             customer_phone: customer.phone || '',
             customer_email: customer.email || '',
             points_balance: String(customer.loyaltyAccount?.pointsBalance || 0),
-            tier_name: customer.loyaltyAccount?.tier?.tierName || 'Member',
+            tier_name: customer.loyaltyAccount?.tier?.tierName || 'Bronze',
             ...(params.variables || {}),
         };
         const renderedBody = this.renderTemplate(template.body, variables);
-        const renderedSubject = template.subject ? this.renderTemplate(template.subject, variables) : '';
+        const renderedSubject = template.subject
+            ? this.renderTemplate(template.subject, variables)
+            : '';
         try {
             let providerResult;
             switch (channel) {
@@ -105,7 +107,10 @@ let ChannelRouterService = ChannelRouterService_1 = class ChannelRouterService {
                     });
                     break;
                 default:
-                    providerResult = { success: false, error: `Unknown channel: ${channel}` };
+                    providerResult = {
+                        success: false,
+                        error: `Unknown channel: ${channel}`,
+                    };
             }
             if (providerResult.success) {
                 await this.logMessage(params, 'sent', undefined, providerResult.messageId, template.id);

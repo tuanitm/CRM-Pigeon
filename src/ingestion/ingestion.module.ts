@@ -10,7 +10,11 @@ import { WooCommerceWebhookController } from './webhooks/woocommerce.controller'
     BullModule.registerQueue({ name: 'events' }),
     BullModule.registerQueue({ name: 'webhooks' }),
   ],
-  controllers: [EventsController, IdentifyController, WooCommerceWebhookController],
+  controllers: [
+    EventsController,
+    IdentifyController,
+    WooCommerceWebhookController,
+  ],
   providers: [EventsService],
   exports: [EventsService],
 })

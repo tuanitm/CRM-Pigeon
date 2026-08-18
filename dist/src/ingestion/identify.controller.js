@@ -111,13 +111,13 @@ let IdentifyController = IdentifyController_1 = class IdentifyController {
                 const existingDevice = await this.prisma.customerDevice.findFirst({
                     where: {
                         customerId: customer.id,
-                        userAgent: dto.userAgent
-                    }
+                        userAgent: dto.userAgent,
+                    },
                 });
                 if (existingDevice) {
                     await this.prisma.customerDevice.update({
                         where: { id: existingDevice.id },
-                        data: { lastLogin: new Date() }
+                        data: { lastLogin: new Date() },
                     });
                 }
                 else {
@@ -127,8 +127,8 @@ let IdentifyController = IdentifyController_1 = class IdentifyController {
                             deviceType,
                             browser,
                             os,
-                            userAgent: dto.userAgent
-                        }
+                            userAgent: dto.userAgent,
+                        },
                     });
                 }
             }
@@ -153,7 +153,9 @@ exports.IdentifyController = IdentifyController;
 __decorate([
     (0, common_1.Post)(),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
-    (0, swagger_1.ApiOperation)({ summary: 'Identify / upsert customer by phone or anonymous ID' }),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Identify / upsert customer by phone or anonymous ID',
+    }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [identify_dto_1.IdentifyDto]),

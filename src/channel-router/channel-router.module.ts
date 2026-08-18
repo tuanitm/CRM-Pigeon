@@ -7,7 +7,12 @@ import { ProvidersModule } from '../providers/providers.module';
 
 @Module({
   imports: [ProvidersModule],
-  providers: [ChannelRouterService, ConsentCheckerService, FrequencyLimiterService, QuietHoursService],
+  providers: [
+    ChannelRouterService,
+    ConsentCheckerService,
+    FrequencyLimiterService,
+    QuietHoursService,
+  ],
   exports: [ChannelRouterService],
 })
 export class ChannelRouterModule {}

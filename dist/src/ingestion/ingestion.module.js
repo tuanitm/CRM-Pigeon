@@ -22,7 +22,11 @@ exports.IngestionModule = IngestionModule = __decorate([
             bullmq_1.BullModule.registerQueue({ name: 'events' }),
             bullmq_1.BullModule.registerQueue({ name: 'webhooks' }),
         ],
-        controllers: [events_controller_1.EventsController, identify_controller_1.IdentifyController, woocommerce_controller_1.WooCommerceWebhookController],
+        controllers: [
+            events_controller_1.EventsController,
+            identify_controller_1.IdentifyController,
+            woocommerce_controller_1.WooCommerceWebhookController,
+        ],
         providers: [events_service_1.EventsService],
         exports: [events_service_1.EventsService],
     })

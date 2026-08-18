@@ -32,10 +32,12 @@ import { DataQualityModule } from './data-quality/data-quality.module';
     ConfigModule.forRoot({ isGlobal: true }),
 
     // Rate limiting
-    ThrottlerModule.forRoot([{
-      ttl: parseInt(process.env.THROTTLE_TTL || '60') * 1000,
-      limit: parseInt(process.env.THROTTLE_LIMIT || '60'),
-    }]),
+    ThrottlerModule.forRoot([
+      {
+        ttl: parseInt(process.env.THROTTLE_TTL || '60') * 1000,
+        limit: parseInt(process.env.THROTTLE_LIMIT || '60'),
+      },
+    ]),
 
     // Scheduled tasks
     ScheduleModule.forRoot(),

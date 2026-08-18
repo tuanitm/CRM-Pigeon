@@ -38,7 +38,7 @@ const errorByType = [
 
 const columns = [
   {
-    title: 'Kết nối',
+    title: 'Connection',
     key: 'connection',
     render: (_: any, r: any) => (
       <Space>
@@ -48,24 +48,24 @@ const columns = [
     ),
   },
   {
-    title: 'Chiều',
+    title: 'Direction',
     dataIndex: 'direction',
     key: 'direction',
     render: (d: string) => (
       <Tag color={d === 'inbound' ? 'blue' : 'green'} icon={<SwapOutlined />}>
-        {d === 'inbound' ? 'Vào' : 'Ra'}
+        {d === 'inbound' ? 'Inbound' : 'Outbound'}
       </Tag>
     ),
   },
   {
-    title: 'Tổng request',
+    title: 'Total Requests',
     dataIndex: 'requests',
     key: 'requests',
     render: (v: number) => <Text strong>{v.toLocaleString()}</Text>,
     sorter: (a: any, b: any) => a.requests - b.requests,
   },
   {
-    title: 'Thành công',
+    title: 'Success',
     key: 'success',
     render: (_: any, r: any) => (
       <Space>
@@ -76,7 +76,7 @@ const columns = [
     ),
   },
   {
-    title: 'Lỗi',
+    title: 'Failed',
     key: 'failed',
     render: (_: any, r: any) => (
       r.failed > 0
@@ -85,7 +85,7 @@ const columns = [
     ),
   },
   {
-    title: 'Phản hồi TB',
+    title: 'Avg Response',
     key: 'avgResponse',
     render: (_: any, r: any) => (
       <Space>
@@ -95,10 +95,10 @@ const columns = [
     ),
   },
   {
-    title: 'Trạng thái',
+    title: 'Status',
     key: 'status',
     render: (_: any, r: any) => (
-      <Badge status={r.status === 'active' ? 'success' : 'warning'} text={r.status === 'active' ? 'Hoạt động' : 'Tạm dừng'} />
+      <Badge status={r.status === 'active' ? 'success' : 'warning'} text={r.status === 'active' ? 'Active' : 'Paused'} />
     ),
   },
 ];
@@ -137,27 +137,27 @@ export default function IntegrationDataPage() {
         {/* Header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 20 }}>
           <div>
-            <Title level={4} style={{ margin: 0, fontWeight: 700 }}>Tổng quan</Title>
-            <Text type="secondary" style={{ fontSize: 12 }}>Báo cáo traffic, hiệu suất và lỗi đồng bộ</Text>
+            <Title level={4} style={{ margin: 0, fontWeight: 700 }}>Overview</Title>
+            <Text type="secondary" style={{ fontSize: 12 }}>Traffic, performance and sync error reports</Text>
           </div>
           <Space>
             <Select defaultValue="all" style={{ width: 160 }} options={[
-              { value: 'all', label: 'Tất cả kết nối' },
+              { value: 'all', label: 'All Connections' },
               { value: 'woo', label: 'WooCommerce' },
               { value: 'zalo', label: 'Zalo OA' },
               { value: 'sap', label: 'SAP B1' },
             ]} />
             <Select defaultValue="both" style={{ width: 120 }} options={[
-              { value: 'both', label: 'Cả 2 chiều' },
-              { value: 'in', label: 'Vào' },
-              { value: 'out', label: 'Ra' },
+              { value: 'both', label: 'Both' },
+              { value: 'in', label: 'Inbound' },
+              { value: 'out', label: 'Outbound' },
             ]} />
             <Select defaultValue="daily" style={{ width: 120 }} options={[
-              { value: 'daily', label: 'Theo ngày' },
-              { value: 'weekly', label: 'Theo tuần' },
-              { value: 'monthly', label: 'Theo tháng' },
+              { value: 'daily', label: 'Daily' },
+              { value: 'weekly', label: 'Weekly' },
+              { value: 'monthly', label: 'Monthly' },
             ]} />
-            <Button type="primary">1 Tháng</Button>
+            <Button type="primary">1 Month</Button>
           </Space>
         </div>
 
@@ -167,7 +167,7 @@ export default function IntegrationDataPage() {
             <Card variant="outlined" style={{ borderRadius: 10, borderColor: '#e5e7eb' }} styles={{ body: { padding: '16px 20px' } }}>
               <Space align="center" style={{ marginBottom: 4 }}>
                 <ApiOutlined style={{ color: '#3b82f6', fontSize: 16 }} />
-                <Text type="secondary" style={{ fontSize: 12, fontWeight: 500 }}>Tổng request <span style={{ opacity: 0.4 }}>ⓘ</span></Text>
+                <Text type="secondary" style={{ fontSize: 12, fontWeight: 500 }}>Total Requests <span style={{ opacity: 0.4 }}>ⓘ</span></Text>
               </Space>
               <div style={{ fontSize: 32, fontWeight: 800, color: '#1f2937' }}>{totalRequests.toLocaleString()}</div>
             </Card>
@@ -176,7 +176,7 @@ export default function IntegrationDataPage() {
             <Card variant="outlined" style={{ borderRadius: 10, borderColor: '#e5e7eb' }} styles={{ body: { padding: '16px 20px' } }}>
               <Space align="center" style={{ marginBottom: 4 }}>
                 <CheckCircleOutlined style={{ color: '#10b981', fontSize: 16 }} />
-                <Text type="secondary" style={{ fontSize: 12, fontWeight: 500 }}>Tỉ lệ thành công <span style={{ opacity: 0.4 }}>ⓘ</span></Text>
+                <Text type="secondary" style={{ fontSize: 12, fontWeight: 500 }}>Success Rate <span style={{ opacity: 0.4 }}>ⓘ</span></Text>
               </Space>
               <div style={{ fontSize: 32, fontWeight: 800, color: '#10b981' }}>{((totalSuccess / totalRequests) * 100).toFixed(1)}%</div>
             </Card>
@@ -185,7 +185,7 @@ export default function IntegrationDataPage() {
             <Card variant="outlined" style={{ borderRadius: 10, borderColor: '#e5e7eb' }} styles={{ body: { padding: '16px 20px' } }}>
               <Space align="center" style={{ marginBottom: 4 }}>
                 <CloseCircleOutlined style={{ color: '#ef4444', fontSize: 16 }} />
-                <Text type="secondary" style={{ fontSize: 12, fontWeight: 500 }}>Tỉ lệ lỗi <span style={{ opacity: 0.4 }}>ⓘ</span></Text>
+                <Text type="secondary" style={{ fontSize: 12, fontWeight: 500 }}>Error Rate <span style={{ opacity: 0.4 }}>ⓘ</span></Text>
               </Space>
               <div style={{ fontSize: 32, fontWeight: 800, color: '#ef4444' }}>{((totalFailed / totalRequests) * 100).toFixed(1)}%</div>
             </Card>
@@ -194,7 +194,7 @@ export default function IntegrationDataPage() {
             <Card variant="outlined" style={{ borderRadius: 10, borderColor: '#e5e7eb' }} styles={{ body: { padding: '16px 20px' } }}>
               <Space align="center" style={{ marginBottom: 4 }}>
                 <ClockCircleOutlined style={{ color: '#f59e0b', fontSize: 16 }} />
-                <Text type="secondary" style={{ fontSize: 12, fontWeight: 500 }}>Phản hồi TB <span style={{ opacity: 0.4 }}>ⓘ</span></Text>
+                <Text type="secondary" style={{ fontSize: 12, fontWeight: 500 }}>Avg Response <span style={{ opacity: 0.4 }}>ⓘ</span></Text>
               </Space>
               <div style={{ fontSize: 32, fontWeight: 800, color: '#1f2937' }}>{avgResponse} <span style={{ fontSize: 14, fontWeight: 400 }}>ms</span></div>
             </Card>
@@ -204,7 +204,7 @@ export default function IntegrationDataPage() {
         {/* Traffic Chart Placeholder + Top API + Errors */}
         <Row gutter={[12, 12]} style={{ marginBottom: 20 }}>
           <Col span={24}>
-            <Card variant="outlined" title={<Space><LineChartOutlined style={{ color: '#3b82f6' }} /> Traffic theo thời gian <span style={{ opacity: 0.4 }}>ⓘ</span></Space>} style={{ borderRadius: 10, borderColor: '#e5e7eb' }}>
+            <Card variant="outlined" title={<Space><LineChartOutlined style={{ color: '#3b82f6' }} /> Traffic over time <span style={{ opacity: 0.4 }}>ⓘ</span></Space>} style={{ borderRadius: 10, borderColor: '#e5e7eb' }}>
               {/* Simple bar chart visualization */}
               <div style={{ display: 'flex', alignItems: 'flex-end', gap: 4, height: 120, padding: '0 20px' }}>
                 {Array.from({ length: 30 }, (_, i) => {
@@ -236,7 +236,7 @@ export default function IntegrationDataPage() {
 
         <Row gutter={[12, 12]} style={{ marginBottom: 20 }}>
           <Col xs={24} lg={12}>
-            <Card variant="outlined" title={<Space><ApiOutlined style={{ color: '#3b82f6' }} /> Top API gọi nhiều nhất <span style={{ opacity: 0.4 }}>ⓘ</span></Space>} style={{ borderRadius: 10, borderColor: '#e5e7eb' }}>
+            <Card variant="outlined" title={<Space><ApiOutlined style={{ color: '#3b82f6' }} /> Top APIs called <span style={{ opacity: 0.4 }}>ⓘ</span></Space>} style={{ borderRadius: 10, borderColor: '#e5e7eb' }}>
               <Space orientation="vertical" style={{ width: '100%' }} size={12}>
                 {topApiCalls.map((api) => (
                   <div key={api.endpoint}>
@@ -253,7 +253,7 @@ export default function IntegrationDataPage() {
             </Card>
           </Col>
           <Col xs={24} lg={12}>
-            <Card variant="outlined" title={<Space><CloseCircleOutlined style={{ color: '#ef4444' }} /> Request lỗi theo loại dữ liệu <span style={{ opacity: 0.4 }}>ⓘ</span></Space>} style={{ borderRadius: 10, borderColor: '#e5e7eb' }}>
+            <Card variant="outlined" title={<Space><CloseCircleOutlined style={{ color: '#ef4444' }} /> Failed requests by error type <span style={{ opacity: 0.4 }}>ⓘ</span></Space>} style={{ borderRadius: 10, borderColor: '#e5e7eb' }}>
               <Space orientation="vertical" style={{ width: '100%' }} size={12}>
                 {errorByType.map((err) => (
                   <div key={err.type} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -272,12 +272,12 @@ export default function IntegrationDataPage() {
         {/* Connection Table */}
         <Row gutter={[12, 12]}>
           <Col xs={24} lg={12}>
-            <Card variant="outlined" title={<Space><SwapOutlined style={{ color: '#3b82f6' }} /> Request theo chiều đồng bộ <span style={{ opacity: 0.4 }}>ⓘ</span></Space>} style={{ borderRadius: 10, borderColor: '#e5e7eb' }}>
+            <Card variant="outlined" title={<Space><SwapOutlined style={{ color: '#3b82f6' }} /> Requests by direction <span style={{ opacity: 0.4 }}>ⓘ</span></Space>} style={{ borderRadius: 10, borderColor: '#e5e7eb' }}>
               <Table columns={columns} dataSource={trafficData} rowKey="id" pagination={false} size="small" />
             </Card>
           </Col>
           <Col xs={24} lg={12}>
-            <Card variant="outlined" title={<Space><LinkOutlined style={{ color: '#3b82f6' }} /> Request theo kết nối <span style={{ opacity: 0.4 }}>ⓘ</span></Space>} style={{ borderRadius: 10, borderColor: '#e5e7eb' }}>
+            <Card variant="outlined" title={<Space><LinkOutlined style={{ color: '#3b82f6' }} /> Requests by connection <span style={{ opacity: 0.4 }}>ⓘ</span></Space>} style={{ borderRadius: 10, borderColor: '#e5e7eb' }}>
               <Space orientation="vertical" style={{ width: '100%' }} size={16}>
                 {trafficData.map((t) => (
                   <div key={t.id}>

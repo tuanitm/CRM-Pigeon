@@ -91,25 +91,7 @@ export declare class PrismaService implements OnModuleInit, OnModuleDestroy {
     get systemConfig(): import("../../../generated/prisma/models").SystemConfigDelegate<import("@prisma/client/runtime/client").InternalArgs, {
         omit: import("../../../generated/prisma/internal/prismaNamespace").GlobalOmitConfig | undefined;
     }>;
-    get dataHub(): import("../../../generated/prisma/models").DataHubDelegate<import("@prisma/client/runtime/client").InternalArgs, {
-        omit: import("../../../generated/prisma/internal/prismaNamespace").GlobalOmitConfig | undefined;
-    }>;
-    get dataHubTable(): import("../../../generated/prisma/models").DataHubTableDelegate<import("@prisma/client/runtime/client").InternalArgs, {
-        omit: import("../../../generated/prisma/internal/prismaNamespace").GlobalOmitConfig | undefined;
-    }>;
-    get dataHubColumn(): import("../../../generated/prisma/models").DataHubColumnDelegate<import("@prisma/client/runtime/client").InternalArgs, {
-        omit: import("../../../generated/prisma/internal/prismaNamespace").GlobalOmitConfig | undefined;
-    }>;
-    get dataHubRecord(): import("../../../generated/prisma/models").DataHubRecordDelegate<import("@prisma/client/runtime/client").InternalArgs, {
-        omit: import("../../../generated/prisma/internal/prismaNamespace").GlobalOmitConfig | undefined;
-    }>;
     get dynamicAction(): import("../../../generated/prisma/models").DynamicActionDelegate<import("@prisma/client/runtime/client").InternalArgs, {
-        omit: import("../../../generated/prisma/internal/prismaNamespace").GlobalOmitConfig | undefined;
-    }>;
-    get dynamicActionPage(): import("../../../generated/prisma/models").DynamicActionPageDelegate<import("@prisma/client/runtime/client").InternalArgs, {
-        omit: import("../../../generated/prisma/internal/prismaNamespace").GlobalOmitConfig | undefined;
-    }>;
-    get dynamicActionComponent(): import("../../../generated/prisma/models").DynamicActionComponentDelegate<import("@prisma/client/runtime/client").InternalArgs, {
         omit: import("../../../generated/prisma/internal/prismaNamespace").GlobalOmitConfig | undefined;
     }>;
     get zaloOA(): import("../../../generated/prisma/models").ZaloOADelegate<import("@prisma/client/runtime/client").InternalArgs, {
@@ -239,6 +221,9 @@ export declare class PrismaService implements OnModuleInit, OnModuleDestroy {
         omit: import("../../../generated/prisma/internal/prismaNamespace").GlobalOmitConfig | undefined;
     }>;
     get adminNotification(): import("../../../generated/prisma/models").AdminNotificationDelegate<import("@prisma/client/runtime/client").InternalArgs, {
+        omit: import("../../../generated/prisma/internal/prismaNamespace").GlobalOmitConfig | undefined;
+    }>;
+    get conditionDefinition(): import("../../../generated/prisma/models").ConditionDefinitionDelegate<import("@prisma/client/runtime/client").InternalArgs, {
         omit: import("../../../generated/prisma/internal/prismaNamespace").GlobalOmitConfig | undefined;
     }>;
     get $executeRaw(): <T = unknown>(query: TemplateStringsArray | import("../../../generated/prisma/internal/prismaNamespace").Sql, ...values: any[]) => import("../../../generated/prisma/internal/prismaNamespace").PrismaPromise<number>;

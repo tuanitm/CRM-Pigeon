@@ -17,20 +17,54 @@ export declare class JourneyController {
         name: string;
         code: string;
         description: string | null;
-        status: string;
         graph: import("@prisma/client/runtime/client").JsonValue;
         triggerEvent: string | null;
         triggerSegmentId: string | null;
         entryConditions: import("@prisma/client/runtime/client").JsonValue | null;
         exitConditions: import("@prisma/client/runtime/client").JsonValue | null;
         version: number;
+        status: string;
         hasControlGroup: boolean;
         controlGroupPct: import("@prisma/client-runtime-utils").Decimal | null;
     }[]>;
+    createJourney(data: any): Promise<{
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        name: string;
+        code: string;
+        description: string | null;
+        graph: import("@prisma/client/runtime/client").JsonValue;
+        triggerEvent: string | null;
+        triggerSegmentId: string | null;
+        entryConditions: import("@prisma/client/runtime/client").JsonValue | null;
+        exitConditions: import("@prisma/client/runtime/client").JsonValue | null;
+        version: number;
+        status: string;
+        hasControlGroup: boolean;
+        controlGroupPct: import("@prisma/client-runtime-utils").Decimal | null;
+    }>;
     enterJourney(journeyId: string, dto: EnterJourneyDto): Promise<{
         success: boolean;
         runId: string | null;
     }>;
     getPerformance(journeyId: string): Promise<Record<string, any>>;
+    updateJourney(journeyId: string, data: any): Promise<{
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        name: string;
+        code: string;
+        description: string | null;
+        graph: import("@prisma/client/runtime/client").JsonValue;
+        triggerEvent: string | null;
+        triggerSegmentId: string | null;
+        entryConditions: import("@prisma/client/runtime/client").JsonValue | null;
+        exitConditions: import("@prisma/client/runtime/client").JsonValue | null;
+        version: number;
+        status: string;
+        hasControlGroup: boolean;
+        controlGroupPct: import("@prisma/client-runtime-utils").Decimal | null;
+    }>;
 }
 export {};

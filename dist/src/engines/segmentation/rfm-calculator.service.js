@@ -16,8 +16,18 @@ const schedule_1 = require("@nestjs/schedule");
 const prisma_service_1 = require("../../shared/prisma/prisma.service");
 const RFM_SEGMENT_MAP = {
     champions: { r: [4, 5], f: [4, 5], m: [4, 5], label: 'Champions' },
-    loyal_customers: { r: [3, 4, 5], f: [3, 4, 5], m: [3, 4, 5], label: 'Loyal Customers' },
-    potential_loyal: { r: [3, 4, 5], f: [1, 2, 3], m: [1, 2, 3], label: 'Potential Loyalists' },
+    loyal_customers: {
+        r: [3, 4, 5],
+        f: [3, 4, 5],
+        m: [3, 4, 5],
+        label: 'Loyal Customers',
+    },
+    potential_loyal: {
+        r: [3, 4, 5],
+        f: [1, 2, 3],
+        m: [1, 2, 3],
+        label: 'Potential Loyalists',
+    },
     new_customers: { r: [4, 5], f: [1], m: [1, 2], label: 'New Customers' },
     promising: { r: [3, 4], f: [1], m: [1], label: 'Promising' },
     need_attention: { r: [2, 3], f: [2, 3], m: [2, 3], label: 'Need Attention' },
@@ -41,9 +51,15 @@ let RfmCalculatorService = RfmCalculatorService_1 = class RfmCalculatorService {
                 this.logger.warn('No customers with orders found for RFM calculation');
                 return;
             }
-            const recencyValues = rawScores.map((s) => s.recency_days).sort((a, b) => a - b);
-            const frequencyValues = rawScores.map((s) => s.frequency).sort((a, b) => a - b);
-            const monetaryValues = rawScores.map((s) => s.monetary).sort((a, b) => a - b);
+            const recencyValues = rawScores
+                .map((s) => s.recency_days)
+                .sort((a, b) => a - b);
+            const frequencyValues = rawScores
+                .map((s) => s.frequency)
+                .sort((a, b) => a - b);
+            const monetaryValues = rawScores
+                .map((s) => s.monetary)
+                .sort((a, b) => a - b);
             const rBounds = this.quintileBoundaries(recencyValues);
             const fBounds = this.quintileBoundaries(frequencyValues);
             const mBounds = this.quintileBoundaries(monetaryValues);

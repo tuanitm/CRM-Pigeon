@@ -1,34 +1,32 @@
-const demoCustomers = [
-  { fullName: 'Nguyen Thi Mai', phone: '+84901234567', email: 'mai@example.com', gender: 'female', customerType: 'End user' },
-  { fullName: 'Tran Van Duc', phone: '+84912345678', email: 'duc@example.com', gender: 'male', customerType: 'End user' },
-  { fullName: 'Le Thi Hoa', phone: '+84923456789', email: 'hoa@example.com', gender: 'female', customerType: 'End user' },
-  { fullName: 'Pham Minh Tuan', phone: '+84934567890', email: 'tuan@example.com', gender: 'male', customerType: 'End user' },
-  { fullName: 'Vo Thi Lan', phone: '+84945678901', email: 'lan@example.com', gender: 'female', customerType: 'End user' },
-  { fullName: 'Hoang Van Nam', phone: '+84956789012', email: 'nam@example.com', gender: 'male', customerType: 'End user' },
-  { fullName: 'Bui Thi Thuy', phone: '+84967890123', email: 'thuy@example.com', gender: 'female', customerType: 'End user' },
+const http = require('http');
+
+const conditions = [
+  { code: 'customer_type', name: 'Customer Type', type: 'string', source: 'customer', description: 'End user, Outlet, or Keyshop' },
+  { code: 'tier', name: 'Customer Tier', type: 'string', source: 'customer', description: 'Customer loyalty tier (e.g. Platinum, VIP)' },
+  { code: 'total_purchase_amount', name: 'Total Purchase Amount', type: 'number', source: 'loyalty_account', description: 'Total lifetime spend of the customer' },
+  { code: 'babyCount', name: 'Total Children (Baby Count)', type: 'number', source: 'database_query', description: 'Number of children added to profile' },
 ];
 
-async function main() {
-  console.log('Seeding demo customers via API...');
-  
-  for (const c of demoCustomers) {
-    try {
-      const res = await fetch('http://localhost:3000/v1/admin/customers', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(c)
-      });
-      
-      const text = await res.text();
-      if (!res.ok) {
-        console.error(`Failed to create ${c.fullName}: ${text}`);
-      } else {
-        console.log(`Created customer: ${c.fullName}`);
+async function run() {
+  for (const c of conditions) {
+    const data = JSON.stringify(c);
+    const req = http.request('http://localhost:3000/v1/admin/conditions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(data),
       }
-    } catch (err) {
-      console.error(`Error for ${c.fullName}:`, err.message);
-    }
+    }, (res) => {
+      let body = '';
+      res.on('data', chunk => body += chunk);
+      res.on('end', () => console.log(`Created ${c.code}: ${res.statusCode} - ${body}`));
+    });
+    req.on('error', e => console.error(e));
+    req.write(data);
+    req.end();
+    
+    // wait a bit
+    await new Promise(r => setTimeout(r, 500));
   }
 }
-
-main();
+run();

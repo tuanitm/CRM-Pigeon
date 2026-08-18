@@ -33,11 +33,16 @@ export class ChannelRouterService {
     private smsProvider: SmsProviderService,
   ) {}
 
-  async send(params: SendMessageParams): Promise<{ sent: boolean; reason?: string; messageId?: string }> {
+  async send(
+    params: SendMessageParams,
+  ): Promise<{ sent: boolean; reason?: string; messageId?: string }> {
     const { customerId, channel, templateCode } = params;
 
     // 1. Consent check
-    const hasConsent = await this.consentChecker.hasConsent(customerId, channel);
+    const hasConsent = await this.consentChecker.hasConsent(
+      customerId,
+      channel,
+    );
     if (!hasConsent) {
       await this.logMessage(params, 'suppressed', 'no_consent');
       return { sent: false, reason: 'no_consent' };
@@ -46,14 +51,22 @@ export class ChannelRouterService {
     // 2. Frequency cap
     const freq = await this.frequencyLimiter.isAllowed(customerId, channel);
     if (!freq.allowed) {
-      await this.logMessage(params, 'suppressed', `frequency_cap_exceeded (${freq.count}/${freq.limit})`);
+      await this.logMessage(
+        params,
+        'suppressed',
+        `frequency_cap_exceeded (${freq.count}/${freq.limit})`,
+      );
       return { sent: false, reason: 'frequency_cap_exceeded' };
     }
 
     // 3. Quiet hours
     if (this.quietHours.isQuietHours()) {
       const nextSend = this.quietHours.getNextSendTime();
-      await this.logMessage(params, 'deferred', `quiet_hours (deferred to ${nextSend.toISOString()})`);
+      await this.logMessage(
+        params,
+        'deferred',
+        `quiet_hours (deferred to ${nextSend.toISOString()})`,
+      );
       return { sent: false, reason: 'quiet_hours_deferred' };
     }
 
@@ -82,18 +95,26 @@ export class ChannelRouterService {
       customer_name: customer.fullName || 'Quý khách',
       customer_phone: customer.phone || '',
       customer_email: customer.email || '',
-      points_balance: String((customer as any).loyaltyAccount?.pointsBalance || 0),
-      tier_name: (customer as any).loyaltyAccount?.tier?.tierName || 'Member',
+      points_balance: String(
+        (customer as any).loyaltyAccount?.pointsBalance || 0,
+      ),
+      tier_name: (customer as any).loyaltyAccount?.tier?.tierName || 'Bronze',
       ...(params.variables || {}),
     };
 
     // Render body with variable substitution
     const renderedBody = this.renderTemplate(template.body, variables);
-    const renderedSubject = template.subject ? this.renderTemplate(template.subject, variables) : '';
+    const renderedSubject = template.subject
+      ? this.renderTemplate(template.subject, variables)
+      : '';
 
     // 5. Send via appropriate provider
     try {
-      let providerResult: { success: boolean; messageId?: string; error?: string };
+      let providerResult: {
+        success: boolean;
+        messageId?: string;
+        error?: string;
+      };
 
       switch (channel) {
         case 'zns':
@@ -123,18 +144,39 @@ export class ChannelRouterService {
           break;
 
         default:
-          providerResult = { success: false, error: `Unknown channel: ${channel}` };
+          providerResult = {
+            success: false,
+            error: `Unknown channel: ${channel}`,
+          };
       }
 
       if (providerResult.success) {
-        await this.logMessage(params, 'sent', undefined, providerResult.messageId, template.id);
+        await this.logMessage(
+          params,
+          'sent',
+          undefined,
+          providerResult.messageId,
+          template.id,
+        );
         return { sent: true, messageId: providerResult.messageId };
       }
 
-      await this.logMessage(params, 'failed', providerResult.error, undefined, template.id);
+      await this.logMessage(
+        params,
+        'failed',
+        providerResult.error,
+        undefined,
+        template.id,
+      );
       return { sent: false, reason: providerResult.error };
     } catch (error) {
-      await this.logMessage(params, 'failed', (error as Error).message, undefined, template.id);
+      await this.logMessage(
+        params,
+        'failed',
+        (error as Error).message,
+        undefined,
+        template.id,
+      );
       return { sent: false, reason: 'provider_error' };
     }
   }
@@ -142,8 +184,14 @@ export class ChannelRouterService {
   /**
    * Simple variable interpolation: {{var_name}} → value
    */
-  private renderTemplate(template: string, variables: Record<string, string>): string {
-    return template.replace(/\{\{(\w+)\}\}/g, (_, key) => variables[key] || `{{${key}}}`);
+  private renderTemplate(
+    template: string,
+    variables: Record<string, string>,
+  ): string {
+    return template.replace(
+      /\{\{(\w+)\}\}/g,
+      (_, key) => variables[key] || `{{${key}}}`,
+    );
   }
 
   private async logMessage(

@@ -1,11 +1,19 @@
-import { Controller, Get, Patch, Param, Body } from '@nestjs/common';
+import { Controller, Get, Patch, Param, Body, Logger } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { PrismaService } from '../shared/prisma/prisma.service';
+import { JourneyEngineService } from '../engines/journey/journey-engine.service';
+import { JourneyRunService } from '../engines/journey/journey-run.service';
 
 @ApiTags('Customer Profile')
 @Controller('customers')
 export class ProfileController {
-  constructor(private prisma: PrismaService) {}
+  private readonly logger = new Logger(ProfileController.name);
+
+  constructor(
+    private prisma: PrismaService,
+    private journeyEngine: JourneyEngineService,
+    private journeyRunService: JourneyRunService,
+  ) {}
 
   @Get(':id')
   @ApiOperation({ summary: 'Get customer profile (360 view)' })
@@ -18,36 +26,48 @@ export class ProfileController {
         tags: true,
         event: {
           orderBy: { occurred_at: 'desc' },
-          take: 100
+          take: 100,
         },
-        loyaltyAccount: { 
-          include: { 
+        loyaltyAccount: {
+          include: {
             tier: true,
             transactions: {
               orderBy: { createdAt: 'desc' },
-              take: 50
-            }
-          } 
+              take: 50,
+            },
+          },
         },
         consents: true,
         reward_redemption: {
           include: { reward_catalog: true },
-          orderBy: { createdAt: 'desc' }
+          orderBy: { createdAt: 'desc' },
         },
         journey_run: {
           include: { journey: true },
-          orderBy: { entered_at: 'desc' }
+          orderBy: { entered_at: 'desc' },
         },
         orders: {
           where: { isInternal: true },
           include: { items: { include: { product: true } } },
-          orderBy: { createdAt: 'desc' }
+          orderBy: { createdAt: 'desc' },
         },
         devices: {
-          orderBy: { lastLogin: 'desc' }
-        }
+          orderBy: { lastLogin: 'desc' },
+        },
       },
     });
+  }
+
+  @Get(':id/debug-baby-journey')
+  @ApiOperation({ summary: 'Debug journey trigger' })
+  async debugBabyJourney(@Param('id') id: string) {
+    this.logger.log(`Debugging baby.profile_created for ${id}`);
+    await this.journeyRunService.handleEventTrigger(
+      'baby.profile_created',
+      id,
+      { debug: true },
+    );
+    return { success: true };
   }
 
   @Patch(':id')
@@ -56,24 +76,30 @@ export class ProfileController {
     // Optionally check if phone is already used by another customer
     if (data.phone) {
       const existing = await this.prisma.customer.findFirst({
-        where: { phone: data.phone, id: { not: id } }
+        where: { phone: data.phone, id: { not: id } },
       });
       if (existing) throw new Error('Phone number already in use');
     }
 
     const oldCustomer = await this.prisma.customer.findUnique({
       where: { id },
-      include: { addresses: true }
+      include: { addresses: true },
     });
     const oldEmail = oldCustomer?.email;
     const oldAddress = oldCustomer?.addresses?.[0]?.addressLine1;
 
-    let eventsToLog: any[] = [];
+    const eventsToLog: any[] = [];
 
     if (data.babies) {
-      const existingBabies = await this.prisma.baby.findMany({ where: { customerId: id } });
-      const incomingIds = data.babies.filter((b: any) => b.id).map((b: any) => b.id);
-      const toDelete = existingBabies.filter(b => !incomingIds.includes(b.id));
+      const existingBabies = await this.prisma.baby.findMany({
+        where: { customerId: id },
+      });
+      const incomingIds = data.babies
+        .filter((b: any) => b.id)
+        .map((b: any) => b.id);
+      const toDelete = existingBabies.filter(
+        (b) => !incomingIds.includes(b.id),
+      );
 
       for (const b of toDelete) {
         await this.prisma.baby.delete({ where: { id: b.id } });
@@ -89,11 +115,34 @@ export class ProfileController {
           stageCode: b.stageCode,
         };
         if (b.id) {
-          await this.prisma.baby.update({ where: { id: b.id }, data: babyData });
-          eventsToLog.push({ type: 'CHILD_MODIFIED', props: { babyId: b.id, name: b.name } });
+          await this.prisma.baby.update({
+            where: { id: b.id },
+            data: babyData,
+          });
+          eventsToLog.push({
+            type: 'CHILD_MODIFIED',
+            props: { babyId: b.id, name: b.name },
+          });
         } else {
-          const newBaby = await this.prisma.baby.create({ data: { ...babyData, customerId: id } });
-          eventsToLog.push({ type: 'CHILD_ADDED', props: { babyId: newBaby.id, name: b.name } });
+          const newBaby = await this.prisma.baby.create({
+            data: { ...babyData, customerId: id },
+          });
+          eventsToLog.push({
+            type: 'CHILD_ADDED',
+            props: { babyId: newBaby.id, name: b.name },
+          });
+          // Fire baby.profile_created → triggers JRN_WELCOME_BABY journey
+          try {
+            await this.journeyRunService.handleEventTrigger(
+              'baby.profile_created',
+              id,
+              { babyId: newBaby.id, babyName: b.name },
+            );
+          } catch (err) {
+            this.logger.error(
+              `Failed to fire baby.profile_created: ${(err as Error).message}`,
+            );
+          }
         }
       }
     }
@@ -110,21 +159,33 @@ export class ProfileController {
         notes: data.notes,
         dateOfBirth: data.dateOfBirth ? new Date(data.dateOfBirth) : undefined,
         avatarUrl: data.avatarUrl,
-        addresses: data.address !== undefined ? {
-          deleteMany: {},
-          create: data.address ? [{ addressLine1: data.address }] : [],
-        } : undefined,
+        addresses:
+          data.address !== undefined
+            ? {
+                deleteMany: {},
+                create: data.address ? [{ addressLine1: data.address }] : [],
+              }
+            : undefined,
       },
     });
 
     if (data.email && data.email !== oldEmail) {
-      eventsToLog.push({ type: 'EMAIL_UPDATED', props: { oldEmail, newEmail: data.email } });
+      eventsToLog.push({
+        type: 'EMAIL_UPDATED',
+        props: { oldEmail, newEmail: data.email },
+      });
     }
     if (data.address !== undefined && data.address !== oldAddress) {
-      eventsToLog.push({ type: 'ADDRESS_UPDATED', props: { oldAddress, newAddress: data.address } });
+      eventsToLog.push({
+        type: 'ADDRESS_UPDATED',
+        props: { oldAddress, newAddress: data.address },
+      });
     }
     if (data.fullName && data.fullName !== oldCustomer?.fullName) {
-      eventsToLog.push({ type: 'PROFILE_UPDATED', props: { updatedFields: ['fullName'] } });
+      eventsToLog.push({
+        type: 'PROFILE_UPDATED',
+        props: { updatedFields: ['fullName'] },
+      });
     }
 
     for (const evt of eventsToLog) {
@@ -133,158 +194,27 @@ export class ProfileController {
           customer_id: id,
           event_type: evt.type,
           properties: evt.props,
-          source: 'customer-api'
-        }
+          source: 'customer-api',
+        },
       });
     }
 
     if (data.isOnboardingCompletion) {
-      await this.evaluateWelcomeBonus(id);
+      // Fire customer.profile_completed → triggers any journey listening for this event
+      try {
+        await this.journeyRunService.handleEventTrigger(
+          'customer.profile_completed',
+          id,
+        );
+        this.logger.log(`Fired customer.profile_completed for customer ${id}`);
+      } catch (err) {
+        this.logger.error(
+          `Failed to fire customer.profile_completed: ${(err as Error).message}`,
+        );
+      }
     }
 
     return updatedCustomer;
-  }
-
-  private async evaluateWelcomeBonus(customerId: string) {
-    // Skip Welcome Onboarding for non-End-user types (Outlet, Keyshop)
-    const customer = await this.prisma.customer.findUnique({ where: { id: customerId }, select: { customerType: true } });
-    if (customer?.customerType && customer.customerType !== 'End user') return;
-
-    const welcomeRule = await this.prisma.loyaltyEarnRule.findFirst({
-      where: { source: 'welcome_bonus', ruleName: 'Welcome Onboarding', isActive: true },
-    });
-    
-    if (!welcomeRule) return;
-
-    const now = new Date();
-    if ((welcomeRule.validFrom && welcomeRule.validFrom > now) || 
-        (welcomeRule.validUntil && welcomeRule.validUntil < now)) {
-      return;
-    }
-
-    let loyaltyAccount = await this.prisma.loyaltyAccount.findUnique({ where: { customerId } });
-    if (!loyaltyAccount) {
-      loyaltyAccount = await this.prisma.loyaltyAccount.create({ data: { customerId } });
-    }
-
-    const formula = welcomeRule.pointsFormula as any;
-    let rewards = [];
-    
-    if (formula?.rewards && Array.isArray(formula.rewards)) {
-      rewards = formula.rewards;
-    } else if (formula?.rewardType) {
-      rewards = [formula];
-    } else if (formula?.type === 'fixed') {
-      rewards = [{ type: 'points', value: formula.value }];
-    }
-
-    let rewardContexts = [];
-    
-    // Check if customer has a child for conditional rewards
-    const babyCount = await this.prisma.baby.count({ where: { customerId } });
-    const hasChild = babyCount > 0;
-
-    for (const r of rewards) {
-      // Evaluate conditions
-      if (r.condition === 'has_child' && !hasChild) continue;
-
-      const rType = r.type || r.rewardType || 'points';
-      
-      if (rType === 'points') {
-        const pts = r.value || 0;
-        if (pts > 0) {
-          await this.prisma.loyaltyAccount.update({
-            where: { id: loyaltyAccount.id },
-            data: {
-              pointsBalance: { increment: pts },
-              pointsLifetime: { increment: pts },
-              transactions: {
-                create: {
-                  customerId,
-                  type: 'earn',
-                  source: 'welcome_bonus',
-                  points: pts,
-                  balanceAfter: pts,
-                  description: r.condition ? 'Welcome Onboarding Bonus (Extra)' : 'Welcome Onboarding Bonus',
-                  idempotencyKey: `welcome-${customerId}-${r.condition || 'base'}-${Date.now()}`,
-                }
-              }
-            }
-          });
-          rewardContexts.push({ type: 'points', pointsEarned: pts, condition: r.condition });
-        }
-      } else if (rType === 'free_gift' && r.rewardId) {
-        await this.prisma.rewardRedemption.create({
-          data: {
-            loyaltyAccountId: loyaltyAccount.id,
-            customerId,
-            rewardId: r.rewardId,
-            pointsSpent: 0,
-            status: 'pending',
-            idempotencyKey: `welcome-gift-${customerId}-${r.rewardId}-${Date.now()}`
-          }
-        });
-        rewardContexts.push({ type: 'free_gift', rewardId: r.rewardId });
-      } else if (rType === 'voucher' && r.rewardId) {
-        await this.prisma.rewardRedemption.create({
-          data: {
-            loyaltyAccountId: loyaltyAccount.id,
-            customerId,
-            rewardId: r.rewardId,
-            pointsSpent: 0,
-            status: 'pending',
-            idempotencyKey: `welcome-voucher-${customerId}-${r.rewardId}-${Date.now()}`
-          }
-        });
-        rewardContexts.push({ type: 'voucher', rewardId: r.rewardId });
-      } else if (rType === 'product' && r.productId) {
-        const orderNum = `INT-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
-        await this.prisma.order.create({
-          data: {
-            customerId,
-            orderNumber: orderNum,
-            status: 'pending',
-            totalAmount: 0,
-            isInternal: true,
-            isGwp: false,
-            orderedAt: new Date(),
-            items: {
-              create: {
-                productId: r.productId,
-                quantity: 1,
-                unitPrice: 0,
-                totalPrice: 0,
-              }
-            }
-          }
-        });
-        rewardContexts.push({ type: 'product', productId: r.productId });
-      }
-    }
-
-    // Ensure JRN_WELCOME_ONBOARDING journey exists
-    const journey = await this.prisma.journey.upsert({
-      where: { code: 'JRN_WELCOME_ONBOARDING' },
-      update: {},
-      create: {
-        code: 'JRN_WELCOME_ONBOARDING',
-        name: 'Welcome Onboarding',
-        status: 'active',
-        triggerEvent: 'customer.profile_completed'
-      }
-    });
-
-    // Log Journey Run
-    await this.prisma.journey_run.create({
-      data: {
-        journey_id: journey.id,
-        customer_id: customerId,
-        status: 'completed',
-        context: { rewards: rewardContexts },
-        entered_at: now,
-        exited_at: now,
-      }
-    });
   }
 
   @Patch(':id/reward-redemptions/:redemptionId/status')
@@ -292,16 +222,17 @@ export class ProfileController {
   async updateRewardRedemptionStatus(
     @Param('id') id: string,
     @Param('redemptionId') redemptionId: string,
-    @Body() data: { status: string; shipmentNo?: string; trackingLink?: string }
+    @Body()
+    data: { status: string; shipmentNo?: string; trackingLink?: string },
   ) {
     return this.prisma.rewardRedemption.update({
       where: { id: redemptionId, customerId: id },
-      data: { 
-        status: data.status, 
+      data: {
+        status: data.status,
         fulfilledAt: data.status === 'fulfilled' ? new Date() : null,
         shipmentNo: data.shipmentNo,
-        trackingLink: data.trackingLink
-      }
+        trackingLink: data.trackingLink,
+      },
     });
   }
 
@@ -310,15 +241,16 @@ export class ProfileController {
   async updateOrderStatus(
     @Param('id') id: string,
     @Param('orderId') orderId: string,
-    @Body() data: { status: string; shipmentNo?: string; trackingLink?: string }
+    @Body()
+    data: { status: string; shipmentNo?: string; trackingLink?: string },
   ) {
     return this.prisma.order.update({
       where: { id: orderId, customerId: id },
-      data: { 
+      data: {
         status: data.status,
         shipmentNo: data.shipmentNo,
-        trackingLink: data.trackingLink
-      }
+        trackingLink: data.trackingLink,
+      },
     });
   }
 }

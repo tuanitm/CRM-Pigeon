@@ -44,6 +44,7 @@ export declare const ModelName: {
     readonly checklist_progress: "checklist_progress";
     readonly customer_metrics_daily: "customer_metrics_daily";
     readonly data_layer_definition: "data_layer_definition";
+    readonly ConditionDefinition: "ConditionDefinition";
     readonly data_quality_flag_log: "data_quality_flag_log";
     readonly data_quality_rule: "data_quality_rule";
     readonly dsr_request: "dsr_request";
@@ -78,13 +79,7 @@ export declare const ModelName: {
     readonly warranty_registration: "warranty_registration";
     readonly webhook_inbox: "webhook_inbox";
     readonly SystemConfig: "SystemConfig";
-    readonly DataHub: "DataHub";
     readonly DynamicAction: "DynamicAction";
-    readonly DynamicActionPage: "DynamicActionPage";
-    readonly DynamicActionComponent: "DynamicActionComponent";
-    readonly DataHubTable: "DataHubTable";
-    readonly DataHubColumn: "DataHubColumn";
-    readonly DataHubRecord: "DataHubRecord";
     readonly ZaloOA: "ZaloOA";
     readonly ZaloMiniApp: "ZaloMiniApp";
     readonly SupportTicket: "SupportTicket";
@@ -525,6 +520,18 @@ export declare const Data_layer_definitionScalarFieldEnum: {
     readonly created_at: "created_at";
 };
 export type Data_layer_definitionScalarFieldEnum = (typeof Data_layer_definitionScalarFieldEnum)[keyof typeof Data_layer_definitionScalarFieldEnum];
+export declare const ConditionDefinitionScalarFieldEnum: {
+    readonly id: "id";
+    readonly code: "code";
+    readonly name: "name";
+    readonly type: "type";
+    readonly source: "source";
+    readonly description: "description";
+    readonly isActive: "isActive";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
+};
+export type ConditionDefinitionScalarFieldEnum = (typeof ConditionDefinitionScalarFieldEnum)[keyof typeof ConditionDefinitionScalarFieldEnum];
 export declare const Data_quality_flag_logScalarFieldEnum: {
     readonly id: "id";
     readonly rule_id: "rule_id";
@@ -917,15 +924,6 @@ export declare const SystemConfigScalarFieldEnum: {
     readonly updatedAt: "updatedAt";
 };
 export type SystemConfigScalarFieldEnum = (typeof SystemConfigScalarFieldEnum)[keyof typeof SystemConfigScalarFieldEnum];
-export declare const DataHubScalarFieldEnum: {
-    readonly id: "id";
-    readonly name: "name";
-    readonly source: "source";
-    readonly ownerId: "ownerId";
-    readonly createdAt: "createdAt";
-    readonly updatedAt: "updatedAt";
-};
-export type DataHubScalarFieldEnum = (typeof DataHubScalarFieldEnum)[keyof typeof DataHubScalarFieldEnum];
 export declare const DynamicActionScalarFieldEnum: {
     readonly id: "id";
     readonly actionCode: "actionCode";
@@ -935,60 +933,12 @@ export declare const DynamicActionScalarFieldEnum: {
     readonly target: "target";
     readonly status: "status";
     readonly ownerId: "ownerId";
-    readonly dataHubId: "dataHubId";
     readonly startDate: "startDate";
     readonly endDate: "endDate";
     readonly createdAt: "createdAt";
     readonly updatedAt: "updatedAt";
 };
 export type DynamicActionScalarFieldEnum = (typeof DynamicActionScalarFieldEnum)[keyof typeof DynamicActionScalarFieldEnum];
-export declare const DynamicActionPageScalarFieldEnum: {
-    readonly id: "id";
-    readonly actionId: "actionId";
-    readonly pageOrder: "pageOrder";
-    readonly title: "title";
-    readonly headerConfig: "headerConfig";
-    readonly actionConfig: "actionConfig";
-    readonly dataHubTableId: "dataHubTableId";
-    readonly createdAt: "createdAt";
-    readonly updatedAt: "updatedAt";
-};
-export type DynamicActionPageScalarFieldEnum = (typeof DynamicActionPageScalarFieldEnum)[keyof typeof DynamicActionPageScalarFieldEnum];
-export declare const DynamicActionComponentScalarFieldEnum: {
-    readonly id: "id";
-    readonly pageId: "pageId";
-    readonly componentOrder: "componentOrder";
-    readonly type: "type";
-    readonly label: "label";
-    readonly placeholder: "placeholder";
-    readonly required: "required";
-    readonly options: "options";
-    readonly validation: "validation";
-    readonly dataHubColumnId: "dataHubColumnId";
-    readonly createdAt: "createdAt";
-    readonly updatedAt: "updatedAt";
-};
-export type DynamicActionComponentScalarFieldEnum = (typeof DynamicActionComponentScalarFieldEnum)[keyof typeof DynamicActionComponentScalarFieldEnum];
-export declare const DataHubTableScalarFieldEnum: {
-    readonly id: "id";
-    readonly dataHubId: "dataHubId";
-    readonly name: "name";
-};
-export type DataHubTableScalarFieldEnum = (typeof DataHubTableScalarFieldEnum)[keyof typeof DataHubTableScalarFieldEnum];
-export declare const DataHubColumnScalarFieldEnum: {
-    readonly id: "id";
-    readonly tableId: "tableId";
-    readonly name: "name";
-    readonly dataType: "dataType";
-};
-export type DataHubColumnScalarFieldEnum = (typeof DataHubColumnScalarFieldEnum)[keyof typeof DataHubColumnScalarFieldEnum];
-export declare const DataHubRecordScalarFieldEnum: {
-    readonly id: "id";
-    readonly tableId: "tableId";
-    readonly data: "data";
-    readonly createdAt: "createdAt";
-};
-export type DataHubRecordScalarFieldEnum = (typeof DataHubRecordScalarFieldEnum)[keyof typeof DataHubRecordScalarFieldEnum];
 export declare const ZaloOAScalarFieldEnum: {
     readonly id: "id";
     readonly oaId: "oaId";

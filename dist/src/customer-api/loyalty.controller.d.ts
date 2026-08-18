@@ -19,17 +19,17 @@ export declare class LoyaltyController {
             isDefault: boolean;
         } | null;
         transactions: {
+            type: string;
             id: string;
             createdAt: Date;
-            type: string;
             description: string | null;
             customerId: string;
             idempotencyKey: string | null;
             source: string;
             points: number;
+            balanceAfter: number;
             referenceType: string | null;
             referenceId: string | null;
-            balanceAfter: number;
             expiresAt: Date | null;
             loyaltyAccountId: string;
         }[];

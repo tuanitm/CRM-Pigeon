@@ -12,9 +12,36 @@ var JourneyRunService_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.JourneyRunService = void 0;
 const common_1 = require("@nestjs/common");
+const schedule_1 = require("@nestjs/schedule");
 const prisma_service_1 = require("../../shared/prisma/prisma.service");
 const journey_engine_service_1 = require("./journey-engine.service");
 const MANDATORY_JOURNEYS = [
+    {
+        code: 'JRN_WELCOME_ONBOARDING',
+        name: 'Welcome Onboarding',
+        description: 'Onboarding reward flow when a new customer completes registration',
+        triggerEvent: 'customer.profile_completed',
+        hasControlGroup: false,
+        graph: {
+            start_node: 'award_reward',
+            nodes: {
+                award_reward: {
+                    type: 'action_reward',
+                    config: { rewards: [] },
+                    next: 'send_welcome_msg',
+                },
+                send_welcome_msg: {
+                    type: 'action',
+                    config: { channel: 'zns', template_code: 'WELCOME_ONBOARDING_01' },
+                    next: 'end_completed',
+                },
+                end_completed: {
+                    type: 'exit',
+                    config: { reason: 'welcome_onboarding_complete' },
+                },
+            },
+        },
+    },
     {
         code: 'JRN_WELCOME_BABY',
         name: 'Welcome Baby Onboarding',
@@ -22,8 +49,13 @@ const MANDATORY_JOURNEYS = [
         triggerEvent: 'baby.profile_created',
         hasControlGroup: false,
         graph: {
-            start_node: 'send_welcome',
+            start_node: 'award_reward',
             nodes: {
+                award_reward: {
+                    type: 'action_reward',
+                    config: { rewards: [] },
+                    next: 'send_welcome',
+                },
                 send_welcome: {
                     type: 'action',
                     config: { channel: 'zns', template_code: 'WELCOME_BABY_01' },
@@ -37,22 +69,6 @@ const MANDATORY_JOURNEYS = [
                 send_tips: {
                     type: 'action',
                     config: { channel: 'email', template_code: 'BABY_STAGE_TIPS_01' },
-                    next: 'wait_72h',
-                },
-                wait_72h: {
-                    type: 'wait',
-                    config: { duration_hours: 72 },
-                    next: 'check_quiz',
-                },
-                check_quiz: {
-                    type: 'condition',
-                    config: { field: 'event_count.quiz.completed', op: 'gte', value: 1 },
-                    next_true: 'end_completed',
-                    next_false: 'send_quiz_invite',
-                },
-                send_quiz_invite: {
-                    type: 'action',
-                    config: { channel: 'zns', template_code: 'QUIZ_INVITE_01' },
                     next: 'end_completed',
                 },
                 end_completed: {
@@ -65,23 +81,17 @@ const MANDATORY_JOURNEYS = [
     {
         code: 'JRN_SECOND_ORDER',
         name: 'Convert to Second Order',
-        description: 'Encourage first-time buyers to make a second purchase with complementary products',
+        description: 'Encourage first-time buyers to make a second purchase',
         triggerEvent: 'order.completed',
         exitConditions: { event_type: 'order.completed' },
         hasControlGroup: false,
         graph: {
-            start_node: 'wait_5d',
+            start_node: 'award_reward',
             nodes: {
-                wait_5d: {
-                    type: 'wait',
-                    config: { duration_hours: 120 },
-                    next: 'check_second_order',
-                },
-                check_second_order: {
-                    type: 'condition',
-                    config: { field: 'event_count.order.completed', op: 'gte', value: 2 },
-                    next_true: 'end_success',
-                    next_false: 'send_recommendation',
+                award_reward: {
+                    type: 'action_reward',
+                    config: { rewards: [] },
+                    next: 'send_recommendation',
                 },
                 send_recommendation: {
                     type: 'action',
@@ -98,8 +108,10 @@ const MANDATORY_JOURNEYS = [
                     config: { channel: 'email', template_code: 'SECOND_ORDER_REMIND_01' },
                     next: 'end_completed',
                 },
-                end_success: { type: 'exit', config: { reason: 'second_order_placed' } },
-                end_completed: { type: 'exit', config: { reason: 'sequence_complete' } },
+                end_completed: {
+                    type: 'exit',
+                    config: { reason: 'sequence_complete' },
+                },
             },
         },
     },
@@ -111,8 +123,13 @@ const MANDATORY_JOURNEYS = [
         exitConditions: { event_type: 'order.completed' },
         hasControlGroup: false,
         graph: {
-            start_node: 'send_reminder',
+            start_node: 'award_reward',
             nodes: {
+                award_reward: {
+                    type: 'action_reward',
+                    config: { rewards: [] },
+                    next: 'send_reminder',
+                },
                 send_reminder: {
                     type: 'action',
                     config: { channel: 'zns', template_code: 'REPLENISH_REMIND_01' },
@@ -121,20 +138,13 @@ const MANDATORY_JOURNEYS = [
                 wait_3d: {
                     type: 'wait',
                     config: { duration_hours: 72 },
-                    next: 'check_ordered',
-                },
-                check_ordered: {
-                    type: 'condition',
-                    config: { field: 'event_count.order.completed', op: 'gte', value: 1 },
-                    next_true: 'end_ordered',
-                    next_false: 'send_followup',
+                    next: 'send_followup',
                 },
                 send_followup: {
                     type: 'action',
                     config: { channel: 'email', template_code: 'REPLENISH_FOLLOWUP_01' },
                     next: 'end_completed',
                 },
-                end_ordered: { type: 'exit', config: { reason: 'customer_reordered' } },
                 end_completed: { type: 'exit', config: { reason: 'reminder_sent' } },
             },
         },
@@ -142,14 +152,19 @@ const MANDATORY_JOURNEYS = [
     {
         code: 'JRN_CHURN_ALERT',
         name: 'Early Churn Warning',
-        description: 'Per-customer cycle churn detection, not global average',
+        description: 'Per-customer cycle churn detection',
         triggerEvent: 'churn.risk_detected',
         exitConditions: { event_type: 'order.completed' },
         hasControlGroup: true,
         controlGroupPct: 10,
         graph: {
-            start_node: 'send_winback',
+            start_node: 'award_reward',
             nodes: {
+                award_reward: {
+                    type: 'action_reward',
+                    config: { rewards: [] },
+                    next: 'send_winback',
+                },
                 send_winback: {
                     type: 'action',
                     config: { channel: 'zns', template_code: 'CHURN_ALERT_01' },
@@ -158,21 +173,17 @@ const MANDATORY_JOURNEYS = [
                 wait_5d: {
                     type: 'wait',
                     config: { duration_hours: 120 },
-                    next: 'check_returned',
-                },
-                check_returned: {
-                    type: 'condition',
-                    config: { field: 'event_count.order.completed', op: 'gte', value: 1 },
-                    next_true: 'end_returned',
-                    next_false: 'send_incentive',
+                    next: 'send_incentive',
                 },
                 send_incentive: {
                     type: 'action',
                     config: { channel: 'email', template_code: 'CHURN_INCENTIVE_01' },
                     next: 'end_completed',
                 },
-                end_returned: { type: 'exit', config: { reason: 'customer_returned' } },
-                end_completed: { type: 'exit', config: { reason: 'churn_sequence_complete' } },
+                end_completed: {
+                    type: 'exit',
+                    config: { reason: 'churn_sequence_complete' },
+                },
             },
         },
     },
@@ -189,6 +200,11 @@ const MANDATORY_JOURNEYS = [
                 wait_60m: {
                     type: 'wait',
                     config: { duration_hours: 1 },
+                    next: 'award_reward',
+                },
+                award_reward: {
+                    type: 'action_reward',
+                    config: { rewards: [] },
                     next: 'send_rescue',
                 },
                 send_rescue: {
@@ -199,20 +215,13 @@ const MANDATORY_JOURNEYS = [
                 wait_24h: {
                     type: 'wait',
                     config: { duration_hours: 24 },
-                    next: 'check_converted',
-                },
-                check_converted: {
-                    type: 'condition',
-                    config: { field: 'event_count.order.completed', op: 'gte', value: 1 },
-                    next_true: 'end_converted',
-                    next_false: 'send_email_rescue',
+                    next: 'send_email_rescue',
                 },
                 send_email_rescue: {
                     type: 'action',
                     config: { channel: 'email', template_code: 'CART_RESCUE_EMAIL_01' },
                     next: 'end_completed',
                 },
-                end_converted: { type: 'exit', config: { reason: 'cart_converted' } },
                 end_completed: { type: 'exit', config: { reason: 'rescue_complete' } },
             },
         },
@@ -224,8 +233,13 @@ const MANDATORY_JOURNEYS = [
         triggerEvent: 'segment_entered',
         hasControlGroup: false,
         graph: {
-            start_node: 'send_nudge',
+            start_node: 'award_reward',
             nodes: {
+                award_reward: {
+                    type: 'action_reward',
+                    config: { rewards: [] },
+                    next: 'send_nudge',
+                },
                 send_nudge: {
                     type: 'action',
                     config: { channel: 'zns', template_code: 'TIER_NUDGE_01' },
@@ -254,8 +268,13 @@ const MANDATORY_JOURNEYS = [
         hasControlGroup: true,
         controlGroupPct: 15,
         graph: {
-            start_node: 'send_miss_you',
+            start_node: 'award_reward',
             nodes: {
+                award_reward: {
+                    type: 'action_reward',
+                    config: { rewards: [] },
+                    next: 'send_miss_you',
+                },
                 send_miss_you: {
                     type: 'action',
                     config: { channel: 'zns', template_code: 'REACTIVATION_01' },
@@ -264,13 +283,7 @@ const MANDATORY_JOURNEYS = [
                 wait_7d: {
                     type: 'wait',
                     config: { duration_hours: 168 },
-                    next: 'check_returned',
-                },
-                check_returned: {
-                    type: 'condition',
-                    config: { field: 'event_count.order.completed', op: 'gte', value: 1 },
-                    next_true: 'end_reactivated',
-                    next_false: 'send_incentive',
+                    next: 'send_incentive',
                 },
                 send_incentive: {
                     type: 'action',
@@ -287,8 +300,36 @@ const MANDATORY_JOURNEYS = [
                     config: { channel: 'sms', template_code: 'REACTIVATION_FINAL_01' },
                     next: 'end_completed',
                 },
-                end_reactivated: { type: 'exit', config: { reason: 'customer_reactivated' } },
-                end_completed: { type: 'exit', config: { reason: 'reactivation_sequence_complete' } },
+                end_completed: {
+                    type: 'exit',
+                    config: { reason: 'reactivation_sequence_complete' },
+                },
+            },
+        },
+    },
+    {
+        code: 'JRN_BIRTHDAY_WISH',
+        name: 'Birthday Wish',
+        description: 'Send birthday greeting and optional reward to customers on their birthday',
+        triggerEvent: 'customer.birthday_today',
+        hasControlGroup: false,
+        graph: {
+            start_node: 'award_reward',
+            nodes: {
+                award_reward: {
+                    type: 'action_reward',
+                    config: { rewards: [] },
+                    next: 'send_birthday_msg',
+                },
+                send_birthday_msg: {
+                    type: 'action',
+                    config: { channel: 'zns', template_code: 'BIRTHDAY_WISH_01' },
+                    next: 'end_completed',
+                },
+                end_completed: {
+                    type: 'exit',
+                    config: { reason: 'birthday_wish_sent' },
+                },
             },
         },
     },
@@ -304,9 +345,35 @@ let JourneyRunService = JourneyRunService_1 = class JourneyRunService {
     async onModuleInit() {
         await this.seedMandatoryJourneys();
     }
+    async checkBirthdaysToday() {
+        this.logger.log('Birthday cron: scanning for customers with birthdays today...');
+        const journey = await this.prisma.journey.findUnique({
+            where: { code: 'JRN_BIRTHDAY_WISH' },
+        });
+        if (!journey || journey.status !== 'active') {
+            this.logger.log('Birthday cron: JRN_BIRTHDAY_WISH journey is not active, skipping.');
+            return;
+        }
+        const today = new Date();
+        const month = today.getMonth() + 1;
+        const day = today.getDate();
+        const customers = (await this.prisma.$queryRawUnsafe(`SELECT id FROM customer WHERE EXTRACT(MONTH FROM date_of_birth) = $1 AND EXTRACT(DAY FROM date_of_birth) = $2`, month, day));
+        this.logger.log(`Birthday cron: found ${customers.length} customers with birthdays today.`);
+        for (const customer of customers) {
+            try {
+                await this.journeyEngine.enterJourney(journey.id, customer.id);
+                this.logger.log(`Birthday cron: triggered JRN_BIRTHDAY_WISH for customer ${customer.id}`);
+            }
+            catch (err) {
+                this.logger.warn(`Birthday cron: failed to trigger for customer ${customer.id}: ${err.message}`);
+            }
+        }
+    }
     async seedMandatoryJourneys() {
         for (const jrn of MANDATORY_JOURNEYS) {
-            const existing = await this.prisma.journey.findUnique({ where: { code: jrn.code } });
+            const existing = await this.prisma.journey.findUnique({
+                where: { code: jrn.code },
+            });
             if (!existing) {
                 await this.prisma.journey.create({
                     data: {
@@ -323,6 +390,19 @@ let JourneyRunService = JourneyRunService_1 = class JourneyRunService {
                     },
                 });
                 this.logger.log(`Seeded mandatory journey: ${jrn.code}`);
+            }
+            else if (existing.version === 1) {
+                await this.prisma.journey.update({
+                    where: { code: jrn.code },
+                    data: {
+                        graph: jrn.graph,
+                        triggerEvent: jrn.triggerEvent,
+                        exitConditions: jrn.exitConditions || {},
+                        hasControlGroup: jrn.hasControlGroup,
+                        controlGroupPct: jrn.controlGroupPct || 0,
+                    },
+                });
+                this.logger.log(`Updated default graph for: ${jrn.code}`);
             }
         }
     }
@@ -341,7 +421,12 @@ let JourneyRunService = JourneyRunService_1 = class JourneyRunService {
     async getJourneyPerformance(journeyId) {
         const runs = await this.prisma.journey_run.findMany({
             where: { journey_id: journeyId },
-            select: { status: true, exit_reason: true, entered_at: true, exited_at: true },
+            select: {
+                status: true,
+                exit_reason: true,
+                entered_at: true,
+                exited_at: true,
+            },
         });
         const controlGroup = await this.prisma.campaign_control_group.count({
             where: { journey_id: journeyId, group: 'control' },
@@ -365,6 +450,12 @@ let JourneyRunService = JourneyRunService_1 = class JourneyRunService {
     }
 };
 exports.JourneyRunService = JourneyRunService;
+__decorate([
+    (0, schedule_1.Cron)('0 8 * * *', { name: 'birthday-wish-check', timeZone: 'UTC' }),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], JourneyRunService.prototype, "checkBirthdaysToday", null);
 exports.JourneyRunService = JourneyRunService = JourneyRunService_1 = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService,

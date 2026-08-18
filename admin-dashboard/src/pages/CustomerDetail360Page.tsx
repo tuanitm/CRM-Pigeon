@@ -186,7 +186,7 @@ export default function CustomerDetail360Page() {
     return <Empty description="Customer not found" style={{ marginTop: 60 }} />;
   }
 
-  const tier = customer.tier || customer.loyaltyAccount?.tier?.tierCode || 'MEMBER';
+  const tier = customer.tier || customer.loyaltyAccount?.tier?.tierCode || 'BRONZE';
   const tierColor = tier === 'GOLD' ? '#f59e0b' : tier === 'SILVER' ? '#94a3b8' : '#3b82f6';
 
   const combinedPurchaseHistory = [
@@ -205,8 +205,15 @@ export default function CustomerDetail360Page() {
   return (
     <div style={{ padding: '0 24px', maxWidth: 1200, margin: '0 auto' }}>
       <div style={{ marginBottom: 24, display: 'flex', alignItems: 'center', gap: 12 }}>
-        <Button icon={<ArrowLeftOutlined />} onClick={() => navigate('/customer360')} type="text" />
+        <Button icon={<ArrowLeftOutlined />} onClick={() => navigate('/customer360', { state: { tab: 'customers' } })} type="text" />
         <Title level={4} style={{ margin: 0, fontWeight: 700, flex: 1 }}>Customer 360° Portrait</Title>
+        <Button 
+          icon={<ReloadOutlined />} 
+          onClick={loadCustomer} 
+          loading={loading}
+        >
+          Refresh
+        </Button>
         <Button 
           danger={customer?.isActive !== false} 
           onClick={handleToggleStatus}
@@ -329,14 +336,7 @@ export default function CustomerDetail360Page() {
             <Tabs 
               className="detail-tabs" 
               defaultActiveKey="overview" 
-              centered 
-              onChange={(activeKey) => {
-                if (activeKey === 'support_tickets') {
-                  loadTickets();
-                } else if (activeKey === 'overview' || activeKey === 'orders') {
-                  loadCustomer();
-                }
-              }}
+              centered
               items={[
               {
                 key: 'overview',

@@ -36,7 +36,7 @@ let ZnsProviderService = ZnsProviderService_1 = class ZnsProviderService {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'access_token': this.accessToken,
+                    access_token: this.accessToken,
                 },
                 body: JSON.stringify({
                     phone,

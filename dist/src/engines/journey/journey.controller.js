@@ -36,12 +36,46 @@ let JourneyController = class JourneyController {
             orderBy: { createdAt: 'desc' },
         });
     }
+    async createJourney(data) {
+        return this.prisma.journey.upsert({
+            where: { code: data.code },
+            update: {},
+            create: {
+                code: data.code,
+                name: data.name || data.code,
+                triggerEvent: data.trigger || data.triggerEvent,
+                status: data.status || 'draft',
+            },
+        });
+    }
     async enterJourney(journeyId, dto) {
         const runId = await this.journeyEngine.enterJourney(journeyId, dto.customerId, dto.context);
         return { success: true, runId };
     }
     async getPerformance(journeyId) {
         return this.journeyRunService.getJourneyPerformance(journeyId);
+    }
+    async updateJourney(journeyId, data) {
+        const updateData = {};
+        if (data.graph !== undefined)
+            updateData.graph = data.graph;
+        if (data.triggerEvent !== undefined)
+            updateData.triggerEvent = data.triggerEvent;
+        if (data.exitConditions !== undefined)
+            updateData.exitConditions = data.exitConditions;
+        if (data.status !== undefined)
+            updateData.status = data.status;
+        if (data.name !== undefined)
+            updateData.name = data.name;
+        if (data.description !== undefined)
+            updateData.description = data.description;
+        if (data.graph !== undefined) {
+            updateData.version = { increment: 1 };
+        }
+        return this.prisma.journey.update({
+            where: { id: journeyId },
+            data: updateData,
+        });
     }
 };
 exports.JourneyController = JourneyController;
@@ -52,6 +86,14 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], JourneyController.prototype, "listJourneys", null);
+__decorate([
+    (0, common_1.Post)(),
+    (0, swagger_1.ApiOperation)({ summary: 'Create a new journey (upserts by code if exists)' }),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], JourneyController.prototype, "createJourney", null);
 __decorate([
     (0, common_1.Post)(':journeyId/enter'),
     (0, swagger_1.ApiOperation)({ summary: 'Manually enter a customer into a journey' }),
@@ -69,6 +111,15 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], JourneyController.prototype, "getPerformance", null);
+__decorate([
+    (0, common_1.Patch)(':journeyId'),
+    (0, swagger_1.ApiOperation)({ summary: 'Update a journey configuration' }),
+    __param(0, (0, common_1.Param)('journeyId')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], JourneyController.prototype, "updateJourney", null);
 exports.JourneyController = JourneyController = __decorate([
     (0, swagger_1.ApiTags)('Journey'),
     (0, common_1.Controller)('journey'),

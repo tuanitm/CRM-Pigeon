@@ -131,7 +131,6 @@ export type AdminUserWhereInput = {
     role?: Prisma.XOR<Prisma.RoleScalarRelationFilter, Prisma.RoleWhereInput>;
     audit_log?: Prisma.AuditLogListRelationFilter;
     dsr_request?: Prisma.Dsr_requestListRelationFilter;
-    data_hubs?: Prisma.DataHubListRelationFilter;
     dynamic_actions?: Prisma.DynamicActionListRelationFilter;
     zaloOAs?: Prisma.ZaloOAListRelationFilter;
     zaloMiniApps?: Prisma.ZaloMiniAppListRelationFilter;
@@ -149,7 +148,6 @@ export type AdminUserOrderByWithRelationInput = {
     role?: Prisma.RoleOrderByWithRelationInput;
     audit_log?: Prisma.AuditLogOrderByRelationAggregateInput;
     dsr_request?: Prisma.dsr_requestOrderByRelationAggregateInput;
-    data_hubs?: Prisma.DataHubOrderByRelationAggregateInput;
     dynamic_actions?: Prisma.DynamicActionOrderByRelationAggregateInput;
     zaloOAs?: Prisma.ZaloOAOrderByRelationAggregateInput;
     zaloMiniApps?: Prisma.ZaloMiniAppOrderByRelationAggregateInput;
@@ -170,7 +168,6 @@ export type AdminUserWhereUniqueInput = Prisma.AtLeast<{
     role?: Prisma.XOR<Prisma.RoleScalarRelationFilter, Prisma.RoleWhereInput>;
     audit_log?: Prisma.AuditLogListRelationFilter;
     dsr_request?: Prisma.Dsr_requestListRelationFilter;
-    data_hubs?: Prisma.DataHubListRelationFilter;
     dynamic_actions?: Prisma.DynamicActionListRelationFilter;
     zaloOAs?: Prisma.ZaloOAListRelationFilter;
     zaloMiniApps?: Prisma.ZaloMiniAppListRelationFilter;
@@ -215,7 +212,6 @@ export type AdminUserCreateInput = {
     role: Prisma.RoleCreateNestedOneWithoutAdminUsersInput;
     audit_log?: Prisma.AuditLogCreateNestedManyWithoutAdmin_userInput;
     dsr_request?: Prisma.dsr_requestCreateNestedManyWithoutAdmin_userInput;
-    data_hubs?: Prisma.DataHubCreateNestedManyWithoutAdminUserInput;
     dynamic_actions?: Prisma.DynamicActionCreateNestedManyWithoutAdminUserInput;
     zaloOAs?: Prisma.ZaloOACreateNestedManyWithoutAdminUserInput;
     zaloMiniApps?: Prisma.ZaloMiniAppCreateNestedManyWithoutAdminUserInput;
@@ -232,7 +228,6 @@ export type AdminUserUncheckedCreateInput = {
     updatedAt?: Date | string;
     audit_log?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdmin_userInput;
     dsr_request?: Prisma.dsr_requestUncheckedCreateNestedManyWithoutAdmin_userInput;
-    data_hubs?: Prisma.DataHubUncheckedCreateNestedManyWithoutAdminUserInput;
     dynamic_actions?: Prisma.DynamicActionUncheckedCreateNestedManyWithoutAdminUserInput;
     zaloOAs?: Prisma.ZaloOAUncheckedCreateNestedManyWithoutAdminUserInput;
     zaloMiniApps?: Prisma.ZaloMiniAppUncheckedCreateNestedManyWithoutAdminUserInput;
@@ -249,7 +244,6 @@ export type AdminUserUpdateInput = {
     role?: Prisma.RoleUpdateOneRequiredWithoutAdminUsersNestedInput;
     audit_log?: Prisma.AuditLogUpdateManyWithoutAdmin_userNestedInput;
     dsr_request?: Prisma.dsr_requestUpdateManyWithoutAdmin_userNestedInput;
-    data_hubs?: Prisma.DataHubUpdateManyWithoutAdminUserNestedInput;
     dynamic_actions?: Prisma.DynamicActionUpdateManyWithoutAdminUserNestedInput;
     zaloOAs?: Prisma.ZaloOAUpdateManyWithoutAdminUserNestedInput;
     zaloMiniApps?: Prisma.ZaloMiniAppUpdateManyWithoutAdminUserNestedInput;
@@ -266,7 +260,6 @@ export type AdminUserUncheckedUpdateInput = {
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     audit_log?: Prisma.AuditLogUncheckedUpdateManyWithoutAdmin_userNestedInput;
     dsr_request?: Prisma.dsr_requestUncheckedUpdateManyWithoutAdmin_userNestedInput;
-    data_hubs?: Prisma.DataHubUncheckedUpdateManyWithoutAdminUserNestedInput;
     dynamic_actions?: Prisma.DynamicActionUncheckedUpdateManyWithoutAdminUserNestedInput;
     zaloOAs?: Prisma.ZaloOAUncheckedUpdateManyWithoutAdminUserNestedInput;
     zaloMiniApps?: Prisma.ZaloMiniAppUncheckedUpdateManyWithoutAdminUserNestedInput;
@@ -414,20 +407,6 @@ export type AdminUserUpdateOneWithoutDsr_requestNestedInput = {
     connect?: Prisma.AdminUserWhereUniqueInput;
     update?: Prisma.XOR<Prisma.XOR<Prisma.AdminUserUpdateToOneWithWhereWithoutDsr_requestInput, Prisma.AdminUserUpdateWithoutDsr_requestInput>, Prisma.AdminUserUncheckedUpdateWithoutDsr_requestInput>;
 };
-export type AdminUserCreateNestedOneWithoutData_hubsInput = {
-    create?: Prisma.XOR<Prisma.AdminUserCreateWithoutData_hubsInput, Prisma.AdminUserUncheckedCreateWithoutData_hubsInput>;
-    connectOrCreate?: Prisma.AdminUserCreateOrConnectWithoutData_hubsInput;
-    connect?: Prisma.AdminUserWhereUniqueInput;
-};
-export type AdminUserUpdateOneWithoutData_hubsNestedInput = {
-    create?: Prisma.XOR<Prisma.AdminUserCreateWithoutData_hubsInput, Prisma.AdminUserUncheckedCreateWithoutData_hubsInput>;
-    connectOrCreate?: Prisma.AdminUserCreateOrConnectWithoutData_hubsInput;
-    upsert?: Prisma.AdminUserUpsertWithoutData_hubsInput;
-    disconnect?: Prisma.AdminUserWhereInput | boolean;
-    delete?: Prisma.AdminUserWhereInput | boolean;
-    connect?: Prisma.AdminUserWhereUniqueInput;
-    update?: Prisma.XOR<Prisma.XOR<Prisma.AdminUserUpdateToOneWithWhereWithoutData_hubsInput, Prisma.AdminUserUpdateWithoutData_hubsInput>, Prisma.AdminUserUncheckedUpdateWithoutData_hubsInput>;
-};
 export type AdminUserCreateNestedOneWithoutDynamic_actionsInput = {
     create?: Prisma.XOR<Prisma.AdminUserCreateWithoutDynamic_actionsInput, Prisma.AdminUserUncheckedCreateWithoutDynamic_actionsInput>;
     connectOrCreate?: Prisma.AdminUserCreateOrConnectWithoutDynamic_actionsInput;
@@ -481,7 +460,6 @@ export type AdminUserCreateWithoutRoleInput = {
     updatedAt?: Date | string;
     audit_log?: Prisma.AuditLogCreateNestedManyWithoutAdmin_userInput;
     dsr_request?: Prisma.dsr_requestCreateNestedManyWithoutAdmin_userInput;
-    data_hubs?: Prisma.DataHubCreateNestedManyWithoutAdminUserInput;
     dynamic_actions?: Prisma.DynamicActionCreateNestedManyWithoutAdminUserInput;
     zaloOAs?: Prisma.ZaloOACreateNestedManyWithoutAdminUserInput;
     zaloMiniApps?: Prisma.ZaloMiniAppCreateNestedManyWithoutAdminUserInput;
@@ -497,7 +475,6 @@ export type AdminUserUncheckedCreateWithoutRoleInput = {
     updatedAt?: Date | string;
     audit_log?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdmin_userInput;
     dsr_request?: Prisma.dsr_requestUncheckedCreateNestedManyWithoutAdmin_userInput;
-    data_hubs?: Prisma.DataHubUncheckedCreateNestedManyWithoutAdminUserInput;
     dynamic_actions?: Prisma.DynamicActionUncheckedCreateNestedManyWithoutAdminUserInput;
     zaloOAs?: Prisma.ZaloOAUncheckedCreateNestedManyWithoutAdminUserInput;
     zaloMiniApps?: Prisma.ZaloMiniAppUncheckedCreateNestedManyWithoutAdminUserInput;
@@ -548,7 +525,6 @@ export type AdminUserCreateWithoutAudit_logInput = {
     updatedAt?: Date | string;
     role: Prisma.RoleCreateNestedOneWithoutAdminUsersInput;
     dsr_request?: Prisma.dsr_requestCreateNestedManyWithoutAdmin_userInput;
-    data_hubs?: Prisma.DataHubCreateNestedManyWithoutAdminUserInput;
     dynamic_actions?: Prisma.DynamicActionCreateNestedManyWithoutAdminUserInput;
     zaloOAs?: Prisma.ZaloOACreateNestedManyWithoutAdminUserInput;
     zaloMiniApps?: Prisma.ZaloMiniAppCreateNestedManyWithoutAdminUserInput;
@@ -564,7 +540,6 @@ export type AdminUserUncheckedCreateWithoutAudit_logInput = {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     dsr_request?: Prisma.dsr_requestUncheckedCreateNestedManyWithoutAdmin_userInput;
-    data_hubs?: Prisma.DataHubUncheckedCreateNestedManyWithoutAdminUserInput;
     dynamic_actions?: Prisma.DynamicActionUncheckedCreateNestedManyWithoutAdminUserInput;
     zaloOAs?: Prisma.ZaloOAUncheckedCreateNestedManyWithoutAdminUserInput;
     zaloMiniApps?: Prisma.ZaloMiniAppUncheckedCreateNestedManyWithoutAdminUserInput;
@@ -593,7 +568,6 @@ export type AdminUserUpdateWithoutAudit_logInput = {
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     role?: Prisma.RoleUpdateOneRequiredWithoutAdminUsersNestedInput;
     dsr_request?: Prisma.dsr_requestUpdateManyWithoutAdmin_userNestedInput;
-    data_hubs?: Prisma.DataHubUpdateManyWithoutAdminUserNestedInput;
     dynamic_actions?: Prisma.DynamicActionUpdateManyWithoutAdminUserNestedInput;
     zaloOAs?: Prisma.ZaloOAUpdateManyWithoutAdminUserNestedInput;
     zaloMiniApps?: Prisma.ZaloMiniAppUpdateManyWithoutAdminUserNestedInput;
@@ -609,7 +583,6 @@ export type AdminUserUncheckedUpdateWithoutAudit_logInput = {
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     dsr_request?: Prisma.dsr_requestUncheckedUpdateManyWithoutAdmin_userNestedInput;
-    data_hubs?: Prisma.DataHubUncheckedUpdateManyWithoutAdminUserNestedInput;
     dynamic_actions?: Prisma.DynamicActionUncheckedUpdateManyWithoutAdminUserNestedInput;
     zaloOAs?: Prisma.ZaloOAUncheckedUpdateManyWithoutAdminUserNestedInput;
     zaloMiniApps?: Prisma.ZaloMiniAppUncheckedUpdateManyWithoutAdminUserNestedInput;
@@ -625,7 +598,6 @@ export type AdminUserCreateWithoutDsr_requestInput = {
     updatedAt?: Date | string;
     role: Prisma.RoleCreateNestedOneWithoutAdminUsersInput;
     audit_log?: Prisma.AuditLogCreateNestedManyWithoutAdmin_userInput;
-    data_hubs?: Prisma.DataHubCreateNestedManyWithoutAdminUserInput;
     dynamic_actions?: Prisma.DynamicActionCreateNestedManyWithoutAdminUserInput;
     zaloOAs?: Prisma.ZaloOACreateNestedManyWithoutAdminUserInput;
     zaloMiniApps?: Prisma.ZaloMiniAppCreateNestedManyWithoutAdminUserInput;
@@ -641,7 +613,6 @@ export type AdminUserUncheckedCreateWithoutDsr_requestInput = {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     audit_log?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdmin_userInput;
-    data_hubs?: Prisma.DataHubUncheckedCreateNestedManyWithoutAdminUserInput;
     dynamic_actions?: Prisma.DynamicActionUncheckedCreateNestedManyWithoutAdminUserInput;
     zaloOAs?: Prisma.ZaloOAUncheckedCreateNestedManyWithoutAdminUserInput;
     zaloMiniApps?: Prisma.ZaloMiniAppUncheckedCreateNestedManyWithoutAdminUserInput;
@@ -670,7 +641,6 @@ export type AdminUserUpdateWithoutDsr_requestInput = {
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     role?: Prisma.RoleUpdateOneRequiredWithoutAdminUsersNestedInput;
     audit_log?: Prisma.AuditLogUpdateManyWithoutAdmin_userNestedInput;
-    data_hubs?: Prisma.DataHubUpdateManyWithoutAdminUserNestedInput;
     dynamic_actions?: Prisma.DynamicActionUpdateManyWithoutAdminUserNestedInput;
     zaloOAs?: Prisma.ZaloOAUpdateManyWithoutAdminUserNestedInput;
     zaloMiniApps?: Prisma.ZaloMiniAppUpdateManyWithoutAdminUserNestedInput;
@@ -686,84 +656,6 @@ export type AdminUserUncheckedUpdateWithoutDsr_requestInput = {
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     audit_log?: Prisma.AuditLogUncheckedUpdateManyWithoutAdmin_userNestedInput;
-    data_hubs?: Prisma.DataHubUncheckedUpdateManyWithoutAdminUserNestedInput;
-    dynamic_actions?: Prisma.DynamicActionUncheckedUpdateManyWithoutAdminUserNestedInput;
-    zaloOAs?: Prisma.ZaloOAUncheckedUpdateManyWithoutAdminUserNestedInput;
-    zaloMiniApps?: Prisma.ZaloMiniAppUncheckedUpdateManyWithoutAdminUserNestedInput;
-};
-export type AdminUserCreateWithoutData_hubsInput = {
-    id?: string;
-    email: string;
-    passwordHash: string;
-    fullName: string;
-    isActive?: boolean;
-    lastLoginAt?: Date | string | null;
-    createdAt?: Date | string;
-    updatedAt?: Date | string;
-    role: Prisma.RoleCreateNestedOneWithoutAdminUsersInput;
-    audit_log?: Prisma.AuditLogCreateNestedManyWithoutAdmin_userInput;
-    dsr_request?: Prisma.dsr_requestCreateNestedManyWithoutAdmin_userInput;
-    dynamic_actions?: Prisma.DynamicActionCreateNestedManyWithoutAdminUserInput;
-    zaloOAs?: Prisma.ZaloOACreateNestedManyWithoutAdminUserInput;
-    zaloMiniApps?: Prisma.ZaloMiniAppCreateNestedManyWithoutAdminUserInput;
-};
-export type AdminUserUncheckedCreateWithoutData_hubsInput = {
-    id?: string;
-    email: string;
-    passwordHash: string;
-    fullName: string;
-    roleId: string;
-    isActive?: boolean;
-    lastLoginAt?: Date | string | null;
-    createdAt?: Date | string;
-    updatedAt?: Date | string;
-    audit_log?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdmin_userInput;
-    dsr_request?: Prisma.dsr_requestUncheckedCreateNestedManyWithoutAdmin_userInput;
-    dynamic_actions?: Prisma.DynamicActionUncheckedCreateNestedManyWithoutAdminUserInput;
-    zaloOAs?: Prisma.ZaloOAUncheckedCreateNestedManyWithoutAdminUserInput;
-    zaloMiniApps?: Prisma.ZaloMiniAppUncheckedCreateNestedManyWithoutAdminUserInput;
-};
-export type AdminUserCreateOrConnectWithoutData_hubsInput = {
-    where: Prisma.AdminUserWhereUniqueInput;
-    create: Prisma.XOR<Prisma.AdminUserCreateWithoutData_hubsInput, Prisma.AdminUserUncheckedCreateWithoutData_hubsInput>;
-};
-export type AdminUserUpsertWithoutData_hubsInput = {
-    update: Prisma.XOR<Prisma.AdminUserUpdateWithoutData_hubsInput, Prisma.AdminUserUncheckedUpdateWithoutData_hubsInput>;
-    create: Prisma.XOR<Prisma.AdminUserCreateWithoutData_hubsInput, Prisma.AdminUserUncheckedCreateWithoutData_hubsInput>;
-    where?: Prisma.AdminUserWhereInput;
-};
-export type AdminUserUpdateToOneWithWhereWithoutData_hubsInput = {
-    where?: Prisma.AdminUserWhereInput;
-    data: Prisma.XOR<Prisma.AdminUserUpdateWithoutData_hubsInput, Prisma.AdminUserUncheckedUpdateWithoutData_hubsInput>;
-};
-export type AdminUserUpdateWithoutData_hubsInput = {
-    id?: Prisma.StringFieldUpdateOperationsInput | string;
-    email?: Prisma.StringFieldUpdateOperationsInput | string;
-    passwordHash?: Prisma.StringFieldUpdateOperationsInput | string;
-    fullName?: Prisma.StringFieldUpdateOperationsInput | string;
-    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-    lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
-    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-    role?: Prisma.RoleUpdateOneRequiredWithoutAdminUsersNestedInput;
-    audit_log?: Prisma.AuditLogUpdateManyWithoutAdmin_userNestedInput;
-    dsr_request?: Prisma.dsr_requestUpdateManyWithoutAdmin_userNestedInput;
-    dynamic_actions?: Prisma.DynamicActionUpdateManyWithoutAdminUserNestedInput;
-    zaloOAs?: Prisma.ZaloOAUpdateManyWithoutAdminUserNestedInput;
-    zaloMiniApps?: Prisma.ZaloMiniAppUpdateManyWithoutAdminUserNestedInput;
-};
-export type AdminUserUncheckedUpdateWithoutData_hubsInput = {
-    id?: Prisma.StringFieldUpdateOperationsInput | string;
-    email?: Prisma.StringFieldUpdateOperationsInput | string;
-    passwordHash?: Prisma.StringFieldUpdateOperationsInput | string;
-    fullName?: Prisma.StringFieldUpdateOperationsInput | string;
-    roleId?: Prisma.StringFieldUpdateOperationsInput | string;
-    isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-    lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
-    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-    audit_log?: Prisma.AuditLogUncheckedUpdateManyWithoutAdmin_userNestedInput;
-    dsr_request?: Prisma.dsr_requestUncheckedUpdateManyWithoutAdmin_userNestedInput;
     dynamic_actions?: Prisma.DynamicActionUncheckedUpdateManyWithoutAdminUserNestedInput;
     zaloOAs?: Prisma.ZaloOAUncheckedUpdateManyWithoutAdminUserNestedInput;
     zaloMiniApps?: Prisma.ZaloMiniAppUncheckedUpdateManyWithoutAdminUserNestedInput;
@@ -780,7 +672,6 @@ export type AdminUserCreateWithoutDynamic_actionsInput = {
     role: Prisma.RoleCreateNestedOneWithoutAdminUsersInput;
     audit_log?: Prisma.AuditLogCreateNestedManyWithoutAdmin_userInput;
     dsr_request?: Prisma.dsr_requestCreateNestedManyWithoutAdmin_userInput;
-    data_hubs?: Prisma.DataHubCreateNestedManyWithoutAdminUserInput;
     zaloOAs?: Prisma.ZaloOACreateNestedManyWithoutAdminUserInput;
     zaloMiniApps?: Prisma.ZaloMiniAppCreateNestedManyWithoutAdminUserInput;
 };
@@ -796,7 +687,6 @@ export type AdminUserUncheckedCreateWithoutDynamic_actionsInput = {
     updatedAt?: Date | string;
     audit_log?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdmin_userInput;
     dsr_request?: Prisma.dsr_requestUncheckedCreateNestedManyWithoutAdmin_userInput;
-    data_hubs?: Prisma.DataHubUncheckedCreateNestedManyWithoutAdminUserInput;
     zaloOAs?: Prisma.ZaloOAUncheckedCreateNestedManyWithoutAdminUserInput;
     zaloMiniApps?: Prisma.ZaloMiniAppUncheckedCreateNestedManyWithoutAdminUserInput;
 };
@@ -825,7 +715,6 @@ export type AdminUserUpdateWithoutDynamic_actionsInput = {
     role?: Prisma.RoleUpdateOneRequiredWithoutAdminUsersNestedInput;
     audit_log?: Prisma.AuditLogUpdateManyWithoutAdmin_userNestedInput;
     dsr_request?: Prisma.dsr_requestUpdateManyWithoutAdmin_userNestedInput;
-    data_hubs?: Prisma.DataHubUpdateManyWithoutAdminUserNestedInput;
     zaloOAs?: Prisma.ZaloOAUpdateManyWithoutAdminUserNestedInput;
     zaloMiniApps?: Prisma.ZaloMiniAppUpdateManyWithoutAdminUserNestedInput;
 };
@@ -841,7 +730,6 @@ export type AdminUserUncheckedUpdateWithoutDynamic_actionsInput = {
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     audit_log?: Prisma.AuditLogUncheckedUpdateManyWithoutAdmin_userNestedInput;
     dsr_request?: Prisma.dsr_requestUncheckedUpdateManyWithoutAdmin_userNestedInput;
-    data_hubs?: Prisma.DataHubUncheckedUpdateManyWithoutAdminUserNestedInput;
     zaloOAs?: Prisma.ZaloOAUncheckedUpdateManyWithoutAdminUserNestedInput;
     zaloMiniApps?: Prisma.ZaloMiniAppUncheckedUpdateManyWithoutAdminUserNestedInput;
 };
@@ -857,7 +745,6 @@ export type AdminUserCreateWithoutZaloOAsInput = {
     role: Prisma.RoleCreateNestedOneWithoutAdminUsersInput;
     audit_log?: Prisma.AuditLogCreateNestedManyWithoutAdmin_userInput;
     dsr_request?: Prisma.dsr_requestCreateNestedManyWithoutAdmin_userInput;
-    data_hubs?: Prisma.DataHubCreateNestedManyWithoutAdminUserInput;
     dynamic_actions?: Prisma.DynamicActionCreateNestedManyWithoutAdminUserInput;
     zaloMiniApps?: Prisma.ZaloMiniAppCreateNestedManyWithoutAdminUserInput;
 };
@@ -873,7 +760,6 @@ export type AdminUserUncheckedCreateWithoutZaloOAsInput = {
     updatedAt?: Date | string;
     audit_log?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdmin_userInput;
     dsr_request?: Prisma.dsr_requestUncheckedCreateNestedManyWithoutAdmin_userInput;
-    data_hubs?: Prisma.DataHubUncheckedCreateNestedManyWithoutAdminUserInput;
     dynamic_actions?: Prisma.DynamicActionUncheckedCreateNestedManyWithoutAdminUserInput;
     zaloMiniApps?: Prisma.ZaloMiniAppUncheckedCreateNestedManyWithoutAdminUserInput;
 };
@@ -902,7 +788,6 @@ export type AdminUserUpdateWithoutZaloOAsInput = {
     role?: Prisma.RoleUpdateOneRequiredWithoutAdminUsersNestedInput;
     audit_log?: Prisma.AuditLogUpdateManyWithoutAdmin_userNestedInput;
     dsr_request?: Prisma.dsr_requestUpdateManyWithoutAdmin_userNestedInput;
-    data_hubs?: Prisma.DataHubUpdateManyWithoutAdminUserNestedInput;
     dynamic_actions?: Prisma.DynamicActionUpdateManyWithoutAdminUserNestedInput;
     zaloMiniApps?: Prisma.ZaloMiniAppUpdateManyWithoutAdminUserNestedInput;
 };
@@ -918,7 +803,6 @@ export type AdminUserUncheckedUpdateWithoutZaloOAsInput = {
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     audit_log?: Prisma.AuditLogUncheckedUpdateManyWithoutAdmin_userNestedInput;
     dsr_request?: Prisma.dsr_requestUncheckedUpdateManyWithoutAdmin_userNestedInput;
-    data_hubs?: Prisma.DataHubUncheckedUpdateManyWithoutAdminUserNestedInput;
     dynamic_actions?: Prisma.DynamicActionUncheckedUpdateManyWithoutAdminUserNestedInput;
     zaloMiniApps?: Prisma.ZaloMiniAppUncheckedUpdateManyWithoutAdminUserNestedInput;
 };
@@ -934,7 +818,6 @@ export type AdminUserCreateWithoutZaloMiniAppsInput = {
     role: Prisma.RoleCreateNestedOneWithoutAdminUsersInput;
     audit_log?: Prisma.AuditLogCreateNestedManyWithoutAdmin_userInput;
     dsr_request?: Prisma.dsr_requestCreateNestedManyWithoutAdmin_userInput;
-    data_hubs?: Prisma.DataHubCreateNestedManyWithoutAdminUserInput;
     dynamic_actions?: Prisma.DynamicActionCreateNestedManyWithoutAdminUserInput;
     zaloOAs?: Prisma.ZaloOACreateNestedManyWithoutAdminUserInput;
 };
@@ -950,7 +833,6 @@ export type AdminUserUncheckedCreateWithoutZaloMiniAppsInput = {
     updatedAt?: Date | string;
     audit_log?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdmin_userInput;
     dsr_request?: Prisma.dsr_requestUncheckedCreateNestedManyWithoutAdmin_userInput;
-    data_hubs?: Prisma.DataHubUncheckedCreateNestedManyWithoutAdminUserInput;
     dynamic_actions?: Prisma.DynamicActionUncheckedCreateNestedManyWithoutAdminUserInput;
     zaloOAs?: Prisma.ZaloOAUncheckedCreateNestedManyWithoutAdminUserInput;
 };
@@ -979,7 +861,6 @@ export type AdminUserUpdateWithoutZaloMiniAppsInput = {
     role?: Prisma.RoleUpdateOneRequiredWithoutAdminUsersNestedInput;
     audit_log?: Prisma.AuditLogUpdateManyWithoutAdmin_userNestedInput;
     dsr_request?: Prisma.dsr_requestUpdateManyWithoutAdmin_userNestedInput;
-    data_hubs?: Prisma.DataHubUpdateManyWithoutAdminUserNestedInput;
     dynamic_actions?: Prisma.DynamicActionUpdateManyWithoutAdminUserNestedInput;
     zaloOAs?: Prisma.ZaloOAUpdateManyWithoutAdminUserNestedInput;
 };
@@ -995,7 +876,6 @@ export type AdminUserUncheckedUpdateWithoutZaloMiniAppsInput = {
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     audit_log?: Prisma.AuditLogUncheckedUpdateManyWithoutAdmin_userNestedInput;
     dsr_request?: Prisma.dsr_requestUncheckedUpdateManyWithoutAdmin_userNestedInput;
-    data_hubs?: Prisma.DataHubUncheckedUpdateManyWithoutAdminUserNestedInput;
     dynamic_actions?: Prisma.DynamicActionUncheckedUpdateManyWithoutAdminUserNestedInput;
     zaloOAs?: Prisma.ZaloOAUncheckedUpdateManyWithoutAdminUserNestedInput;
 };
@@ -1020,7 +900,6 @@ export type AdminUserUpdateWithoutRoleInput = {
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     audit_log?: Prisma.AuditLogUpdateManyWithoutAdmin_userNestedInput;
     dsr_request?: Prisma.dsr_requestUpdateManyWithoutAdmin_userNestedInput;
-    data_hubs?: Prisma.DataHubUpdateManyWithoutAdminUserNestedInput;
     dynamic_actions?: Prisma.DynamicActionUpdateManyWithoutAdminUserNestedInput;
     zaloOAs?: Prisma.ZaloOAUpdateManyWithoutAdminUserNestedInput;
     zaloMiniApps?: Prisma.ZaloMiniAppUpdateManyWithoutAdminUserNestedInput;
@@ -1036,7 +915,6 @@ export type AdminUserUncheckedUpdateWithoutRoleInput = {
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     audit_log?: Prisma.AuditLogUncheckedUpdateManyWithoutAdmin_userNestedInput;
     dsr_request?: Prisma.dsr_requestUncheckedUpdateManyWithoutAdmin_userNestedInput;
-    data_hubs?: Prisma.DataHubUncheckedUpdateManyWithoutAdminUserNestedInput;
     dynamic_actions?: Prisma.DynamicActionUncheckedUpdateManyWithoutAdminUserNestedInput;
     zaloOAs?: Prisma.ZaloOAUncheckedUpdateManyWithoutAdminUserNestedInput;
     zaloMiniApps?: Prisma.ZaloMiniAppUncheckedUpdateManyWithoutAdminUserNestedInput;
@@ -1054,7 +932,6 @@ export type AdminUserUncheckedUpdateManyWithoutRoleInput = {
 export type AdminUserCountOutputType = {
     audit_log: number;
     dsr_request: number;
-    data_hubs: number;
     dynamic_actions: number;
     zaloOAs: number;
     zaloMiniApps: number;
@@ -1062,7 +939,6 @@ export type AdminUserCountOutputType = {
 export type AdminUserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     audit_log?: boolean | AdminUserCountOutputTypeCountAudit_logArgs;
     dsr_request?: boolean | AdminUserCountOutputTypeCountDsr_requestArgs;
-    data_hubs?: boolean | AdminUserCountOutputTypeCountData_hubsArgs;
     dynamic_actions?: boolean | AdminUserCountOutputTypeCountDynamic_actionsArgs;
     zaloOAs?: boolean | AdminUserCountOutputTypeCountZaloOAsArgs;
     zaloMiniApps?: boolean | AdminUserCountOutputTypeCountZaloMiniAppsArgs;
@@ -1075,9 +951,6 @@ export type AdminUserCountOutputTypeCountAudit_logArgs<ExtArgs extends runtime.T
 };
 export type AdminUserCountOutputTypeCountDsr_requestArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     where?: Prisma.dsr_requestWhereInput;
-};
-export type AdminUserCountOutputTypeCountData_hubsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-    where?: Prisma.DataHubWhereInput;
 };
 export type AdminUserCountOutputTypeCountDynamic_actionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     where?: Prisma.DynamicActionWhereInput;
@@ -1101,7 +974,6 @@ export type AdminUserSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
     role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>;
     audit_log?: boolean | Prisma.AdminUser$audit_logArgs<ExtArgs>;
     dsr_request?: boolean | Prisma.AdminUser$dsr_requestArgs<ExtArgs>;
-    data_hubs?: boolean | Prisma.AdminUser$data_hubsArgs<ExtArgs>;
     dynamic_actions?: boolean | Prisma.AdminUser$dynamic_actionsArgs<ExtArgs>;
     zaloOAs?: boolean | Prisma.AdminUser$zaloOAsArgs<ExtArgs>;
     zaloMiniApps?: boolean | Prisma.AdminUser$zaloMiniAppsArgs<ExtArgs>;
@@ -1147,7 +1019,6 @@ export type AdminUserInclude<ExtArgs extends runtime.Types.Extensions.InternalAr
     role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>;
     audit_log?: boolean | Prisma.AdminUser$audit_logArgs<ExtArgs>;
     dsr_request?: boolean | Prisma.AdminUser$dsr_requestArgs<ExtArgs>;
-    data_hubs?: boolean | Prisma.AdminUser$data_hubsArgs<ExtArgs>;
     dynamic_actions?: boolean | Prisma.AdminUser$dynamic_actionsArgs<ExtArgs>;
     zaloOAs?: boolean | Prisma.AdminUser$zaloOAsArgs<ExtArgs>;
     zaloMiniApps?: boolean | Prisma.AdminUser$zaloMiniAppsArgs<ExtArgs>;
@@ -1165,7 +1036,6 @@ export type $AdminUserPayload<ExtArgs extends runtime.Types.Extensions.InternalA
         role: Prisma.$RolePayload<ExtArgs>;
         audit_log: Prisma.$AuditLogPayload<ExtArgs>[];
         dsr_request: Prisma.$dsr_requestPayload<ExtArgs>[];
-        data_hubs: Prisma.$DataHubPayload<ExtArgs>[];
         dynamic_actions: Prisma.$DynamicActionPayload<ExtArgs>[];
         zaloOAs: Prisma.$ZaloOAPayload<ExtArgs>[];
         zaloMiniApps: Prisma.$ZaloMiniAppPayload<ExtArgs>[];
@@ -1235,7 +1105,6 @@ export interface Prisma__AdminUserClient<T, Null = never, ExtArgs extends runtim
     role<T extends Prisma.RoleDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.RoleDefaultArgs<ExtArgs>>): Prisma.Prisma__RoleClient<runtime.Types.Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
     audit_log<T extends Prisma.AdminUser$audit_logArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AdminUser$audit_logArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
     dsr_request<T extends Prisma.AdminUser$dsr_requestArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AdminUser$dsr_requestArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$dsr_requestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
-    data_hubs<T extends Prisma.AdminUser$data_hubsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AdminUser$data_hubsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DataHubPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
     dynamic_actions<T extends Prisma.AdminUser$dynamic_actionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AdminUser$dynamic_actionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DynamicActionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
     zaloOAs<T extends Prisma.AdminUser$zaloOAsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AdminUser$zaloOAsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ZaloOAPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
     zaloMiniApps<T extends Prisma.AdminUser$zaloMiniAppsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AdminUser$zaloMiniAppsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ZaloMiniAppPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
@@ -1375,17 +1244,6 @@ export type AdminUser$dsr_requestArgs<ExtArgs extends runtime.Types.Extensions.I
     take?: number;
     skip?: number;
     distinct?: Prisma.Dsr_requestScalarFieldEnum | Prisma.Dsr_requestScalarFieldEnum[];
-};
-export type AdminUser$data_hubsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-    select?: Prisma.DataHubSelect<ExtArgs> | null;
-    omit?: Prisma.DataHubOmit<ExtArgs> | null;
-    include?: Prisma.DataHubInclude<ExtArgs> | null;
-    where?: Prisma.DataHubWhereInput;
-    orderBy?: Prisma.DataHubOrderByWithRelationInput | Prisma.DataHubOrderByWithRelationInput[];
-    cursor?: Prisma.DataHubWhereUniqueInput;
-    take?: number;
-    skip?: number;
-    distinct?: Prisma.DataHubScalarFieldEnum | Prisma.DataHubScalarFieldEnum[];
 };
 export type AdminUser$dynamic_actionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     select?: Prisma.DynamicActionSelect<ExtArgs> | null;

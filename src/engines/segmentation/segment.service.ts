@@ -12,7 +12,11 @@ import { EventsService } from '../../ingestion/events.service';
  */
 
 // 10 mandatory segments from the SRS
-export const MANDATORY_SEGMENTS: { code: string; name: string; rules: RuleGroup }[] = [
+export const MANDATORY_SEGMENTS: {
+  code: string;
+  name: string;
+  rules: RuleGroup;
+}[] = [
   {
     code: 'new_registered_no_order',
     name: 'Registered but never ordered',
@@ -62,7 +66,12 @@ export const MANDATORY_SEGMENTS: { code: string; name: string; rules: RuleGroup 
       operator: 'AND',
       conditions: [
         { type: 'attribute', field: 'baby.is_born', op: 'eq', value: true },
-        { type: 'relative_date', field: 'baby.date_of_birth', op: 'within_days', value: 180 },
+        {
+          type: 'relative_date',
+          field: 'baby.date_of_birth',
+          op: 'within_days',
+          value: 180,
+        },
       ],
     },
   },
@@ -94,7 +103,13 @@ export const MANDATORY_SEGMENTS: { code: string; name: string; rules: RuleGroup 
     rules: {
       operator: 'AND',
       conditions: [
-        { type: 'event', event_type: 'cart.abandoned', op: 'gte', value: 1, timeframe_days: 7 },
+        {
+          type: 'event',
+          event_type: 'cart.abandoned',
+          op: 'gte',
+          value: 1,
+          timeframe_days: 7,
+        },
       ],
     },
   },
@@ -104,8 +119,18 @@ export const MANDATORY_SEGMENTS: { code: string; name: string; rules: RuleGroup 
     rules: {
       operator: 'AND',
       conditions: [
-        { type: 'attribute', field: 'loyalty_account.net_spend', op: 'gte', value: 1400000 },
-        { type: 'attribute', field: 'loyalty_account.net_spend', op: 'lt', value: 1700000 },
+        {
+          type: 'attribute',
+          field: 'loyalty_account.net_spend',
+          op: 'gte',
+          value: 1400000,
+        },
+        {
+          type: 'attribute',
+          field: 'loyalty_account.net_spend',
+          op: 'lt',
+          value: 1700000,
+        },
       ],
     },
   },
@@ -137,7 +162,9 @@ export class SegmentService {
    */
   async seedMandatorySegments(): Promise<void> {
     for (const seg of MANDATORY_SEGMENTS) {
-      const existing = await this.prisma.segment.findUnique({ where: { code: seg.code } });
+      const existing = await this.prisma.segment.findUnique({
+        where: { code: seg.code },
+      });
       if (!existing) {
         await this.prisma.segment.create({
           data: {
@@ -166,9 +193,15 @@ export class SegmentService {
 
     for (const segment of segments) {
       try {
-        await this.refreshSegment(segment.id, segment.code, segment.rules as unknown as RuleGroup);
+        await this.refreshSegment(
+          segment.id,
+          segment.code,
+          segment.rules as unknown as RuleGroup,
+        );
       } catch (err) {
-        this.logger.error(`Failed to refresh segment ${segment.code}: ${(err as Error).message}`);
+        this.logger.error(
+          `Failed to refresh segment ${segment.code}: ${(err as Error).message}`,
+        );
       }
     }
   }
@@ -176,11 +209,17 @@ export class SegmentService {
   /**
    * Refresh a single segment: evaluate rules, update memberships, generate events.
    */
-  async refreshSegment(segmentId: string, segmentCode: string, rules: RuleGroup): Promise<{ entered: number; exited: number }> {
+  async refreshSegment(
+    segmentId: string,
+    segmentCode: string,
+    rules: RuleGroup,
+  ): Promise<{ entered: number; exited: number }> {
     this.logger.log(`Refreshing segment: ${segmentCode}`);
 
     // Get current matching customers
-    const matchingIds = new Set(await this.ruleEvaluator.evaluateForAllCustomers(rules));
+    const matchingIds = new Set(
+      await this.ruleEvaluator.evaluateForAllCustomers(rules),
+    );
 
     // Get current members
     const currentMembers = await this.prisma.segment_membership.findMany({
@@ -233,7 +272,9 @@ export class SegmentService {
       data: { memberCount: matchingIds.size, lastEvaluatedAt: new Date() },
     });
 
-    this.logger.log(`Segment ${segmentCode}: ${entered} entered, ${exited} exited, ${matchingIds.size} total`);
+    this.logger.log(
+      `Segment ${segmentCode}: ${entered} entered, ${exited} exited, ${matchingIds.size} total`,
+    );
     return { entered, exited };
   }
 
@@ -253,7 +294,11 @@ export class SegmentService {
       );
 
       const currentMembership = await this.prisma.segment_membership.findFirst({
-        where: { segment_id: segment.id, customer_id: customerId, exited_at: null },
+        where: {
+          segment_id: segment.id,
+          customer_id: customerId,
+          exited_at: null,
+        },
       });
 
       if (matches && !currentMembership) {

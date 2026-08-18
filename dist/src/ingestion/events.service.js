@@ -41,7 +41,9 @@ let EventsService = EventsService_1 = class EventsService {
                 continue;
             }
             const eventId = (0, uuid_1.v4)();
-            const occurredAt = event.occurredAt ? new Date(event.occurredAt) : new Date();
+            const occurredAt = event.occurredAt
+                ? new Date(event.occurredAt)
+                : new Date();
             await this.prisma.$executeRaw `
         INSERT INTO "event" ("id", "customer_id", "anonymous_id", "event_type", "properties", "context", "idempotency_key", "source", "occurred_at", "received_at")
         VALUES (${eventId}::uuid, ${event.customerId}::uuid, ${event.anonymousId}, ${event.eventType}, ${JSON.stringify(event.properties || {})}::jsonb, ${JSON.stringify(event.context || {})}::jsonb, ${idemKey}, ${source || 'api'}, ${occurredAt}, NOW())

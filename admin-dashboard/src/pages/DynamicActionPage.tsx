@@ -6,43 +6,22 @@ import {
 import {
   ThunderboltOutlined, PlusOutlined, SearchOutlined,
   PlayCircleOutlined, PauseCircleOutlined, CopyOutlined, DeleteOutlined,
-  EditOutlined, DatabaseOutlined, EyeOutlined,
 } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
-import { dynamicActionApi, dataHubApi } from '../services/api';
+import { dynamicActionApi } from '../services/api';
 
 const { Text } = Typography;
 
-const COMPONENT_TYPE_OPTIONS = [
-  { value: 'text_input', label: 'Text Input' },
-  { value: 'textarea', label: 'Text Area' },
-  { value: 'select', label: 'Dropdown Select' },
-  { value: 'checkbox', label: 'Checkbox' },
-  { value: 'radio', label: 'Radio' },
-  { value: 'date_picker', label: 'Date Picker' },
-  { value: 'rating', label: 'Rating' },
-  { value: 'image', label: 'Image' },
-  { value: 'label', label: 'Static Label' },
-];
-
 export default function DynamicActionPage() {
-  const [activeTab, setActiveTab] = useState<'all' | 'datasource'>('all');
   const [statusFilter, setStatusFilter] = useState<'all' | 'running' | 'stopped' | 'draft'>('all');
   const [actions, setActions] = useState<any[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [dataHubs, setDataHubs] = useState<any[]>([]);
   const [searchText, setSearchText] = useState('');
   const [form] = Form.useForm();
-  const navigate = useNavigate();
 
   const loadData = async () => {
     try {
-      const [actionsData, hubsData] = await Promise.all([
-        dynamicActionApi.list(),
-        dataHubApi.list(),
-      ]);
+      const actionsData = await dynamicActionApi.list();
       setActions(actionsData);
-      setDataHubs(hubsData);
     } catch (err) {
       console.error(err);
     }
@@ -123,14 +102,8 @@ export default function DynamicActionPage() {
       title: 'ACTION NAME',
       dataIndex: 'name',
       key: 'name',
-      render: (name: string, r: any) => (
-        <Text
-          strong
-          style={{ color: '#3b82f6', fontSize: 13, cursor: 'pointer' }}
-          onClick={() => navigate(`/dynamic-action/${r.id}`)}
-        >
-          {name}
-        </Text>
+      render: (name: string) => (
+        <Text strong style={{ fontSize: 13 }}>{name}</Text>
       ),
     },
     {
@@ -144,12 +117,6 @@ export default function DynamicActionPage() {
       dataIndex: 'target',
       key: 'target',
       render: (t: string) => <Space>{t}</Space>,
-    },
-    {
-      title: 'PAGES',
-      key: 'pages',
-      width: 70,
-      render: (_: any, r: any) => <Badge count={r.pages?.length || 0} style={{ background: '#6b7280' }} />,
     },
     {
       title: 'OWNER',
@@ -195,10 +162,9 @@ export default function DynamicActionPage() {
     {
       title: 'ACTIONS',
       key: 'actions',
-      width: 130,
+      width: 100,
       render: (_: any, r: any) => (
         <Space>
-          <Tooltip title="View Detail"><Button type="text" size="small" icon={<EyeOutlined />} onClick={() => navigate(`/dynamic-action/${r.id}`)} /></Tooltip>
           <Tooltip title="Duplicate"><Button type="text" size="small" icon={<CopyOutlined />} /></Tooltip>
           <Tooltip title="Delete"><Button type="text" size="small" danger icon={<DeleteOutlined />} onClick={() => handleDelete(r.id)} /></Tooltip>
         </Space>
@@ -207,158 +173,125 @@ export default function DynamicActionPage() {
   ];
 
   return (
-    <div style={{ display: 'flex', gap: 0 }}>
-      {/* Sub-sidebar */}
-      <div className="page-sub-sidebar" style={{ marginLeft: -20, marginTop: -20, marginBottom: -20 }}>
-        <div
-          className={`sub-sidebar-item ${activeTab === 'all' ? 'sub-sidebar-item--active' : ''}`}
-          onClick={() => setActiveTab('all')}
-        >
-          <ThunderboltOutlined /> All Actions
-        </div>
-        <div
-          className={`sub-sidebar-item ${activeTab === 'datasource' ? 'sub-sidebar-item--active' : ''}`}
-          onClick={() => setActiveTab('datasource')}
-        >
-          <DatabaseOutlined /> Data Source
-        </div>
-      </div>
+    <div>
+      {/* KPI Summary */}
+      <Row gutter={[12, 12]} style={{ marginBottom: 20 }}>
+        <Col xs={24} sm={6}>
+          <Card variant="outlined" style={{ borderRadius: 10, borderColor: '#e5e7eb' }} styles={{ body: { padding: '14px 18px' } }}>
+            <Statistic title="Total Actions" value={actions.length} prefix={<ThunderboltOutlined style={{ color: '#3b82f6' }} />} />
+          </Card>
+        </Col>
+        <Col xs={24} sm={6}>
+          <Card variant="outlined" style={{ borderRadius: 10, borderColor: '#e5e7eb' }} styles={{ body: { padding: '14px 18px' } }}>
+            <Statistic title="Running" value={running.length} prefix={<PlayCircleOutlined style={{ color: '#10b981' }} />} styles={{ content: { color: '#10b981' } }} />
+          </Card>
+        </Col>
+        <Col xs={24} sm={6}>
+          <Card variant="outlined" style={{ borderRadius: 10, borderColor: '#e5e7eb' }} styles={{ body: { padding: '14px 18px' } }}>
+            <Statistic title="Draft" value={draft.length} prefix={<PauseCircleOutlined style={{ color: '#f59e0b' }} />} styles={{ content: { color: '#f59e0b' } }} />
+          </Card>
+        </Col>
+        <Col xs={24} sm={6}>
+          <Card variant="outlined" style={{ borderRadius: 10, borderColor: '#e5e7eb' }} styles={{ body: { padding: '14px 18px' } }}>
+            <Statistic title="Stopped" value={stopped.length} prefix={<PauseCircleOutlined style={{ color: '#6b7280' }} />} />
+          </Card>
+        </Col>
+      </Row>
 
-      {/* Main Content */}
-      <div style={{ flex: 1, padding: '0 0 0 24px' }}>
-        {activeTab === 'all' ? (
-          <>
-            {/* KPI Summary */}
-            <Row gutter={[12, 12]} style={{ marginBottom: 20 }}>
-              <Col xs={24} sm={6}>
-                <Card variant="outlined" style={{ borderRadius: 10, borderColor: '#e5e7eb' }} styles={{ body: { padding: '14px 18px' } }}>
-                  <Statistic title="Total Actions" value={actions.length} prefix={<ThunderboltOutlined style={{ color: '#3b82f6' }} />} />
-                </Card>
-              </Col>
-              <Col xs={24} sm={6}>
-                <Card variant="outlined" style={{ borderRadius: 10, borderColor: '#e5e7eb' }} styles={{ body: { padding: '14px 18px' } }}>
-                  <Statistic title="Running" value={running.length} prefix={<PlayCircleOutlined style={{ color: '#10b981' }} />} styles={{ content: { color: '#10b981' } }} />
-                </Card>
-              </Col>
-              <Col xs={24} sm={6}>
-                <Card variant="outlined" style={{ borderRadius: 10, borderColor: '#e5e7eb' }} styles={{ body: { padding: '14px 18px' } }}>
-                  <Statistic title="Draft" value={draft.length} prefix={<PauseCircleOutlined style={{ color: '#f59e0b' }} />} styles={{ content: { color: '#f59e0b' } }} />
-                </Card>
-              </Col>
-              <Col xs={24} sm={6}>
-                <Card variant="outlined" style={{ borderRadius: 10, borderColor: '#e5e7eb' }} styles={{ body: { padding: '14px 18px' } }}>
-                  <Statistic title="Stopped" value={stopped.length} prefix={<PauseCircleOutlined style={{ color: '#6b7280' }} />} />
-                </Card>
-              </Col>
-            </Row>
-
-            {/* Filters */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-              <Space>
-                {[
-                  { key: 'all', label: 'All', count: actions.length, color: '#3b82f6' },
-                  { key: 'running', label: 'Running', count: running.length, color: '#10b981' },
-                  { key: 'draft', label: 'Draft', count: draft.length, color: '#f59e0b' },
-                  { key: 'stopped', label: 'Stopped', count: stopped.length, color: '#6b7280' },
-                ].map(f => (
-                  <Button
-                    key={f.key}
-                    type={statusFilter === f.key ? 'primary' : 'default'}
-                    onClick={() => setStatusFilter(f.key as any)}
-                    style={{ borderRadius: 8 }}
-                  >
-                    {f.label} <Badge count={f.count} style={{ marginLeft: 6, background: f.color }} />
-                  </Button>
-                ))}
-              </Space>
-              <Space>
-                <Input
-                  placeholder="Search by name, code..."
-                  prefix={<SearchOutlined />}
-                  style={{ width: 240, borderRadius: 8 }}
-                  value={searchText}
-                  onChange={e => setSearchText(e.target.value)}
-                />
-                <Button type="primary" icon={<PlusOutlined />} onClick={() => setIsModalVisible(true)}>Create New</Button>
-              </Space>
-            </div>
-
-            {/* Table */}
-            <Card variant="outlined" style={{ borderRadius: 10, borderColor: '#e5e7eb' }} styles={{ body: { padding: 0 } }}>
-              <Table
-                columns={columns}
-                dataSource={filtered}
-                rowKey="id"
-                pagination={{ pageSize: 10, showTotal: (total) => `${total} actions` }}
-              />
-            </Card>
-
-            {/* Create Modal */}
-            <Modal
-              title="Create Dynamic Action"
-              open={isModalVisible}
-              onCancel={() => setIsModalVisible(false)}
-              onOk={() => form.submit()}
-              width={520}
+      {/* Filters */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+        <Space>
+          {[
+            { key: 'all', label: 'All', count: actions.length, color: '#3b82f6' },
+            { key: 'running', label: 'Running', count: running.length, color: '#10b981' },
+            { key: 'draft', label: 'Draft', count: draft.length, color: '#f59e0b' },
+            { key: 'stopped', label: 'Stopped', count: stopped.length, color: '#6b7280' },
+          ].map(f => (
+            <Button
+              key={f.key}
+              type={statusFilter === f.key ? 'primary' : 'default'}
+              onClick={() => setStatusFilter(f.key as any)}
+              style={{ borderRadius: 8 }}
             >
-              <Form form={form} layout="vertical" onFinish={handleCreate}>
-                <Form.Item name="name" label="Action Name" rules={[{ required: true }]}>
-                  <Input placeholder="e.g. Product Review Survey" />
-                </Form.Item>
-                <Form.Item name="description" label="Description">
-                  <Input.TextArea rows={2} placeholder="Optional description" />
-                </Form.Item>
-                <Row gutter={12}>
-                  <Col span={12}>
-                    <Form.Item name="trigger" label="Trigger" rules={[{ required: true }]} initialValue="form.submitted">
-                      <Select options={[
-                        { value: 'form.submitted', label: 'Form Submitted' },
-                        { value: 'qr.scanned', label: 'QR Scanned' },
-                        { value: 'link.clicked', label: 'Link Clicked' },
-                        { value: 'schedule.daily', label: 'Daily Schedule' },
-                        { value: 'schedule.monthly', label: 'Monthly Schedule' },
-                        { value: 'order.completed', label: 'Order Completed' },
-                        { value: 'order.cancelled', label: 'Order Cancelled' },
-                      ]} />
-                    </Form.Item>
-                  </Col>
-                  <Col span={12}>
-                    <Form.Item name="target" label="Target" rules={[{ required: true }]} initialValue="Customer">
-                      <Select options={[
-                        { value: 'Customer', label: 'Customer' },
-                        { value: 'Order', label: 'Order' },
-                        { value: 'Lead', label: 'Lead' },
-                        { value: 'Data Hub', label: 'Data Hub' },
-                      ]} />
-                    </Form.Item>
-                  </Col>
-                </Row>
-                <Row gutter={12}>
-                  <Col span={12}>
-                    <Form.Item name="startDate" label="Start Date">
-                      <DatePicker style={{ width: '100%' }} showTime />
-                    </Form.Item>
-                  </Col>
-                  <Col span={12}>
-                    <Form.Item name="endDate" label="End Date">
-                      <DatePicker style={{ width: '100%' }} showTime />
-                    </Form.Item>
-                  </Col>
-                </Row>
-                <Form.Item name="dataHubId" label="Link to Data Hub">
-                  <Select allowClear placeholder="Select a Data Hub..." options={dataHubs.map((h: any) => ({ value: h.id, label: h.name }))} />
-                </Form.Item>
-              </Form>
-            </Modal>
-          </>
-        ) : (
-          <div>
-            <Card variant="outlined" style={{ borderRadius: 10, borderColor: '#e5e7eb' }}>
-              <Text type="secondary">Manage data sources for Dynamic Actions. Feature under development.</Text>
-            </Card>
-          </div>
-        )}
+              {f.label} <Badge count={f.count} style={{ marginLeft: 6, background: f.color }} />
+            </Button>
+          ))}
+        </Space>
+        <Space>
+          <Input
+            placeholder="Search by name, code..."
+            prefix={<SearchOutlined />}
+            style={{ width: 240, borderRadius: 8 }}
+            value={searchText}
+            onChange={e => setSearchText(e.target.value)}
+          />
+          <Button type="primary" icon={<PlusOutlined />} onClick={() => setIsModalVisible(true)}>Create New</Button>
+        </Space>
       </div>
+
+      {/* Table */}
+      <Card variant="outlined" style={{ borderRadius: 10, borderColor: '#e5e7eb' }} styles={{ body: { padding: 0 } }}>
+        <Table
+          columns={columns}
+          dataSource={filtered}
+          rowKey="id"
+          pagination={{ pageSize: 10, showTotal: (total) => `${total} actions` }}
+        />
+      </Card>
+
+      {/* Create Modal */}
+      <Modal
+        title="Create Dynamic Action"
+        open={isModalVisible}
+        onCancel={() => setIsModalVisible(false)}
+        onOk={() => form.submit()}
+        width={520}
+      >
+        <Form form={form} layout="vertical" onFinish={handleCreate}>
+          <Form.Item name="name" label="Action Name" rules={[{ required: true }]}>
+            <Input placeholder="e.g. Product Review Survey" />
+          </Form.Item>
+          <Form.Item name="description" label="Description">
+            <Input.TextArea rows={2} placeholder="Optional description" />
+          </Form.Item>
+          <Row gutter={12}>
+            <Col span={12}>
+              <Form.Item name="trigger" label="Trigger" rules={[{ required: true }]} initialValue="form.submitted">
+                <Select options={[
+                  { value: 'form.submitted', label: 'Form Submitted' },
+                  { value: 'qr.scanned', label: 'QR Scanned' },
+                  { value: 'link.clicked', label: 'Link Clicked' },
+                  { value: 'schedule.daily', label: 'Daily Schedule' },
+                  { value: 'schedule.monthly', label: 'Monthly Schedule' },
+                  { value: 'order.completed', label: 'Order Completed' },
+                  { value: 'order.cancelled', label: 'Order Cancelled' },
+                ]} />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item name="target" label="Target" rules={[{ required: true }]} initialValue="Customer">
+                <Select options={[
+                  { value: 'Customer', label: 'Customer' },
+                  { value: 'Order', label: 'Order' },
+                  { value: 'Lead', label: 'Lead' },
+                ]} />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={12}>
+            <Col span={12}>
+              <Form.Item name="startDate" label="Start Date">
+                <DatePicker style={{ width: '100%' }} showTime />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item name="endDate" label="End Date">
+                <DatePicker style={{ width: '100%' }} showTime />
+              </Form.Item>
+            </Col>
+          </Row>
+        </Form>
+      </Modal>
     </div>
   );
 }

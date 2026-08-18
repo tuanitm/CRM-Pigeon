@@ -1,4 +1,12 @@
-import { Controller, Get, Patch, Post, Param, Body, NotFoundException } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Patch,
+  Post,
+  Param,
+  Body,
+  NotFoundException,
+} from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { PrismaService } from '../shared/prisma/prisma.service';
 
@@ -12,7 +20,7 @@ export class AdminSupportController {
   async getAllTickets() {
     return this.prisma.supportTicket.findMany({
       include: { customer: { select: { fullName: true, customerCode: true } } },
-      orderBy: { createdAt: 'desc' }
+      orderBy: { createdAt: 'desc' },
     });
   }
 
@@ -21,7 +29,7 @@ export class AdminSupportController {
   async getTicketsByCustomer(@Param('customerId') customerId: string) {
     return this.prisma.supportTicket.findMany({
       where: { customerId },
-      orderBy: { createdAt: 'desc' }
+      orderBy: { createdAt: 'desc' },
     });
   }
 
@@ -30,21 +38,26 @@ export class AdminSupportController {
   async updateStatus(@Param('id') id: string, @Body() dto: { status: string }) {
     return this.prisma.supportTicket.update({
       where: { id },
-      data: { status: dto.status }
+      data: { status: dto.status },
     });
   }
 
   @Post(':id/reply')
   @ApiOperation({ summary: 'Reply to an existing support ticket as admin' })
-  async replyTicket(@Param('id') id: string, @Body() dto: { message: string, adminName?: string }) {
-    const ticket = await this.prisma.supportTicket.findUnique({ where: { id } });
+  async replyTicket(
+    @Param('id') id: string,
+    @Body() dto: { message: string; adminName?: string },
+  ) {
+    const ticket = await this.prisma.supportTicket.findUnique({
+      where: { id },
+    });
     if (!ticket) throw new NotFoundException('Ticket not found');
 
     const newMessage = {
       sender: 'admin',
       adminName: dto.adminName || 'Support Team',
       message: dto.message,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
 
     const messages = Array.isArray(ticket.messages) ? [...ticket.messages] : [];
@@ -52,7 +65,7 @@ export class AdminSupportController {
 
     return this.prisma.supportTicket.update({
       where: { id },
-      data: { messages, status: 'In Progress' } // Auto-mark in progress when replied
+      data: { messages, status: 'In Progress' }, // Auto-mark in progress when replied
     });
   }
 }

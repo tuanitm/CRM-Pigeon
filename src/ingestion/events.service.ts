@@ -16,7 +16,10 @@ export class EventsService {
     @InjectQueue('events') private eventsQueue: Queue,
   ) {}
 
-  async ingestBatch(events: EventDto[], source?: string): Promise<{ accepted: number; duplicates: number }> {
+  async ingestBatch(
+    events: EventDto[],
+    source?: string,
+  ): Promise<{ accepted: number; duplicates: number }> {
     let accepted = 0;
     let duplicates = 0;
 
@@ -31,7 +34,9 @@ export class EventsService {
 
       // Write to event store via raw SQL (partitioned table — Prisma can't handle this directly)
       const eventId = uuidv4();
-      const occurredAt = event.occurredAt ? new Date(event.occurredAt) : new Date();
+      const occurredAt = event.occurredAt
+        ? new Date(event.occurredAt)
+        : new Date();
 
       await this.prisma.$executeRaw`
         INSERT INTO "event" ("id", "customer_id", "anonymous_id", "event_type", "properties", "context", "idempotency_key", "source", "occurred_at", "received_at")
@@ -49,7 +54,9 @@ export class EventsService {
       accepted++;
     }
 
-    this.logger.log(`Ingested batch: ${accepted} accepted, ${duplicates} duplicates`);
+    this.logger.log(
+      `Ingested batch: ${accepted} accepted, ${duplicates} duplicates`,
+    );
     return { accepted, duplicates };
   }
 }

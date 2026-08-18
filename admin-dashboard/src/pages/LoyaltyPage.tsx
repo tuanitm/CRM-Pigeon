@@ -2,19 +2,20 @@ import React, { useState, useEffect } from 'react';
 import {
   Card, Typography, Table, Tag, Space, Row, Col, Statistic, Descriptions,
   Divider, Button, Modal, Form, Input, InputNumber, Switch, Select,
-  Tabs, Tooltip, Popconfirm, message, Badge, Empty,
+  Tabs, Tooltip, Popconfirm, message, Badge, Empty, Avatar,
 } from 'antd';
 import {
   GiftOutlined, TrophyOutlined, StarOutlined, CrownOutlined,
   FireOutlined, PlusOutlined, EditOutlined, DeleteOutlined,
-  HistoryOutlined, ShoppingOutlined, ReloadOutlined, UndoOutlined
+  HistoryOutlined, ShoppingOutlined, ReloadOutlined, UndoOutlined, SettingOutlined
 } from '@ant-design/icons';
-import { loyaltyApi, customerApi } from '../services/api';
+import { loyaltyApi, customerApi, journeyApi } from '../services/api';
+import { initialJourneysData } from './JourneysPage';
 
 const { Title, Text } = Typography;
 
 const TIER_COLORS: Record<string, string> = {
-  MEMBER: '#8c8c8c', SILVER: '#c0c0c0', GOLD: '#FFD700',
+  BRONZE: '#8c8c8c', SILVER: '#c0c0c0', GOLD: '#FFD700',
   PLATINUM: '#e5e4e2', DIAMOND: '#b9f2ff', VIP: '#ff4d4f',
 };
 
@@ -78,15 +79,41 @@ export default function LoyaltyPage() {
 
   const loadAll = async () => {
     try {
-      const [t, r, rw, s, tx, rd] = await Promise.all([
+      const [t, r, rw, s, tx, rd, journeys] = await Promise.all([
         loyaltyApi.listTiers(),
         loyaltyApi.listEarnRules(),
         loyaltyApi.listRewards(),
         loyaltyApi.getStats(),
         loyaltyApi.listTransactions(30),
         loyaltyApi.listRedemptions(30),
+        journeyApi.list().catch(() => []),
       ]);
-      setTiers(t); setEarnRules(r); setRewards(rw);
+      
+      const mappedJourneys = (journeys || []).filter((j: any) => j.graph && j.graph.nodes).map((j: any) => {
+        let storedRewards: any[] = [];
+        Object.values(j.graph.nodes).forEach((n: any) => {
+          if (n.type === 'action_reward' && n.config?.rewards) {
+            storedRewards = n.config.rewards;
+          }
+        });
+        // Use friendly name: prefer localStorage journey name, then initialJourneysData, then clean up code
+        const savedJourneys = JSON.parse(localStorage.getItem('demo_journeys') || '[]');
+        const localJourney = savedJourneys.find((lj: any) => lj.code === j.code);
+        const knownJourney = initialJourneysData.find(ij => ij.code === j.code);
+        const friendlyName = localJourney?.name || knownJourney?.name 
+          || (j.name?.startsWith('JRN_') ? j.name.replace(/^JRN_/, '').replace(/_/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase()) : j.name);
+        return {
+          id: `jrn_${j.id}`,
+          source: 'journey',
+          ruleName: friendlyName,
+          pointsFormula: storedRewards,
+          tierMultiplierApplies: false,
+          isActive: j.status === 'active',
+          isJourney: true,
+        };
+      });
+
+      setTiers(t); setEarnRules([...r, ...mappedJourneys]); setRewards(rw);
       setStats(s); setTransactions(tx); setRedemptions(rd);
     } catch (err) { console.error(err); }
   };
@@ -158,7 +185,7 @@ export default function LoyaltyPage() {
       rewardForm.setFieldsValue({
         code: reward.code, name: reward.name, description: reward.description,
         category: reward.category, pointsCost: reward.pointsCost,
-        stock: reward.stock, isActive: reward.isActive,
+        stock: reward.stock, isActive: reward.isActive, imageUrl: reward.imageUrl,
       });
     } else { rewardForm.resetFields(); }
     setRewardModal(true);
@@ -192,10 +219,17 @@ export default function LoyaltyPage() {
       title: '', key: 'actions', width: 80,
       render: (_: any, r: any) => (
         <Space>
-          <Tooltip title="Edit"><Button type="text" size="small" icon={<EditOutlined />} onClick={() => openRuleModal(r)} /></Tooltip>
-          <Popconfirm title="Delete?" onConfirm={() => deleteRule(r.id)} okType="danger" okText="Delete">
-            <Button type="text" size="small" danger icon={<DeleteOutlined />} />
-          </Popconfirm>
+          {!r.isJourney && (
+            <>
+              <Tooltip title="Edit"><Button type="text" size="small" icon={<EditOutlined />} onClick={() => openRuleModal(r)} /></Tooltip>
+              <Popconfirm title="Delete?" onConfirm={() => deleteRule(r.id)} okType="danger" okText="Delete">
+                <Button type="text" size="small" danger icon={<DeleteOutlined />} />
+              </Popconfirm>
+            </>
+          )}
+          {r.isJourney && (
+            <Tooltip title="Managed via Journeys Tab"><Button type="text" size="small" icon={<SettingOutlined />} disabled /></Tooltip>
+          )}
         </Space>
       ),
     },
@@ -203,6 +237,7 @@ export default function LoyaltyPage() {
 
   const rewardCols = [
     { title: 'Code', dataIndex: 'code', key: 'code', render: (c: string) => <Tag>{c}</Tag> },
+    { title: 'Image', key: 'img', width: 60, render: (_: any, r: any) => r.imageUrl ? <img src={r.imageUrl} alt="reward" style={{ width: 32, height: 32, objectFit: 'cover', borderRadius: 4 }} /> : <Avatar icon={<GiftOutlined />} size={32} /> },
     { title: 'Reward', dataIndex: 'name', key: 'name', render: (t: string) => <Text strong>{t}</Text> },
     { title: 'Category', dataIndex: 'category', key: 'cat', render: (c: string) => c ? <Tag color="blue">{c}</Tag> : '—' },
     { title: 'Cost', dataIndex: 'pointsCost', key: 'pts', render: (p: number) => <Tag color="gold">{p?.toLocaleString()} pts</Tag> },
@@ -647,6 +682,9 @@ export default function LoyaltyPage() {
               </Form.Item>
             </Col>
           </Row>
+          <Form.Item name="imageUrl" label="Image URL">
+            <Input placeholder="https://example.com/image.png" />
+          </Form.Item>
           <Form.Item name="isActive" label="Active" valuePropName="checked" initialValue={true}>
             <Switch />
           </Form.Item>

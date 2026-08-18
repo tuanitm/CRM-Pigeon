@@ -129,6 +129,9 @@ export interface PrismaClient<in LogOpts extends Prisma.LogLevel = never, in out
     get data_layer_definition(): Prisma.data_layer_definitionDelegate<ExtArgs, {
         omit: OmitOpts;
     }>;
+    get conditionDefinition(): Prisma.ConditionDefinitionDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
     get data_quality_flag_log(): Prisma.data_quality_flag_logDelegate<ExtArgs, {
         omit: OmitOpts;
     }>;
@@ -231,25 +234,7 @@ export interface PrismaClient<in LogOpts extends Prisma.LogLevel = never, in out
     get systemConfig(): Prisma.SystemConfigDelegate<ExtArgs, {
         omit: OmitOpts;
     }>;
-    get dataHub(): Prisma.DataHubDelegate<ExtArgs, {
-        omit: OmitOpts;
-    }>;
     get dynamicAction(): Prisma.DynamicActionDelegate<ExtArgs, {
-        omit: OmitOpts;
-    }>;
-    get dynamicActionPage(): Prisma.DynamicActionPageDelegate<ExtArgs, {
-        omit: OmitOpts;
-    }>;
-    get dynamicActionComponent(): Prisma.DynamicActionComponentDelegate<ExtArgs, {
-        omit: OmitOpts;
-    }>;
-    get dataHubTable(): Prisma.DataHubTableDelegate<ExtArgs, {
-        omit: OmitOpts;
-    }>;
-    get dataHubColumn(): Prisma.DataHubColumnDelegate<ExtArgs, {
-        omit: OmitOpts;
-    }>;
-    get dataHubRecord(): Prisma.DataHubRecordDelegate<ExtArgs, {
         omit: OmitOpts;
     }>;
     get zaloOA(): Prisma.ZaloOADelegate<ExtArgs, {

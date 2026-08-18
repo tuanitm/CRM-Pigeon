@@ -24,7 +24,7 @@ let PointsService = PointsService_1 = class PointsService {
         this.redis = redis;
     }
     async earnPoints(params) {
-        const { customerId, source, points, referenceType, referenceId, description, idempotencyKey } = params;
+        const { customerId, source, points, referenceType, referenceId, description, idempotencyKey, } = params;
         if (points <= 0)
             return { success: false, error: 'Points must be positive' };
         const lockKey = `loyalty:${customerId}`;
@@ -35,9 +35,13 @@ let PointsService = PointsService_1 = class PointsService {
             const isDup = await this.redis.checkIdempotency(idempotencyKey);
             if (isDup)
                 return { success: false, error: 'Duplicate transaction' };
-            let account = await this.prisma.loyaltyAccount.findUnique({ where: { customerId } });
+            let account = await this.prisma.loyaltyAccount.findUnique({
+                where: { customerId },
+            });
             if (!account) {
-                const defaultTier = await this.prisma.loyaltyTierConfig.findFirst({ where: { isDefault: true } });
+                const defaultTier = await this.prisma.loyaltyTierConfig.findFirst({
+                    where: { isDefault: true },
+                });
                 account = await this.prisma.loyaltyAccount.create({
                     data: {
                         customerId,
@@ -50,25 +54,28 @@ let PointsService = PointsService_1 = class PointsService {
                 });
             }
             const tier = account.tierId
-                ? await this.prisma.loyaltyTierConfig.findUnique({ where: { id: account.tierId } })
+                ? await this.prisma.loyaltyTierConfig.findUnique({
+                    where: { id: account.tierId },
+                })
                 : null;
             const multiplier = tier ? Number(tier.pointsMultiplier) : 1.0;
             const earnRule = await this.prisma.loyaltyEarnRule.findFirst({
                 where: {
                     source,
                     isActive: true,
-                    OR: [
-                        { validFrom: null },
-                        { validFrom: { lte: new Date() } },
-                    ],
+                    OR: [{ validFrom: null }, { validFrom: { lte: new Date() } }],
                 },
             });
-            const finalPoints = (earnRule?.tierMultiplierApplies !== false)
+            const finalPoints = earnRule?.tierMultiplierApplies !== false
                 ? Math.floor(points * multiplier)
                 : points;
             const newBalance = account.pointsBalance + finalPoints;
-            const expiryConfig = await this.prisma.systemConfig.findUnique({ where: { key: 'points_expiry_months' } });
-            const expiryMonths = expiryConfig && !isNaN(parseInt(expiryConfig.value, 10)) ? parseInt(expiryConfig.value, 10) : 12;
+            const expiryConfig = await this.prisma.systemConfig.findUnique({
+                where: { key: 'points_expiry_months' },
+            });
+            const expiryMonths = expiryConfig && !isNaN(parseInt(expiryConfig.value, 10))
+                ? parseInt(expiryConfig.value, 10)
+                : 12;
             const expiresAt = new Date();
             expiresAt.setMonth(expiresAt.getMonth() + expiryMonths);
             await this.prisma.loyaltyTransaction.create({
@@ -213,9 +220,17 @@ let PointsService = PointsService_1 = class PointsService {
       FROM loyalty_account la
       LEFT JOIN loyalty_transaction lt ON lt.loyalty_account_id = la.id AND lt.type = 'earn' AND lt.points > 0
     `;
-        const data = result[0] || { total_outstanding: 0, expiring_30d: 0, expiring_90d: 0 };
-        const rateConfig = await this.prisma.systemConfig.findUnique({ where: { key: 'points_to_currency_rate' } });
-        const conversionRate = rateConfig && !isNaN(parseFloat(rateConfig.value)) ? parseFloat(rateConfig.value) : 100;
+        const data = result[0] || {
+            total_outstanding: 0,
+            expiring_30d: 0,
+            expiring_90d: 0,
+        };
+        const rateConfig = await this.prisma.systemConfig.findUnique({
+            where: { key: 'points_to_currency_rate' },
+        });
+        const conversionRate = rateConfig && !isNaN(parseFloat(rateConfig.value))
+            ? parseFloat(rateConfig.value)
+            : 100;
         await this.prisma.points_liability_snapshot.create({
             data: {
                 snapshot_date: new Date(),

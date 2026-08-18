@@ -13,10 +13,16 @@ export class FrequencyLimiterService {
 
   constructor(private redis: RedisService) {}
 
-  async isAllowed(customerId: string, channel: string): Promise<{ allowed: boolean; count: number; limit: number }> {
+  async isAllowed(
+    customerId: string,
+    channel: string,
+  ): Promise<{ allowed: boolean; count: number; limit: number }> {
     const limit = this.LIMITS[channel] || 5;
     const { count, allowed } = await this.redis.incrementFrequency(
-      customerId, channel, limit, this.WINDOW_SECONDS,
+      customerId,
+      channel,
+      limit,
+      this.WINDOW_SECONDS,
     );
     return { allowed, count, limit };
   }

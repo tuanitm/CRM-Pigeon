@@ -2,26 +2,33 @@ import React, { useState } from 'react';
 import { Card, Typography, Table, Tag, Space, Badge, Row, Col, Statistic, Button, Drawer, Popconfirm, message, Modal, Form, Input, Select } from 'antd';
 import { NodeIndexOutlined, PlayCircleOutlined, CheckCircleOutlined, PauseCircleOutlined, PlusOutlined, SettingOutlined, DeleteOutlined } from '@ant-design/icons';
 import JourneyBuilderDrawer from '../components/JourneyBuilderDrawer';
-import { dynamicActionApi } from '../services/api';
+import { dynamicActionApi, journeyApi } from '../services/api';
 
 const { Title } = Typography;
 
 export const initialJourneysData = [
-  { code: 'JRN_WELCOME_ONBOARDING', name: 'Welcome Onboarding', trigger: 'customer.registered', status: 'active', activeRuns: 0, completed: 0, controlGroup: false },
-  { code: 'JRN_WELCOME_BABY', name: 'Welcome Baby Onboarding', trigger: 'baby.profile_created', status: 'active', activeRuns: 124, completed: 892, controlGroup: false },
-  { code: 'JRN_SECOND_ORDER', name: 'Convert to Second Order', trigger: 'order.completed', status: 'active', activeRuns: 67, completed: 445, controlGroup: false },
-  { code: 'JRN_REPLENISH', name: 'Replenishment Reminder', trigger: 'replenishment.due', status: 'active', activeRuns: 89, completed: 1_204, controlGroup: false },
-  { code: 'JRN_CHURN_ALERT', name: 'Early Churn Warning', trigger: 'churn.risk_detected', status: 'active', activeRuns: 33, completed: 156, controlGroup: true },
-  { code: 'JRN_CART_RESCUE', name: 'Abandoned Cart Recovery', trigger: 'cart.abandoned', status: 'active', activeRuns: 45, completed: 312, controlGroup: false },
+  { code: 'JRN_WELCOME_ONBOARDING', name: 'Welcome Onboarding', trigger: 'customer.profile_completed', status: 'active', activeRuns: 0, completed: 0, controlGroup: false },
+  { code: 'JRN_WELCOME_BABY', name: 'Welcome Baby Onboarding', trigger: 'baby.profile_created', status: 'active', activeRuns: 0, completed: 0, controlGroup: false },
+  { code: 'JRN_SECOND_ORDER', name: 'Convert to Second Order', trigger: 'order.completed', status: 'active', activeRuns: 0, completed: 0, controlGroup: false },
+  { code: 'JRN_REPLENISH', name: 'Replenishment Reminder', trigger: 'replenishment.due', status: 'active', activeRuns: 0, completed: 0, controlGroup: false },
+  { code: 'JRN_CHURN_ALERT', name: 'Early Churn Warning', trigger: 'churn.risk_detected', status: 'active', activeRuns: 0, completed: 0, controlGroup: true },
+  { code: 'JRN_CART_RESCUE', name: 'Abandoned Cart Recovery', trigger: 'cart.abandoned', status: 'active', activeRuns: 0, completed: 0, controlGroup: false },
   { code: 'JRN_TIER_NUDGE', name: 'Tier Upgrade Motivation', trigger: 'segment_entered', status: 'draft', activeRuns: 0, completed: 0, controlGroup: false },
-  { code: 'JRN_REACTIVATION', name: 'Win-back Reactivation', trigger: 'segment_entered', status: 'active', activeRuns: 28, completed: 92, controlGroup: true },
+  { code: 'JRN_REACTIVATION', name: 'Win-back Reactivation', trigger: 'segment_entered', status: 'active', activeRuns: 0, completed: 0, controlGroup: true },
+  { code: 'JRN_BIRTHDAY_WISH', name: 'Birthday Wish', trigger: 'customer.birthday_today', status: 'draft', activeRuns: 0, completed: 0, controlGroup: false },
 ];
 
 export default function JourneysPage() {
   // Use localStorage to persist state across tab changes and reloads
+  // Merge with initialJourneysData so newly added mandatory journeys always appear
   const [journeys, setJourneys] = useState(() => {
     const saved = localStorage.getItem('demo_journeys');
-    return saved ? JSON.parse(saved) : initialJourneysData;
+    if (!saved) return initialJourneysData;
+    const parsed = JSON.parse(saved);
+    // Add any new mandatory journeys that aren't in the saved list
+    const existingCodes = new Set(parsed.map((j: any) => j.code));
+    const missing = initialJourneysData.filter(j => !existingCodes.has(j.code));
+    return missing.length > 0 ? [...parsed, ...missing] : parsed;
   });
 
   const [editingJourney, setEditingJourney] = useState<string | null>(null);
@@ -54,20 +61,31 @@ export default function JourneysPage() {
     }))
   ];
 
-  const handleAdd = (values: any) => {
-    const newJourney = {
-      code: values.code || `JRN_${Date.now()}`,
-      name: values.name,
-      trigger: values.trigger,
-      status: 'draft',
-      activeRuns: 0,
-      completed: 0,
-      controlGroup: false,
-    };
-    setJourneys([...journeys, newJourney]);
-    setAddModalVisible(false);
-    form.resetFields();
-    message.success('Journey created successfully');
+  const handleAdd = async (values: any) => {
+    try {
+      const code = values.code || `JRN_${Date.now()}`;
+      await journeyApi.create({
+        code,
+        name: values.name,
+        trigger: values.trigger,
+        status: 'draft',
+      });
+      const newJourney = {
+        code,
+        name: values.name,
+        trigger: values.trigger,
+        status: 'draft',
+        activeRuns: 0,
+        completed: 0,
+        controlGroup: false,
+      };
+      setJourneys([...journeys, newJourney]);
+      setAddModalVisible(false);
+      form.resetFields();
+      message.success('Journey created successfully');
+    } catch (err: any) {
+      message.error('Failed to create journey: ' + err.message);
+    }
   };
 
   const handleDelete = (code: string) => {
@@ -75,7 +93,34 @@ export default function JourneysPage() {
     message.success('Journey deleted successfully');
   };
 
-  const totalActive = journeys.reduce((sum, j) => sum + j.activeRuns, 0);
+  const handleToggleStatus = async (code: string, currentStatus: string) => {
+    const newStatus = currentStatus === 'active' ? 'draft' : 'active';
+    try {
+      const allDBJourneys = await journeyApi.list();
+      const dbJourney = allDBJourneys.find((j: any) => j.code === code);
+
+      if (dbJourney) {
+        await journeyApi.update(dbJourney.id, { status: newStatus });
+      } else {
+         const j = journeys.find((x: any) => x.code === code);
+         if (j) {
+           await journeyApi.create({
+             code: j.code,
+             name: j.name,
+             trigger: j.trigger,
+             status: newStatus
+           });
+         }
+      }
+
+      setJourneys(journeys.map((j: any) => j.code === code ? { ...j, status: newStatus } : j));
+      message.success(`Journey marked as ${newStatus}`);
+    } catch (err: any) {
+      message.error('Failed to change status: ' + err.message);
+    }
+  };
+
+  const totalActive = journeys.reduce((sum: any, j: any) => sum + j.activeRuns, 0);
   const totalCompleted = journeys.reduce((sum, j) => sum + j.completed, 0);
 
   const columns = [
@@ -124,14 +169,21 @@ export default function JourneysPage() {
         <Space size="small">
           <Button 
             type="text" 
+            icon={r.status === 'active' ? <PauseCircleOutlined /> : <PlayCircleOutlined />} 
+            onClick={() => handleToggleStatus(r.code, r.status)}
+            title={r.status === 'active' ? 'Pause Journey' : 'Activate Journey'}
+          />
+          <Button 
+            type="text" 
             icon={<SettingOutlined />} 
             onClick={() => {
               setEditingJourney(r.code);
               setDrawerVisible(true);
             }}
+            title="Edit Configuration"
           />
           <Popconfirm title="Delete this journey?" onConfirm={() => handleDelete(r.code)}>
-            <Button type="text" danger icon={<DeleteOutlined />} />
+            <Button type="text" danger icon={<DeleteOutlined />} title="Delete Journey" />
           </Popconfirm>
         </Space>
       ),
@@ -176,7 +228,7 @@ export default function JourneysPage() {
       </Card>
 
       <Drawer
-        title={editingJourney === 'JRN_WELCOME_ONBOARDING' ? "Welcome Onboarding Pipeline" : "Journey Configuration"}
+        title={"Journey Configuration"}
         width={700}
         onClose={() => setDrawerVisible(false)}
         open={drawerVisible}

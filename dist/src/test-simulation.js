@@ -20,35 +20,39 @@ async function bootstrap() {
                 phone,
                 fullName: 'Nguyen Test User',
                 email: 'testuser@example.com',
-            }
+            },
         });
     }
     console.log('Creating incomplete baby profile...');
-    const babies = await prisma.baby.findMany({ where: { customerId: customer.id } });
+    const babies = await prisma.baby.findMany({
+        where: { customerId: customer.id },
+    });
     if (babies.length === 0) {
         await prisma.baby.create({
             data: {
                 customerId: customer.id,
                 name: 'Baby An',
-            }
+            },
         });
     }
     console.log('Running Data Quality evaluation...');
     await dataQualityService.evaluateCustomerQuality(customer.id);
-    const updatedCustomer = await prisma.customer.findUnique({ where: { id: customer.id } });
+    const updatedCustomer = await prisma.customer.findUnique({
+        where: { id: customer.id },
+    });
     console.log(`Customer Data Quality Flag: ${updatedCustomer?.dataQualityFlag}`);
     const flags = await prisma.data_quality_flag_log.findMany({
         where: { customer_id: customer.id, resolved: false },
-        include: { data_quality_rule: true }
+        include: { data_quality_rule: true },
     });
     console.log(`Active Flags found: ${flags.length}`);
-    flags.forEach(f => {
+    flags.forEach((f) => {
         console.log(` - Flagged for: ${f.data_quality_rule.code} (${f.flag_reason})`);
     });
     console.log('--- Simulation Complete ---');
     await app.close();
 }
-bootstrap().catch(err => {
+bootstrap().catch((err) => {
     console.error(err);
     process.exit(1);
 });

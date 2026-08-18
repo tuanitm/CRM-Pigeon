@@ -36,12 +36,9 @@ import CustomersPage from './pages/CustomersPage';
 import SegmentsPage from './pages/SegmentsPage';
 import AutomationPage from './pages/AutomationPage';
 import LoyaltyPage from './pages/LoyaltyPage';
-import DataHubPage from './pages/DataHubPage';
 import IntegrationDataPage from './pages/IntegrationDataPage';
 import GamificationPage from './pages/GamificationPage';
-import DataHubDetailPage from './pages/DataHubDetailPage';
 import DynamicActionPage from './pages/DynamicActionPage';
-import DynamicActionDetailPage from './pages/DynamicActionDetailPage';
 import StoragePage from './pages/StoragePage';
 import ZaloOAPage from './pages/ZaloOAPage';
 import ZaloMiniAppPage from './pages/ZaloMiniAppPage';
@@ -89,16 +86,14 @@ const menuItems = [
     ],
   },
   {
-    key: 'grp_data',
-    icon: <DatabaseOutlined />,
-    label: 'Data & Infrastructure',
+    key: 'grp_settings',
+    icon: <SettingOutlined />,
+    label: 'Settings',
     children: [
-      { key: '/data-hub', label: 'Data Hub' },
       { key: '/integration', label: 'Integrations' },
       { key: '/storage', label: 'Storage' },
     ],
   },
-  { key: '/settings', icon: <SettingOutlined />, label: 'Settings' },
 ];
 
 function AppLayout() {
@@ -160,7 +155,8 @@ function AppLayout() {
     if (path.startsWith('/automation') || path.startsWith('/dynamic-action')) return ['grp_engagement'];
     if (path.startsWith('/loyalty') || path.startsWith('/gamification')) return ['grp_loyalty'];
     if (path.startsWith('/zalo')) return ['grp_channels'];
-    if (path.startsWith('/data-hub') || path.startsWith('/integration') || path.startsWith('/storage')) return ['grp_data'];
+    if (path.startsWith('/data-hub')) return ['grp_data'];
+    if (path.startsWith('/integration') || path.startsWith('/storage') || path.startsWith('/settings')) return ['grp_settings'];
     return [];
   };
 
@@ -402,14 +398,11 @@ function AppLayout() {
             <Route path="/segments" element={<SegmentsPage />} />
             <Route path="/automation" element={<AutomationPage />} />
             <Route path="/loyalty" element={<LoyaltyPage />} />
-            <Route path="/data-hub" element={<DataHubPage />} />
-            <Route path="/data-hub/:id" element={<DataHubDetailPage />} />
             <Route path="/integration" element={<IntegrationDataPage />} />
             <Route path="/zalo-mini-app" element={<ZaloMiniAppPage />} />
             <Route path="/zalo-oa" element={<ZaloOAPage />} />
             <Route path="/gamification" element={<GamificationPage />} />
             <Route path="/dynamic-action" element={<DynamicActionPage />} />
-            <Route path="/dynamic-action/:id" element={<DynamicActionDetailPage />} />
             <Route path="/storage" element={<StoragePage />} />
           </Routes>
         </Content>

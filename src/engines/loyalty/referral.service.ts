@@ -35,9 +35,15 @@ export class ReferralService {
   /**
    * Process a referral conversion. Validates anti-fraud checks.
    */
-  async processReferral(referralCode: string, referredCustomerId: string): Promise<{ success: boolean; error?: string }> {
-    const codeRecord = await this.prisma.referral_code.findUnique({ where: { code: referralCode } });
-    if (!codeRecord || !codeRecord.is_active) return { success: false, error: 'Invalid referral code' };
+  async processReferral(
+    referralCode: string,
+    referredCustomerId: string,
+  ): Promise<{ success: boolean; error?: string }> {
+    const codeRecord = await this.prisma.referral_code.findUnique({
+      where: { code: referralCode },
+    });
+    if (!codeRecord || !codeRecord.is_active)
+      return { success: false, error: 'Invalid referral code' };
     if (codeRecord.max_uses && codeRecord.current_uses >= codeRecord.max_uses) {
       return { success: false, error: 'Referral code has reached max uses' };
     }
@@ -60,19 +66,32 @@ export class ReferralService {
 
     for (const ra of referrerAddresses) {
       for (const rd of referredAddresses) {
-        if (ra.addressLine1 && ra.addressLine1 === rd.addressLine1 &&
-            ra.district === rd.district && ra.province === rd.province) {
-          this.logger.warn(`Referral fraud suspected: same address for ${codeRecord.customer_id} and ${referredCustomerId}`);
-          return { success: false, error: 'Referral rejected: address match detected' };
+        if (
+          ra.addressLine1 &&
+          ra.addressLine1 === rd.addressLine1 &&
+          ra.district === rd.district &&
+          ra.province === rd.province
+        ) {
+          this.logger.warn(
+            `Referral fraud suspected: same address for ${codeRecord.customer_id} and ${referredCustomerId}`,
+          );
+          return {
+            success: false,
+            error: 'Referral rejected: address match detected',
+          };
         }
       }
     }
 
     // Check for duplicate conversion
     const existingConversion = await this.prisma.referral_conversion.findFirst({
-      where: { referral_code_id: codeRecord.id, referred_id: referredCustomerId },
+      where: {
+        referral_code_id: codeRecord.id,
+        referred_id: referredCustomerId,
+      },
     });
-    if (existingConversion) return { success: false, error: 'Already referred' };
+    if (existingConversion)
+      return { success: false, error: 'Already referred' };
 
     // Create conversion
     const referrerPoints = 200;
@@ -115,7 +134,9 @@ export class ReferralService {
       idempotencyKey: `referral:referred:${codeRecord.id}:${referredCustomerId}`,
     });
 
-    this.logger.log(`Referral converted: ${codeRecord.customer_id} → ${referredCustomerId}`);
+    this.logger.log(
+      `Referral converted: ${codeRecord.customer_id} → ${referredCustomerId}`,
+    );
     return { success: true };
   }
 }

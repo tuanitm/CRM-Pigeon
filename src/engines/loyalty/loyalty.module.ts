@@ -7,9 +7,7 @@ import { ReferralService } from './referral.service';
 import { LoyaltyController } from './loyalty.controller';
 
 @Module({
-  imports: [
-    BullModule.registerQueue({ name: 'loyalty' }),
-  ],
+  imports: [BullModule.registerQueue({ name: 'loyalty' })],
   controllers: [LoyaltyController],
   providers: [PointsService, TierService, MilestoneService, ReferralService],
   exports: [PointsService, TierService, MilestoneService, ReferralService],

@@ -1,14 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../shared/prisma/prisma.service';
 
-export type NotificationCategory = 'CUSTOMER' | 'TICKET' | 'ORDER' | 'JOURNEY' | 'SYSTEM';
+export type NotificationCategory =
+  'CUSTOMER' | 'TICKET' | 'ORDER' | 'JOURNEY' | 'SYSTEM';
 
 @Injectable()
 export class NotificationService {
   constructor(private prisma: PrismaService) {}
 
   /** Create a new admin notification */
-  async emit(category: NotificationCategory, title: string, body?: string, link?: string) {
+  async emit(
+    category: NotificationCategory,
+    title: string,
+    body?: string,
+    link?: string,
+  ) {
     return this.prisma.adminNotification.create({
       data: { category, title, body, link },
     });

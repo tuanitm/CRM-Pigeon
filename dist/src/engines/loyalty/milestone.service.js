@@ -130,13 +130,25 @@ let MilestoneService = MilestoneService_1 = class MilestoneService {
           SELECT COALESCE(SUM(net_amount), 0)::float as total FROM "order"
           WHERE customer_id = ${customerId}::uuid AND status NOT IN ('cancelled', 'refunded')
         `;
-                return { value: result[0]?.total || 0, completed: (result[0]?.total || 0) >= target };
+                return {
+                    value: result[0]?.total || 0,
+                    completed: (result[0]?.total || 0) >= target,
+                };
             }
             case 'profile_fields': {
-                const customer = await this.prisma.customer.findUnique({ where: { id: customerId } });
+                const customer = await this.prisma.customer.findUnique({
+                    where: { id: customerId },
+                });
                 if (!customer)
                     return { value: 0, completed: false };
-                const fields = ['phone', 'email', 'fullName', 'dateOfBirth', 'gender', 'avatarUrl'];
+                const fields = [
+                    'phone',
+                    'email',
+                    'fullName',
+                    'dateOfBirth',
+                    'gender',
+                    'avatarUrl',
+                ];
                 const filled = fields.filter((f) => customer[f] != null).length;
                 return { value: filled, completed: filled >= target };
             }

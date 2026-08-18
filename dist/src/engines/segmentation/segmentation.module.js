@@ -17,9 +17,7 @@ let SegmentationModule = class SegmentationModule {
 exports.SegmentationModule = SegmentationModule;
 exports.SegmentationModule = SegmentationModule = __decorate([
     (0, common_1.Module)({
-        imports: [
-            bullmq_1.BullModule.registerQueue({ name: 'segmentation' }),
-        ],
+        imports: [bullmq_1.BullModule.registerQueue({ name: 'segmentation' })],
         providers: [rule_evaluator_service_1.RuleEvaluatorService, rfm_calculator_service_1.RfmCalculatorService, segment_service_1.SegmentService],
         exports: [rule_evaluator_service_1.RuleEvaluatorService, rfm_calculator_service_1.RfmCalculatorService, segment_service_1.SegmentService],
     })

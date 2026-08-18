@@ -23,9 +23,18 @@ export class EventProcessor extends WorkerHost {
     super();
   }
 
-  async process(job: Job<{ eventId: string; eventType: string; customerId?: string; properties?: Record<string, any> }>) {
+  async process(
+    job: Job<{
+      eventId: string;
+      eventType: string;
+      customerId?: string;
+      properties?: Record<string, any>;
+    }>,
+  ) {
     const { eventId, eventType, customerId, properties } = job.data;
-    this.logger.log(`Processing event ${eventId}: ${eventType} for customer ${customerId || 'anonymous'}`);
+    this.logger.log(
+      `Processing event ${eventId}: ${eventType} for customer ${customerId || 'anonymous'}`,
+    );
 
     if (!customerId) {
       this.logger.debug('Skipping anonymous event — no customer_id');
@@ -41,14 +50,21 @@ export class EventProcessor extends WorkerHost {
 
     // 2. Check journey triggers
     try {
-      await this.journeyRunService.handleEventTrigger(eventType, customerId, properties);
+      await this.journeyRunService.handleEventTrigger(
+        eventType,
+        customerId,
+        properties,
+      );
     } catch (err) {
       this.logger.error(`Journey trigger failed: ${(err as Error).message}`);
     }
 
     // 3. Check milestones
     try {
-      await this.milestoneService.checkMilestones(customerId, properties?.baby_id);
+      await this.milestoneService.checkMilestones(
+        customerId,
+        properties?.baby_id,
+      );
     } catch (err) {
       this.logger.error(`Milestone check failed: ${(err as Error).message}`);
     }
@@ -77,7 +93,10 @@ export class EventProcessor extends WorkerHost {
 
   // ---------- Event-specific handlers ----------
 
-  private async handleOrderCompleted(customerId: string, props: Record<string, any>) {
+  private async handleOrderCompleted(
+    customerId: string,
+    props: Record<string, any>,
+  ) {
     const { orderId, netAmount, items } = props;
 
     // Award purchase points (1 point per 10,000 VND)
@@ -126,7 +145,10 @@ export class EventProcessor extends WorkerHost {
     });
   }
 
-  private async handleQuizCompleted(customerId: string, props: Record<string, any>) {
+  private async handleQuizCompleted(
+    customerId: string,
+    props: Record<string, any>,
+  ) {
     const points = props.pointsReward || 30;
     await this.pointsService.earnPoints({
       customerId,
@@ -139,7 +161,10 @@ export class EventProcessor extends WorkerHost {
     });
   }
 
-  private async handleReviewSubmitted(customerId: string, props: Record<string, any>) {
+  private async handleReviewSubmitted(
+    customerId: string,
+    props: Record<string, any>,
+  ) {
     const points = props.isVerifiedPurchase ? 50 : 20;
     await this.pointsService.earnPoints({
       customerId,

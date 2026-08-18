@@ -59,7 +59,10 @@ let IdentityResolverService = IdentityResolverService_1 = class IdentityResolver
     async linkIdentity(customerId, type, value) {
         const existing = await this.prisma.customerIdentity.findUnique({
             where: {
-                identityType_identityValue: { identityType: type, identityValue: value },
+                identityType_identityValue: {
+                    identityType: type,
+                    identityValue: value,
+                },
             },
         });
         if (existing && existing.customerId !== customerId) {

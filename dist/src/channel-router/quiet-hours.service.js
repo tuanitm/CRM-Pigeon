@@ -23,7 +23,11 @@ let QuietHoursService = class QuietHoursService {
     }
     isQuietHours() {
         const now = new Date();
-        const vnHour = parseInt(now.toLocaleString('en-US', { timeZone: this.timezone, hour: 'numeric', hour12: false }));
+        const vnHour = parseInt(now.toLocaleString('en-US', {
+            timeZone: this.timezone,
+            hour: 'numeric',
+            hour12: false,
+        }));
         return vnHour >= this.quietStart || vnHour < this.quietEnd;
     }
     getNextSendTime() {

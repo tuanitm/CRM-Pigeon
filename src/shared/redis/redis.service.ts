@@ -26,7 +26,13 @@ export class RedisService implements OnModuleDestroy {
   /** Distributed lock using SET NX EX */
   async acquireLock(key: string, ttlSeconds: number = 10): Promise<boolean> {
     try {
-      const result = await this.client.set(`lock:${key}`, '1', 'EX', ttlSeconds, 'NX');
+      const result = await this.client.set(
+        `lock:${key}`,
+        '1',
+        'EX',
+        ttlSeconds,
+        'NX',
+      );
       return result === 'OK';
     } catch (e) {
       return true; // Bypass lock if Redis is down
@@ -40,7 +46,10 @@ export class RedisService implements OnModuleDestroy {
   }
 
   /** Idempotency check: returns true if key already exists */
-  async checkIdempotency(key: string, ttlSeconds: number = 86400): Promise<boolean> {
+  async checkIdempotency(
+    key: string,
+    ttlSeconds: number = 86400,
+  ): Promise<boolean> {
     try {
       const exists = await this.client.exists(`idem:${key}`);
       if (exists) return true;
@@ -52,7 +61,12 @@ export class RedisService implements OnModuleDestroy {
   }
 
   /** Frequency counter: increment and check limit */
-  async incrementFrequency(customerId: string, channel: string, limit: number, windowSeconds: number): Promise<{ count: number; allowed: boolean }> {
+  async incrementFrequency(
+    customerId: string,
+    channel: string,
+    limit: number,
+    windowSeconds: number,
+  ): Promise<{ count: number; allowed: boolean }> {
     try {
       const key = `freq:${customerId}:${channel}`;
       const count = await this.client.incr(key);

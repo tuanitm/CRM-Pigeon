@@ -18,10 +18,7 @@ let JourneyModule = class JourneyModule {
 exports.JourneyModule = JourneyModule;
 exports.JourneyModule = JourneyModule = __decorate([
     (0, common_1.Module)({
-        imports: [
-            bullmq_1.BullModule.registerQueue({ name: 'journey' }),
-            channel_router_module_1.ChannelRouterModule,
-        ],
+        imports: [bullmq_1.BullModule.registerQueue({ name: 'journey' }), channel_router_module_1.ChannelRouterModule],
         controllers: [journey_controller_1.JourneyController],
         providers: [journey_engine_service_1.JourneyEngineService, journey_run_service_1.JourneyRunService],
         exports: [journey_engine_service_1.JourneyEngineService, journey_run_service_1.JourneyRunService],

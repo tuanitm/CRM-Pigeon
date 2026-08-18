@@ -19,7 +19,10 @@ export class MilestoneService {
    * Check and advance milestone progress for a customer.
    * Called after relevant events (order, quiz, profile update, etc.).
    */
-  async checkMilestones(customerId: string, babyId?: string): Promise<{ completed: string[] }> {
+  async checkMilestones(
+    customerId: string,
+    babyId?: string,
+  ): Promise<{ completed: string[] }> {
     const milestones = await this.prisma.milestone_definition.findMany({
       where: { is_active: true },
       orderBy: { milestone_order: 'asc' },
@@ -90,7 +93,9 @@ export class MilestoneService {
         `;
 
         completed.push(milestone.code);
-        this.logger.log(`Milestone completed: ${milestone.code} for customer ${customerId}`);
+        this.logger.log(
+          `Milestone completed: ${milestone.code} for customer ${customerId}`,
+        );
       }
     }
 
@@ -113,7 +118,9 @@ export class MilestoneService {
       },
     });
 
-    const progressMap = new Map(progressRecords.map((p) => [p.milestone_id, p]));
+    const progressMap = new Map(
+      progressRecords.map((p) => [p.milestone_id, p]),
+    );
 
     return milestones.map((m) => {
       const prog = progressMap.get(m.id);
@@ -143,7 +150,7 @@ export class MilestoneService {
         const result = await this.prisma.$queryRaw`
           SELECT COUNT(*)::int as count FROM "order"
           WHERE customer_id = ${customerId}::uuid AND status NOT IN ('cancelled', 'refunded')
-        ` as unknown as { count: number }[];
+        `;
         const count = result[0]?.count || 0;
         return { value: count, completed: count >= target };
       }
@@ -151,14 +158,28 @@ export class MilestoneService {
         const result = await this.prisma.$queryRaw`
           SELECT COALESCE(SUM(net_amount), 0)::float as total FROM "order"
           WHERE customer_id = ${customerId}::uuid AND status NOT IN ('cancelled', 'refunded')
-        ` as unknown as { total: number }[];
-        return { value: result[0]?.total || 0, completed: (result[0]?.total || 0) >= target };
+        `;
+        return {
+          value: result[0]?.total || 0,
+          completed: (result[0]?.total || 0) >= target,
+        };
       }
       case 'profile_fields': {
-        const customer = await this.prisma.customer.findUnique({ where: { id: customerId } });
+        const customer = await this.prisma.customer.findUnique({
+          where: { id: customerId },
+        });
         if (!customer) return { value: 0, completed: false };
-        const fields = ['phone', 'email', 'fullName', 'dateOfBirth', 'gender', 'avatarUrl'];
-        const filled = fields.filter((f) => (customer as any)[f] != null).length;
+        const fields = [
+          'phone',
+          'email',
+          'fullName',
+          'dateOfBirth',
+          'gender',
+          'avatarUrl',
+        ];
+        const filled = fields.filter(
+          (f) => (customer as any)[f] != null,
+        ).length;
         return { value: filled, completed: filled >= target };
       }
       case 'review_count': {

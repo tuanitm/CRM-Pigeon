@@ -15,16 +15,29 @@ import { PrismaService } from '../../shared/prisma/prisma.service';
  */
 
 // 9 RFM action segments as defined in the SRS
-const RFM_SEGMENT_MAP: Record<string, { r: number[]; f: number[]; m: number[]; label: string }> = {
-  champions:        { r: [4, 5], f: [4, 5], m: [4, 5], label: 'Champions' },
-  loyal_customers:  { r: [3, 4, 5], f: [3, 4, 5], m: [3, 4, 5], label: 'Loyal Customers' },
-  potential_loyal:  { r: [3, 4, 5], f: [1, 2, 3], m: [1, 2, 3], label: 'Potential Loyalists' },
-  new_customers:    { r: [4, 5], f: [1], m: [1, 2], label: 'New Customers' },
-  promising:        { r: [3, 4], f: [1], m: [1], label: 'Promising' },
-  need_attention:   { r: [2, 3], f: [2, 3], m: [2, 3], label: 'Need Attention' },
-  about_to_sleep:   { r: [2], f: [1, 2], m: [1, 2], label: 'About to Sleep' },
-  at_risk:          { r: [1, 2], f: [3, 4, 5], m: [3, 4, 5], label: 'At Risk' },
-  hibernating:      { r: [1], f: [1, 2], m: [1, 2], label: 'Hibernating' },
+const RFM_SEGMENT_MAP: Record<
+  string,
+  { r: number[]; f: number[]; m: number[]; label: string }
+> = {
+  champions: { r: [4, 5], f: [4, 5], m: [4, 5], label: 'Champions' },
+  loyal_customers: {
+    r: [3, 4, 5],
+    f: [3, 4, 5],
+    m: [3, 4, 5],
+    label: 'Loyal Customers',
+  },
+  potential_loyal: {
+    r: [3, 4, 5],
+    f: [1, 2, 3],
+    m: [1, 2, 3],
+    label: 'Potential Loyalists',
+  },
+  new_customers: { r: [4, 5], f: [1], m: [1, 2], label: 'New Customers' },
+  promising: { r: [3, 4], f: [1], m: [1], label: 'Promising' },
+  need_attention: { r: [2, 3], f: [2, 3], m: [2, 3], label: 'Need Attention' },
+  about_to_sleep: { r: [2], f: [1, 2], m: [1, 2], label: 'About to Sleep' },
+  at_risk: { r: [1, 2], f: [3, 4, 5], m: [3, 4, 5], label: 'At Risk' },
+  hibernating: { r: [1], f: [1, 2], m: [1, 2], label: 'Hibernating' },
 };
 
 @Injectable()
@@ -53,9 +66,15 @@ export class RfmCalculatorService {
       }
 
       // Step 2: Calculate quintile boundaries
-      const recencyValues = rawScores.map((s) => s.recency_days).sort((a, b) => a - b);
-      const frequencyValues = rawScores.map((s) => s.frequency).sort((a, b) => a - b);
-      const monetaryValues = rawScores.map((s) => s.monetary).sort((a, b) => a - b);
+      const recencyValues = rawScores
+        .map((s) => s.recency_days)
+        .sort((a, b) => a - b);
+      const frequencyValues = rawScores
+        .map((s) => s.frequency)
+        .sort((a, b) => a - b);
+      const monetaryValues = rawScores
+        .map((s) => s.monetary)
+        .sort((a, b) => a - b);
 
       const rBounds = this.quintileBoundaries(recencyValues);
       const fBounds = this.quintileBoundaries(frequencyValues);
@@ -87,16 +106,28 @@ export class RfmCalculatorService {
       }
 
       const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
-      this.logger.log(`RFM calculation complete: ${insertCount} customers scored in ${elapsed}s for period ${period}`);
+      this.logger.log(
+        `RFM calculation complete: ${insertCount} customers scored in ${elapsed}s for period ${period}`,
+      );
     } catch (err) {
-      this.logger.error(`RFM calculation failed: ${(err as Error).message}`, (err as Error).stack);
+      this.logger.error(
+        `RFM calculation failed: ${(err as Error).message}`,
+        (err as Error).stack,
+      );
     }
   }
 
   /**
    * Compute raw Recency, Frequency, Monetary values using the CLEANED data layer.
    */
-  private async computeRawScores(): Promise<{ customer_id: string; recency_days: number; frequency: number; monetary: number }[]> {
+  private async computeRawScores(): Promise<
+    {
+      customer_id: string;
+      recency_days: number;
+      frequency: number;
+      monetary: number;
+    }[]
+  > {
     return this.prisma.$queryRaw`
       SELECT
         o.customer_id,
@@ -128,7 +159,7 @@ export class RfmCalculatorService {
       WHERE customer_id = ${customerId}::uuid
         AND status NOT IN ('cancelled', 'refunded')
         AND is_gwp = false
-    ` as { total_discount: number; total_spend: number }[];
+    `;
 
     if (!result.length || result[0].total_spend === 0) return false;
     const discountRatio = result[0].total_discount / result[0].total_spend;
@@ -154,7 +185,8 @@ export class RfmCalculatorService {
    */
   private quintileBoundaries(sorted: number[]): number[] {
     const n = sorted.length;
-    if (n < 5) return [sorted[0] || 0, sorted[0] || 0, sorted[0] || 0, sorted[0] || 0];
+    if (n < 5)
+      return [sorted[0] || 0, sorted[0] || 0, sorted[0] || 0, sorted[0] || 0];
     return [
       sorted[Math.floor(n * 0.2)],
       sorted[Math.floor(n * 0.4)],
@@ -185,7 +217,9 @@ export class RfmCalculatorService {
   }
 
   private getWeekNumber(date: Date): number {
-    const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+    const d = new Date(
+      Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()),
+    );
     d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
     const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
     return Math.ceil(((d.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);

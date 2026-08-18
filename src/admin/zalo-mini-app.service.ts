@@ -46,7 +46,8 @@ export class ZaloMiniAppService {
   async update(id: string, data: any) {
     const updateData: any = {};
     if (data.name !== undefined) updateData.name = data.name;
-    if (data.description !== undefined) updateData.description = data.description;
+    if (data.description !== undefined)
+      updateData.description = data.description;
     if (data.iconUrl !== undefined) updateData.iconUrl = data.iconUrl;
     if (data.themeColor !== undefined) updateData.themeColor = data.themeColor;
     if (data.status !== undefined) updateData.status = data.status;

@@ -5,7 +5,7 @@ interface JourneyGraph {
     nodes: Record<string, JourneyNode>;
 }
 interface JourneyNode {
-    type: 'action' | 'wait' | 'condition' | 'wait_until_event' | 'split' | 'exit';
+    type: 'action' | 'action_reward' | 'wait' | 'condition' | 'wait_until_event' | 'split' | 'exit';
     config: Record<string, any>;
     next?: string;
     next_true?: string;
@@ -24,6 +24,9 @@ export declare class JourneyEngineService {
     processNode(runId: string, customerId: string, graph: JourneyGraph, nodeId: string, exitConditions: Record<string, any> | null): Promise<void>;
     resumeRun(runId: string): Promise<void>;
     private handleAction;
+    private handleActionReward;
+    private evaluateRewardCondition;
+    private evaluateSimpleFormula;
     private handleWait;
     private handleWaitUntilEvent;
     private handleCondition;

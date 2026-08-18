@@ -14,7 +14,7 @@ import { PrismaService } from '../../shared/prisma/prisma.service';
 @Injectable()
 export class ReplenishmentService {
   private readonly logger = new Logger(ReplenishmentService.name);
-  private readonly TRIGGER_PERCENTAGE = 0.80;
+  private readonly TRIGGER_PERCENTAGE = 0.8;
   private readonly EWMA_ALPHA = 0.3;
 
   constructor(private prisma: PrismaService) {}
@@ -61,18 +61,30 @@ export class ReplenishmentService {
       firedCount++;
     }
 
-    this.logger.log(`Replenishment check complete: ${firedCount} reminders fired`);
+    this.logger.log(
+      `Replenishment check complete: ${firedCount} reminders fired`,
+    );
   }
 
   /**
    * Update replenishment cycle after a new purchase.
    */
-  async onProductPurchased(customerId: string, productId: string, orderedAt: Date): Promise<void> {
+  async onProductPurchased(
+    customerId: string,
+    productId: string,
+    orderedAt: Date,
+  ): Promise<void> {
     // Priority 1: Personal cycle
-    const personalCycle = await this.calculatePersonalCycle(customerId, productId);
+    const personalCycle = await this.calculatePersonalCycle(
+      customerId,
+      productId,
+    );
 
     // Priority 2: Product lifecycle rule
-    const productRule = await this.getProductLifecycleRule(productId, customerId);
+    const productRule = await this.getProductLifecycleRule(
+      productId,
+      customerId,
+    );
 
     // Priority 3: Global average
     const globalAvg = await this.getGlobalAverageCycle(productId);
@@ -107,7 +119,8 @@ export class ReplenishmentService {
     if (existing) {
       // EWMA smoothing
       const smoothedDays = Math.round(
-        this.EWMA_ALPHA * cycleDays + (1 - this.EWMA_ALPHA) * existing.cycle_days,
+        this.EWMA_ALPHA * cycleDays +
+          (1 - this.EWMA_ALPHA) * existing.cycle_days,
       );
 
       await this.prisma.replenishment_schedule.update({
@@ -135,10 +148,15 @@ export class ReplenishmentService {
       });
     }
 
-    this.logger.log(`Replenishment: ${customerId} / ${productId} — ${cycleDays}d (${cycleSource})`);
+    this.logger.log(
+      `Replenishment: ${customerId} / ${productId} — ${cycleDays}d (${cycleSource})`,
+    );
   }
 
-  private async calculatePersonalCycle(customerId: string, productId: string): Promise<number | null> {
+  private async calculatePersonalCycle(
+    customerId: string,
+    productId: string,
+  ): Promise<number | null> {
     const purchases = await this.prisma.$queryRaw`
       SELECT o.ordered_at
       FROM "order" o
@@ -147,13 +165,15 @@ export class ReplenishmentService {
         AND oi.product_id = ${productId}::uuid
         AND o.status NOT IN ('cancelled', 'refunded')
       ORDER BY o.ordered_at ASC
-    ` as unknown as { ordered_at: Date }[];
+    `;
 
     if (purchases.length < 2) return null;
 
     const intervals: number[] = [];
     for (let i = 1; i < purchases.length; i++) {
-      const diffMs = new Date(purchases[i].ordered_at).getTime() - new Date(purchases[i - 1].ordered_at).getTime();
+      const diffMs =
+        new Date(purchases[i].ordered_at).getTime() -
+        new Date(purchases[i - 1].ordered_at).getTime();
       intervals.push(diffMs / (1000 * 60 * 60 * 24));
     }
 
@@ -165,7 +185,10 @@ export class ReplenishmentService {
     return Math.round(ewma);
   }
 
-  private async getProductLifecycleRule(productId: string, customerId: string): Promise<number | null> {
+  private async getProductLifecycleRule(
+    productId: string,
+    customerId: string,
+  ): Promise<number | null> {
     const baby = await this.prisma.baby.findFirst({
       where: { customerId, isBorn: true },
       orderBy: { dateOfBirth: 'desc' },
@@ -185,7 +208,9 @@ export class ReplenishmentService {
     return genericRule?.replaceDays || null;
   }
 
-  private async getGlobalAverageCycle(productId: string): Promise<number | null> {
+  private async getGlobalAverageCycle(
+    productId: string,
+  ): Promise<number | null> {
     const result = await this.prisma.product_purchase_cycle.findFirst({
       where: { product_id: productId },
     });

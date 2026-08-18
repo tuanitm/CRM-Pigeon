@@ -6,10 +6,7 @@ import { ChannelRouterModule } from '../../channel-router/channel-router.module'
 import { JourneyController } from './journey.controller';
 
 @Module({
-  imports: [
-    BullModule.registerQueue({ name: 'journey' }),
-    ChannelRouterModule,
-  ],
+  imports: [BullModule.registerQueue({ name: 'journey' }), ChannelRouterModule],
   controllers: [JourneyController],
   providers: [JourneyEngineService, JourneyRunService],
   exports: [JourneyEngineService, JourneyRunService],

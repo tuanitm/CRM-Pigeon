@@ -17,7 +17,7 @@ const prisma_service_1 = require("../../shared/prisma/prisma.service");
 let ReplenishmentService = ReplenishmentService_1 = class ReplenishmentService {
     prisma;
     logger = new common_1.Logger(ReplenishmentService_1.name);
-    TRIGGER_PERCENTAGE = 0.80;
+    TRIGGER_PERCENTAGE = 0.8;
     EWMA_ALPHA = 0.3;
     constructor(prisma) {
         this.prisma = prisma;
@@ -85,7 +85,8 @@ let ReplenishmentService = ReplenishmentService_1 = class ReplenishmentService {
             where: { customer_id: customerId, product_id: productId },
         });
         if (existing) {
-            const smoothedDays = Math.round(this.EWMA_ALPHA * cycleDays + (1 - this.EWMA_ALPHA) * existing.cycle_days);
+            const smoothedDays = Math.round(this.EWMA_ALPHA * cycleDays +
+                (1 - this.EWMA_ALPHA) * existing.cycle_days);
             await this.prisma.replenishment_schedule.update({
                 where: { id: existing.id },
                 data: {
@@ -127,7 +128,8 @@ let ReplenishmentService = ReplenishmentService_1 = class ReplenishmentService {
             return null;
         const intervals = [];
         for (let i = 1; i < purchases.length; i++) {
-            const diffMs = new Date(purchases[i].ordered_at).getTime() - new Date(purchases[i - 1].ordered_at).getTime();
+            const diffMs = new Date(purchases[i].ordered_at).getTime() -
+                new Date(purchases[i - 1].ordered_at).getTime();
             intervals.push(diffMs / (1000 * 60 * 60 * 24));
         }
         let ewma = intervals[0];

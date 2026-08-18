@@ -32,19 +32,21 @@ export class LoyaltyController {
   @Get('accounts/:customerId')
   @ApiOperation({ summary: 'Get loyalty account details for a customer' })
   async getAccount(@Param('customerId') customerId: string) {
-    let account = await this.prisma.loyaltyAccount.findUnique({
+    const account = await this.prisma.loyaltyAccount.findUnique({
       where: { customerId },
       include: { tier: true },
     });
 
     if (!account) {
       // Return a dummy object if account does not exist yet
-      const defaultTier = await this.prisma.loyaltyTierConfig.findFirst({ where: { isDefault: true } });
+      const defaultTier = await this.prisma.loyaltyTierConfig.findFirst({
+        where: { isDefault: true },
+      });
       return {
         customerId,
         pointsBalance: 0,
         pointsLifetime: 0,
-        tier: { tierCode: defaultTier?.tierCode || 'NONE' }
+        tier: { tierCode: defaultTier?.tierCode || 'NONE' },
       };
     }
 

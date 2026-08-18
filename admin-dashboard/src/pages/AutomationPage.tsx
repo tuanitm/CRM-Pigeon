@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { NodeIndexOutlined, MessageOutlined, CalendarOutlined } from '@ant-design/icons';
+import { NodeIndexOutlined, MessageOutlined, CalendarOutlined, UnorderedListOutlined } from '@ant-design/icons';
 import JourneysPage from './JourneysPage';
 import MessagesPage from './MessagesPage';
 import SchedulesPage from './SchedulesPage';
+import ConditionDictionaryPage from './ConditionDictionaryPage';
 
 export default function AutomationPage() {
   const [activeTab, setActiveTab] = useState<'journeys' | 'messages' | 'schedules'>('journeys');
@@ -29,12 +30,19 @@ export default function AutomationPage() {
         >
           <CalendarOutlined /> Schedules
         </div>
+        <div
+          className={`sub-sidebar-item ${activeTab === 'conditions' ? 'sub-sidebar-item--active' : ''}`}
+          onClick={() => setActiveTab('conditions')}
+        >
+          <UnorderedListOutlined /> Conditions
+        </div>
       </div>
 
       <div style={{ flex: 1, padding: '0 0 0 24px' }}>
         {activeTab === 'journeys' && <JourneysPage />}
         {activeTab === 'messages' && <MessagesPage />}
         {activeTab === 'schedules' && <SchedulesPage />}
+        {activeTab === 'conditions' && <ConditionDictionaryPage />}
       </div>
     </div>
   );

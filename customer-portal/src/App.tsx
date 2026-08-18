@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { api } from './api';
 import './index.css';
 
@@ -11,7 +11,7 @@ const SupportIcon = () => <svg width="24" height="24" viewBox="0 0 24 24" fill="
 
 export default function App() {
   const [customerId, setCustomerId] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'home' | 'rewards' | 'profile'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'rewards' | 'profile' | 'support'>('home');
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const [isOnboarding, setIsOnboarding] = useState(false);
@@ -64,9 +64,12 @@ export default function App() {
     if (!showFamilySection) return true;
     for (let i = 0; i < babies.length; i++) {
       const b = babies[i];
-      const hasDate = b.isBorn !== false ? !!b.dateOfBirth : !!b.dueDate;
+      // Be lenient with legacy data that might not have isBorn explicitly set
+      const hasDate = (b.isBorn !== false && !!b.dateOfBirth) || (b.isBorn === false && !!b.dueDate) || !!b.dateOfBirth || !!b.dueDate;
       if (!b.name?.trim() || !b.gender || !hasDate || !b.stageCode) {
-        showToast(`Child #${i + 1}: Name, Gender, Date of Birth/Due Date, and Stage are all compulsory.`);
+        const msg = `Child #${i + 1}: Name, Gender, Date of Birth/Due Date, and Stage are all compulsory. Please fill in all fields before saving.`;
+        showToast(msg);
+        alert(msg); // Hard alert so user cannot miss it
         return false;
       }
     }
@@ -147,7 +150,7 @@ export default function App() {
       setRewards(rwData);
       setTickets(ticketsData);
       setBabies(profData.babies || []);
-      setShowFamilySection(profData.babies && profData.babies.length > 0);
+      setShowFamilySection(true);
     } catch (err: any) {
       console.error(err);
     }
@@ -228,10 +231,12 @@ export default function App() {
     setLoading(true);
     try {
       await api.updateProfile(customerId, { babies: showFamilySection ? babies : [] });
-      showToast(showFamilySection ? 'Children information updated!' : 'Family & Kids section hidden.');
-      loadDashboard(customerId);
+      showToast(showFamilySection ? 'Children information updated!' : 'Kids section hidden.');
+      await loadDashboard(customerId);
     } catch (err: any) {
-      showToast('Failed to save child info');
+      const msg = 'Failed to save child info: ' + (err.message || 'Unknown error');
+      showToast(msg);
+      alert(msg);
     } finally {
       setLoading(false);
     }
@@ -295,7 +300,7 @@ export default function App() {
             </div>
 
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 24, marginBottom: 8 }}>
-              <h3 style={{ margin: 0, fontSize: 16 }}>Family & Kids (Optional)</h3>
+              <h3 style={{ margin: 0, fontSize: 16 }}>Kids (Optional)</h3>
               <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, cursor: 'pointer', color: 'var(--primary)', fontWeight: 600 }}>
                 <input 
                   type="checkbox" 
@@ -317,7 +322,7 @@ export default function App() {
               <div key={idx} className="glass-card" style={{ padding: 12, marginBottom: 12, position: 'relative' }}>
                 <button type="button" onClick={() => setBabies(babies.filter((_, i) => i !== idx))} style={{ position: 'absolute', right: 12, top: 12, background: 'none', border: 'none', color: 'var(--danger)' }}>✕</button>
                 <div className="input-group">
-                  <label>Child's Name *</label>
+                  <label>Child #{idx + 1}'s Name *</label>
                   <input type="text" value={baby.name} onChange={e => {
                     const newBabies = [...babies];
                     newBabies[idx].name = e.target.value;
@@ -352,8 +357,8 @@ export default function App() {
                   </div>
                 </div>
                 <div style={{ marginTop: 12 }}>
-                  <div style={{ display: 'flex', gap: 16, marginBottom: 8 }}>
-                    <label style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 13, cursor: 'pointer' }}>
+                  <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 13, cursor: 'pointer', margin: 0 }}>
                       <input 
                         type="radio" 
                         name={`dateType-${idx}`}
@@ -364,9 +369,9 @@ export default function App() {
                           newBabies[idx].dueDate = '';
                           setBabies(newBabies);
                         }}
-                      /> Date of Birth
+                      /> DoB
                     </label>
-                    <label style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 13, cursor: 'pointer' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 13, cursor: 'pointer', margin: 0 }}>
                       <input 
                         type="radio" 
                         name={`dateType-${idx}`}
@@ -377,13 +382,10 @@ export default function App() {
                           newBabies[idx].dateOfBirth = '';
                           setBabies(newBabies);
                         }}
-                      /> Due Date
+                      /> DD
                     </label>
-                  </div>
-                  <div className="input-group" style={{ marginBottom: 0 }}>
-                    {baby.isBorn !== false ? (
-                      <div>
-                        <label style={{ fontSize: 12, display: 'block', marginBottom: 4 }}>Date of Birth *</label>
+                    <div style={{ flex: 1 }}>
+                      {baby.isBorn !== false ? (
                         <input 
                           type="date" 
                           value={baby.dateOfBirth?.split('T')[0] || ''} 
@@ -394,11 +396,9 @@ export default function App() {
                             setBabies(newBabies);
                           }} 
                           required
+                          style={{ padding: '8px 12px', width: '100%' }}
                         />
-                      </div>
-                    ) : (
-                      <div>
-                        <label style={{ fontSize: 12, display: 'block', marginBottom: 4 }}>Due Date *</label>
+                      ) : (
                         <input 
                           type="date" 
                           value={baby.dueDate?.split('T')[0] || ''} 
@@ -409,9 +409,10 @@ export default function App() {
                             setBabies(newBabies);
                           }} 
                           required
+                          style={{ padding: '8px 12px', width: '100%' }}
                         />
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -448,7 +449,7 @@ export default function App() {
                   return 'Good evening,';
                 })()}
               </h4>
-              <h2>{profile?.fullName || 'Valued Member'} - {profile?.customerType || 'End user'}</h2>
+              <h2>{profile?.fullName || 'Valued Bronze'} - {profile?.customerType || 'End user'}</h2>
             </div>
             <button 
               onClick={handleLogout} 
@@ -461,7 +462,18 @@ export default function App() {
 
           <div className="tier-card">
             <h4 style={{ color: 'rgba(255,255,255,0.7)', fontSize: 12, textTransform: 'uppercase', letterSpacing: 1 }}>Current Tier</h4>
-            <h1 style={{ fontSize: 32, margin: '4px 0 16px' }}>{loyalty?.tier?.name || 'Member'}</h1>
+            <h1 style={{ 
+              fontSize: 32, 
+              margin: '4px 0 16px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              color: (loyalty?.tier?.name || 'Bronze').toUpperCase() === 'GOLD' ? '#FFD700' : 'white',
+              textShadow: (loyalty?.tier?.name || 'Bronze').toUpperCase() === 'GOLD' ? '0 0 10px rgba(255,215,0,0.5)' : 'none'
+            }}>
+              <svg viewBox="64 64 896 896" width="32" height="32" fill="currentColor"><path d="M899.6 276.5L705 396.4 518.4 147.5a8.06 8.06 0 00-12.9 0L319 396.4 124.3 276.5c-5.7-3.5-13.1 1.2-12.2 7.9L188.5 865c1.1 7.9 7.9 14 16 14h615.1c8 0 14.9-6 15.9-14l76.4-580.6c.8-6.7-6.5-11.4-12.3-7.9zM813 811H211l-59.3-451.1 144.5 89.1c5.1 3.2 11.6 1.4 14.6-4.1l199-265.4 199.1 265.4c3 4 10.3 6.9 15.4 3.7l148.6-91.8L813 811zM349.5 596.2l-9.9 22.9-24.3-5c-4.4-.9-7.9 2.5-6.9 6.9l5 24.3-22.9 9.9c-4.1 1.8-4 7.6.1 9.4l22.9 9.9-5 24.3c-.9 4.4 2.5 7.9 6.9 6.9l24.3-5 9.9 22.9c1.8 4.1 7.6 4 9.4-.1l9.9-22.9 24.3 5c4.4.9 7.9-2.5 6.9-6.9l-5-24.3 22.9-9.9c4.1-1.8 4-7.6-.1-9.4l-22.9-9.9 5-24.3c.9-4.4-2.5-7.9-6.9-6.9l-24.3 5-9.9-22.9c-1.8-4.2-7.6-4.2-9.4.1zm331-5c-4.1-1.8-9.8-1.9-11.7 2.2l-9.9 22.9-24.3-5c-4.4-.9-7.9 2.5-6.9 6.9l5 24.3-22.9 9.9c-4.1 1.8-4 7.6.1 9.4l22.9 9.9-5 24.3c-.9 4.4 2.5 7.9 6.9 6.9l24.3-5 9.9 22.9c1.8 4.1 7.6 4 9.4-.1l9.9-22.9 24.3 5c4.4.9 7.9-2.5 6.9-6.9l-5-24.3 22.9-9.9c4.1-1.8 4-7.6-.1-9.4l-22.9-9.9 5-24.3c.9-4.4-2.5-7.9-6.9-6.9l-24.3 5-9.9-22.9c-1.7-4.1-7.5-4.1-9.3 0zM512 408c-35.3 0-64 28.7-64 64s28.7 64 64 64 64-28.7 64-64-28.7-64-64-64zm0 94c-16.5 0-30-13.5-30-30s13.5-30 30-30 30 13.5 30 30-13.5 30-30 30z"></path></svg>
+              {loyalty?.tier?.name || 'Bronze'}
+            </h1>
             
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
               <div>
@@ -508,7 +520,13 @@ export default function App() {
           <div className="rewards-grid">
             {rewards.map(reward => (
               <div key={reward.id} className="reward-card">
-                <div className="reward-image">{reward.code.includes('MUG') ? '☕' : reward.code.includes('TOTE') ? '🛍️' : '🎁'}</div>
+                <div className="reward-image" style={reward.imageUrl ? { padding: 0, overflow: 'hidden' } : {}}>
+                  {reward.imageUrl ? (
+                    <img src={reward.imageUrl} alt={reward.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  ) : (
+                    reward.code.includes('MUG') ? '☕' : reward.code.includes('TOTE') ? '🛍️' : '🎁'
+                  )}
+                </div>
                 <div style={{ flex: 1 }}>
                   <div style={{ fontWeight: 600, fontSize: 14, lineHeight: 1.2 }}>{reward.name}</div>
                   <div style={{ color: 'var(--primary)', fontWeight: 700, fontSize: 13, marginTop: 4 }}>{reward.pointsCost} pts</div>
@@ -633,11 +651,13 @@ export default function App() {
               )}
               <div className="input-group">
                 <label>Address</label>
-                <input type="text" value={onboardData.address} onChange={e => setOnboardData({...onboardData, address: e.target.value})} />
+                <input type="text" value={onboardData.address} onChange={e => setOnboardData({...onboardData, address: e.target.value})} readOnly={!!profile?.addresses?.[0]?.addressLine1} style={profile?.addresses?.[0]?.addressLine1 ? { background: '#f1f5f9' } : {}} />
+                {profile?.addresses?.[0]?.addressLine1 && <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 4 }}>Address cannot be changed after registration. Please contact support.</div>}
               </div>
               <div className="input-group">
                 <label>Email</label>
-                <input type="email" value={onboardData.email} onChange={e => setOnboardData({...onboardData, email: e.target.value})} />
+                <input type="email" value={onboardData.email} onChange={e => setOnboardData({...onboardData, email: e.target.value})} readOnly={!!profile?.email} style={profile?.email ? { background: '#f1f5f9' } : {}} />
+                {profile?.email && <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 4 }}>Email cannot be changed after registration. Please contact support.</div>}
               </div>
               <button className="btn btn-primary" onClick={handleSavePersonalInfo} disabled={loading} style={{ marginTop: 8 }}>Save Personal Info</button>
             </div>
@@ -646,7 +666,7 @@ export default function App() {
           {(profile?.customerType !== 'Outlet' && profile?.customerType !== 'Keyshop') && (
             <div className="glass-card">
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-                <h3 style={{ color: 'var(--primary)', margin: 0 }}>Family & Kids ✨</h3>
+                <h3 style={{ color: 'var(--primary)', margin: 0 }}>Kids ✨</h3>
                 <button 
                   type="button"
                   onClick={() => {
@@ -678,64 +698,66 @@ export default function App() {
                   
                   {babies.map((b, i) => (
                     <div key={i} style={{ background: 'rgba(255,255,255,0.8)', padding: 16, borderRadius: 12, marginBottom: 16, border: '1px solid #e2e8f0', position: 'relative' }}>
-                      <button type="button" onClick={() => setBabies(babies.filter((_, idx) => idx !== i))} style={{ position: 'absolute', right: 12, top: 12, background: 'none', border: 'none', color: 'var(--danger)', cursor: 'pointer', fontSize: 16 }}>✕</button>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 12 }}>
-                        <span style={{ fontWeight: 600, fontSize: 14 }}>Child #{i + 1}</span>
-                      </div>
-                      <div className="input-group">
-                        <label>Child's Name *</label>
-                        <input type="text" value={b.name} onChange={e => { const newB = [...babies]; newB[i].name = e.target.value; setBabies(newB); }} placeholder="Child's name" required />
-                      </div>
-                      <div className="input-group" style={{ marginBottom: 12 }}>
-                        <label style={{ marginBottom: 8 }}>Date Type *</label>
-                        <div style={{ display: 'flex', gap: 16 }}>
-                          <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontWeight: 'normal', margin: 0 }}>
-                            <input type="radio" name={`type-${i}`} checked={b.isBorn !== false} onChange={() => { const newB = [...babies]; newB[i].isBorn = true; newB[i].dueDate = ''; setBabies(newB); }} /> Date of Birth
-                          </label>
-                          <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontWeight: 'normal', margin: 0 }}>
-                            <input type="radio" name={`type-${i}`} checked={b.isBorn === false} onChange={() => { const newB = [...babies]; newB[i].isBorn = false; newB[i].dateOfBirth = ''; setBabies(newB); }} /> Due Date
-                          </label>
-                        </div>
-                      </div>
-                      {b.isBorn !== false ? (
-                        <div className="input-group">
-                          <label>Date of Birth *</label>
-                          <input type="date" max={new Date().toISOString().split('T')[0]} value={b.dateOfBirth ? b.dateOfBirth.split('T')[0] : ''} onChange={e => { const newB = [...babies]; newB[i].dateOfBirth = e.target.value; setBabies(newB); }} required />
-                        </div>
-                      ) : (
-                        <div className="input-group">
-                          <label>Due Date *</label>
-                          <input type="date" min={new Date(Date.now() + 86400000).toISOString().split('T')[0]} value={b.dueDate ? b.dueDate.split('T')[0] : ''} onChange={e => { const newB = [...babies]; newB[i].dueDate = e.target.value; setBabies(newB); }} required />
+                      {b.id && (
+                        <div style={{ position: 'absolute', top: 12, right: 40, background: '#10b981', color: 'white', padding: '4px 8px', borderRadius: 12, fontSize: 12, fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: 4 }}>
+                          ✓ Saved
                         </div>
                       )}
+                      {!b.id && <button type="button" onClick={() => setBabies(babies.filter((_, idx) => idx !== i))} style={{ position: 'absolute', right: 12, top: 12, background: 'none', border: 'none', color: 'var(--danger)', cursor: 'pointer', fontSize: 16 }}>✕</button>}
                       <div className="input-group">
-                        <label>Gender *</label>
-                        <select style={{ width: '100%', padding: 14, borderRadius: 12, border: '1px solid #cbd5e1', background: 'white' }} value={b.gender || ''} onChange={e => { const newB = [...babies]; newB[i].gender = e.target.value; setBabies(newB); }} required>
-                          <option value="">Select gender</option>
-                          <option value="male">Male</option>
-                          <option value="female">Female</option>
-                        </select>
+                        <label>Child #{i + 1}'s Name *</label>
+                        <input type="text" value={b.name} onChange={e => { const newB = [...babies]; newB[i].name = e.target.value; setBabies(newB); }} placeholder="Child's name" readOnly={!!b.id} style={b.id ? { background: '#f1f5f9' } : {}} required />
                       </div>
-                      <div className="input-group">
-                        <label>Stage *</label>
-                        <select style={{ width: '100%', padding: 14, borderRadius: 12, border: '1px solid #cbd5e1', background: 'white' }} value={b.stageCode || ''} onChange={e => { const newB = [...babies]; newB[i].stageCode = e.target.value; setBabies(newB); }} required>
-                          <option value="">Select stage</option>
-                          <option value="NEWBORN">Newborn</option>
-                          <option value="INFANT">Infant</option>
-                          <option value="TODDLER">Toddler</option>
-                        </select>
+                      <div style={{ marginBottom: 16 }}>
+                        <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+                          <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontWeight: 'normal', margin: 0 }}>
+                            <input type="radio" name={`type-${i}`} checked={b.isBorn !== false} onChange={() => { const newB = [...babies]; newB[i].isBorn = true; newB[i].dueDate = ''; setBabies(newB); }} disabled={!!b.id} /> DoB
+                          </label>
+                          <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontWeight: 'normal', margin: 0 }}>
+                            <input type="radio" name={`type-${i}`} checked={b.isBorn === false} onChange={() => { const newB = [...babies]; newB[i].isBorn = false; newB[i].dateOfBirth = ''; setBabies(newB); }} disabled={!!b.id} /> DD
+                          </label>
+                          <div style={{ flex: 1 }}>
+                            {b.isBorn !== false ? (
+                              <input type="date" max={new Date().toISOString().split('T')[0]} value={b.dateOfBirth ? b.dateOfBirth.split('T')[0] : ''} onChange={e => { const newB = [...babies]; newB[i].dateOfBirth = e.target.value; setBabies(newB); }} disabled={!!b.id} style={b.id ? { background: '#f1f5f9', padding: '12px 14px', width: '100%', borderRadius: 12, border: '1px solid #cbd5e1' } : { padding: '12px 14px', width: '100%', borderRadius: 12, border: '1px solid #cbd5e1' }} required />
+                            ) : (
+                              <input type="date" min={new Date(Date.now() + 86400000).toISOString().split('T')[0]} value={b.dueDate ? b.dueDate.split('T')[0] : ''} onChange={e => { const newB = [...babies]; newB[i].dueDate = e.target.value; setBabies(newB); }} disabled={!!b.id} style={b.id ? { background: '#f1f5f9', padding: '12px 14px', width: '100%', borderRadius: 12, border: '1px solid #cbd5e1' } : { padding: '12px 14px', width: '100%', borderRadius: 12, border: '1px solid #cbd5e1' }} required />
+                            )}
+                          </div>
+                        </div>
                       </div>
+                      <div style={{ display: 'flex', gap: 12 }}>
+                        <div className="input-group" style={{ flex: 1 }}>
+                          <label>Gender *</label>
+                          <select style={b.id ? { width: '100%', padding: 12, borderRadius: 12, border: '1px solid #cbd5e1', background: '#f1f5f9' } : { width: '100%', padding: 12, borderRadius: 12, border: '1px solid #cbd5e1', background: 'white' }} value={b.gender || ''} onChange={e => { const newB = [...babies]; newB[i].gender = e.target.value; setBabies(newB); }} disabled={!!b.id} required>
+                            <option value="">Select gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                          </select>
+                        </div>
+                        <div className="input-group" style={{ flex: 1 }}>
+                          <label>Stage *</label>
+                          <select style={b.id ? { width: '100%', padding: 12, borderRadius: 12, border: '1px solid #cbd5e1', background: '#f1f5f9' } : { width: '100%', padding: 12, borderRadius: 12, border: '1px solid #cbd5e1', background: 'white' }} value={b.stageCode || ''} onChange={e => { const newB = [...babies]; newB[i].stageCode = e.target.value; setBabies(newB); }} disabled={!!b.id} required>
+                            <option value="">Select stage</option>
+                            <option value="NEWBORN">Newborn</option>
+                            <option value="INFANT">Infant</option>
+                            <option value="TODDLER">Toddler</option>
+                          </select>
+                        </div>
+                      </div>
+                      {b.id && <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 8 }}>Child information cannot be edited or deleted once saved. Please contact support.</div>}
                     </div>
                   ))}
                   
                   <div style={{ display: 'flex', gap: 12 }}>
-                    <button className="btn btn-secondary" onClick={addChild} style={{ flex: 1 }}>+ Add Child</button>
-                    <button className="btn btn-primary" onClick={handleSaveChildren} disabled={loading} style={{ flex: 1 }}>Save Family Info</button>
+                    <button type="button" className="btn btn-secondary" onClick={addChild} style={{ flex: 1 }}>+ Add Child</button>
+                    <button type="button" className="btn btn-primary" onClick={handleSaveChildren} disabled={loading} style={{ flex: 1 }}>
+                      {loading ? 'Saving...' : 'Save Kids Info'}
+                    </button>
                   </div>
                 </>
               ) : (
                 <div style={{ padding: '16px 0', textAlign: 'center', color: 'var(--text-muted)', fontSize: 13 }}>
-                  Family & Kids section is hidden. Click <strong>"Show Section"</strong> to manage your child info.
+                  Kids section is hidden. Click <strong>"Show Section"</strong> to manage your child info.
                 </div>
               )}
             </div>
@@ -809,7 +831,13 @@ export default function App() {
       {confirmReward && (
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, backdropFilter: 'blur(4px)' }}>
           <div className="glass-card" style={{ width: '100%', maxWidth: 400, textAlign: 'center', padding: 32 }}>
-            <div style={{ fontSize: 48, marginBottom: 16 }}>{confirmReward.code.includes('MUG') ? '☕' : confirmReward.code.includes('TOTE') ? '🛍️' : '🎁'}</div>
+            <div style={{ fontSize: 48, marginBottom: 16 }}>
+              {confirmReward.imageUrl ? (
+                <img src={confirmReward.imageUrl} alt={confirmReward.name} style={{ width: 80, height: 80, objectFit: 'cover', borderRadius: 12, margin: '0 auto', display: 'block' }} />
+              ) : (
+                confirmReward.code.includes('MUG') ? '☕' : confirmReward.code.includes('TOTE') ? '🛍️' : '🎁'
+              )}
+            </div>
             <h3 style={{ marginBottom: 8, fontSize: 20 }}>Confirm Redemption</h3>
             <p style={{ color: 'var(--text-muted)', marginBottom: 24, fontSize: 14 }}>
               Are you sure you want to redeem <strong>{confirmReward.name}</strong> for <strong style={{ color: 'var(--primary)' }}>{confirmReward.pointsCost} pts</strong>?

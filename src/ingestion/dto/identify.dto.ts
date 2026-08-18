@@ -1,4 +1,10 @@
-import { IsString, IsOptional, IsObject, IsEmail, IsArray } from 'class-validator';
+import {
+  IsString,
+  IsOptional,
+  IsObject,
+  IsEmail,
+  IsArray,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class IdentifyDto {
@@ -32,10 +38,18 @@ export class IdentifyDto {
   @IsString()
   idempotencyKey?: string;
 
-  @ApiProperty({ required: false, description: 'Optional array of children profiles' })
+  @ApiProperty({
+    required: false,
+    description: 'Optional array of children profiles',
+  })
   @IsOptional()
   @IsArray()
-  babies?: Array<{ name: string; dateOfBirth: string; gender: string; stageCode?: string }>;
+  babies?: Array<{
+    name: string;
+    dateOfBirth: string;
+    gender: string;
+    stageCode?: string;
+  }>;
 
   @ApiProperty({ required: false })
   @IsOptional()

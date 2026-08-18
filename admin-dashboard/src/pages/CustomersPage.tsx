@@ -92,8 +92,8 @@ export default function CustomersPage() {
       title: 'Tier',
       key: 'tier',
       render: (_: any, r: any) => {
-        const tier = r.loyaltyAccount?.tierId || r.tier || 'MEMBER';
-        const colors: Record<string, string> = { GOLD: 'gold', SILVER: 'default', MEMBER: 'blue' };
+        const tier = r.loyaltyAccount?.tierId || r.tier || 'BRONZE';
+        const colors: Record<string, string> = { GOLD: 'gold', SILVER: 'default', BRONZE: 'blue' };
         return <Tag color={colors[tier] || 'blue'}>{tier}</Tag>;
       },
     },
@@ -323,7 +323,7 @@ export default function CustomersPage() {
 const demoCustomers = [
   { id: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890', fullName: 'Nguyen Thi Mai', phone: '+84901234567', email: 'mai@example.com', gender: 'female', tier: 'GOLD', points: 2450, orderCount: 12, babies: [{ id: '1', name: 'Bé An', stageCode: 'INFANT' }], loyaltyAccount: { pointsBalance: 2450, pointsLifetime: 5200, pointsRedeemed: 2750 } },
   { id: 'b2c3d4e5-f6a7-8901-bcde-f12345678901', fullName: 'Tran Van Duc', phone: '+84912345678', email: 'duc@example.com', gender: 'male', tier: 'SILVER', points: 890, orderCount: 5, babies: [], loyaltyAccount: { pointsBalance: 890, pointsLifetime: 1200, pointsRedeemed: 310 } },
-  { id: 'c3d4e5f6-a7b8-9012-cdef-123456789012', fullName: 'Le Thi Hoa', phone: '+84923456789', email: null, gender: 'female', tier: 'MEMBER', points: 120, orderCount: 1, babies: [{ id: '2', name: 'Bé Bình', stageCode: 'NEWBORN' }, { id: '3', name: 'Bé Châu', stageCode: 'TODDLER' }], loyaltyAccount: { pointsBalance: 120, pointsLifetime: 120, pointsRedeemed: 0 } },
-  { id: 'd4e5f6a7-b8c9-0123-defa-234567890123', fullName: 'Pham Minh Tuan', phone: '+84934567890', email: 'tuan@example.com', gender: 'male', tier: 'MEMBER', points: 50, orderCount: 0, babies: [], loyaltyAccount: { pointsBalance: 50, pointsLifetime: 50, pointsRedeemed: 0 } },
+  { id: 'c3d4e5f6-a7b8-9012-cdef-123456789012', fullName: 'Le Thi Hoa', phone: '+84923456789', email: null, gender: 'female', tier: 'BRONZE', points: 120, orderCount: 1, babies: [{ id: '2', name: 'Bé Bình', stageCode: 'NEWBORN' }, { id: '3', name: 'Bé Châu', stageCode: 'TODDLER' }], loyaltyAccount: { pointsBalance: 120, pointsLifetime: 120, pointsRedeemed: 0 } },
+  { id: 'd4e5f6a7-b8c9-0123-defa-234567890123', fullName: 'Pham Minh Tuan', phone: '+84934567890', email: 'tuan@example.com', gender: 'male', tier: 'BRONZE', points: 50, orderCount: 0, babies: [], loyaltyAccount: { pointsBalance: 50, pointsLifetime: 50, pointsRedeemed: 0 } },
   { id: 'e5f6a7b8-c9d0-1234-efab-345678901234', fullName: 'Vo Thi Lan', phone: '+84945678901', email: 'lan@example.com', gender: 'female', tier: 'SILVER', points: 1580, orderCount: 8, babies: [{ id: '4', name: 'Bé Dũng', stageCode: 'INFANT' }], loyaltyAccount: { pointsBalance: 1580, pointsLifetime: 3200, pointsRedeemed: 1620 } },
 ];

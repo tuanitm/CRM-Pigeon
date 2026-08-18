@@ -15,13 +15,20 @@ const serial_controller_1 = require("./serial.controller");
 const support_controller_1 = require("./support.controller");
 const loyalty_module_1 = require("../engines/loyalty/loyalty.module");
 const admin_module_1 = require("../admin/admin.module");
+const journey_module_1 = require("../engines/journey/journey.module");
 let CustomerApiModule = class CustomerApiModule {
 };
 exports.CustomerApiModule = CustomerApiModule;
 exports.CustomerApiModule = CustomerApiModule = __decorate([
     (0, common_1.Module)({
-        imports: [loyalty_module_1.LoyaltyModule, admin_module_1.AdminModule],
-        controllers: [profile_controller_1.ProfileController, baby_controller_1.BabyController, loyalty_controller_1.LoyaltyController, serial_controller_1.SerialController, support_controller_1.CustomerSupportController],
+        imports: [loyalty_module_1.LoyaltyModule, admin_module_1.AdminModule, journey_module_1.JourneyModule],
+        controllers: [
+            profile_controller_1.ProfileController,
+            baby_controller_1.BabyController,
+            loyalty_controller_1.LoyaltyController,
+            serial_controller_1.SerialController,
+            support_controller_1.CustomerSupportController,
+        ],
     })
 ], CustomerApiModule);
 //# sourceMappingURL=customer-api.module.js.map

@@ -16,7 +16,10 @@ export class LoyaltyController {
   async getLoyalty(@Param('customerId') customerId: string) {
     return this.prisma.loyaltyAccount.findUnique({
       where: { customerId },
-      include: { tier: true, transactions: { orderBy: { createdAt: 'desc' }, take: 20 } },
+      include: {
+        tier: true,
+        transactions: { orderBy: { createdAt: 'desc' }, take: 20 },
+      },
     });
   }
 
@@ -29,7 +32,6 @@ export class LoyaltyController {
     return this.prisma.rewardCatalog.findMany({
       where: {
         isActive: true,
-        pointsCost: { lte: account?.pointsBalance || 0 },
       },
       orderBy: { pointsCost: 'asc' },
     });
@@ -37,9 +39,15 @@ export class LoyaltyController {
 
   @Post(':customerId/redeem')
   @ApiOperation({ summary: 'Redeem a reward (atomic with distributed lock)' })
-  async redeemReward(@Param('customerId') customerId: string, @Body() data: { rewardCode: string; idempotencyKey: string }) {
+  async redeemReward(
+    @Param('customerId') customerId: string,
+    @Body() data: { rewardCode: string; idempotencyKey: string },
+  ) {
     // Distributed lock per customer
-    const lockAcquired = await this.redis.acquireLock(`loyalty:${customerId}`, 10);
+    const lockAcquired = await this.redis.acquireLock(
+      `loyalty:${customerId}`,
+      10,
+    );
     if (!lockAcquired) {
       return { error: 'Another transaction is in progress. Please try again.' };
     }
@@ -49,12 +57,18 @@ export class LoyaltyController {
       const isDup = await this.redis.checkIdempotency(data.idempotencyKey);
       if (isDup) return { status: 'duplicate' };
 
-      const reward = await this.prisma.rewardCatalog.findUnique({ where: { code: data.rewardCode } });
-      if (!reward || !reward.isActive) return { error: 'Reward not found or inactive' };
+      const reward = await this.prisma.rewardCatalog.findUnique({
+        where: { code: data.rewardCode },
+      });
+      if (!reward || !reward.isActive)
+        return { error: 'Reward not found or inactive' };
 
-      const account = await this.prisma.loyaltyAccount.findUnique({ where: { customerId } });
+      const account = await this.prisma.loyaltyAccount.findUnique({
+        where: { customerId },
+      });
       if (!account) return { error: 'No loyalty account found' };
-      if (account.pointsBalance < reward.pointsCost) return { error: 'Insufficient points' };
+      if (account.pointsBalance < reward.pointsCost)
+        return { error: 'Insufficient points' };
 
       // Atomic: deduct points + create redemption
       const newBalance = account.pointsBalance - reward.pointsCost;
@@ -83,7 +97,9 @@ export class LoyaltyController {
       });
 
       if (reward.category === 'product') {
-        const product = await this.prisma.product.findFirst({ where: { sku: reward.code } });
+        const product = await this.prisma.product.findFirst({
+          where: { sku: reward.code },
+        });
         await this.prisma.order.create({
           data: {
             customerId,
@@ -98,10 +114,10 @@ export class LoyaltyController {
                 sku: reward.code,
                 quantity: 1,
                 unitPrice: 0,
-                totalPrice: 0
-              }
-            }
-          }
+                totalPrice: 0,
+              },
+            },
+          },
         });
       } else {
         await this.prisma.rewardRedemption.create({
@@ -111,8 +127,8 @@ export class LoyaltyController {
             rewardId: reward.id,
             pointsSpent: reward.pointsCost,
             status: 'pending',
-            idempotencyKey: data.idempotencyKey
-          }
+            idempotencyKey: data.idempotencyKey,
+          },
         });
       }
 
@@ -124,10 +140,10 @@ export class LoyaltyController {
             rewardCode: reward.code,
             rewardName: reward.name,
             pointsSpent: reward.pointsCost,
-            category: reward.category
+            category: reward.category,
           },
-          source: 'customer-portal'
-        }
+          source: 'customer-portal',
+        },
       });
 
       return { status: 'redeemed', pointsSpent: reward.pointsCost, newBalance };

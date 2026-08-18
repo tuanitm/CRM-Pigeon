@@ -5,9 +5,7 @@ import { RfmCalculatorService } from './rfm-calculator.service';
 import { SegmentService } from './segment.service';
 
 @Module({
-  imports: [
-    BullModule.registerQueue({ name: 'segmentation' }),
-  ],
+  imports: [BullModule.registerQueue({ name: 'segmentation' })],
   providers: [RuleEvaluatorService, RfmCalculatorService, SegmentService],
   exports: [RuleEvaluatorService, RfmCalculatorService, SegmentService],
 })

@@ -239,7 +239,7 @@ export default function DashboardPage() {
         <Col xs={24} lg={8}>
           <Card variant="outlined" title="Phân bổ hạng thành viên" style={{ borderRadius: 10, borderColor: '#e5e7eb' }}>
             {[
-              { tier: 'MEMBER', count: 9_200, color: '#94a3b8', pct: 74 },
+              { tier: 'BRONZE', count: 9_200, color: '#94a3b8', pct: 74 },
               { tier: 'SILVER', count: 2_450, color: '#a8a29e', pct: 20 },
               { tier: 'GOLD', count: 800, color: '#f59e0b', pct: 6 },
             ].map((t) => (

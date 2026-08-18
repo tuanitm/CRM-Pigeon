@@ -48,12 +48,17 @@ export class ZaloOAService {
   async update(id: string, data: any) {
     const updateData: any = {};
     if (data.name !== undefined) updateData.name = data.name;
-    if (data.description !== undefined) updateData.description = data.description;
+    if (data.description !== undefined)
+      updateData.description = data.description;
     if (data.avatarUrl !== undefined) updateData.avatarUrl = data.avatarUrl;
-    if (data.packageName !== undefined) updateData.packageName = data.packageName;
+    if (data.packageName !== undefined)
+      updateData.packageName = data.packageName;
     if (data.followers !== undefined) updateData.followers = data.followers;
     if (data.status !== undefined) updateData.status = data.status;
-    if (data.expiryDate !== undefined) updateData.expiryDate = data.expiryDate ? new Date(data.expiryDate) : null;
+    if (data.expiryDate !== undefined)
+      updateData.expiryDate = data.expiryDate
+        ? new Date(data.expiryDate)
+        : null;
     return this.prisma.zaloOA.update({ where: { id }, data: updateData });
   }
 
@@ -62,9 +67,13 @@ export class ZaloOAService {
   }
 
   async delete(id: string) {
-    const linkedApps = await this.prisma.zaloMiniApp.count({ where: { zaloOAId: id } });
+    const linkedApps = await this.prisma.zaloMiniApp.count({
+      where: { zaloOAId: id },
+    });
     if (linkedApps > 0) {
-      throw new Error(`Cannot delete this OA because it is linked to ${linkedApps} Mini App(s). Unlink them first.`);
+      throw new Error(
+        `Cannot delete this OA because it is linked to ${linkedApps} Mini App(s). Unlink them first.`,
+      );
     }
     return this.prisma.zaloOA.delete({ where: { id } });
   }

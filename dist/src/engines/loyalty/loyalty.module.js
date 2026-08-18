@@ -19,9 +19,7 @@ let LoyaltyModule = class LoyaltyModule {
 exports.LoyaltyModule = LoyaltyModule;
 exports.LoyaltyModule = LoyaltyModule = __decorate([
     (0, common_1.Module)({
-        imports: [
-            bullmq_1.BullModule.registerQueue({ name: 'loyalty' }),
-        ],
+        imports: [bullmq_1.BullModule.registerQueue({ name: 'loyalty' })],
         controllers: [loyalty_controller_1.LoyaltyController],
         providers: [points_service_1.PointsService, tier_service_1.TierService, milestone_service_1.MilestoneService, referral_service_1.ReferralService],
         exports: [points_service_1.PointsService, tier_service_1.TierService, milestone_service_1.MilestoneService, referral_service_1.ReferralService],

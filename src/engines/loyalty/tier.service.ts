@@ -10,7 +10,7 @@ import { PrismaService } from '../../shared/prisma/prisma.service';
  *   2. distinct_order_months (number of unique months with at least one order)
  *
  * Customer must meet BOTH criteria to qualify for a tier.
- * Tiers: MEMBER → SILVER → GOLD (configurable via loyalty_tier_config).
+ * Tiers: BRONZE → SILVER → GOLD (configurable via loyalty_tier_config).
  */
 @Injectable()
 export class TierService {
@@ -54,7 +54,7 @@ export class TierService {
 
       // Fallback to default tier
       if (!newTierId && tiers.length > 0) {
-        const defaultTier = tiers.find(t => t.isDefault);
+        const defaultTier = tiers.find((t) => t.isDefault);
         newTierId = defaultTier?.id || tiers[tiers.length - 1].id;
       }
 
@@ -73,7 +73,8 @@ export class TierService {
         });
 
         // Generate tier change event
-        const isUpgrade = (newTier?.tierOrder || 0) > (account.tier?.tierOrder || 0);
+        const isUpgrade =
+          (newTier?.tierOrder || 0) > (account.tier?.tierOrder || 0);
         await this.prisma.$executeRaw`
           INSERT INTO event (id, customer_id, event_type, properties, source, occurred_at, received_at)
           VALUES (uuid_generate_v4(), ${account.customerId}::uuid,
@@ -85,7 +86,9 @@ export class TierService {
         if (isUpgrade) upgraded++;
         else downgraded++;
 
-        this.logger.log(`Tier change: ${account.customerId} ${oldTier} → ${newTier?.tierCode}`);
+        this.logger.log(
+          `Tier change: ${account.customerId} ${oldTier} → ${newTier?.tierCode}`,
+        );
       } else {
         // Just update metrics even if tier didn't change
         await this.prisma.loyaltyAccount.update({
@@ -99,22 +102,30 @@ export class TierService {
       }
     }
 
-    this.logger.log(`Tier evaluation complete: ${upgraded} upgraded, ${downgraded} downgraded, ${accounts.length} total`);
+    this.logger.log(
+      `Tier evaluation complete: ${upgraded} upgraded, ${downgraded} downgraded, ${accounts.length} total`,
+    );
   }
 
   /**
    * Evaluate a single customer's tier (on-demand).
    */
-  async evaluateCustomerTier(customerId: string): Promise<{ tierCode: string; netSpend: number; distinctMonths: number }> {
+  async evaluateCustomerTier(
+    customerId: string,
+  ): Promise<{ tierCode: string; netSpend: number; distinctMonths: number }> {
     const metrics = await this.calculateTierMetrics(customerId);
 
     const tiers = await this.prisma.loyaltyTierConfig.findMany({
       orderBy: { tierOrder: 'desc' },
     });
 
-    let qualifiedTier = tiers.find(t => t.isDefault) || tiers[tiers.length - 1]; // Default to designated default tier or lowest
+    let qualifiedTier =
+      tiers.find((t) => t.isDefault) || tiers[tiers.length - 1]; // Default to designated default tier or lowest
     for (const tier of tiers) {
-      if (metrics.netSpend >= Number(tier.minNetSpend) && metrics.distinctMonths >= tier.minDistinctMonths) {
+      if (
+        metrics.netSpend >= Number(tier.minNetSpend) &&
+        metrics.distinctMonths >= tier.minDistinctMonths
+      ) {
         qualifiedTier = tier;
         break;
       }
@@ -132,7 +143,9 @@ export class TierService {
    * net_spend: sum of net_amount from non-cancelled, non-refunded, non-GWP orders
    * distinct_months: count of unique YYYY-MM with at least one order
    */
-  private async calculateTierMetrics(customerId: string): Promise<{ netSpend: number; distinctMonths: number }> {
+  private async calculateTierMetrics(
+    customerId: string,
+  ): Promise<{ netSpend: number; distinctMonths: number }> {
     const result = await this.prisma.$queryRaw`
       SELECT
         COALESCE(SUM(o.net_amount), 0)::float AS net_spend,
@@ -144,7 +157,7 @@ export class TierService {
         AND o.is_gwp = false
         AND o.is_internal = false
         AND c.data_quality_flag IS NULL
-    ` as unknown as { net_spend: number; distinct_months: number }[];
+    `;
 
     return {
       netSpend: result[0]?.net_spend || 0,

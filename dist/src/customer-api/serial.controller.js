@@ -34,7 +34,10 @@ let SerialController = class SerialController {
       WHERE ps.serial_code = ${data.serialCode}
     `;
         if (!serial.length) {
-            return { valid: false, message: 'Serial code not found. This product may not be authentic.' };
+            return {
+                valid: false,
+                message: 'Serial code not found. This product may not be authentic.',
+            };
         }
         const s = serial[0];
         const scanResult = s.status === 'active' ? 'authentic' : 'already_claimed';
@@ -52,14 +55,17 @@ let SerialController = class SerialController {
     async claimSerial(data) {
         const serials = await this.prisma.product_serial.findMany({
             where: { serial_code: data.serialCode },
-            include: { product: true }
+            include: { product: true },
         });
         if (!serials.length) {
             return { status: 'error', message: 'Serial code not found.' };
         }
         const serial = serials[0];
         if (serial.status !== 'active') {
-            return { status: 'error', message: 'This serial code has already been claimed.' };
+            return {
+                status: 'error',
+                message: 'This serial code has already been claimed.',
+            };
         }
         await this.prisma.product_serial.update({
             where: { id: serial.id },
@@ -67,14 +73,14 @@ let SerialController = class SerialController {
                 status: 'claimed',
                 claimed_by: data.customerId,
                 claimed_at: new Date(),
-            }
+            },
         });
         await this.prisma.serial_scan.create({
             data: {
                 serial_id: serial.id,
                 customer_id: data.customerId,
                 scan_result: 'claimed',
-            }
+            },
         });
         const result = await this.pointsService.earnPoints({
             customerId: data.customerId,
@@ -83,7 +89,7 @@ let SerialController = class SerialController {
             referenceType: 'product_serial',
             referenceId: serial.id,
             description: `Claimed QR code for ${serial.product.name}`,
-            idempotencyKey: (0, uuid_1.v4)()
+            idempotencyKey: (0, uuid_1.v4)(),
         });
         if (result.success) {
             await this.prisma.event.create({
@@ -93,12 +99,16 @@ let SerialController = class SerialController {
                     properties: {
                         points: 100,
                         productName: serial.product.name,
-                        serialCode: data.serialCode
+                        serialCode: data.serialCode,
                     },
-                    source: 'customer-portal'
-                }
+                    source: 'customer-portal',
+                },
             });
-            return { status: 'claimed', message: 'Points awarded successfully', newBalance: result.newBalance };
+            return {
+                status: 'claimed',
+                message: 'Points awarded successfully',
+                newBalance: result.newBalance,
+            };
         }
         else {
             return { status: 'error', message: result.error };
@@ -109,7 +119,9 @@ exports.SerialController = SerialController;
 __decorate([
     (0, common_1.Post)('verify'),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
-    (0, swagger_1.ApiOperation)({ summary: 'Verify product serial (public — no auth required)' }),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Verify product serial (public — no auth required)',
+    }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),

@@ -30,10 +30,14 @@ let EmailProviderService = EmailProviderService_1 = class EmailProviderService {
         }
         try {
             const payload = {
-                personalizations: [{
+                personalizations: [
+                    {
                         to: [{ email: params.to }],
-                        ...(params.templateData ? { dynamic_template_data: params.templateData } : {}),
-                    }],
+                        ...(params.templateData
+                            ? { dynamic_template_data: params.templateData }
+                            : {}),
+                    },
+                ],
                 from: { email: params.from || this.fromEmail, name: 'PIGEON Vietnam' },
             };
             if (params.templateId) {
@@ -46,7 +50,7 @@ let EmailProviderService = EmailProviderService_1 = class EmailProviderService {
             const response = await fetch('https://api.sendgrid.com/v3/mail/send', {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${this.apiKey}`,
+                    Authorization: `Bearer ${this.apiKey}`,
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(payload),
@@ -58,7 +62,10 @@ let EmailProviderService = EmailProviderService_1 = class EmailProviderService {
             }
             const errorBody = await response.text();
             this.logger.error(`SendGrid error ${response.status}: ${errorBody}`);
-            return { success: false, error: `SendGrid ${response.status}: ${errorBody}` };
+            return {
+                success: false,
+                error: `SendGrid ${response.status}: ${errorBody}`,
+            };
         }
         catch (err) {
             this.logger.error(`Email send failed: ${err.message}`);

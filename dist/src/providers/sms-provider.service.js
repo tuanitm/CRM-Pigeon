@@ -68,7 +68,7 @@ let SmsProviderService = SmsProviderService_1 = class SmsProviderService {
             const response = await fetch('https://api.speedsms.vn/index.php/sms/send', {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${this.apiKey}`,
+                    Authorization: `Bearer ${this.apiKey}`,
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({

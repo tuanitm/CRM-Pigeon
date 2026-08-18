@@ -60,7 +60,10 @@ __decorate([
     __metadata("design:type", String)
 ], IdentifyDto.prototype, "idempotencyKey", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ required: false, description: 'Optional array of children profiles' }),
+    (0, swagger_1.ApiProperty)({
+        required: false,
+        description: 'Optional array of children profiles',
+    }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsArray)(),
     __metadata("design:type", Array)

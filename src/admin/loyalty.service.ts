@@ -43,24 +43,32 @@ export class LoyaltyService {
     if (data.tierName !== undefined) d.tierName = data.tierName;
     if (data.tierOrder !== undefined) d.tierOrder = data.tierOrder;
     if (data.minNetSpend !== undefined) d.minNetSpend = data.minNetSpend;
-    if (data.minDistinctMonths !== undefined) d.minDistinctMonths = data.minDistinctMonths;
-    if (data.pointsMultiplier !== undefined) d.pointsMultiplier = data.pointsMultiplier;
+    if (data.minDistinctMonths !== undefined)
+      d.minDistinctMonths = data.minDistinctMonths;
+    if (data.pointsMultiplier !== undefined)
+      d.pointsMultiplier = data.pointsMultiplier;
     if (data.benefits !== undefined) d.benefits = data.benefits;
     if (data.isDefault !== undefined) d.isDefault = data.isDefault;
     return this.prisma.loyaltyTierConfig.update({ where: { id }, data: d });
   }
 
   async deleteTier(id: string) {
-    const linked = await this.prisma.loyaltyAccount.count({ where: { tierId: id } });
+    const linked = await this.prisma.loyaltyAccount.count({
+      where: { tierId: id },
+    });
     if (linked > 0) {
-      throw new Error(`Cannot delete: ${linked} account(s) are assigned to this tier.`);
+      throw new Error(
+        `Cannot delete: ${linked} account(s) are assigned to this tier.`,
+      );
     }
     return this.prisma.loyaltyTierConfig.delete({ where: { id } });
   }
 
   // ─── Earn Rules ───────────────────────────────────────
   async listEarnRules() {
-    return this.prisma.loyaltyEarnRule.findMany({ orderBy: { createdAt: 'asc' } });
+    return this.prisma.loyaltyEarnRule.findMany({
+      orderBy: { createdAt: 'asc' },
+    });
   }
 
   async getWelcomeRule() {
@@ -69,9 +77,14 @@ export class LoyaltyService {
     });
   }
 
-  async upsertWelcomeRule(data: { isActive: boolean; points: any; validFrom?: string; validUntil?: string }) {
+  async upsertWelcomeRule(data: {
+    isActive: boolean;
+    points: any;
+    validFrom?: string;
+    validUntil?: string;
+  }) {
     const existing = await this.getWelcomeRule();
-    
+
     // If the frontend sent an object (the new format), use it directly.
     // If they sent a number (legacy), wrap it.
     let formula = data.points;
@@ -127,7 +140,8 @@ export class LoyaltyService {
     if (data.ruleName !== undefined) d.ruleName = data.ruleName;
     if (data.pointsFormula !== undefined) d.pointsFormula = data.pointsFormula;
     if (data.conditions !== undefined) d.conditions = data.conditions;
-    if (data.tierMultiplierApplies !== undefined) d.tierMultiplierApplies = data.tierMultiplierApplies;
+    if (data.tierMultiplierApplies !== undefined)
+      d.tierMultiplierApplies = data.tierMultiplierApplies;
     if (data.isActive !== undefined) d.isActive = data.isActive;
     return this.prisma.loyaltyEarnRule.update({ where: { id }, data: d });
   }
@@ -182,21 +196,28 @@ export class LoyaltyService {
   }
 
   async deleteReward(id: string) {
-    const used = await this.prisma.rewardRedemption.count({ where: { rewardId: id } });
+    const used = await this.prisma.rewardRedemption.count({
+      where: { rewardId: id },
+    });
     if (used > 0) {
-      throw new Error(`Cannot delete: ${used} redemption(s) reference this reward.`);
+      throw new Error(
+        `Cannot delete: ${used} redemption(s) reference this reward.`,
+      );
     }
     return this.prisma.rewardCatalog.delete({ where: { id } });
   }
 
   // ─── Dashboard Stats ──────────────────────────────────
   async getStats() {
-    const [totalAccounts, totalBalance, totalRedeemed, totalExpired] = await Promise.all([
-      this.prisma.loyaltyAccount.count(),
-      this.prisma.loyaltyAccount.aggregate({ _sum: { pointsBalance: true } }),
-      this.prisma.loyaltyAccount.aggregate({ _sum: { pointsRedeemed: true } }),
-      this.prisma.loyaltyAccount.aggregate({ _sum: { pointsExpired: true } }),
-    ]);
+    const [totalAccounts, totalBalance, totalRedeemed, totalExpired] =
+      await Promise.all([
+        this.prisma.loyaltyAccount.count(),
+        this.prisma.loyaltyAccount.aggregate({ _sum: { pointsBalance: true } }),
+        this.prisma.loyaltyAccount.aggregate({
+          _sum: { pointsRedeemed: true },
+        }),
+        this.prisma.loyaltyAccount.aggregate({ _sum: { pointsExpired: true } }),
+      ]);
 
     return {
       totalAccounts,
@@ -234,11 +255,11 @@ export class LoyaltyService {
       orderBy: { createdAt: 'desc' },
       include: {
         customer: { select: { id: true, fullName: true, phone: true } },
-        items: { include: { product: true } }
-      }
+        items: { include: { product: true } },
+      },
     });
 
-    const formattedOrders = orders.map(o => ({
+    const formattedOrders = orders.map((o) => ({
       id: o.id,
       customerId: o.customerId,
       status: o.status,
@@ -250,11 +271,14 @@ export class LoyaltyService {
       reward_catalog: {
         code: o.items[0]?.product?.sku || 'PRODUCT',
         name: o.items[0]?.product?.name || 'Unknown Product',
-        category: 'product'
-      }
+        category: 'product',
+      },
     }));
 
-    const combined = [...redemptions.map(r => ({ ...r, type: 'redemption' })), ...formattedOrders]
+    const combined = [
+      ...redemptions.map((r) => ({ ...r, type: 'redemption' })),
+      ...formattedOrders,
+    ]
       .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
       .slice(0, take);
 

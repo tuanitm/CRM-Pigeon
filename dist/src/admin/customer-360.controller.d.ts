@@ -44,10 +44,10 @@ export declare class Customer360Controller {
         }[];
         recentCustomers: {
             id: string;
-            createdAt: Date;
-            customerType: string | null;
             phone: string | null;
             fullName: string | null;
+            customerType: string | null;
+            createdAt: Date;
         }[];
         recentOrders: ({
             customer: {
@@ -55,22 +55,22 @@ export declare class Customer360Controller {
             };
         } & {
             id: string;
+            createdAt: Date;
+            updatedAt: Date;
             customerId: string;
+            channel: string | null;
+            status: string;
+            shipmentNo: string | null;
+            trackingLink: string | null;
             wooOrderId: bigint | null;
             orderNumber: string | null;
-            status: string;
             totalAmount: import("@prisma/client-runtime-utils").Decimal;
             discountAmount: import("@prisma/client-runtime-utils").Decimal;
             netAmount: import("@prisma/client-runtime-utils").Decimal;
             currency: string;
-            channel: string | null;
             isGwp: boolean;
             isInternal: boolean;
-            shipmentNo: string | null;
-            trackingLink: string | null;
             orderedAt: Date;
-            createdAt: Date;
-            updatedAt: Date;
         })[];
         recentTickets: ({
             customer: {
@@ -78,29 +78,29 @@ export declare class Customer360Controller {
             };
         } & {
             id: string;
-            customerId: string;
-            status: string;
             createdAt: Date;
             updatedAt: Date;
+            customerId: string;
             subject: string;
+            status: string;
             category: string;
             messages: import("@prisma/client/runtime/client").JsonValue;
         })[];
         topCustomers: ({
+            customer: {
+                id: string;
+                phone: string | null;
+                fullName: string | null;
+                customerType: string | null;
+            };
             tier: {
                 tierCode: string;
             } | null;
-            customer: {
-                id: string;
-                customerType: string | null;
-                phone: string | null;
-                fullName: string | null;
-            };
         } & {
             id: string;
-            customerId: string;
             createdAt: Date;
             updatedAt: Date;
+            customerId: string;
             tierId: string | null;
             pointsBalance: number;
             pointsLifetime: number;
@@ -111,26 +111,26 @@ export declare class Customer360Controller {
             tierEvaluatedAt: Date | null;
         })[];
     }>;
+    fixDb(): Promise<{
+        success: boolean;
+        updated: number;
+    }>;
     listCustomers(cursor?: string, take?: number, search?: string): Promise<{
         data: ({
-            _count: {
-                orders: number;
-            };
+            loyaltyAccount: {
+                tierId: string | null;
+                pointsBalance: number;
+            } | null;
             babies: {
                 id: string;
                 name: string | null;
                 stageCode: string | null;
             }[];
-            loyaltyAccount: {
-                tierId: string | null;
-                pointsBalance: number;
-            } | null;
+            _count: {
+                orders: number;
+            };
         } & {
-            isActive: boolean;
             id: string;
-            createdAt: Date;
-            updatedAt: Date;
-            customerType: string | null;
             customerCode: string | null;
             phone: string | null;
             email: string | null;
@@ -139,11 +139,15 @@ export declare class Customer360Controller {
             dateOfBirth: Date | null;
             avatarUrl: string | null;
             registrationSource: string | null;
+            customerType: string | null;
             dmsCode: string | null;
             notes: string | null;
             dataQualityFlag: string | null;
             isMerged: boolean;
+            isActive: boolean;
             mergedIntoId: string | null;
+            createdAt: Date;
+            updatedAt: Date;
         })[];
         nextCursor: string | null;
         hasMore: boolean;
@@ -151,9 +155,9 @@ export declare class Customer360Controller {
     createCustomer(dto: CreateCustomerDto): Promise<{
         loyaltyAccount: {
             id: string;
-            customerId: string;
             createdAt: Date;
             updatedAt: Date;
+            customerId: string;
             tierId: string | null;
             pointsBalance: number;
             pointsLifetime: number;
@@ -164,11 +168,7 @@ export declare class Customer360Controller {
             tierEvaluatedAt: Date | null;
         } | null;
     } & {
-        isActive: boolean;
         id: string;
-        createdAt: Date;
-        updatedAt: Date;
-        customerType: string | null;
         customerCode: string | null;
         phone: string | null;
         email: string | null;
@@ -177,20 +177,20 @@ export declare class Customer360Controller {
         dateOfBirth: Date | null;
         avatarUrl: string | null;
         registrationSource: string | null;
+        customerType: string | null;
         dmsCode: string | null;
         notes: string | null;
         dataQualityFlag: string | null;
         isMerged: boolean;
+        isActive: boolean;
         mergedIntoId: string | null;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
     updateStatus(id: string, dto: {
         isActive: boolean;
     }): Promise<{
-        isActive: boolean;
         id: string;
-        createdAt: Date;
-        updatedAt: Date;
-        customerType: string | null;
         customerCode: string | null;
         phone: string | null;
         email: string | null;
@@ -199,101 +199,17 @@ export declare class Customer360Controller {
         dateOfBirth: Date | null;
         avatarUrl: string | null;
         registrationSource: string | null;
+        customerType: string | null;
         dmsCode: string | null;
         notes: string | null;
         dataQualityFlag: string | null;
         isMerged: boolean;
+        isActive: boolean;
         mergedIntoId: string | null;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
     getCustomerDetails(id: string): Promise<{
-        babies: {
-            id: string;
-            customerId: string;
-            createdAt: Date;
-            updatedAt: Date;
-            name: string | null;
-            gender: string | null;
-            dateOfBirth: Date | null;
-            dueDate: Date | null;
-            isBorn: boolean;
-            stageCode: string | null;
-            feedingType: string | null;
-        }[];
-        consents: {
-            id: string;
-            customerId: string;
-            status: string;
-            channel: string;
-            createdAt: Date;
-            updatedAt: Date;
-            documentVersionId: string | null;
-            grantedAt: Date | null;
-            revokedAt: Date | null;
-            ipAddress: string | null;
-        }[];
-        addresses: {
-            id: string;
-            customerId: string;
-            createdAt: Date;
-            updatedAt: Date;
-            isDefault: boolean;
-            label: string | null;
-            addressLine1: string | null;
-            addressLine2: string | null;
-            ward: string | null;
-            district: string | null;
-            province: string | null;
-            country: string;
-        }[];
-        tags: {
-            id: string;
-            customerId: string;
-            createdAt: Date;
-            source: string | null;
-            tag: string;
-        }[];
-        event: {
-            id: string;
-            source: string | null;
-            occurred_at: Date;
-            customer_id: string | null;
-            anonymous_id: string | null;
-            event_type: string;
-            properties: import("@prisma/client/runtime/client").JsonValue;
-            context: import("@prisma/client/runtime/client").JsonValue | null;
-            idempotency_key: string | null;
-            received_at: Date;
-        }[];
-        journey_run: ({
-            journey: {
-                id: string;
-                status: string;
-                createdAt: Date;
-                updatedAt: Date;
-                name: string;
-                code: string;
-                description: string | null;
-                graph: import("@prisma/client/runtime/client").JsonValue;
-                triggerEvent: string | null;
-                triggerSegmentId: string | null;
-                entryConditions: import("@prisma/client/runtime/client").JsonValue | null;
-                exitConditions: import("@prisma/client/runtime/client").JsonValue | null;
-                version: number;
-                hasControlGroup: boolean;
-                controlGroupPct: import("@prisma/client-runtime-utils").Decimal | null;
-            };
-        } & {
-            id: string;
-            status: string;
-            entered_at: Date;
-            customer_id: string;
-            context: import("@prisma/client/runtime/client").JsonValue | null;
-            journey_id: string;
-            current_node_id: string | null;
-            exited_at: Date | null;
-            exit_reason: string | null;
-            journey_version: number;
-        })[];
         loyaltyAccount: ({
             tier: {
                 id: string;
@@ -309,25 +225,25 @@ export declare class Customer360Controller {
                 isDefault: boolean;
             } | null;
             transactions: {
-                id: string;
-                customerId: string;
-                createdAt: Date;
-                source: string;
-                description: string | null;
-                loyaltyAccountId: string;
                 type: string;
+                id: string;
+                createdAt: Date;
+                description: string | null;
+                customerId: string;
+                idempotencyKey: string | null;
+                source: string;
                 points: number;
                 balanceAfter: number;
                 referenceType: string | null;
                 referenceId: string | null;
                 expiresAt: Date | null;
-                idempotencyKey: string | null;
+                loyaltyAccountId: string;
             }[];
         } & {
             id: string;
-            customerId: string;
             createdAt: Date;
             updatedAt: Date;
+            customerId: string;
             tierId: string | null;
             pointsBalance: number;
             pointsLifetime: number;
@@ -337,18 +253,106 @@ export declare class Customer360Controller {
             distinctOrderMonths: number;
             tierEvaluatedAt: Date | null;
         }) | null;
+        event: {
+            id: string;
+            customer_id: string | null;
+            properties: import("@prisma/client/runtime/client").JsonValue;
+            context: import("@prisma/client/runtime/client").JsonValue | null;
+            source: string | null;
+            event_type: string;
+            anonymous_id: string | null;
+            occurred_at: Date;
+            idempotency_key: string | null;
+            received_at: Date;
+        }[];
+        journey_run: ({
+            journey: {
+                id: string;
+                createdAt: Date;
+                updatedAt: Date;
+                name: string;
+                code: string;
+                description: string | null;
+                graph: import("@prisma/client/runtime/client").JsonValue;
+                triggerEvent: string | null;
+                triggerSegmentId: string | null;
+                entryConditions: import("@prisma/client/runtime/client").JsonValue | null;
+                exitConditions: import("@prisma/client/runtime/client").JsonValue | null;
+                version: number;
+                status: string;
+                hasControlGroup: boolean;
+                controlGroupPct: import("@prisma/client-runtime-utils").Decimal | null;
+            };
+        } & {
+            id: string;
+            customer_id: string;
+            entered_at: Date;
+            exited_at: Date | null;
+            context: import("@prisma/client/runtime/client").JsonValue | null;
+            status: string;
+            journey_id: string;
+            current_node_id: string | null;
+            exit_reason: string | null;
+            journey_version: number;
+        })[];
+        babies: {
+            id: string;
+            gender: string | null;
+            dateOfBirth: Date | null;
+            createdAt: Date;
+            updatedAt: Date;
+            name: string | null;
+            customerId: string;
+            dueDate: Date | null;
+            isBorn: boolean;
+            stageCode: string | null;
+            feedingType: string | null;
+        }[];
+        consents: {
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            customerId: string;
+            channel: string;
+            status: string;
+            documentVersionId: string | null;
+            grantedAt: Date | null;
+            revokedAt: Date | null;
+            ipAddress: string | null;
+        }[];
+        addresses: {
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            customerId: string;
+            isDefault: boolean;
+            label: string | null;
+            addressLine1: string | null;
+            addressLine2: string | null;
+            ward: string | null;
+            district: string | null;
+            province: string | null;
+            country: string;
+        }[];
+        tags: {
+            id: string;
+            createdAt: Date;
+            customerId: string;
+            source: string | null;
+            tag: string;
+        }[];
         orders: ({
             items: ({
                 product: {
-                    isActive: boolean;
                     id: string;
-                    isGwp: boolean;
+                    isActive: boolean;
                     createdAt: Date;
                     updatedAt: Date;
                     name: string;
-                    category: string | null;
+                    isGwp: boolean;
                     sku: string;
                     wooProductId: bigint | null;
+                    category: string | null;
                     subcategory: string | null;
                     brand: string | null;
                     stageCodes: import("@prisma/client/runtime/client").JsonValue | null;
@@ -357,78 +361,74 @@ export declare class Customer360Controller {
             } & {
                 id: string;
                 createdAt: Date;
-                orderId: string;
-                productId: string | null;
                 sku: string | null;
                 quantity: number;
                 unitPrice: import("@prisma/client-runtime-utils").Decimal;
                 totalPrice: import("@prisma/client-runtime-utils").Decimal;
+                productId: string | null;
+                orderId: string;
             })[];
         } & {
             id: string;
+            createdAt: Date;
+            updatedAt: Date;
             customerId: string;
+            channel: string | null;
+            status: string;
+            shipmentNo: string | null;
+            trackingLink: string | null;
             wooOrderId: bigint | null;
             orderNumber: string | null;
-            status: string;
             totalAmount: import("@prisma/client-runtime-utils").Decimal;
             discountAmount: import("@prisma/client-runtime-utils").Decimal;
             netAmount: import("@prisma/client-runtime-utils").Decimal;
             currency: string;
-            channel: string | null;
             isGwp: boolean;
             isInternal: boolean;
-            shipmentNo: string | null;
-            trackingLink: string | null;
             orderedAt: Date;
-            createdAt: Date;
-            updatedAt: Date;
         })[];
         reward_redemption: ({
             reward_catalog: {
-                isActive: boolean;
                 id: string;
+                isActive: boolean;
                 createdAt: Date;
                 updatedAt: Date;
                 name: string;
-                category: string | null;
                 code: string;
                 description: string | null;
+                validFrom: Date | null;
+                validUntil: Date | null;
+                category: string | null;
                 pointsCost: number;
                 stock: number | null;
                 imageUrl: string | null;
-                validFrom: Date | null;
-                validUntil: Date | null;
             };
         } & {
             id: string;
-            customerId: string;
-            status: string;
-            shipmentNo: string | null;
-            trackingLink: string | null;
             createdAt: Date;
             updatedAt: Date;
-            loyaltyAccountId: string;
+            customerId: string;
             idempotencyKey: string | null;
-            rewardId: string;
+            status: string;
             pointsSpent: number;
+            shipmentNo: string | null;
+            trackingLink: string | null;
             fulfilledAt: Date | null;
+            loyaltyAccountId: string;
+            rewardId: string;
         })[];
         devices: {
             id: string;
-            customerId: string;
             createdAt: Date;
-            lastLogin: Date;
+            customerId: string;
+            userAgent: string;
             deviceType: string;
             browser: string;
             os: string;
-            userAgent: string;
+            lastLogin: Date;
         }[];
     } & {
-        isActive: boolean;
         id: string;
-        createdAt: Date;
-        updatedAt: Date;
-        customerType: string | null;
         customerCode: string | null;
         phone: string | null;
         email: string | null;
@@ -437,10 +437,14 @@ export declare class Customer360Controller {
         dateOfBirth: Date | null;
         avatarUrl: string | null;
         registrationSource: string | null;
+        customerType: string | null;
         dmsCode: string | null;
         notes: string | null;
         dataQualityFlag: string | null;
         isMerged: boolean;
+        isActive: boolean;
         mergedIntoId: string | null;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
 }

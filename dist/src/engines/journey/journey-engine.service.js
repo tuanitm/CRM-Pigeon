@@ -23,13 +23,19 @@ let JourneyEngineService = JourneyEngineService_1 = class JourneyEngineService {
         this.channelRouter = channelRouter;
     }
     async enterJourney(journeyId, customerId, context) {
-        const journey = await this.prisma.journey.findUnique({ where: { id: journeyId } });
+        const journey = await this.prisma.journey.findUnique({
+            where: { id: journeyId },
+        });
         if (!journey || journey.status !== 'active') {
             this.logger.warn(`Journey ${journeyId} not found or not active`);
             return null;
         }
         const existingRun = await this.prisma.journey_run.findFirst({
-            where: { journey_id: journeyId, customer_id: customerId, status: 'active' },
+            where: {
+                journey_id: journeyId,
+                customer_id: customerId,
+                status: 'active',
+            },
         });
         if (existingRun) {
             this.logger.debug(`Customer ${customerId} already in journey ${journey.code}`);
@@ -90,6 +96,9 @@ let JourneyEngineService = JourneyEngineService_1 = class JourneyEngineService {
             case 'action':
                 await this.handleAction(runId, customerId, node, graph, exitConditions);
                 break;
+            case 'action_reward':
+                await this.handleActionReward(runId, customerId, node, graph, exitConditions);
+                break;
             case 'wait':
                 await this.handleWait(runId, nodeId, node);
                 break;
@@ -149,6 +158,273 @@ let JourneyEngineService = JourneyEngineService_1 = class JourneyEngineService {
         }
         else {
             await this.exitRun(runId, 'journey_complete');
+        }
+    }
+    async handleActionReward(runId, customerId, node, graph, exitConditions) {
+        const rewards = node.config.rewards || [];
+        this.logger.log(`Journey action_reward: evaluating ${rewards.length} rewards for ${customerId}`);
+        let loyaltyAccount = await this.prisma.loyaltyAccount.findUnique({
+            where: { customerId },
+        });
+        if (!loyaltyAccount) {
+            loyaltyAccount = await this.prisma.loyaltyAccount.create({
+                data: { customerId },
+            });
+        }
+        const customerProfile = await this.prisma.customer.findUnique({
+            where: { id: customerId },
+        });
+        const babyCount = await this.prisma.baby.count({ where: { customerId } });
+        const rewardContexts = [];
+        for (const r of rewards) {
+            if (r.condition) {
+                const conditionPassed = await this.evaluateRewardCondition(r.condition, customerId, customerProfile, loyaltyAccount, babyCount);
+                if (!conditionPassed)
+                    continue;
+            }
+            const rType = r.type || r.rewardType || 'points';
+            let finalAmount = Number(r.value) || 0;
+            if (r.valueType === 'formula' && r.formulaValue) {
+                finalAmount = this.evaluateSimpleFormula(r.formulaValue, customerProfile, loyaltyAccount, babyCount);
+            }
+            if (rType === 'points' && finalAmount > 0) {
+                await this.prisma.loyaltyAccount.update({
+                    where: { id: loyaltyAccount.id },
+                    data: {
+                        pointsBalance: { increment: finalAmount },
+                        pointsLifetime: { increment: finalAmount },
+                        transactions: {
+                            create: {
+                                customerId,
+                                type: 'earn',
+                                source: 'journey_reward',
+                                points: finalAmount,
+                                balanceAfter: Number(loyaltyAccount.pointsBalance) + finalAmount,
+                                description: `Journey Reward`,
+                                idempotencyKey: `jrn-reward-${runId}-points-${Date.now()}`,
+                            },
+                        },
+                    },
+                });
+                loyaltyAccount = await this.prisma.loyaltyAccount.findUnique({
+                    where: { id: loyaltyAccount.id },
+                });
+                rewardContexts.push({
+                    type: 'points',
+                    pointsEarned: finalAmount,
+                    condition: r.condition,
+                });
+            }
+            else if (rType === 'free_gift' && r.rewardId) {
+                const qty = Math.max(1, finalAmount);
+                for (let i = 0; i < qty; i++) {
+                    await this.prisma.rewardRedemption.create({
+                        data: {
+                            loyaltyAccountId: loyaltyAccount.id,
+                            customerId,
+                            rewardId: r.rewardId,
+                            pointsSpent: 0,
+                            status: 'pending',
+                            idempotencyKey: `jrn-gift-${runId}-${r.rewardId}-${Date.now()}-${i}`,
+                        },
+                    });
+                }
+                rewardContexts.push({
+                    type: 'free_gift',
+                    rewardId: r.rewardId,
+                    quantity: qty,
+                    condition: r.condition,
+                });
+            }
+            else if (rType === 'voucher' && r.rewardId) {
+                const qty = Math.max(1, finalAmount);
+                for (let i = 0; i < qty; i++) {
+                    await this.prisma.rewardRedemption.create({
+                        data: {
+                            loyaltyAccountId: loyaltyAccount.id,
+                            customerId,
+                            rewardId: r.rewardId,
+                            pointsSpent: 0,
+                            status: 'issued',
+                            idempotencyKey: `jrn-voucher-${runId}-${r.rewardId}-${Date.now()}-${i}`,
+                        },
+                    });
+                }
+                rewardContexts.push({
+                    type: 'voucher',
+                    rewardId: r.rewardId,
+                    quantity: qty,
+                    condition: r.condition,
+                });
+            }
+            else if (rType === 'product' && r.productId) {
+                const qty = Math.max(1, finalAmount);
+                const orderNum = `JRN-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+                await this.prisma.order.create({
+                    data: {
+                        customerId,
+                        orderNumber: orderNum,
+                        status: 'pending',
+                        totalAmount: 0,
+                        isInternal: true,
+                        isGwp: false,
+                        orderedAt: new Date(),
+                        items: {
+                            create: {
+                                productId: r.productId,
+                                quantity: qty,
+                                unitPrice: 0,
+                                totalPrice: 0,
+                            },
+                        },
+                    },
+                });
+                rewardContexts.push({
+                    type: 'product',
+                    productId: r.productId,
+                    quantity: qty,
+                    condition: r.condition,
+                });
+            }
+        }
+        if (rewardContexts.length > 0) {
+            const run = await this.prisma.journey_run.findUnique({
+                where: { id: runId },
+            });
+            const existingCtx = run?.context || {};
+            await this.prisma.journey_run.update({
+                where: { id: runId },
+                data: { context: { ...existingCtx, rewards: rewardContexts } },
+            });
+        }
+        if (node.next) {
+            await this.prisma.journey_run.update({
+                where: { id: runId },
+                data: { current_node_id: node.next },
+            });
+            await this.processNode(runId, customerId, graph, node.next, exitConditions);
+        }
+        else {
+            await this.exitRun(runId, 'journey_complete');
+        }
+    }
+    async evaluateRewardCondition(condition, customerId, customerProfile, loyaltyAccount, babyCount) {
+        if (typeof condition === 'string') {
+            if (condition === 'has_child')
+                return babyCount > 0;
+            return true;
+        }
+        if (typeof condition === 'object') {
+            let rules = [];
+            let logicalOperator = 'AND';
+            if (condition.rules) {
+                rules = condition.rules;
+                logicalOperator = condition.logicalOperator || 'AND';
+            }
+            else if (condition.field) {
+                rules = [condition];
+            }
+            if (rules.length === 0)
+                return true;
+            let passedAll = true;
+            let passedAny = false;
+            for (const rule of rules) {
+                let targetValue = null;
+                const def = await this.prisma.conditionDefinition.findUnique({
+                    where: { code: rule.field },
+                });
+                if (!def) {
+                    targetValue = customerProfile ? customerProfile[rule.field] : null;
+                    if (rule.field === 'customerType' && !targetValue)
+                        targetValue = 'End user';
+                    if (rule.field === 'babyCount')
+                        targetValue = babyCount;
+                    if (rule.field === 'pointsBalance')
+                        targetValue = Number(loyaltyAccount.pointsBalance);
+                }
+                else {
+                    if (def.source === 'customer') {
+                        targetValue = customerProfile ? customerProfile[def.code] : null;
+                        if (def.code === 'customer_type' && !targetValue)
+                            targetValue = 'End user';
+                    }
+                    else if (def.source === 'loyalty_account') {
+                        if (def.code === 'pointsBalance')
+                            targetValue = Number(loyaltyAccount.pointsBalance);
+                        else if (def.code === 'total_purchase_amount') {
+                            const ordersAgg = await this.prisma.order.aggregate({
+                                where: { customerId, status: 'completed' },
+                                _sum: { totalAmount: true },
+                            });
+                            targetValue = Number(ordersAgg._sum.totalAmount || 0);
+                        }
+                        else {
+                            targetValue = loyaltyAccount[def.code];
+                        }
+                    }
+                    else if (def.source === 'database_query') {
+                        if (def.code === 'babyCount')
+                            targetValue = babyCount;
+                    }
+                }
+                const { operator, value } = rule;
+                const strTarget = String(targetValue).toLowerCase();
+                const strVal = String(value).toLowerCase();
+                let conditionMet = false;
+                switch (operator) {
+                    case 'equals':
+                        conditionMet = strTarget === strVal;
+                        break;
+                    case 'not_equals':
+                        conditionMet = strTarget !== strVal;
+                        break;
+                    case 'greater_than':
+                        conditionMet = Number(targetValue) > Number(value);
+                        break;
+                    case 'greater_than_or_equal':
+                        conditionMet = Number(targetValue) >= Number(value);
+                        break;
+                    case 'less_than':
+                        conditionMet = Number(targetValue) < Number(value);
+                        break;
+                    case 'less_than_or_equal':
+                        conditionMet = Number(targetValue) <= Number(value);
+                        break;
+                    case 'contains':
+                        conditionMet = strTarget.includes(strVal);
+                        break;
+                    default:
+                        conditionMet = false;
+                }
+                if (!conditionMet)
+                    passedAll = false;
+                if (conditionMet)
+                    passedAny = true;
+            }
+            return logicalOperator === 'OR' ? passedAny : passedAll;
+        }
+        return true;
+    }
+    evaluateSimpleFormula(formula, customerProfile, loyaltyAccount, babyCount) {
+        try {
+            let expression = formula;
+            const vars = formula.match(/[a-zA-Z_]\w*/g) || [];
+            for (const v of [...new Set(vars)]) {
+                let val = 0;
+                if (v === 'babyCount')
+                    val = babyCount;
+                else if (v === 'pointsBalance')
+                    val = Number(loyaltyAccount?.pointsBalance || 0);
+                else if (customerProfile && customerProfile[v] !== undefined)
+                    val = Number(customerProfile[v]) || 0;
+                expression = expression.replace(new RegExp(`\\b${v}\\b`, 'g'), String(val));
+            }
+            const result = Function(`"use strict"; return (${expression})`)();
+            return Math.round(Number(result) || 0);
+        }
+        catch {
+            this.logger.warn(`Formula evaluation failed: ${formula}`);
+            return 0;
         }
     }
     async handleWait(runId, nodeId, node) {
@@ -225,11 +501,16 @@ let JourneyEngineService = JourneyEngineService_1 = class JourneyEngineService {
       `;
             const count = result[0]?.count || 0;
             switch (op) {
-                case 'gte': return count >= value;
-                case 'gt': return count > value;
-                case 'eq': return count === value;
-                case 'lt': return count < value;
-                default: return false;
+                case 'gte':
+                    return count >= value;
+                case 'gt':
+                    return count > value;
+                case 'eq':
+                    return count === value;
+                case 'lt':
+                    return count < value;
+                default:
+                    return false;
             }
         }
         return false;

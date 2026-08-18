@@ -19,7 +19,12 @@ exports.ChannelRouterModule = ChannelRouterModule;
 exports.ChannelRouterModule = ChannelRouterModule = __decorate([
     (0, common_1.Module)({
         imports: [providers_module_1.ProvidersModule],
-        providers: [channel_router_service_1.ChannelRouterService, consent_checker_service_1.ConsentCheckerService, frequency_limiter_service_1.FrequencyLimiterService, quiet_hours_service_1.QuietHoursService],
+        providers: [
+            channel_router_service_1.ChannelRouterService,
+            consent_checker_service_1.ConsentCheckerService,
+            frequency_limiter_service_1.FrequencyLimiterService,
+            quiet_hours_service_1.QuietHoursService,
+        ],
         exports: [channel_router_service_1.ChannelRouterService],
     })
 ], ChannelRouterModule);

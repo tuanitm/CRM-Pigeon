@@ -41,7 +41,7 @@ let TierService = TierService_1 = class TierService {
                 }
             }
             if (!newTierId && tiers.length > 0) {
-                const defaultTier = tiers.find(t => t.isDefault);
+                const defaultTier = tiers.find((t) => t.isDefault);
                 newTierId = defaultTier?.id || tiers[tiers.length - 1].id;
             }
             if (newTierId && newTierId !== account.tierId) {
@@ -88,9 +88,10 @@ let TierService = TierService_1 = class TierService {
         const tiers = await this.prisma.loyaltyTierConfig.findMany({
             orderBy: { tierOrder: 'desc' },
         });
-        let qualifiedTier = tiers.find(t => t.isDefault) || tiers[tiers.length - 1];
+        let qualifiedTier = tiers.find((t) => t.isDefault) || tiers[tiers.length - 1];
         for (const tier of tiers) {
-            if (metrics.netSpend >= Number(tier.minNetSpend) && metrics.distinctMonths >= tier.minDistinctMonths) {
+            if (metrics.netSpend >= Number(tier.minNetSpend) &&
+                metrics.distinctMonths >= tier.minDistinctMonths) {
                 qualifiedTier = tier;
                 break;
             }

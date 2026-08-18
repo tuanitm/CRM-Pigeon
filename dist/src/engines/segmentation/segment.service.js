@@ -65,7 +65,12 @@ exports.MANDATORY_SEGMENTS = [
             operator: 'AND',
             conditions: [
                 { type: 'attribute', field: 'baby.is_born', op: 'eq', value: true },
-                { type: 'relative_date', field: 'baby.date_of_birth', op: 'within_days', value: 180 },
+                {
+                    type: 'relative_date',
+                    field: 'baby.date_of_birth',
+                    op: 'within_days',
+                    value: 180,
+                },
             ],
         },
     },
@@ -97,7 +102,13 @@ exports.MANDATORY_SEGMENTS = [
         rules: {
             operator: 'AND',
             conditions: [
-                { type: 'event', event_type: 'cart.abandoned', op: 'gte', value: 1, timeframe_days: 7 },
+                {
+                    type: 'event',
+                    event_type: 'cart.abandoned',
+                    op: 'gte',
+                    value: 1,
+                    timeframe_days: 7,
+                },
             ],
         },
     },
@@ -107,8 +118,18 @@ exports.MANDATORY_SEGMENTS = [
         rules: {
             operator: 'AND',
             conditions: [
-                { type: 'attribute', field: 'loyalty_account.net_spend', op: 'gte', value: 1400000 },
-                { type: 'attribute', field: 'loyalty_account.net_spend', op: 'lt', value: 1700000 },
+                {
+                    type: 'attribute',
+                    field: 'loyalty_account.net_spend',
+                    op: 'gte',
+                    value: 1400000,
+                },
+                {
+                    type: 'attribute',
+                    field: 'loyalty_account.net_spend',
+                    op: 'lt',
+                    value: 1700000,
+                },
             ],
         },
     },
@@ -135,7 +156,9 @@ let SegmentService = SegmentService_1 = class SegmentService {
     }
     async seedMandatorySegments() {
         for (const seg of exports.MANDATORY_SEGMENTS) {
-            const existing = await this.prisma.segment.findUnique({ where: { code: seg.code } });
+            const existing = await this.prisma.segment.findUnique({
+                where: { code: seg.code },
+            });
             if (!existing) {
                 await this.prisma.segment.create({
                     data: {
@@ -215,7 +238,11 @@ let SegmentService = SegmentService_1 = class SegmentService {
         for (const segment of realtimeSegments) {
             const matches = await this.ruleEvaluator.evaluateForCustomer(customerId, segment.rules);
             const currentMembership = await this.prisma.segment_membership.findFirst({
-                where: { segment_id: segment.id, customer_id: customerId, exited_at: null },
+                where: {
+                    segment_id: segment.id,
+                    customer_id: customerId,
+                    exited_at: null,
+                },
             });
             if (matches && !currentMembership) {
                 await this.prisma.segment_membership.create({

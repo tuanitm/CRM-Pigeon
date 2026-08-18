@@ -12,13 +12,13 @@ export declare class AuditLogService {
         ipAddress?: string;
     }): Promise<{
         id: string;
-        createdAt: Date;
         action: string;
         entityType: string | null;
         entityId: string | null;
         oldValues: import("@prisma/client/runtime/client").JsonValue | null;
         newValues: import("@prisma/client/runtime/client").JsonValue | null;
         ipAddress: string | null;
+        createdAt: Date;
         adminUserId: string | null;
     }>;
 }

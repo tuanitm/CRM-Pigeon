@@ -1,4 +1,12 @@
-import { Controller, Post, Body, HttpCode, HttpStatus, Logger, HttpException } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  HttpCode,
+  HttpStatus,
+  Logger,
+  HttpException,
+} from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { IdentifyDto } from './dto/identify.dto';
 import { PrismaService } from '../shared/prisma/prisma.service';
@@ -17,7 +25,9 @@ export class IdentifyController {
 
   @Post()
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Identify / upsert customer by phone or anonymous ID' })
+  @ApiOperation({
+    summary: 'Identify / upsert customer by phone or anonymous ID',
+  })
   async identify(@Body() dto: IdentifyDto) {
     // Idempotency check
     if (dto.idempotencyKey) {
@@ -43,7 +53,9 @@ export class IdentifyController {
             phone: normalizedPhone,
             email: dto.email,
             fullName: dto.fullName,
-            customerCode: Math.floor(10000000 + Math.random() * 90000000).toString(),
+            customerCode: Math.floor(
+              10000000 + Math.random() * 90000000,
+            ).toString(),
             registrationSource: 'api',
           },
         });
@@ -64,7 +76,10 @@ export class IdentifyController {
     }
 
     if (customer && customer.isActive === false) {
-      throw new HttpException('Your account has been deactivated. Please contact support.', HttpStatus.FORBIDDEN);
+      throw new HttpException(
+        'Your account has been deactivated. Please contact support.',
+        HttpStatus.FORBIDDEN,
+      );
     }
 
     // Link anonymous_id if provided
@@ -90,7 +105,9 @@ export class IdentifyController {
     if (customer && dto.babies && Array.isArray(dto.babies)) {
       for (const baby of dto.babies) {
         if (!baby.name || !baby.dateOfBirth || !baby.gender) {
-          this.logger.warn(`Skipping baby record for customer ${customer.id} due to missing required fields`);
+          this.logger.warn(
+            `Skipping baby record for customer ${customer.id} due to missing required fields`,
+          );
           continue;
         }
 
@@ -120,14 +137,14 @@ export class IdentifyController {
         const existingDevice = await this.prisma.customerDevice.findFirst({
           where: {
             customerId: customer.id,
-            userAgent: dto.userAgent
-          }
+            userAgent: dto.userAgent,
+          },
         });
 
         if (existingDevice) {
           await this.prisma.customerDevice.update({
             where: { id: existingDevice.id },
-            data: { lastLogin: new Date() }
+            data: { lastLogin: new Date() },
           });
         } else {
           await this.prisma.customerDevice.create({
@@ -136,8 +153,8 @@ export class IdentifyController {
               deviceType,
               browser,
               os,
-              userAgent: dto.userAgent
-            }
+              userAgent: dto.userAgent,
+            },
           });
         }
       } catch (err) {

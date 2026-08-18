@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Patch, Param, Body, ParamData, NotFoundException } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Param,
+  Body,
+  ParamData,
+  NotFoundException,
+} from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { PrismaService } from '../shared/prisma/prisma.service';
 import { NotificationService } from '../admin/notification.service';
@@ -16,17 +25,25 @@ export class CustomerSupportController {
   async getTickets(@Param('customerId') customerId: string) {
     return this.prisma.supportTicket.findMany({
       where: { customerId },
-      orderBy: { createdAt: 'desc' }
+      orderBy: { createdAt: 'desc' },
     });
   }
 
   @Post()
   @ApiOperation({ summary: 'Create a new support ticket' })
-  async createTicket(@Body() dto: { customerId: string, subject: string, category: string, message: string }) {
+  async createTicket(
+    @Body()
+    dto: {
+      customerId: string;
+      subject: string;
+      category: string;
+      message: string;
+    },
+  ) {
     const initialMessage = {
       sender: 'customer',
       message: dto.message,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
 
     const ticket = await this.prisma.supportTicket.create({
@@ -34,12 +51,15 @@ export class CustomerSupportController {
         customerId: dto.customerId,
         subject: dto.subject,
         category: dto.category,
-        messages: [initialMessage]
-      }
+        messages: [initialMessage],
+      },
     });
 
     // Look up customer name for notification
-    const cust = await this.prisma.customer.findUnique({ where: { id: dto.customerId }, select: { fullName: true } });
+    const cust = await this.prisma.customer.findUnique({
+      where: { id: dto.customerId },
+      select: { fullName: true },
+    });
     this.notifications.emit(
       'TICKET',
       `New support ticket: ${dto.subject}`,
@@ -53,13 +73,15 @@ export class CustomerSupportController {
   @Post(':id/reply')
   @ApiOperation({ summary: 'Reply to an existing support ticket' })
   async replyTicket(@Param('id') id: string, @Body() dto: { message: string }) {
-    const ticket = await this.prisma.supportTicket.findUnique({ where: { id } });
+    const ticket = await this.prisma.supportTicket.findUnique({
+      where: { id },
+    });
     if (!ticket) throw new NotFoundException('Ticket not found');
 
     const newMessage = {
       sender: 'customer',
       message: dto.message,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
 
     const messages = Array.isArray(ticket.messages) ? [...ticket.messages] : [];
@@ -67,7 +89,7 @@ export class CustomerSupportController {
 
     return this.prisma.supportTicket.update({
       where: { id },
-      data: { messages }
+      data: { messages },
     });
   }
 
@@ -75,11 +97,12 @@ export class CustomerSupportController {
   @ApiOperation({ summary: 'Update ticket status by customer' })
   async updateStatus(@Param('id') id: string, @Body() dto: { status: string }) {
     // Only allow setting to Resolved from customer side for simplicity
-    if (dto.status !== 'Resolved') throw new Error('Customers can only mark tickets as Resolved');
-    
+    if (dto.status !== 'Resolved')
+      throw new Error('Customers can only mark tickets as Resolved');
+
     return this.prisma.supportTicket.update({
       where: { id },
-      data: { status: dto.status }
+      data: { status: dto.status },
     });
   }
 }
