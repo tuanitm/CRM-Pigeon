@@ -558,10 +558,18 @@ export default function CustomerDetail360Page() {
                           let title = evt.event_type;
                           let desc = '';
 
-                          if (evt.event_type === 'PROFILE_UPDATED' || evt.event_type === 'EMAIL_UPDATED' || evt.event_type === 'ADDRESS_UPDATED') {
+                          if (evt.event_type === 'EMAIL_UPDATED') {
+                            color = 'blue';
+                            title = 'Email Updated';
+                            desc = `Changed from "${evt.properties?.oldEmail || 'none'}" to "${evt.properties?.newEmail || 'none'}"`;
+                          } else if (evt.event_type === 'ADDRESS_UPDATED') {
+                            color = 'blue';
+                            title = 'Address Updated';
+                            desc = `Changed from "${evt.properties?.oldAddress || 'none'}" to "${evt.properties?.newAddress || 'none'}"`;
+                          } else if (evt.event_type === 'PROFILE_UPDATED') {
                             color = 'blue';
                             title = 'Profile Updated';
-                            desc = JSON.stringify(evt.properties);
+                            desc = `Updated fields: ${evt.properties?.updatedFields?.join(', ') || 'N/A'}`;
                           } else if (evt.event_type.startsWith('CHILD_')) {
                             color = 'pink';
                             title = 'Family Info Updated';

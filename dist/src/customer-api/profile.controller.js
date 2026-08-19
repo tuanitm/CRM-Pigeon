@@ -1,10 +1,43 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
@@ -19,6 +52,7 @@ const swagger_1 = require("@nestjs/swagger");
 const prisma_service_1 = require("../shared/prisma/prisma.service");
 const journey_engine_service_1 = require("../engines/journey/journey-engine.service");
 const journey_run_service_1 = require("../engines/journey/journey-run.service");
+const bcrypt = __importStar(require("bcrypt"));
 let ProfileController = ProfileController_1 = class ProfileController {
     prisma;
     journeyEngine;
@@ -136,6 +170,10 @@ let ProfileController = ProfileController_1 = class ProfileController {
                 }
             }
         }
+        let hashedPinCode = undefined;
+        if (data.pinCode) {
+            hashedPinCode = await bcrypt.hash(data.pinCode, 10);
+        }
         const updatedCustomer = await this.prisma.customer.update({
             where: { id },
             data: {
@@ -148,6 +186,7 @@ let ProfileController = ProfileController_1 = class ProfileController {
                 notes: data.notes,
                 dateOfBirth: data.dateOfBirth ? new Date(data.dateOfBirth) : undefined,
                 avatarUrl: data.avatarUrl,
+                pinCode: hashedPinCode,
                 addresses: data.address !== undefined
                     ? {
                         deleteMany: {},
@@ -156,19 +195,25 @@ let ProfileController = ProfileController_1 = class ProfileController {
                     : undefined,
             },
         });
-        if (data.email && data.email !== oldEmail) {
+        const normalizedOldEmail = oldEmail || '';
+        const normalizedNewEmail = data.email || '';
+        if (data.email !== undefined && normalizedOldEmail !== normalizedNewEmail) {
             eventsToLog.push({
                 type: 'EMAIL_UPDATED',
-                props: { oldEmail, newEmail: data.email },
+                props: { oldEmail: normalizedOldEmail || 'none', newEmail: normalizedNewEmail || 'none' },
             });
         }
-        if (data.address !== undefined && data.address !== oldAddress) {
+        const normalizedOldAddress = oldAddress || '';
+        const normalizedNewAddress = data.address || '';
+        if (data.address !== undefined && normalizedOldAddress !== normalizedNewAddress) {
             eventsToLog.push({
                 type: 'ADDRESS_UPDATED',
-                props: { oldAddress, newAddress: data.address },
+                props: { oldAddress: normalizedOldAddress || 'none', newAddress: normalizedNewAddress || 'none' },
             });
         }
-        if (data.fullName && data.fullName !== oldCustomer?.fullName) {
+        const normalizedOldName = oldCustomer?.fullName || '';
+        const normalizedNewName = data.fullName || '';
+        if (data.fullName !== undefined && normalizedOldName !== normalizedNewName) {
             eventsToLog.push({
                 type: 'PROFILE_UPDATED',
                 props: { updatedFields: ['fullName'] },

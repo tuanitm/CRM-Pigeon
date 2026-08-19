@@ -25,6 +25,7 @@ export type CustomerMinAggregateOutputType = {
     mergedIntoId: string | null;
     createdAt: Date | null;
     updatedAt: Date | null;
+    pinCode: string | null;
 };
 export type CustomerMaxAggregateOutputType = {
     id: string | null;
@@ -45,6 +46,7 @@ export type CustomerMaxAggregateOutputType = {
     mergedIntoId: string | null;
     createdAt: Date | null;
     updatedAt: Date | null;
+    pinCode: string | null;
 };
 export type CustomerCountAggregateOutputType = {
     id: number;
@@ -65,6 +67,7 @@ export type CustomerCountAggregateOutputType = {
     mergedIntoId: number;
     createdAt: number;
     updatedAt: number;
+    pinCode: number;
     _all: number;
 };
 export type CustomerMinAggregateInputType = {
@@ -86,6 +89,7 @@ export type CustomerMinAggregateInputType = {
     mergedIntoId?: true;
     createdAt?: true;
     updatedAt?: true;
+    pinCode?: true;
 };
 export type CustomerMaxAggregateInputType = {
     id?: true;
@@ -106,6 +110,7 @@ export type CustomerMaxAggregateInputType = {
     mergedIntoId?: true;
     createdAt?: true;
     updatedAt?: true;
+    pinCode?: true;
 };
 export type CustomerCountAggregateInputType = {
     id?: true;
@@ -126,6 +131,7 @@ export type CustomerCountAggregateInputType = {
     mergedIntoId?: true;
     createdAt?: true;
     updatedAt?: true;
+    pinCode?: true;
     _all?: true;
 };
 export type CustomerAggregateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -171,6 +177,7 @@ export type CustomerGroupByOutputType = {
     mergedIntoId: string | null;
     createdAt: Date;
     updatedAt: Date;
+    pinCode: string | null;
     _count: CustomerCountAggregateOutputType | null;
     _min: CustomerMinAggregateOutputType | null;
     _max: CustomerMaxAggregateOutputType | null;
@@ -200,6 +207,7 @@ export type CustomerWhereInput = {
     mergedIntoId?: Prisma.UuidNullableFilter<"Customer"> | string | null;
     createdAt?: Prisma.DateTimeFilter<"Customer"> | Date | string;
     updatedAt?: Prisma.DateTimeFilter<"Customer"> | Date | string;
+    pinCode?: Prisma.StringNullableFilter<"Customer"> | string | null;
     babies?: Prisma.BabyListRelationFilter;
     campaign_control_group?: Prisma.Campaign_control_groupListRelationFilter;
     checklist_progress?: Prisma.Checklist_progressListRelationFilter;
@@ -260,6 +268,7 @@ export type CustomerOrderByWithRelationInput = {
     mergedIntoId?: Prisma.SortOrderInput | Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
+    pinCode?: Prisma.SortOrderInput | Prisma.SortOrder;
     babies?: Prisma.BabyOrderByRelationAggregateInput;
     campaign_control_group?: Prisma.campaign_control_groupOrderByRelationAggregateInput;
     checklist_progress?: Prisma.checklist_progressOrderByRelationAggregateInput;
@@ -323,6 +332,7 @@ export type CustomerWhereUniqueInput = Prisma.AtLeast<{
     mergedIntoId?: Prisma.UuidNullableFilter<"Customer"> | string | null;
     createdAt?: Prisma.DateTimeFilter<"Customer"> | Date | string;
     updatedAt?: Prisma.DateTimeFilter<"Customer"> | Date | string;
+    pinCode?: Prisma.StringNullableFilter<"Customer"> | string | null;
     babies?: Prisma.BabyListRelationFilter;
     campaign_control_group?: Prisma.Campaign_control_groupListRelationFilter;
     checklist_progress?: Prisma.Checklist_progressListRelationFilter;
@@ -383,6 +393,7 @@ export type CustomerOrderByWithAggregationInput = {
     mergedIntoId?: Prisma.SortOrderInput | Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
+    pinCode?: Prisma.SortOrderInput | Prisma.SortOrder;
     _count?: Prisma.CustomerCountOrderByAggregateInput;
     _max?: Prisma.CustomerMaxOrderByAggregateInput;
     _min?: Prisma.CustomerMinOrderByAggregateInput;
@@ -409,6 +420,7 @@ export type CustomerScalarWhereWithAggregatesInput = {
     mergedIntoId?: Prisma.UuidNullableWithAggregatesFilter<"Customer"> | string | null;
     createdAt?: Prisma.DateTimeWithAggregatesFilter<"Customer"> | Date | string;
     updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Customer"> | Date | string;
+    pinCode?: Prisma.StringNullableWithAggregatesFilter<"Customer"> | string | null;
 };
 export type CustomerCreateInput = {
     id?: string;
@@ -428,6 +440,7 @@ export type CustomerCreateInput = {
     isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressCreateNestedManyWithoutCustomerInput;
@@ -488,6 +501,7 @@ export type CustomerUncheckedCreateInput = {
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyUncheckedCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressUncheckedCreateNestedManyWithoutCustomerInput;
@@ -546,6 +560,7 @@ export type CustomerUpdateInput = {
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUpdateManyWithoutCustomerNestedInput;
@@ -606,6 +621,7 @@ export type CustomerUncheckedUpdateInput = {
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUncheckedUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUncheckedUpdateManyWithoutCustomerNestedInput;
@@ -665,6 +681,7 @@ export type CustomerCreateManyInput = {
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
 };
 export type CustomerUpdateManyMutationInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -684,6 +701,7 @@ export type CustomerUpdateManyMutationInput = {
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 };
 export type CustomerUncheckedUpdateManyInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -704,6 +722,7 @@ export type CustomerUncheckedUpdateManyInput = {
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 };
 export type CustomerNullableScalarRelationFilter = {
     is?: Prisma.CustomerWhereInput | null;
@@ -736,6 +755,7 @@ export type CustomerCountOrderByAggregateInput = {
     mergedIntoId?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
+    pinCode?: Prisma.SortOrder;
 };
 export type CustomerMaxOrderByAggregateInput = {
     id?: Prisma.SortOrder;
@@ -756,6 +776,7 @@ export type CustomerMaxOrderByAggregateInput = {
     mergedIntoId?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
+    pinCode?: Prisma.SortOrder;
 };
 export type CustomerMinOrderByAggregateInput = {
     id?: Prisma.SortOrder;
@@ -776,6 +797,7 @@ export type CustomerMinOrderByAggregateInput = {
     mergedIntoId?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
+    pinCode?: Prisma.SortOrder;
 };
 export type CustomerScalarRelationFilter = {
     is?: Prisma.CustomerWhereInput;
@@ -1332,6 +1354,7 @@ export type CustomerCreateWithoutMergedFromInput = {
     isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressCreateNestedManyWithoutCustomerInput;
@@ -1391,6 +1414,7 @@ export type CustomerUncheckedCreateWithoutMergedFromInput = {
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyUncheckedCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressUncheckedCreateNestedManyWithoutCustomerInput;
@@ -1452,6 +1476,7 @@ export type CustomerCreateWithoutMergedIntoInput = {
     isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressCreateNestedManyWithoutCustomerInput;
@@ -1510,6 +1535,7 @@ export type CustomerUncheckedCreateWithoutMergedIntoInput = {
     isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyUncheckedCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressUncheckedCreateNestedManyWithoutCustomerInput;
@@ -1585,6 +1611,7 @@ export type CustomerUpdateWithoutMergedFromInput = {
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUpdateManyWithoutCustomerNestedInput;
@@ -1644,6 +1671,7 @@ export type CustomerUncheckedUpdateWithoutMergedFromInput = {
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUncheckedUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUncheckedUpdateManyWithoutCustomerNestedInput;
@@ -1718,6 +1746,7 @@ export type CustomerScalarWhereInput = {
     mergedIntoId?: Prisma.UuidNullableFilter<"Customer"> | string | null;
     createdAt?: Prisma.DateTimeFilter<"Customer"> | Date | string;
     updatedAt?: Prisma.DateTimeFilter<"Customer"> | Date | string;
+    pinCode?: Prisma.StringNullableFilter<"Customer"> | string | null;
 };
 export type CustomerCreateWithoutIdentitiesInput = {
     id?: string;
@@ -1737,6 +1766,7 @@ export type CustomerCreateWithoutIdentitiesInput = {
     isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressCreateNestedManyWithoutCustomerInput;
@@ -1796,6 +1826,7 @@ export type CustomerUncheckedCreateWithoutIdentitiesInput = {
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyUncheckedCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressUncheckedCreateNestedManyWithoutCustomerInput;
@@ -1866,6 +1897,7 @@ export type CustomerUpdateWithoutIdentitiesInput = {
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUpdateManyWithoutCustomerNestedInput;
@@ -1925,6 +1957,7 @@ export type CustomerUncheckedUpdateWithoutIdentitiesInput = {
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUncheckedUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUncheckedUpdateManyWithoutCustomerNestedInput;
@@ -1982,6 +2015,7 @@ export type CustomerCreateWithoutMerge_candidate_merge_candidate_customer_id_aTo
     isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressCreateNestedManyWithoutCustomerInput;
@@ -2041,6 +2075,7 @@ export type CustomerUncheckedCreateWithoutMerge_candidate_merge_candidate_custom
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyUncheckedCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressUncheckedCreateNestedManyWithoutCustomerInput;
@@ -2102,6 +2137,7 @@ export type CustomerCreateWithoutMerge_candidate_merge_candidate_customer_id_bTo
     isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressCreateNestedManyWithoutCustomerInput;
@@ -2161,6 +2197,7 @@ export type CustomerUncheckedCreateWithoutMerge_candidate_merge_candidate_custom
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyUncheckedCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressUncheckedCreateNestedManyWithoutCustomerInput;
@@ -2231,6 +2268,7 @@ export type CustomerUpdateWithoutMerge_candidate_merge_candidate_customer_id_aTo
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUpdateManyWithoutCustomerNestedInput;
@@ -2290,6 +2328,7 @@ export type CustomerUncheckedUpdateWithoutMerge_candidate_merge_candidate_custom
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUncheckedUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUncheckedUpdateManyWithoutCustomerNestedInput;
@@ -2356,6 +2395,7 @@ export type CustomerUpdateWithoutMerge_candidate_merge_candidate_customer_id_bTo
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUpdateManyWithoutCustomerNestedInput;
@@ -2415,6 +2455,7 @@ export type CustomerUncheckedUpdateWithoutMerge_candidate_merge_candidate_custom
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUncheckedUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUncheckedUpdateManyWithoutCustomerNestedInput;
@@ -2472,6 +2513,7 @@ export type CustomerCreateWithoutAddressesInput = {
     isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressCreateNestedManyWithoutCustomerInput;
@@ -2531,6 +2573,7 @@ export type CustomerUncheckedCreateWithoutAddressesInput = {
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyUncheckedCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressUncheckedCreateNestedManyWithoutCustomerInput;
@@ -2601,6 +2644,7 @@ export type CustomerUpdateWithoutAddressesInput = {
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUpdateManyWithoutCustomerNestedInput;
@@ -2660,6 +2704,7 @@ export type CustomerUncheckedUpdateWithoutAddressesInput = {
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUncheckedUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUncheckedUpdateManyWithoutCustomerNestedInput;
@@ -2717,6 +2762,7 @@ export type CustomerCreateWithoutTagsInput = {
     isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressCreateNestedManyWithoutCustomerInput;
@@ -2776,6 +2822,7 @@ export type CustomerUncheckedCreateWithoutTagsInput = {
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyUncheckedCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressUncheckedCreateNestedManyWithoutCustomerInput;
@@ -2846,6 +2893,7 @@ export type CustomerUpdateWithoutTagsInput = {
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUpdateManyWithoutCustomerNestedInput;
@@ -2905,6 +2953,7 @@ export type CustomerUncheckedUpdateWithoutTagsInput = {
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUncheckedUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUncheckedUpdateManyWithoutCustomerNestedInput;
@@ -2962,6 +3011,7 @@ export type CustomerCreateWithoutBabiesInput = {
     isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     campaign_control_group?: Prisma.campaign_control_groupCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressCreateNestedManyWithoutCustomerInput;
     consents?: Prisma.ConsentCreateNestedManyWithoutCustomerInput;
@@ -3021,6 +3071,7 @@ export type CustomerUncheckedCreateWithoutBabiesInput = {
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressUncheckedCreateNestedManyWithoutCustomerInput;
     consents?: Prisma.ConsentUncheckedCreateNestedManyWithoutCustomerInput;
@@ -3091,6 +3142,7 @@ export type CustomerUpdateWithoutBabiesInput = {
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     campaign_control_group?: Prisma.campaign_control_groupUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUpdateManyWithoutCustomerNestedInput;
     consents?: Prisma.ConsentUpdateManyWithoutCustomerNestedInput;
@@ -3150,6 +3202,7 @@ export type CustomerUncheckedUpdateWithoutBabiesInput = {
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUncheckedUpdateManyWithoutCustomerNestedInput;
     consents?: Prisma.ConsentUncheckedUpdateManyWithoutCustomerNestedInput;
@@ -3207,6 +3260,7 @@ export type CustomerCreateWithoutConsentsInput = {
     isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressCreateNestedManyWithoutCustomerInput;
@@ -3266,6 +3320,7 @@ export type CustomerUncheckedCreateWithoutConsentsInput = {
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyUncheckedCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressUncheckedCreateNestedManyWithoutCustomerInput;
@@ -3336,6 +3391,7 @@ export type CustomerUpdateWithoutConsentsInput = {
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUpdateManyWithoutCustomerNestedInput;
@@ -3395,6 +3451,7 @@ export type CustomerUncheckedUpdateWithoutConsentsInput = {
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUncheckedUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUncheckedUpdateManyWithoutCustomerNestedInput;
@@ -3452,6 +3509,7 @@ export type CustomerCreateWithoutOrdersInput = {
     isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressCreateNestedManyWithoutCustomerInput;
@@ -3511,6 +3569,7 @@ export type CustomerUncheckedCreateWithoutOrdersInput = {
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyUncheckedCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressUncheckedCreateNestedManyWithoutCustomerInput;
@@ -3581,6 +3640,7 @@ export type CustomerUpdateWithoutOrdersInput = {
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUpdateManyWithoutCustomerNestedInput;
@@ -3640,6 +3700,7 @@ export type CustomerUncheckedUpdateWithoutOrdersInput = {
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUncheckedUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUncheckedUpdateManyWithoutCustomerNestedInput;
@@ -3697,6 +3758,7 @@ export type CustomerCreateWithoutProduct_exchangeInput = {
     isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressCreateNestedManyWithoutCustomerInput;
@@ -3756,6 +3818,7 @@ export type CustomerUncheckedCreateWithoutProduct_exchangeInput = {
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyUncheckedCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressUncheckedCreateNestedManyWithoutCustomerInput;
@@ -3826,6 +3889,7 @@ export type CustomerUpdateWithoutProduct_exchangeInput = {
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUpdateManyWithoutCustomerNestedInput;
@@ -3885,6 +3949,7 @@ export type CustomerUncheckedUpdateWithoutProduct_exchangeInput = {
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUncheckedUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUncheckedUpdateManyWithoutCustomerNestedInput;
@@ -3942,6 +4007,7 @@ export type CustomerCreateWithoutReviewsInput = {
     isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressCreateNestedManyWithoutCustomerInput;
@@ -4001,6 +4067,7 @@ export type CustomerUncheckedCreateWithoutReviewsInput = {
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyUncheckedCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressUncheckedCreateNestedManyWithoutCustomerInput;
@@ -4071,6 +4138,7 @@ export type CustomerUpdateWithoutReviewsInput = {
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUpdateManyWithoutCustomerNestedInput;
@@ -4130,6 +4198,7 @@ export type CustomerUncheckedUpdateWithoutReviewsInput = {
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUncheckedUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUncheckedUpdateManyWithoutCustomerNestedInput;
@@ -4187,6 +4256,7 @@ export type CustomerCreateWithoutLoyaltyAccountInput = {
     isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressCreateNestedManyWithoutCustomerInput;
@@ -4246,6 +4316,7 @@ export type CustomerUncheckedCreateWithoutLoyaltyAccountInput = {
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyUncheckedCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressUncheckedCreateNestedManyWithoutCustomerInput;
@@ -4316,6 +4387,7 @@ export type CustomerUpdateWithoutLoyaltyAccountInput = {
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUpdateManyWithoutCustomerNestedInput;
@@ -4375,6 +4447,7 @@ export type CustomerUncheckedUpdateWithoutLoyaltyAccountInput = {
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUncheckedUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUncheckedUpdateManyWithoutCustomerNestedInput;
@@ -4432,6 +4505,7 @@ export type CustomerCreateWithoutLoyalty_transactionInput = {
     isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressCreateNestedManyWithoutCustomerInput;
@@ -4491,6 +4565,7 @@ export type CustomerUncheckedCreateWithoutLoyalty_transactionInput = {
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyUncheckedCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressUncheckedCreateNestedManyWithoutCustomerInput;
@@ -4561,6 +4636,7 @@ export type CustomerUpdateWithoutLoyalty_transactionInput = {
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUpdateManyWithoutCustomerNestedInput;
@@ -4620,6 +4696,7 @@ export type CustomerUncheckedUpdateWithoutLoyalty_transactionInput = {
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUncheckedUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUncheckedUpdateManyWithoutCustomerNestedInput;
@@ -4677,6 +4754,7 @@ export type CustomerCreateWithoutReward_redemptionInput = {
     isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressCreateNestedManyWithoutCustomerInput;
@@ -4736,6 +4814,7 @@ export type CustomerUncheckedCreateWithoutReward_redemptionInput = {
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyUncheckedCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressUncheckedCreateNestedManyWithoutCustomerInput;
@@ -4806,6 +4885,7 @@ export type CustomerUpdateWithoutReward_redemptionInput = {
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUpdateManyWithoutCustomerNestedInput;
@@ -4865,6 +4945,7 @@ export type CustomerUncheckedUpdateWithoutReward_redemptionInput = {
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUncheckedUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUncheckedUpdateManyWithoutCustomerNestedInput;
@@ -4922,6 +5003,7 @@ export type CustomerCreateWithoutCampaign_control_groupInput = {
     isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressCreateNestedManyWithoutCustomerInput;
     consents?: Prisma.ConsentCreateNestedManyWithoutCustomerInput;
@@ -4981,6 +5063,7 @@ export type CustomerUncheckedCreateWithoutCampaign_control_groupInput = {
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyUncheckedCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressUncheckedCreateNestedManyWithoutCustomerInput;
     consents?: Prisma.ConsentUncheckedCreateNestedManyWithoutCustomerInput;
@@ -5051,6 +5134,7 @@ export type CustomerUpdateWithoutCampaign_control_groupInput = {
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUpdateManyWithoutCustomerNestedInput;
     consents?: Prisma.ConsentUpdateManyWithoutCustomerNestedInput;
@@ -5110,6 +5194,7 @@ export type CustomerUncheckedUpdateWithoutCampaign_control_groupInput = {
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUncheckedUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUncheckedUpdateManyWithoutCustomerNestedInput;
     consents?: Prisma.ConsentUncheckedUpdateManyWithoutCustomerNestedInput;
@@ -5167,6 +5252,7 @@ export type CustomerCreateWithoutChecklist_progressInput = {
     isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupCreateNestedManyWithoutCustomerInput;
     consents?: Prisma.ConsentCreateNestedManyWithoutCustomerInput;
@@ -5226,6 +5312,7 @@ export type CustomerUncheckedCreateWithoutChecklist_progressInput = {
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyUncheckedCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedCreateNestedManyWithoutCustomerInput;
     consents?: Prisma.ConsentUncheckedCreateNestedManyWithoutCustomerInput;
@@ -5296,6 +5383,7 @@ export type CustomerUpdateWithoutChecklist_progressInput = {
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUpdateManyWithoutCustomerNestedInput;
     consents?: Prisma.ConsentUpdateManyWithoutCustomerNestedInput;
@@ -5355,6 +5443,7 @@ export type CustomerUncheckedUpdateWithoutChecklist_progressInput = {
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUncheckedUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedUpdateManyWithoutCustomerNestedInput;
     consents?: Prisma.ConsentUncheckedUpdateManyWithoutCustomerNestedInput;
@@ -5412,6 +5501,7 @@ export type CustomerCreateWithoutCustomer_metrics_dailyInput = {
     isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressCreateNestedManyWithoutCustomerInput;
@@ -5471,6 +5561,7 @@ export type CustomerUncheckedCreateWithoutCustomer_metrics_dailyInput = {
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyUncheckedCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressUncheckedCreateNestedManyWithoutCustomerInput;
@@ -5541,6 +5632,7 @@ export type CustomerUpdateWithoutCustomer_metrics_dailyInput = {
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUpdateManyWithoutCustomerNestedInput;
@@ -5600,6 +5692,7 @@ export type CustomerUncheckedUpdateWithoutCustomer_metrics_dailyInput = {
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUncheckedUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUncheckedUpdateManyWithoutCustomerNestedInput;
@@ -5657,6 +5750,7 @@ export type CustomerCreateWithoutData_quality_flag_logInput = {
     isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressCreateNestedManyWithoutCustomerInput;
@@ -5716,6 +5810,7 @@ export type CustomerUncheckedCreateWithoutData_quality_flag_logInput = {
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyUncheckedCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressUncheckedCreateNestedManyWithoutCustomerInput;
@@ -5786,6 +5881,7 @@ export type CustomerUpdateWithoutData_quality_flag_logInput = {
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUpdateManyWithoutCustomerNestedInput;
@@ -5845,6 +5941,7 @@ export type CustomerUncheckedUpdateWithoutData_quality_flag_logInput = {
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUncheckedUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUncheckedUpdateManyWithoutCustomerNestedInput;
@@ -5902,6 +5999,7 @@ export type CustomerCreateWithoutDsr_requestInput = {
     isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressCreateNestedManyWithoutCustomerInput;
@@ -5961,6 +6059,7 @@ export type CustomerUncheckedCreateWithoutDsr_requestInput = {
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyUncheckedCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressUncheckedCreateNestedManyWithoutCustomerInput;
@@ -6031,6 +6130,7 @@ export type CustomerUpdateWithoutDsr_requestInput = {
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUpdateManyWithoutCustomerNestedInput;
@@ -6090,6 +6190,7 @@ export type CustomerUncheckedUpdateWithoutDsr_requestInput = {
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUncheckedUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUncheckedUpdateManyWithoutCustomerNestedInput;
@@ -6147,6 +6248,7 @@ export type CustomerCreateWithoutEventInput = {
     isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressCreateNestedManyWithoutCustomerInput;
@@ -6206,6 +6308,7 @@ export type CustomerUncheckedCreateWithoutEventInput = {
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyUncheckedCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressUncheckedCreateNestedManyWithoutCustomerInput;
@@ -6276,6 +6379,7 @@ export type CustomerUpdateWithoutEventInput = {
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUpdateManyWithoutCustomerNestedInput;
@@ -6335,6 +6439,7 @@ export type CustomerUncheckedUpdateWithoutEventInput = {
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUncheckedUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUncheckedUpdateManyWithoutCustomerNestedInput;
@@ -6392,6 +6497,7 @@ export type CustomerCreateWithoutExpert_bookingInput = {
     isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressCreateNestedManyWithoutCustomerInput;
@@ -6451,6 +6557,7 @@ export type CustomerUncheckedCreateWithoutExpert_bookingInput = {
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyUncheckedCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressUncheckedCreateNestedManyWithoutCustomerInput;
@@ -6521,6 +6628,7 @@ export type CustomerUpdateWithoutExpert_bookingInput = {
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUpdateManyWithoutCustomerNestedInput;
@@ -6580,6 +6688,7 @@ export type CustomerUncheckedUpdateWithoutExpert_bookingInput = {
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUncheckedUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUncheckedUpdateManyWithoutCustomerNestedInput;
@@ -6637,6 +6746,7 @@ export type CustomerCreateWithoutFrequency_counterInput = {
     isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressCreateNestedManyWithoutCustomerInput;
@@ -6696,6 +6806,7 @@ export type CustomerUncheckedCreateWithoutFrequency_counterInput = {
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyUncheckedCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressUncheckedCreateNestedManyWithoutCustomerInput;
@@ -6766,6 +6877,7 @@ export type CustomerUpdateWithoutFrequency_counterInput = {
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUpdateManyWithoutCustomerNestedInput;
@@ -6825,6 +6937,7 @@ export type CustomerUncheckedUpdateWithoutFrequency_counterInput = {
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUncheckedUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUncheckedUpdateManyWithoutCustomerNestedInput;
@@ -6882,6 +6995,7 @@ export type CustomerCreateWithoutJourney_runInput = {
     isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressCreateNestedManyWithoutCustomerInput;
@@ -6941,6 +7055,7 @@ export type CustomerUncheckedCreateWithoutJourney_runInput = {
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyUncheckedCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressUncheckedCreateNestedManyWithoutCustomerInput;
@@ -7011,6 +7126,7 @@ export type CustomerUpdateWithoutJourney_runInput = {
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUpdateManyWithoutCustomerNestedInput;
@@ -7070,6 +7186,7 @@ export type CustomerUncheckedUpdateWithoutJourney_runInput = {
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUncheckedUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUncheckedUpdateManyWithoutCustomerNestedInput;
@@ -7127,6 +7244,7 @@ export type CustomerCreateWithoutMessage_logInput = {
     isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressCreateNestedManyWithoutCustomerInput;
@@ -7186,6 +7304,7 @@ export type CustomerUncheckedCreateWithoutMessage_logInput = {
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyUncheckedCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressUncheckedCreateNestedManyWithoutCustomerInput;
@@ -7256,6 +7375,7 @@ export type CustomerUpdateWithoutMessage_logInput = {
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUpdateManyWithoutCustomerNestedInput;
@@ -7315,6 +7435,7 @@ export type CustomerUncheckedUpdateWithoutMessage_logInput = {
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUncheckedUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUncheckedUpdateManyWithoutCustomerNestedInput;
@@ -7372,6 +7493,7 @@ export type CustomerCreateWithoutMilestone_progressInput = {
     isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressCreateNestedManyWithoutCustomerInput;
@@ -7431,6 +7553,7 @@ export type CustomerUncheckedCreateWithoutMilestone_progressInput = {
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyUncheckedCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressUncheckedCreateNestedManyWithoutCustomerInput;
@@ -7501,6 +7624,7 @@ export type CustomerUpdateWithoutMilestone_progressInput = {
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUpdateManyWithoutCustomerNestedInput;
@@ -7560,6 +7684,7 @@ export type CustomerUncheckedUpdateWithoutMilestone_progressInput = {
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUncheckedUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUncheckedUpdateManyWithoutCustomerNestedInput;
@@ -7617,6 +7742,7 @@ export type CustomerCreateWithoutProduct_serialInput = {
     isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressCreateNestedManyWithoutCustomerInput;
@@ -7676,6 +7802,7 @@ export type CustomerUncheckedCreateWithoutProduct_serialInput = {
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyUncheckedCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressUncheckedCreateNestedManyWithoutCustomerInput;
@@ -7746,6 +7873,7 @@ export type CustomerUpdateWithoutProduct_serialInput = {
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUpdateManyWithoutCustomerNestedInput;
@@ -7805,6 +7933,7 @@ export type CustomerUncheckedUpdateWithoutProduct_serialInput = {
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUncheckedUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUncheckedUpdateManyWithoutCustomerNestedInput;
@@ -7862,6 +7991,7 @@ export type CustomerCreateWithoutQuiz_responseInput = {
     isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressCreateNestedManyWithoutCustomerInput;
@@ -7921,6 +8051,7 @@ export type CustomerUncheckedCreateWithoutQuiz_responseInput = {
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyUncheckedCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressUncheckedCreateNestedManyWithoutCustomerInput;
@@ -7991,6 +8122,7 @@ export type CustomerUpdateWithoutQuiz_responseInput = {
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUpdateManyWithoutCustomerNestedInput;
@@ -8050,6 +8182,7 @@ export type CustomerUncheckedUpdateWithoutQuiz_responseInput = {
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUncheckedUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUncheckedUpdateManyWithoutCustomerNestedInput;
@@ -8107,6 +8240,7 @@ export type CustomerCreateWithoutReferral_codeInput = {
     isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressCreateNestedManyWithoutCustomerInput;
@@ -8166,6 +8300,7 @@ export type CustomerUncheckedCreateWithoutReferral_codeInput = {
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyUncheckedCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressUncheckedCreateNestedManyWithoutCustomerInput;
@@ -8236,6 +8371,7 @@ export type CustomerUpdateWithoutReferral_codeInput = {
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUpdateManyWithoutCustomerNestedInput;
@@ -8295,6 +8431,7 @@ export type CustomerUncheckedUpdateWithoutReferral_codeInput = {
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUncheckedUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUncheckedUpdateManyWithoutCustomerNestedInput;
@@ -8352,6 +8489,7 @@ export type CustomerCreateWithoutReferral_conversion_referral_conversion_referre
     isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressCreateNestedManyWithoutCustomerInput;
@@ -8411,6 +8549,7 @@ export type CustomerUncheckedCreateWithoutReferral_conversion_referral_conversio
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyUncheckedCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressUncheckedCreateNestedManyWithoutCustomerInput;
@@ -8472,6 +8611,7 @@ export type CustomerCreateWithoutReferral_conversion_referral_conversion_referre
     isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressCreateNestedManyWithoutCustomerInput;
@@ -8531,6 +8671,7 @@ export type CustomerUncheckedCreateWithoutReferral_conversion_referral_conversio
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyUncheckedCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressUncheckedCreateNestedManyWithoutCustomerInput;
@@ -8601,6 +8742,7 @@ export type CustomerUpdateWithoutReferral_conversion_referral_conversion_referre
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUpdateManyWithoutCustomerNestedInput;
@@ -8660,6 +8802,7 @@ export type CustomerUncheckedUpdateWithoutReferral_conversion_referral_conversio
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUncheckedUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUncheckedUpdateManyWithoutCustomerNestedInput;
@@ -8726,6 +8869,7 @@ export type CustomerUpdateWithoutReferral_conversion_referral_conversion_referre
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUpdateManyWithoutCustomerNestedInput;
@@ -8785,6 +8929,7 @@ export type CustomerUncheckedUpdateWithoutReferral_conversion_referral_conversio
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUncheckedUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUncheckedUpdateManyWithoutCustomerNestedInput;
@@ -8842,6 +8987,7 @@ export type CustomerCreateWithoutReplenishment_scheduleInput = {
     isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressCreateNestedManyWithoutCustomerInput;
@@ -8901,6 +9047,7 @@ export type CustomerUncheckedCreateWithoutReplenishment_scheduleInput = {
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyUncheckedCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressUncheckedCreateNestedManyWithoutCustomerInput;
@@ -8971,6 +9118,7 @@ export type CustomerUpdateWithoutReplenishment_scheduleInput = {
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUpdateManyWithoutCustomerNestedInput;
@@ -9030,6 +9178,7 @@ export type CustomerUncheckedUpdateWithoutReplenishment_scheduleInput = {
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUncheckedUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUncheckedUpdateManyWithoutCustomerNestedInput;
@@ -9087,6 +9236,7 @@ export type CustomerCreateWithoutRfm_snapshotInput = {
     isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressCreateNestedManyWithoutCustomerInput;
@@ -9146,6 +9296,7 @@ export type CustomerUncheckedCreateWithoutRfm_snapshotInput = {
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyUncheckedCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressUncheckedCreateNestedManyWithoutCustomerInput;
@@ -9216,6 +9367,7 @@ export type CustomerUpdateWithoutRfm_snapshotInput = {
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUpdateManyWithoutCustomerNestedInput;
@@ -9275,6 +9427,7 @@ export type CustomerUncheckedUpdateWithoutRfm_snapshotInput = {
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUncheckedUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUncheckedUpdateManyWithoutCustomerNestedInput;
@@ -9332,6 +9485,7 @@ export type CustomerCreateWithoutSegment_membershipInput = {
     isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressCreateNestedManyWithoutCustomerInput;
@@ -9391,6 +9545,7 @@ export type CustomerUncheckedCreateWithoutSegment_membershipInput = {
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyUncheckedCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressUncheckedCreateNestedManyWithoutCustomerInput;
@@ -9461,6 +9616,7 @@ export type CustomerUpdateWithoutSegment_membershipInput = {
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUpdateManyWithoutCustomerNestedInput;
@@ -9520,6 +9676,7 @@ export type CustomerUncheckedUpdateWithoutSegment_membershipInput = {
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUncheckedUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUncheckedUpdateManyWithoutCustomerNestedInput;
@@ -9577,6 +9734,7 @@ export type CustomerCreateWithoutSerial_scanInput = {
     isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressCreateNestedManyWithoutCustomerInput;
@@ -9636,6 +9794,7 @@ export type CustomerUncheckedCreateWithoutSerial_scanInput = {
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyUncheckedCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressUncheckedCreateNestedManyWithoutCustomerInput;
@@ -9706,6 +9865,7 @@ export type CustomerUpdateWithoutSerial_scanInput = {
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUpdateManyWithoutCustomerNestedInput;
@@ -9765,6 +9925,7 @@ export type CustomerUncheckedUpdateWithoutSerial_scanInput = {
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUncheckedUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUncheckedUpdateManyWithoutCustomerNestedInput;
@@ -9822,6 +9983,7 @@ export type CustomerCreateWithoutSessionInput = {
     isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressCreateNestedManyWithoutCustomerInput;
@@ -9881,6 +10043,7 @@ export type CustomerUncheckedCreateWithoutSessionInput = {
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyUncheckedCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressUncheckedCreateNestedManyWithoutCustomerInput;
@@ -9951,6 +10114,7 @@ export type CustomerUpdateWithoutSessionInput = {
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUpdateManyWithoutCustomerNestedInput;
@@ -10010,6 +10174,7 @@ export type CustomerUncheckedUpdateWithoutSessionInput = {
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUncheckedUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUncheckedUpdateManyWithoutCustomerNestedInput;
@@ -10067,6 +10232,7 @@ export type CustomerCreateWithoutSubscriptionInput = {
     isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressCreateNestedManyWithoutCustomerInput;
@@ -10126,6 +10292,7 @@ export type CustomerUncheckedCreateWithoutSubscriptionInput = {
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyUncheckedCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressUncheckedCreateNestedManyWithoutCustomerInput;
@@ -10196,6 +10363,7 @@ export type CustomerUpdateWithoutSubscriptionInput = {
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUpdateManyWithoutCustomerNestedInput;
@@ -10255,6 +10423,7 @@ export type CustomerUncheckedUpdateWithoutSubscriptionInput = {
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUncheckedUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUncheckedUpdateManyWithoutCustomerNestedInput;
@@ -10312,6 +10481,7 @@ export type CustomerCreateWithoutWarranty_registrationInput = {
     isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressCreateNestedManyWithoutCustomerInput;
@@ -10371,6 +10541,7 @@ export type CustomerUncheckedCreateWithoutWarranty_registrationInput = {
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyUncheckedCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressUncheckedCreateNestedManyWithoutCustomerInput;
@@ -10441,6 +10612,7 @@ export type CustomerUpdateWithoutWarranty_registrationInput = {
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUpdateManyWithoutCustomerNestedInput;
@@ -10500,6 +10672,7 @@ export type CustomerUncheckedUpdateWithoutWarranty_registrationInput = {
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUncheckedUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUncheckedUpdateManyWithoutCustomerNestedInput;
@@ -10557,6 +10730,7 @@ export type CustomerCreateWithoutSupport_ticketInput = {
     isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressCreateNestedManyWithoutCustomerInput;
@@ -10616,6 +10790,7 @@ export type CustomerUncheckedCreateWithoutSupport_ticketInput = {
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyUncheckedCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressUncheckedCreateNestedManyWithoutCustomerInput;
@@ -10686,6 +10861,7 @@ export type CustomerUpdateWithoutSupport_ticketInput = {
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUpdateManyWithoutCustomerNestedInput;
@@ -10745,6 +10921,7 @@ export type CustomerUncheckedUpdateWithoutSupport_ticketInput = {
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUncheckedUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUncheckedUpdateManyWithoutCustomerNestedInput;
@@ -10802,6 +10979,7 @@ export type CustomerCreateWithoutDevicesInput = {
     isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressCreateNestedManyWithoutCustomerInput;
@@ -10861,6 +11039,7 @@ export type CustomerUncheckedCreateWithoutDevicesInput = {
     mergedIntoId?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
     babies?: Prisma.BabyUncheckedCreateNestedManyWithoutCustomerInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedCreateNestedManyWithoutCustomerInput;
     checklist_progress?: Prisma.checklist_progressUncheckedCreateNestedManyWithoutCustomerInput;
@@ -10931,6 +11110,7 @@ export type CustomerUpdateWithoutDevicesInput = {
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUpdateManyWithoutCustomerNestedInput;
@@ -10990,6 +11170,7 @@ export type CustomerUncheckedUpdateWithoutDevicesInput = {
     mergedIntoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUncheckedUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUncheckedUpdateManyWithoutCustomerNestedInput;
@@ -11047,6 +11228,7 @@ export type CustomerCreateManyMergedIntoInput = {
     isActive?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    pinCode?: string | null;
 };
 export type CustomerUpdateWithoutMergedIntoInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -11066,6 +11248,7 @@ export type CustomerUpdateWithoutMergedIntoInput = {
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUpdateManyWithoutCustomerNestedInput;
@@ -11124,6 +11307,7 @@ export type CustomerUncheckedUpdateWithoutMergedIntoInput = {
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     babies?: Prisma.BabyUncheckedUpdateManyWithoutCustomerNestedInput;
     campaign_control_group?: Prisma.campaign_control_groupUncheckedUpdateManyWithoutCustomerNestedInput;
     checklist_progress?: Prisma.checklist_progressUncheckedUpdateManyWithoutCustomerNestedInput;
@@ -11182,6 +11366,7 @@ export type CustomerUncheckedUpdateManyWithoutMergedIntoInput = {
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 };
 export type CustomerCountOutputType = {
     babies: number;
@@ -11399,6 +11584,7 @@ export type CustomerSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
     mergedIntoId?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
+    pinCode?: boolean;
     babies?: boolean | Prisma.Customer$babiesArgs<ExtArgs>;
     campaign_control_group?: boolean | Prisma.Customer$campaign_control_groupArgs<ExtArgs>;
     checklist_progress?: boolean | Prisma.Customer$checklist_progressArgs<ExtArgs>;
@@ -11460,6 +11646,7 @@ export type CustomerSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
     mergedIntoId?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
+    pinCode?: boolean;
     mergedInto?: boolean | Prisma.Customer$mergedIntoArgs<ExtArgs>;
 }, ExtArgs["result"]["customer"]>;
 export type CustomerSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -11481,6 +11668,7 @@ export type CustomerSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
     mergedIntoId?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
+    pinCode?: boolean;
     mergedInto?: boolean | Prisma.Customer$mergedIntoArgs<ExtArgs>;
 }, ExtArgs["result"]["customer"]>;
 export type CustomerSelectScalar = {
@@ -11502,8 +11690,9 @@ export type CustomerSelectScalar = {
     mergedIntoId?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
+    pinCode?: boolean;
 };
-export type CustomerOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "customerCode" | "phone" | "email" | "fullName" | "gender" | "dateOfBirth" | "avatarUrl" | "registrationSource" | "customerType" | "dmsCode" | "notes" | "dataQualityFlag" | "isMerged" | "isActive" | "mergedIntoId" | "createdAt" | "updatedAt", ExtArgs["result"]["customer"]>;
+export type CustomerOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "customerCode" | "phone" | "email" | "fullName" | "gender" | "dateOfBirth" | "avatarUrl" | "registrationSource" | "customerType" | "dmsCode" | "notes" | "dataQualityFlag" | "isMerged" | "isActive" | "mergedIntoId" | "createdAt" | "updatedAt" | "pinCode", ExtArgs["result"]["customer"]>;
 export type CustomerInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     babies?: boolean | Prisma.Customer$babiesArgs<ExtArgs>;
     campaign_control_group?: boolean | Prisma.Customer$campaign_control_groupArgs<ExtArgs>;
@@ -11616,6 +11805,7 @@ export type $CustomerPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
         mergedIntoId: string | null;
         createdAt: Date;
         updatedAt: Date;
+        pinCode: string | null;
     }, ExtArgs["result"]["customer"]>;
     composites: {};
 };
@@ -11731,6 +11921,7 @@ export interface CustomerFieldRefs {
     readonly mergedIntoId: Prisma.FieldRef<"Customer", 'String'>;
     readonly createdAt: Prisma.FieldRef<"Customer", 'DateTime'>;
     readonly updatedAt: Prisma.FieldRef<"Customer", 'DateTime'>;
+    readonly pinCode: Prisma.FieldRef<"Customer", 'String'>;
 }
 export type CustomerFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     select?: Prisma.CustomerSelect<ExtArgs> | null;

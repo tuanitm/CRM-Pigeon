@@ -68,6 +68,7 @@ model Customer {
   warranty_registration                                         warranty_registration[]
   support_ticket                                                SupportTicket[]
   devices                                                       CustomerDevice[]
+  pinCode                                                       String?                  @map("pin_code") @db.VarChar(255)
 
   @@index([email], map: "idx_customer_email")
   @@index([phone], map: "idx_customer_phone")

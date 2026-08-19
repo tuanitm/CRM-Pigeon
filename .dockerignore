@@ -1,0 +1,12 @@
+node_modules
+dist
+.git
+.env
+.DS_Store
+npm-debug.log
+customer-portal/node_modules
+customer-portal/dist
+admin-dashboard/node_modules
+admin-dashboard/dist
+zalo-mini-app/node_modules
+zalo-mini-app/dist

@@ -12,6 +12,7 @@ import { IdentifyDto } from './dto/identify.dto';
 import { PrismaService } from '../shared/prisma/prisma.service';
 import { RedisService } from '../shared/redis/redis.service';
 import { UAParser } from 'ua-parser-js';
+import * as bcrypt from 'bcrypt';
 
 @ApiTags('Ingestion')
 @Controller('identify')
@@ -80,6 +81,24 @@ export class IdentifyController {
         'Your account has been deactivated. Please contact support.',
         HttpStatus.FORBIDDEN,
       );
+    }
+
+    // PIN Check
+    if (customer && dto.source !== 'ZaloMiniApp' && !isNew) {
+      if (!dto.pinCode) {
+        throw new HttpException('PIN is required', HttpStatus.UNAUTHORIZED);
+      }
+      
+      if (!customer.pinCode) {
+        if (dto.pinCode !== '123456') {
+          throw new HttpException('Invalid PIN', HttpStatus.UNAUTHORIZED);
+        }
+      } else {
+        const isMatch = await bcrypt.compare(dto.pinCode, customer.pinCode);
+        if (!isMatch) {
+          throw new HttpException('Invalid PIN', HttpStatus.UNAUTHORIZED);
+        }
+      }
     }
 
     // Link anonymous_id if provided

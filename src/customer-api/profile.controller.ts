@@ -3,6 +3,7 @@ import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { PrismaService } from '../shared/prisma/prisma.service';
 import { JourneyEngineService } from '../engines/journey/journey-engine.service';
 import { JourneyRunService } from '../engines/journey/journey-run.service';
+import * as bcrypt from 'bcrypt';
 
 @ApiTags('Customer Profile')
 @Controller('customers')
@@ -147,6 +148,11 @@ export class ProfileController {
       }
     }
 
+    let hashedPinCode = undefined;
+    if (data.pinCode) {
+      hashedPinCode = await bcrypt.hash(data.pinCode, 10);
+    }
+
     const updatedCustomer = await this.prisma.customer.update({
       where: { id },
       data: {
@@ -159,6 +165,7 @@ export class ProfileController {
         notes: data.notes,
         dateOfBirth: data.dateOfBirth ? new Date(data.dateOfBirth) : undefined,
         avatarUrl: data.avatarUrl,
+        pinCode: hashedPinCode,
         addresses:
           data.address !== undefined
             ? {
@@ -169,19 +176,27 @@ export class ProfileController {
       },
     });
 
-    if (data.email && data.email !== oldEmail) {
+    const normalizedOldEmail = oldEmail || '';
+    const normalizedNewEmail = data.email || '';
+    if (data.email !== undefined && normalizedOldEmail !== normalizedNewEmail) {
       eventsToLog.push({
         type: 'EMAIL_UPDATED',
-        props: { oldEmail, newEmail: data.email },
+        props: { oldEmail: normalizedOldEmail || 'none', newEmail: normalizedNewEmail || 'none' },
       });
     }
-    if (data.address !== undefined && data.address !== oldAddress) {
+    
+    const normalizedOldAddress = oldAddress || '';
+    const normalizedNewAddress = data.address || '';
+    if (data.address !== undefined && normalizedOldAddress !== normalizedNewAddress) {
       eventsToLog.push({
         type: 'ADDRESS_UPDATED',
-        props: { oldAddress, newAddress: data.address },
+        props: { oldAddress: normalizedOldAddress || 'none', newAddress: normalizedNewAddress || 'none' },
       });
     }
-    if (data.fullName && data.fullName !== oldCustomer?.fullName) {
+    
+    const normalizedOldName = oldCustomer?.fullName || '';
+    const normalizedNewName = data.fullName || '';
+    if (data.fullName !== undefined && normalizedOldName !== normalizedNewName) {
       eventsToLog.push({
         type: 'PROFILE_UPDATED',
         props: { updatedFields: ['fullName'] },

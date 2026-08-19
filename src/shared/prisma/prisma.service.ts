@@ -267,13 +267,13 @@ export class PrismaService implements OnModuleInit, OnModuleDestroy {
   }
 
   // Expose raw query methods
-  get $executeRaw() {
+  get $executeRaw(): any {
     return this._client.$executeRaw.bind(this._client);
   }
-  get $queryRaw() {
+  get $queryRaw(): any {
     return this._client.$queryRaw.bind(this._client);
   }
-  get $transaction() {
+  get $transaction(): any {
     return this._client.$transaction.bind(this._client);
   }
 }

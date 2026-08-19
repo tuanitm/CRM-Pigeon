@@ -18,6 +18,8 @@ export default function App() {
   const [onboardData, setOnboardData] = useState({ dateOfBirth: '', address: '', email: '' });
 
   const [phone, setPhone] = useState('');
+  const [pinCode, setPinCode] = useState('');
+  const [showPinInput, setShowPinInput] = useState(false);
   const [fullName, setFullName] = useState('');
 
   const [profile, setProfile] = useState<any>(null);
@@ -43,7 +45,7 @@ export default function App() {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await api.identify(phone, fullName, navigator.userAgent);
+      const res = await api.identify(phone, pinCode, fullName, navigator.userAgent);
       if (res.customerId) {
         setCustomerId(res.customerId);
         if (res.isNew) {
@@ -54,7 +56,12 @@ export default function App() {
         }
       }
     } catch (err: any) {
-      showToast('Login failed: ' + err.message);
+      if (err.message === 'PIN is required') {
+        setShowPinInput(true);
+        showToast('Please enter your 6-digit PIN');
+      } else {
+        showToast('Login failed: ' + err.message);
+      }
     } finally {
       setLoading(false);
     }
@@ -84,6 +91,7 @@ export default function App() {
     try {
       await api.updateProfile(customerId, {
         fullName: fullName,
+        pinCode: pinCode,
         dateOfBirth: onboardData.dateOfBirth,
         address: onboardData.address,
         email: onboardData.email || undefined,
@@ -122,6 +130,7 @@ export default function App() {
         dateOfBirth: onboardData.dateOfBirth,
         address: onboardData.address,
         email: onboardData.email || undefined,
+        pinCode: pinCode || undefined,
       });
       showToast('Personal info updated successfully!');
       loadDashboard(customerId);
@@ -251,15 +260,39 @@ export default function App() {
       <div className="screen fade-in" style={{ justifyContent: 'center' }}>
         {toast && <div className="toast">{toast}</div>}
         <div className="glass-card" style={{ textAlign: 'center' }}>
-          <div style={{ width: 64, height: 64, background: 'var(--primary)', borderRadius: '50%', margin: '0 auto 16px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: 24 }}>✨</div>
+          <img src="/pigeonlogo.jpg" alt="Pigeon Logo" style={{ width: 64, height: 64, borderRadius: '50%', margin: '0 auto 16px', display: 'block', objectFit: 'contain', background: 'white' }} />
           <h2 style={{ marginBottom: 8 }}>Welcome to Loyalty Circle</h2>
           <p style={{ color: 'var(--text-muted)', marginBottom: 24, fontSize: 14 }}>Enter your phone number to access your points and rewards instantly.</p>
           
           <form onSubmit={handleLogin}>
             <div className="input-group">
               <label>Phone Number</label>
-              <input type="tel" value={phone} onChange={e => setPhone(e.target.value)} placeholder="+84 90 123 4567" required />
+              <input 
+                type="tel" 
+                value={phone} 
+                onChange={e => {
+                  setPhone(e.target.value);
+                  if (showPinInput) setShowPinInput(false);
+                }} 
+                placeholder="+84 90 123 4567" 
+                required 
+              />
             </div>
+            {showPinInput && (
+              <div className="input-group fade-in">
+                <label>6-Digit PIN</label>
+                <input 
+                  type="password" 
+                  value={pinCode} 
+                  onChange={e => setPinCode(e.target.value)} 
+                  placeholder="123456" 
+                  maxLength={6} 
+                  pattern="\d{6}" 
+                  required 
+                  autoFocus
+                />
+              </div>
+            )}
             <button type="submit" className="btn btn-primary" disabled={loading} style={{ marginTop: 8 }}>
               {loading ? 'Entering...' : 'Continue'}
             </button>
@@ -285,6 +318,10 @@ export default function App() {
             <div className="input-group">
               <label>Full Name *</label>
               <input type="text" value={fullName} onChange={e => setFullName(e.target.value)} placeholder="Jane Doe" required />
+            </div>
+            <div className="input-group">
+              <label>Set 6-Digit PIN *</label>
+              <input type="password" value={pinCode} onChange={e => setPinCode(e.target.value)} placeholder="123456" maxLength={6} pattern="\d{6}" required />
             </div>
             <div className="input-group">
               <label>Date of Birth *</label>
@@ -651,15 +688,20 @@ export default function App() {
               )}
               <div className="input-group">
                 <label>Address</label>
-                <input type="text" value={onboardData.address} onChange={e => setOnboardData({...onboardData, address: e.target.value})} readOnly={!!profile?.addresses?.[0]?.addressLine1} style={profile?.addresses?.[0]?.addressLine1 ? { background: '#f1f5f9' } : {}} />
-                {profile?.addresses?.[0]?.addressLine1 && <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 4 }}>Address cannot be changed after registration. Please contact support.</div>}
+                <input type="text" value={onboardData.address} onChange={e => setOnboardData({...onboardData, address: e.target.value})} />
               </div>
               <div className="input-group">
                 <label>Email</label>
-                <input type="email" value={onboardData.email} onChange={e => setOnboardData({...onboardData, email: e.target.value})} readOnly={!!profile?.email} style={profile?.email ? { background: '#f1f5f9' } : {}} />
-                {profile?.email && <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 4 }}>Email cannot be changed after registration. Please contact support.</div>}
+                <input type="email" value={onboardData.email} onChange={e => setOnboardData({...onboardData, email: e.target.value})} />
               </div>
-              <button className="btn btn-primary" onClick={handleSavePersonalInfo} disabled={loading} style={{ marginTop: 8 }}>Save Personal Info</button>
+              <div className="input-group">
+                <label>Change PIN Code (Optional)</label>
+                <input type="password" value={pinCode} onChange={e => setPinCode(e.target.value)} placeholder="Enter new 6-digit PIN" maxLength={6} pattern="\d{6}" />
+                <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 4 }}>Leave blank if you don't want to change it. Default is 123456.</div>
+              </div>
+              <button className="btn btn-primary" onClick={handleSavePersonalInfo} disabled={loading} style={{ marginTop: 8 }}>
+                {loading ? 'Saving...' : 'Save Personal Info'}
+              </button>
             </div>
           </div>
 

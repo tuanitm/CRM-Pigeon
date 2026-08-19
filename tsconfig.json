@@ -20,7 +20,8 @@
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": true,
     "strictBindCallApply": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "useUnknownInCatchVariables": false
   },
-  "exclude": ["admin-dashboard", "customer-portal", "node_modules", "dist"]
+  "exclude": ["admin-dashboard/**/*", "customer-portal/**/*", "zalo-mini-app/**/*", "node_modules", "dist"]
 }

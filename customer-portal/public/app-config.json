@@ -1,0 +1,32 @@
+{
+  "app": {
+    "title": "Pigeon CRM - Loyalty Circle",
+    "icon": "/favicon.svg",
+    "description": "Customer Relationship Management and Loyalty Platform",
+    "headerColor": "#ffffff",
+    "textColor": "#000000",
+    "statusBarColor": "#ffffff",
+    "hideAndroidBottomNavigationBar": false,
+    "themeColor": "#007AFF"
+  },
+  "pages": [
+    {
+      "name": "index",
+      "path": "/",
+      "title": "Home"
+    }
+  ],
+  "permissions": [
+    "user.profile.get",
+    "device.info.get",
+    "location.get",
+    "qr.scan",
+    "message.send"
+  ],
+  "network": {
+    "timeout": 30000,
+    "retryCount": 3
+  },
+  "debug": false,
+  "version": "1.0.0"
+}

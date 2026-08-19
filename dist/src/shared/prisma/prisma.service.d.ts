@@ -226,18 +226,7 @@ export declare class PrismaService implements OnModuleInit, OnModuleDestroy {
     get conditionDefinition(): import("../../../generated/prisma/models").ConditionDefinitionDelegate<import("@prisma/client/runtime/client").InternalArgs, {
         omit: import("../../../generated/prisma/internal/prismaNamespace").GlobalOmitConfig | undefined;
     }>;
-    get $executeRaw(): <T = unknown>(query: TemplateStringsArray | import("../../../generated/prisma/internal/prismaNamespace").Sql, ...values: any[]) => import("../../../generated/prisma/internal/prismaNamespace").PrismaPromise<number>;
-    get $queryRaw(): <T = unknown>(query: TemplateStringsArray | import("../../../generated/prisma/internal/prismaNamespace").Sql, ...values: any[]) => import("../../../generated/prisma/internal/prismaNamespace").PrismaPromise<T>;
-    get $transaction(): {
-        <P extends import("../../../generated/prisma/internal/prismaNamespace").PrismaPromise<any>[]>(arg: [...P], options?: {
-            maxWait?: number;
-            timeout?: number;
-            isolationLevel?: import("../../../generated/prisma/internal/prismaNamespace").TransactionIsolationLevel;
-        }): import("@prisma/client/runtime/client").JsPromise<import("@prisma/client/runtime/client").UnwrapTuple<P>>;
-        <R>(fn: (prisma: Omit<import("../../../generated/prisma/internal/class").PrismaClient, import("@prisma/client/runtime/client").ITXClientDenyList>) => import("@prisma/client/runtime/client").JsPromise<R>, options?: {
-            maxWait?: number;
-            timeout?: number;
-            isolationLevel?: import("../../../generated/prisma/internal/prismaNamespace").TransactionIsolationLevel;
-        }): import("@prisma/client/runtime/client").JsPromise<R>;
-    };
+    get $executeRaw(): any;
+    get $queryRaw(): any;
+    get $transaction(): any;
 }

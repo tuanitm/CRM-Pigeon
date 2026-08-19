@@ -13,4 +13,5 @@ export declare class IdentifyDto {
     }>;
     userAgent?: string;
     source?: string;
+    pinCode?: string;
 }

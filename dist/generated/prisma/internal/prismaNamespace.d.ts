@@ -5776,6 +5776,7 @@ export declare const CustomerScalarFieldEnum: {
     readonly mergedIntoId: "mergedIntoId";
     readonly createdAt: "createdAt";
     readonly updatedAt: "updatedAt";
+    readonly pinCode: "pinCode";
 };
 export type CustomerScalarFieldEnum = (typeof CustomerScalarFieldEnum)[keyof typeof CustomerScalarFieldEnum];
 export declare const CustomerIdentityScalarFieldEnum: {

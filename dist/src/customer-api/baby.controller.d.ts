@@ -22,8 +22,8 @@ export declare class BabyController {
         dateOfBirth: Date | null;
         createdAt: Date;
         updatedAt: Date;
-        name: string | null;
         customerId: string;
+        name: string | null;
         dueDate: Date | null;
         isBorn: boolean;
         stageCode: string | null;
@@ -35,8 +35,8 @@ export declare class BabyController {
         dateOfBirth: Date | null;
         createdAt: Date;
         updatedAt: Date;
-        name: string | null;
         customerId: string;
+        name: string | null;
         dueDate: Date | null;
         isBorn: boolean;
         stageCode: string | null;
@@ -48,8 +48,8 @@ export declare class BabyController {
         dateOfBirth: Date | null;
         createdAt: Date;
         updatedAt: Date;
-        name: string | null;
         customerId: string;
+        name: string | null;
         dueDate: Date | null;
         isBorn: boolean;
         stageCode: string | null;
@@ -61,8 +61,8 @@ export declare class BabyController {
         dateOfBirth: Date | null;
         createdAt: Date;
         updatedAt: Date;
-        name: string | null;
         customerId: string;
+        name: string | null;
         dueDate: Date | null;
         isBorn: boolean;
         stageCode: string | null;

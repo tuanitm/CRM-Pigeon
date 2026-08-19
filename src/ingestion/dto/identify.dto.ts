@@ -60,4 +60,9 @@ export class IdentifyDto {
   @IsOptional()
   @IsString()
   source?: string;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsString()
+  pinCode?: string;
 }

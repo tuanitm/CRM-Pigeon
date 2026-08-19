@@ -1,11 +1,11 @@
 const BASE_URL = 'http://localhost:3000/v1';
 
 export const api = {
-  identify: async (phone: string, fullName?: string, userAgent?: string) => {
+  identify: async (phone: string, pinCode?: string, fullName?: string, userAgent?: string) => {
     const res = await fetch(`${BASE_URL}/identify`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ phone, fullName, userAgent, source: 'Portal' }),
+      body: JSON.stringify({ phone, pinCode, fullName, userAgent, source: 'Portal' }),
     });
     if (!res.ok) {
       const errorData = await res.json().catch(() => ({}));

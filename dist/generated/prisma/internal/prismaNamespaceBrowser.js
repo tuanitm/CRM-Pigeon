@@ -145,7 +145,8 @@ exports.CustomerScalarFieldEnum = {
     isActive: 'isActive',
     mergedIntoId: 'mergedIntoId',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    pinCode: 'pinCode'
 };
 exports.CustomerIdentityScalarFieldEnum = {
     id: 'id',

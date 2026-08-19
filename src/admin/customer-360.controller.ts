@@ -335,6 +335,7 @@ export class Customer360Controller {
     @Query('take') take: number = 20,
     @Query('search') search?: string,
   ) {
+    const takeNum = Number(take);
     const where = search
       ? {
           OR: [
@@ -347,7 +348,7 @@ export class Customer360Controller {
 
     const customers = await this.prisma.customer.findMany({
       where,
-      take: take + 1,
+      take: takeNum + 1,
       ...(cursor ? { cursor: { id: cursor }, skip: 1 } : {}),
       orderBy: { createdAt: 'desc' },
       include: {
@@ -357,8 +358,8 @@ export class Customer360Controller {
       },
     });
 
-    const hasMore = customers.length > take;
-    const data = hasMore ? customers.slice(0, take) : customers;
+    const hasMore = customers.length > takeNum;
+    const data = hasMore ? customers.slice(0, takeNum) : customers;
     const nextCursor = hasMore ? data[data.length - 1].id : null;
 
     return { data, nextCursor, hasMore };
