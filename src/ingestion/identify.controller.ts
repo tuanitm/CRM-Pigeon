@@ -49,6 +49,10 @@ export class IdentifyController {
         where: { phone: normalizedPhone },
       });
       if (!customer) {
+        if (dto.source === 'Portal' || dto.source === 'ZaloMiniApp') {
+          return { status: 'needs_registration', isNew: true, customerId: null };
+        }
+
         customer = await this.prisma.customer.create({
           data: {
             phone: normalizedPhone,
@@ -83,17 +87,16 @@ export class IdentifyController {
       );
     }
 
+    if (customer && !customer.pinCode && dto.source === 'ZaloMiniApp') {
+      return { status: 'needs_registration', isNew: true, customerId: customer.id };
+    }
+
     // PIN Check
     if (customer && dto.source !== 'ZaloMiniApp' && !isNew) {
-      if (!dto.pinCode) {
-        throw new HttpException('PIN is required', HttpStatus.UNAUTHORIZED);
-      }
-      
-      if (!customer.pinCode) {
-        if (dto.pinCode !== '123456') {
-          throw new HttpException('Invalid PIN', HttpStatus.UNAUTHORIZED);
+      if (customer.pinCode) {
+        if (!dto.pinCode) {
+          throw new HttpException('PIN is required', HttpStatus.UNAUTHORIZED);
         }
-      } else {
         const isMatch = await bcrypt.compare(dto.pinCode, customer.pinCode);
         if (!isMatch) {
           throw new HttpException('Invalid PIN', HttpStatus.UNAUTHORIZED);
@@ -116,6 +119,25 @@ export class IdentifyController {
           identityType: 'anonymous_id',
           identityValue: dto.anonymousId,
           priority: 8,
+        },
+      });
+    }
+
+    // Link zalo_id if provided
+    if (customer && dto.zaloId) {
+      await this.prisma.customerIdentity.upsert({
+        where: {
+          identityType_identityValue: {
+            identityType: 'zalo_id',
+            identityValue: dto.zaloId,
+          },
+        },
+        update: { customerId: customer.id },
+        create: {
+          customerId: customer.id,
+          identityType: 'zalo_id',
+          identityValue: dto.zaloId,
+          priority: 3,
         },
       });
     }

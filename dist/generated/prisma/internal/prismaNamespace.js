@@ -392,6 +392,7 @@ exports.RewardCatalogScalarFieldEnum = {
     description: 'description',
     category: 'category',
     pointsCost: 'pointsCost',
+    price: 'price',
     stock: 'stock',
     imageUrl: 'imageUrl',
     isActive: 'isActive',

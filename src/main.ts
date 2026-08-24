@@ -12,11 +12,7 @@ async function bootstrap() {
   app.use(helmet());
   app.use(compression());
   app.enableCors({
-    origin: process.env.CORS_ORIGINS?.split(',') || [
-      'http://localhost:3001',
-      'http://localhost:5173',
-      'http://localhost:5174',
-    ],
+    origin: true,
     credentials: true,
   });
 
@@ -44,9 +40,9 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-docs', app, document);
 
-  const port = process.env.APP_PORT || 3000;
-  await app.listen(port);
-  console.log(`🚀 PIGEON CRM running on http://localhost:${port}`);
+  const port = process.env.APP_PORT || 5170;
+  await app.listen(port, '0.0.0.0');
+  console.log(`🚀 PIGEON CRM API running on port ${port} across all IPs (0.0.0.0)`);
   console.log(`📚 API Docs: http://localhost:${port}/api-docs`);
 }
 bootstrap();

@@ -1,12 +1,11 @@
-import React from 'react';
-import { Row, Col, Card, Statistic, Typography, Tag, Space, Progress, Avatar, Tooltip } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Row, Col, Card, Typography, Tag, Space, Progress, Avatar, Tooltip, Spin, message } from 'antd';
 import {
   UserOutlined,
   ArrowUpOutlined,
   ArrowDownOutlined,
   TrophyOutlined,
   ThunderboltOutlined,
-  LineChartOutlined,
   ShoppingCartOutlined,
   DollarOutlined,
   RiseOutlined,
@@ -16,6 +15,7 @@ import {
   MobileOutlined,
   CalendarOutlined,
 } from '@ant-design/icons';
+import { dashboardApi } from '../services/api';
 
 const { Title, Text } = Typography;
 
@@ -36,7 +36,7 @@ function MiniSparkline({ data, color = '#3b82f6' }: { data: number[]; color?: st
           key={i}
           className="sparkline-bar"
           style={{
-            height: `${(val / max) * 100}%`,
+            height: `${max > 0 ? (val / max) * 100 : 0}%`,
             background: color,
             opacity: i === data.length - 1 ? 1 : 0.15 + (i / data.length) * 0.5,
           }}
@@ -84,41 +84,84 @@ function KpiCard({
   );
 }
 
-// ─── Revenue chart bars (simulated 30-day) ───
-const revenueBars = Array.from({ length: 30 }, (_, i) => 20 + Math.sin(i * 0.5) * 15 + Math.random() * 30);
+function formatMillions(value: number) {
+  return `${(value / 1000000).toLocaleString('en-US', { maximumFractionDigits: 1 })}M ₫`;
+}
+
+function formatVND(value: number) {
+  return `${Math.round(value).toLocaleString('en-US')} ₫`;
+}
 
 export default function DashboardPage() {
+  const [data, setData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    dashboardApi.getMetrics()
+      .then(res => {
+        setData(res);
+      })
+      .catch(err => {
+        message.error('Failed to load dashboard metrics');
+        console.error(err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
+        <Spin size="large" />
+      </div>
+    );
+  }
+
+  // Fallback to empty structure if api fails
+  const metrics = data || {
+    kpis: {
+      totalRevenue: 0, totalOrders: 0, profit: 0, aov: 0,
+      totalProductsSold: 0, conversionRate: 0, retentionRate: 0, messagesSentToday: 0
+    },
+    revenueChart: { bars: Array(30).fill(0), total: 0, avgPerDay: 0 },
+    recentActivities: []
+  };
+
+  const { kpis, revenueChart, recentActivities } = metrics;
+  const maxRevenueBar = Math.max(...revenueChart.bars, 1); // prevent division by zero
+
   return (
     <div>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
         <Title level={3} style={{ margin: 0, fontWeight: 700 }}>Dashboard</Title>
         <Tag color="blue" style={{ borderRadius: 6, padding: '2px 12px' }}>
-          <CalendarOutlined /> Khoảng thời gian: <strong>30 ngày qua</strong>
+          <CalendarOutlined /> Time range: <strong>Last 30 days</strong>
         </Tag>
       </div>
 
       {/* ─── Row 1: Business KPIs ─── */}
       <Row gutter={[12, 12]}>
         <Col xs={24} sm={12} xl={6}>
-          <KpiCard label="GIÁ TRỊ" labelType="value" title="Tổng doanh thu" value="1,258M ₫"
+          <KpiCard label="VALUE" labelType="value" title="Total Revenue" value={formatMillions(kpis.totalRevenue)}
             pctChange={18.4}
             sparkline={sparklineData} sparkColor="#10b981"
             icon={<DollarOutlined style={{ color: '#10b981' }} />} />
         </Col>
         <Col xs={24} sm={12} xl={6}>
-          <KpiCard label="SỐ LƯỢNG" labelType="quantity" title="Tổng đơn hàng" value="3,842"
+          <KpiCard label="QUANTITY" labelType="quantity" title="Total Orders" value={kpis.totalOrders.toLocaleString()}
             pctChange={12.1}
             sparkline={[12, 15, 9, 18, 14, 22, 16, 25, 19, 28, 21, 30, 24]}
             sparkColor="#3b82f6"
             icon={<ShoppingCartOutlined style={{ color: '#3b82f6' }} />} />
         </Col>
         <Col xs={24} sm={12} xl={6}>
-          <KpiCard label="GIÁ TRỊ" labelType="value" title="Lợi nhuận" value="428M ₫"
+          <KpiCard label="VALUE" labelType="value" title="Profit" value={formatMillions(kpis.profit)}
             pctChange={8.7}
             icon={<RiseOutlined style={{ color: '#8b5cf6' }} />} />
         </Col>
         <Col xs={24} sm={12} xl={6}>
-          <KpiCard label="GIÁ TRỊ" labelType="value" title="AOV — Giá trị đơn TB" value="327,500 ₫"
+          <KpiCard label="VALUE" labelType="value" title="AOV — Avg Order Value" value={formatVND(kpis.aov)}
             pctChange={-2.3}
             icon={<BarChartOutlined style={{ color: '#f59e0b' }} />} />
         </Col>
@@ -126,21 +169,21 @@ export default function DashboardPage() {
 
       <Row gutter={[12, 12]} style={{ marginTop: 12 }}>
         <Col xs={24} sm={12} xl={6}>
-          <KpiCard label="SỐ LƯỢNG" labelType="quantity" title="Tổng sản phẩm bán" value="8,520"
+          <KpiCard label="QUANTITY" labelType="quantity" title="Total Products Sold" value={kpis.totalProductsSold.toLocaleString()}
             icon={<ShoppingCartOutlined style={{ color: '#06b6d4' }} />} />
         </Col>
         <Col xs={24} sm={12} xl={6}>
-          <KpiCard label="TỶ LỆ" labelType="rate" title="Tỷ lệ chuyển đổi" value="18%"
+          <KpiCard label="RATE" labelType="rate" title="Conversion Rate" value={`${kpis.conversionRate.toFixed(1)}%`}
             pctChange={5.4}
             icon={<RiseOutlined style={{ color: '#10b981' }} />} />
         </Col>
         <Col xs={24} sm={12} xl={6}>
-          <KpiCard label="TỶ LỆ" labelType="rate" title="Tỷ lệ mua lại" value="32%"
+          <KpiCard label="RATE" labelType="rate" title="Retention Rate" value={`${kpis.retentionRate.toFixed(1)}%`}
             pctChange={3.2}
             icon={<TrophyOutlined style={{ color: '#f59e0b' }} />} />
         </Col>
         <Col xs={24} sm={12} xl={6}>
-          <KpiCard label="SỐ LƯỢNG" labelType="quantity" title="Tin nhắn gửi hôm nay" value="1,280"
+          <KpiCard label="QUANTITY" labelType="quantity" title="Messages Sent Today" value={kpis.messagesSentToday.toLocaleString()}
             icon={<MessageOutlined style={{ color: '#ec4899' }} />} />
         </Col>
       </Row>
@@ -150,33 +193,37 @@ export default function DashboardPage() {
         styles={{ body: { padding: '20px 24px' } }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
           <div>
-            <Title level={5} style={{ margin: 0, fontWeight: 700 }}>Doanh thu theo ngày</Title>
-            <Text type="secondary" style={{ fontSize: 12 }}>30 ngày gần nhất · Đơn vị: triệu VND</Text>
+            <Title level={5} style={{ margin: 0, fontWeight: 700 }}>Daily Revenue</Title>
+            <Text type="secondary" style={{ fontSize: 12 }}>Last 30 days · Unit: millions VND</Text>
           </div>
           <Space>
-            <Tag color="blue">Tổng: 1,258M ₫</Tag>
-            <Tag color="green">TB/ngày: 42M ₫</Tag>
+            <Tag color="blue">Total: {formatMillions(revenueChart.total)}</Tag>
+            <Tag color="green">Avg/day: {formatMillions(revenueChart.avgPerDay)}</Tag>
           </Space>
         </div>
         <div style={{ display: 'flex', alignItems: 'flex-end', gap: 3, height: 140, padding: '0 4px' }}>
-          {revenueBars.map((h, i) => (
-            <Tooltip key={i} title={`Ngày ${i + 1}/07: ${Math.round(h)}M ₫`}>
-              <div
-                style={{
-                  flex: 1,
-                  height: `${h}%`,
-                  background: `linear-gradient(180deg, #3b82f6 0%, #60a5fa 100%)`,
-                  borderRadius: '3px 3px 0 0',
-                  opacity: 0.4 + (i / 30) * 0.6,
-                  transition: 'opacity 0.2s',
-                  cursor: 'pointer',
-                }}
-              />
-            </Tooltip>
-          ))}
+          {revenueChart.bars.map((h: number, i: number) => {
+            const hPercent = (h / maxRevenueBar) * 100;
+            return (
+              <Tooltip key={i} title={`Day ${i + 1}: ${formatMillions(h)}`}>
+                <div
+                  style={{
+                    flex: 1,
+                    height: `${hPercent}%`,
+                    minHeight: hPercent > 0 ? '4px' : '0',
+                    background: `linear-gradient(180deg, #3b82f6 0%, #60a5fa 100%)`,
+                    borderRadius: '3px 3px 0 0',
+                    opacity: 0.4 + (i / 30) * 0.6,
+                    transition: 'opacity 0.2s',
+                    cursor: 'pointer',
+                  }}
+                />
+              </Tooltip>
+            );
+          })}
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 4px 0', color: '#9ca3af', fontSize: 11 }}>
-          <span>01/07</span><span>05/07</span><span>10/07</span><span>15/07</span><span>20/07</span><span>25/07</span><span>30/07</span>
+          <span>Day 1</span><span>Day 5</span><span>Day 10</span><span>Day 15</span><span>Day 20</span><span>Day 25</span><span>Day 30</span>
         </div>
       </Card>
 
@@ -185,7 +232,7 @@ export default function DashboardPage() {
         <Col xs={24} lg={14}>
           <Card
             variant="outlined"
-            title={<Space><ThunderboltOutlined style={{ color: '#3b82f6' }} /> Hành trình đang chạy</Space>}
+            title={<Space><ThunderboltOutlined style={{ color: '#3b82f6' }} /> Running Journeys</Space>}
             style={{ borderRadius: 10, borderColor: '#e5e7eb', height: '100%' }}
           >
             {[
@@ -198,8 +245,8 @@ export default function DashboardPage() {
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
                   <Text strong>{j.name}</Text>
                   <Space>
-                    <Tag color="processing">{j.active} đang chạy</Tag>
-                    <Tag color="success">{j.completed} hoàn thành</Tag>
+                    <Tag color="processing">{j.active} active</Tag>
+                    <Tag color="success">{j.completed} completed</Tag>
                   </Space>
                 </div>
                 <Progress percent={j.rate} strokeColor={{ '0%': '#3b82f6', '100%': '#10b981' }} size="small" format={(pct) => `${pct}%`} />
@@ -211,25 +258,19 @@ export default function DashboardPage() {
         <Col xs={24} lg={10}>
           <Card
             variant="outlined"
-            title={<Space><TrophyOutlined style={{ color: '#f59e0b' }} /> Hoạt động gần đây</Space>}
+            title={<Space><TrophyOutlined style={{ color: '#f59e0b' }} /> Recent Activities</Space>}
             style={{ borderRadius: 10, borderColor: '#e5e7eb', height: '100%' }}
           >
-            {[
-              { title: 'Nguyen Thi Mai', desc: 'Nâng hạng lên GOLD', time: '2 phút trước', color: '#FFD700' },
-              { title: 'Tran Van Duc', desc: 'Hoàn thành Journey Welcome Baby', time: '8 phút trước', color: '#10b981' },
-              { title: 'Le Thi Hoa', desc: 'Đổi 500 điểm lấy voucher', time: '15 phút trước', color: '#3b82f6' },
-              { title: 'Pham Minh Tuan', desc: 'Quét QR xác thực — +50 điểm', time: '22 phút trước', color: '#8b5cf6' },
-              { title: 'Vo Thi Lan', desc: 'Gửi ZNS giỏ hàng bị bỏ', time: '35 phút trước', color: '#ec4899' },
-            ].map((item, i) => (
-              <div key={i} style={{ display: 'flex', gap: 12, padding: '10px 0', borderBottom: i < 4 ? '1px solid #f3f4f6' : 'none' }}>
-                <Avatar style={{ backgroundColor: item.color, flexShrink: 0 }} icon={<UserOutlined />} size={36} />
+            {recentActivities.length > 0 ? recentActivities.map((item: any, i: number) => (
+              <div key={i} style={{ display: 'flex', gap: 12, padding: '10px 0', borderBottom: i < recentActivities.length - 1 ? '1px solid #f3f4f6' : 'none' }}>
+                <Avatar style={{ backgroundColor: item.color || '#3b82f6', flexShrink: 0 }} icon={<UserOutlined />} size={36} />
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <Text strong style={{ fontSize: 13 }}>{item.title}</Text>
                   <div style={{ fontSize: 12, color: '#4b5563' }}>{item.desc}</div>
-                  <div style={{ fontSize: 11, color: '#9ca3af' }}>{item.time}</div>
+                  <div style={{ fontSize: 11, color: '#9ca3af' }}>{new Date(item.time).toLocaleString()}</div>
                 </div>
               </div>
-            ))}
+            )) : <Text type="secondary">No recent activities found.</Text>}
           </Card>
         </Col>
       </Row>
@@ -237,7 +278,7 @@ export default function DashboardPage() {
       {/* ─── Row 4: Tier + RFM + Channel ─── */}
       <Row gutter={[12, 12]} style={{ marginTop: 12 }}>
         <Col xs={24} lg={8}>
-          <Card variant="outlined" title="Phân bổ hạng thành viên" style={{ borderRadius: 10, borderColor: '#e5e7eb' }}>
+          <Card variant="outlined" title="Membership Tier Distribution" style={{ borderRadius: 10, borderColor: '#e5e7eb' }}>
             {[
               { tier: 'BRONZE', count: 9_200, color: '#94a3b8', pct: 74 },
               { tier: 'SILVER', count: 2_450, color: '#a8a29e', pct: 20 },
@@ -254,7 +295,7 @@ export default function DashboardPage() {
           </Card>
         </Col>
         <Col xs={24} lg={8}>
-          <Card variant="outlined" title="Phân khúc RFM" style={{ borderRadius: 10, borderColor: '#e5e7eb' }}>
+          <Card variant="outlined" title="RFM Segments" style={{ borderRadius: 10, borderColor: '#e5e7eb' }}>
             <Space orientation="vertical" style={{ width: '100%' }} size={10}>
               {[
                 { seg: 'Champions', count: 320, color: '#10b981' },
@@ -275,7 +316,7 @@ export default function DashboardPage() {
           </Card>
         </Col>
         <Col xs={24} lg={8}>
-          <Card variant="outlined" title="Hiệu suất kênh gửi" style={{ borderRadius: 10, borderColor: '#e5e7eb' }}>
+          <Card variant="outlined" title="Channel Performance" style={{ borderRadius: 10, borderColor: '#e5e7eb' }}>
             <Space orientation="vertical" style={{ width: '100%' }} size={12}>
               {[
                 { ch: 'ZNS', sent: 820, delivered: 792, rate: 96.6, color: '#3b82f6', icon: <MobileOutlined /> },
@@ -285,7 +326,7 @@ export default function DashboardPage() {
                 <div key={c.ch}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
                     <Space size={4}>{c.icon} <Text strong>{c.ch}</Text></Space>
-                    <Text type="secondary" style={{ fontSize: 12 }}>{c.sent} gửi / {c.delivered} nhận</Text>
+                    <Text type="secondary" style={{ fontSize: 12 }}>{c.sent} sent / {c.delivered} delivered</Text>
                   </div>
                   <Progress percent={c.rate} strokeColor={c.color} size="small" />
                 </div>

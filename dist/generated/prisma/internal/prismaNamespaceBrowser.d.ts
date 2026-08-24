@@ -364,6 +364,7 @@ export declare const RewardCatalogScalarFieldEnum: {
     readonly description: "description";
     readonly category: "category";
     readonly pointsCost: "pointsCost";
+    readonly price: "price";
     readonly stock: "stock";
     readonly imageUrl: "imageUrl";
     readonly isActive: "isActive";

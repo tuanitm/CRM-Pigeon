@@ -15,7 +15,7 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const [isOnboarding, setIsOnboarding] = useState(false);
-  const [onboardData, setOnboardData] = useState({ dateOfBirth: '', address: '', email: '' });
+  const [onboardData, setOnboardData] = useState({ dateOfBirth: '', address: '', email: '', gender: '' });
 
   const [phone, setPhone] = useState('');
   const [pinCode, setPinCode] = useState('');
@@ -46,14 +46,13 @@ export default function App() {
     setLoading(true);
     try {
       const res = await api.identify(phone, pinCode, fullName, navigator.userAgent);
-      if (res.customerId) {
+      if (res.isNew) {
+        if (res.customerId) setCustomerId(res.customerId);
+        setIsOnboarding(true);
+      } else if (res.customerId) {
         setCustomerId(res.customerId);
-        if (res.isNew) {
-          setIsOnboarding(true);
-        } else {
-          showToast('Welcome back to the Loyalty Circle!');
-          loadDashboard(res.customerId);
-        }
+        showToast('Welcome back to the Loyalty Circle!');
+        loadDashboard(res.customerId);
       }
     } catch (err: any) {
       if (err.message === 'PIN is required') {
@@ -85,22 +84,39 @@ export default function App() {
 
   const handleOnboardSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!customerId) return;
     if (showFamilySection && !validateBabies()) return;
     setLoading(true);
     try {
-      await api.updateProfile(customerId, {
-        fullName: fullName,
-        pinCode: pinCode,
-        dateOfBirth: onboardData.dateOfBirth,
-        address: onboardData.address,
-        email: onboardData.email || undefined,
-        babies: showFamilySection ? babies.filter(b => b.name && (b.dateOfBirth || b.dueDate)) : [],
-        isOnboardingCompletion: true // Flag to trigger Welcome Bonus in backend
-      });
+      let currentId = customerId;
+      if (!currentId) {
+        const newCust = await api.registerProfile({
+          phone: phone,
+          fullName: fullName,
+          pinCode: pinCode,
+          dateOfBirth: onboardData.dateOfBirth,
+          gender: onboardData.gender,
+          address: onboardData.address,
+          email: onboardData.email || undefined,
+          babies: showFamilySection ? babies.filter(b => b.name && (b.dateOfBirth || b.dueDate)) : [],
+          isOnboardingCompletion: true
+        });
+        currentId = newCust.id;
+        setCustomerId(currentId);
+      } else {
+        await api.updateProfile(currentId, {
+          fullName: fullName,
+          pinCode: pinCode,
+          dateOfBirth: onboardData.dateOfBirth,
+          gender: onboardData.gender,
+          address: onboardData.address,
+          email: onboardData.email || undefined,
+          babies: showFamilySection ? babies.filter(b => b.name && (b.dateOfBirth || b.dueDate)) : [],
+          isOnboardingCompletion: true
+        });
+      }
       showToast('Profile completed successfully!');
       setIsOnboarding(false);
-      loadDashboard(customerId);
+      loadDashboard(currentId);
     } catch (err: any) {
       showToast('Failed to save profile: ' + err.message);
     } finally {
@@ -116,6 +132,8 @@ export default function App() {
     setTickets([]);
     setBabies([]);
     setPhone('');
+    setPinCode('');
+    setShowPinInput(false);
     setFullName('');
     setOnboardData({ dateOfBirth: '', address: '', email: '' });
     setActiveTab('home');
@@ -154,6 +172,7 @@ export default function App() {
         dateOfBirth: profData.dateOfBirth ? profData.dateOfBirth.split('T')[0] : '',
         address: profData.addresses?.[0]?.addressLine1 || '',
         email: profData.email || '',
+        gender: profData.gender || '',
       });
       setLoyalty(loyData);
       setRewards(rwData);
@@ -255,12 +274,12 @@ export default function App() {
     setBabies([...babies, { name: '', dateOfBirth: '', gender: '', stageCode: '', isBorn: true }]);
   };
 
-  if (!customerId) {
+  if (!customerId && !isOnboarding) {
     return (
       <div className="screen fade-in" style={{ justifyContent: 'center' }}>
         {toast && <div className="toast">{toast}</div>}
         <div className="glass-card" style={{ textAlign: 'center' }}>
-          <img src="/pigeonlogo.jpg" alt="Pigeon Logo" style={{ width: 64, height: 64, borderRadius: '50%', margin: '0 auto 16px', display: 'block', objectFit: 'contain', background: 'white' }} />
+          <img src={`${import.meta.env.BASE_URL}pigeonlogo.jpg`} alt="Pigeon Logo" style={{ width: 64, height: 64, borderRadius: '50%', margin: '0 auto 16px', display: 'block', objectFit: 'contain', background: 'white' }} />
           <h2 style={{ marginBottom: 8 }}>Welcome to Loyalty Circle</h2>
           <p style={{ color: 'var(--text-muted)', marginBottom: 24, fontSize: 14 }}>Enter your phone number to access your points and rewards instantly.</p>
           
@@ -317,7 +336,7 @@ export default function App() {
             </div>
             <div className="input-group">
               <label>Full Name *</label>
-              <input type="text" value={fullName} onChange={e => setFullName(e.target.value)} placeholder="Jane Doe" required />
+              <input type="text" value={fullName} onChange={e => setFullName(e.target.value)} placeholder="Jane Doe" required autoComplete="name" />
             </div>
             <div className="input-group">
               <label>Set 6-Digit PIN *</label>
@@ -326,6 +345,15 @@ export default function App() {
             <div className="input-group">
               <label>Date of Birth *</label>
               <input type="date" value={onboardData.dateOfBirth} onChange={e => setOnboardData({...onboardData, dateOfBirth: e.target.value})} required />
+            </div>
+            <div className="input-group">
+              <label>Gender *</label>
+              <select value={onboardData.gender} onChange={e => setOnboardData({...onboardData, gender: e.target.value})} required>
+                <option value="">Select gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+              </select>
             </div>
             <div className="input-group">
               <label>Address *</label>
@@ -476,6 +504,14 @@ export default function App() {
       
       {activeTab === 'home' && (
         <div className="screen fade-in">
+          {!profile?.pinCode && (
+            <div style={{ background: '#fffbeb', border: '1px solid #fef08a', color: '#b45309', padding: '12px 16px', borderRadius: 12, marginBottom: 24, fontSize: 14, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div>
+                <strong>Security Warning:</strong> You haven't set a PIN code yet. Please set one to secure your account.
+              </div>
+              <button onClick={() => setActiveTab('profile')} style={{ background: 'transparent', border: '1px solid #b45309', color: '#b45309', borderRadius: 8, padding: '6px 12px', fontSize: 12, cursor: 'pointer', fontWeight: 600 }}>Set PIN</button>
+            </div>
+          )}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div>
               <h4 style={{ color: 'var(--text-muted)', fontSize: 13 }}>

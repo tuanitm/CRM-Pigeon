@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { PrismaService } from './shared/prisma/prisma.service';
+import { SegmentService } from './engines/segmentation/segment.service';
 
 const demoCustomers = [
   {
@@ -117,6 +118,10 @@ async function bootstrap() {
   console.log('Bootstrapping app context for seeding...');
   const app = await NestFactory.createApplicationContext(AppModule);
   const prisma = app.get(PrismaService);
+  const segmentService = app.get(SegmentService);
+
+  console.log('Seeding mandatory segments...');
+  await segmentService.seedMandatorySegments();
 
   console.log('Seeding demo customers...');
 

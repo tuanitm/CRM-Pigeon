@@ -10,10 +10,12 @@ export type AggregateRewardCatalog = {
 };
 export type RewardCatalogAvgAggregateOutputType = {
     pointsCost: number | null;
+    price: runtime.Decimal | null;
     stock: number | null;
 };
 export type RewardCatalogSumAggregateOutputType = {
     pointsCost: number | null;
+    price: runtime.Decimal | null;
     stock: number | null;
 };
 export type RewardCatalogMinAggregateOutputType = {
@@ -23,6 +25,7 @@ export type RewardCatalogMinAggregateOutputType = {
     description: string | null;
     category: string | null;
     pointsCost: number | null;
+    price: runtime.Decimal | null;
     stock: number | null;
     imageUrl: string | null;
     isActive: boolean | null;
@@ -38,6 +41,7 @@ export type RewardCatalogMaxAggregateOutputType = {
     description: string | null;
     category: string | null;
     pointsCost: number | null;
+    price: runtime.Decimal | null;
     stock: number | null;
     imageUrl: string | null;
     isActive: boolean | null;
@@ -53,6 +57,7 @@ export type RewardCatalogCountAggregateOutputType = {
     description: number;
     category: number;
     pointsCost: number;
+    price: number;
     stock: number;
     imageUrl: number;
     isActive: number;
@@ -64,10 +69,12 @@ export type RewardCatalogCountAggregateOutputType = {
 };
 export type RewardCatalogAvgAggregateInputType = {
     pointsCost?: true;
+    price?: true;
     stock?: true;
 };
 export type RewardCatalogSumAggregateInputType = {
     pointsCost?: true;
+    price?: true;
     stock?: true;
 };
 export type RewardCatalogMinAggregateInputType = {
@@ -77,6 +84,7 @@ export type RewardCatalogMinAggregateInputType = {
     description?: true;
     category?: true;
     pointsCost?: true;
+    price?: true;
     stock?: true;
     imageUrl?: true;
     isActive?: true;
@@ -92,6 +100,7 @@ export type RewardCatalogMaxAggregateInputType = {
     description?: true;
     category?: true;
     pointsCost?: true;
+    price?: true;
     stock?: true;
     imageUrl?: true;
     isActive?: true;
@@ -107,6 +116,7 @@ export type RewardCatalogCountAggregateInputType = {
     description?: true;
     category?: true;
     pointsCost?: true;
+    price?: true;
     stock?: true;
     imageUrl?: true;
     isActive?: true;
@@ -151,6 +161,7 @@ export type RewardCatalogGroupByOutputType = {
     description: string | null;
     category: string | null;
     pointsCost: number;
+    price: runtime.Decimal | null;
     stock: number | null;
     imageUrl: string | null;
     isActive: boolean;
@@ -177,6 +188,7 @@ export type RewardCatalogWhereInput = {
     description?: Prisma.StringNullableFilter<"RewardCatalog"> | string | null;
     category?: Prisma.StringNullableFilter<"RewardCatalog"> | string | null;
     pointsCost?: Prisma.IntFilter<"RewardCatalog"> | number;
+    price?: Prisma.DecimalNullableFilter<"RewardCatalog"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null;
     stock?: Prisma.IntNullableFilter<"RewardCatalog"> | number | null;
     imageUrl?: Prisma.StringNullableFilter<"RewardCatalog"> | string | null;
     isActive?: Prisma.BoolFilter<"RewardCatalog"> | boolean;
@@ -193,6 +205,7 @@ export type RewardCatalogOrderByWithRelationInput = {
     description?: Prisma.SortOrderInput | Prisma.SortOrder;
     category?: Prisma.SortOrderInput | Prisma.SortOrder;
     pointsCost?: Prisma.SortOrder;
+    price?: Prisma.SortOrderInput | Prisma.SortOrder;
     stock?: Prisma.SortOrderInput | Prisma.SortOrder;
     imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder;
     isActive?: Prisma.SortOrder;
@@ -212,6 +225,7 @@ export type RewardCatalogWhereUniqueInput = Prisma.AtLeast<{
     description?: Prisma.StringNullableFilter<"RewardCatalog"> | string | null;
     category?: Prisma.StringNullableFilter<"RewardCatalog"> | string | null;
     pointsCost?: Prisma.IntFilter<"RewardCatalog"> | number;
+    price?: Prisma.DecimalNullableFilter<"RewardCatalog"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null;
     stock?: Prisma.IntNullableFilter<"RewardCatalog"> | number | null;
     imageUrl?: Prisma.StringNullableFilter<"RewardCatalog"> | string | null;
     isActive?: Prisma.BoolFilter<"RewardCatalog"> | boolean;
@@ -228,6 +242,7 @@ export type RewardCatalogOrderByWithAggregationInput = {
     description?: Prisma.SortOrderInput | Prisma.SortOrder;
     category?: Prisma.SortOrderInput | Prisma.SortOrder;
     pointsCost?: Prisma.SortOrder;
+    price?: Prisma.SortOrderInput | Prisma.SortOrder;
     stock?: Prisma.SortOrderInput | Prisma.SortOrder;
     imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder;
     isActive?: Prisma.SortOrder;
@@ -251,6 +266,7 @@ export type RewardCatalogScalarWhereWithAggregatesInput = {
     description?: Prisma.StringNullableWithAggregatesFilter<"RewardCatalog"> | string | null;
     category?: Prisma.StringNullableWithAggregatesFilter<"RewardCatalog"> | string | null;
     pointsCost?: Prisma.IntWithAggregatesFilter<"RewardCatalog"> | number;
+    price?: Prisma.DecimalNullableWithAggregatesFilter<"RewardCatalog"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null;
     stock?: Prisma.IntNullableWithAggregatesFilter<"RewardCatalog"> | number | null;
     imageUrl?: Prisma.StringNullableWithAggregatesFilter<"RewardCatalog"> | string | null;
     isActive?: Prisma.BoolWithAggregatesFilter<"RewardCatalog"> | boolean;
@@ -266,6 +282,7 @@ export type RewardCatalogCreateInput = {
     description?: string | null;
     category?: string | null;
     pointsCost: number;
+    price?: runtime.Decimal | runtime.DecimalJsLike | number | string | null;
     stock?: number | null;
     imageUrl?: string | null;
     isActive?: boolean;
@@ -282,6 +299,7 @@ export type RewardCatalogUncheckedCreateInput = {
     description?: string | null;
     category?: string | null;
     pointsCost: number;
+    price?: runtime.Decimal | runtime.DecimalJsLike | number | string | null;
     stock?: number | null;
     imageUrl?: string | null;
     isActive?: boolean;
@@ -298,6 +316,7 @@ export type RewardCatalogUpdateInput = {
     description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     pointsCost?: Prisma.IntFieldUpdateOperationsInput | number;
+    price?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null;
     stock?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
     imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
@@ -314,6 +333,7 @@ export type RewardCatalogUncheckedUpdateInput = {
     description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     pointsCost?: Prisma.IntFieldUpdateOperationsInput | number;
+    price?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null;
     stock?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
     imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
@@ -330,6 +350,7 @@ export type RewardCatalogCreateManyInput = {
     description?: string | null;
     category?: string | null;
     pointsCost: number;
+    price?: runtime.Decimal | runtime.DecimalJsLike | number | string | null;
     stock?: number | null;
     imageUrl?: string | null;
     isActive?: boolean;
@@ -345,6 +366,7 @@ export type RewardCatalogUpdateManyMutationInput = {
     description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     pointsCost?: Prisma.IntFieldUpdateOperationsInput | number;
+    price?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null;
     stock?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
     imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
@@ -360,6 +382,7 @@ export type RewardCatalogUncheckedUpdateManyInput = {
     description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     pointsCost?: Prisma.IntFieldUpdateOperationsInput | number;
+    price?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null;
     stock?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
     imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
@@ -375,6 +398,7 @@ export type RewardCatalogCountOrderByAggregateInput = {
     description?: Prisma.SortOrder;
     category?: Prisma.SortOrder;
     pointsCost?: Prisma.SortOrder;
+    price?: Prisma.SortOrder;
     stock?: Prisma.SortOrder;
     imageUrl?: Prisma.SortOrder;
     isActive?: Prisma.SortOrder;
@@ -385,6 +409,7 @@ export type RewardCatalogCountOrderByAggregateInput = {
 };
 export type RewardCatalogAvgOrderByAggregateInput = {
     pointsCost?: Prisma.SortOrder;
+    price?: Prisma.SortOrder;
     stock?: Prisma.SortOrder;
 };
 export type RewardCatalogMaxOrderByAggregateInput = {
@@ -394,6 +419,7 @@ export type RewardCatalogMaxOrderByAggregateInput = {
     description?: Prisma.SortOrder;
     category?: Prisma.SortOrder;
     pointsCost?: Prisma.SortOrder;
+    price?: Prisma.SortOrder;
     stock?: Prisma.SortOrder;
     imageUrl?: Prisma.SortOrder;
     isActive?: Prisma.SortOrder;
@@ -409,6 +435,7 @@ export type RewardCatalogMinOrderByAggregateInput = {
     description?: Prisma.SortOrder;
     category?: Prisma.SortOrder;
     pointsCost?: Prisma.SortOrder;
+    price?: Prisma.SortOrder;
     stock?: Prisma.SortOrder;
     imageUrl?: Prisma.SortOrder;
     isActive?: Prisma.SortOrder;
@@ -419,6 +446,7 @@ export type RewardCatalogMinOrderByAggregateInput = {
 };
 export type RewardCatalogSumOrderByAggregateInput = {
     pointsCost?: Prisma.SortOrder;
+    price?: Prisma.SortOrder;
     stock?: Prisma.SortOrder;
 };
 export type RewardCatalogScalarRelationFilter = {
@@ -451,6 +479,7 @@ export type RewardCatalogCreateWithoutReward_redemptionInput = {
     description?: string | null;
     category?: string | null;
     pointsCost: number;
+    price?: runtime.Decimal | runtime.DecimalJsLike | number | string | null;
     stock?: number | null;
     imageUrl?: string | null;
     isActive?: boolean;
@@ -466,6 +495,7 @@ export type RewardCatalogUncheckedCreateWithoutReward_redemptionInput = {
     description?: string | null;
     category?: string | null;
     pointsCost: number;
+    price?: runtime.Decimal | runtime.DecimalJsLike | number | string | null;
     stock?: number | null;
     imageUrl?: string | null;
     isActive?: boolean;
@@ -494,6 +524,7 @@ export type RewardCatalogUpdateWithoutReward_redemptionInput = {
     description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     pointsCost?: Prisma.IntFieldUpdateOperationsInput | number;
+    price?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null;
     stock?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
     imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
@@ -509,6 +540,7 @@ export type RewardCatalogUncheckedUpdateWithoutReward_redemptionInput = {
     description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     pointsCost?: Prisma.IntFieldUpdateOperationsInput | number;
+    price?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null;
     stock?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
     imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
@@ -536,6 +568,7 @@ export type RewardCatalogSelect<ExtArgs extends runtime.Types.Extensions.Interna
     description?: boolean;
     category?: boolean;
     pointsCost?: boolean;
+    price?: boolean;
     stock?: boolean;
     imageUrl?: boolean;
     isActive?: boolean;
@@ -553,6 +586,7 @@ export type RewardCatalogSelectCreateManyAndReturn<ExtArgs extends runtime.Types
     description?: boolean;
     category?: boolean;
     pointsCost?: boolean;
+    price?: boolean;
     stock?: boolean;
     imageUrl?: boolean;
     isActive?: boolean;
@@ -568,6 +602,7 @@ export type RewardCatalogSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
     description?: boolean;
     category?: boolean;
     pointsCost?: boolean;
+    price?: boolean;
     stock?: boolean;
     imageUrl?: boolean;
     isActive?: boolean;
@@ -583,6 +618,7 @@ export type RewardCatalogSelectScalar = {
     description?: boolean;
     category?: boolean;
     pointsCost?: boolean;
+    price?: boolean;
     stock?: boolean;
     imageUrl?: boolean;
     isActive?: boolean;
@@ -591,7 +627,7 @@ export type RewardCatalogSelectScalar = {
     createdAt?: boolean;
     updatedAt?: boolean;
 };
-export type RewardCatalogOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "code" | "name" | "description" | "category" | "pointsCost" | "stock" | "imageUrl" | "isActive" | "validFrom" | "validUntil" | "createdAt" | "updatedAt", ExtArgs["result"]["rewardCatalog"]>;
+export type RewardCatalogOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "code" | "name" | "description" | "category" | "pointsCost" | "price" | "stock" | "imageUrl" | "isActive" | "validFrom" | "validUntil" | "createdAt" | "updatedAt", ExtArgs["result"]["rewardCatalog"]>;
 export type RewardCatalogInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     reward_redemption?: boolean | Prisma.RewardCatalog$reward_redemptionArgs<ExtArgs>;
     _count?: boolean | Prisma.RewardCatalogCountOutputTypeDefaultArgs<ExtArgs>;
@@ -610,6 +646,7 @@ export type $RewardCatalogPayload<ExtArgs extends runtime.Types.Extensions.Inter
         description: string | null;
         category: string | null;
         pointsCost: number;
+        price: runtime.Decimal | null;
         stock: number | null;
         imageUrl: string | null;
         isActive: boolean;
@@ -681,6 +718,7 @@ export interface RewardCatalogFieldRefs {
     readonly description: Prisma.FieldRef<"RewardCatalog", 'String'>;
     readonly category: Prisma.FieldRef<"RewardCatalog", 'String'>;
     readonly pointsCost: Prisma.FieldRef<"RewardCatalog", 'Int'>;
+    readonly price: Prisma.FieldRef<"RewardCatalog", 'Decimal'>;
     readonly stock: Prisma.FieldRef<"RewardCatalog", 'Int'>;
     readonly imageUrl: Prisma.FieldRef<"RewardCatalog", 'String'>;
     readonly isActive: Prisma.FieldRef<"RewardCatalog", 'Boolean'>;

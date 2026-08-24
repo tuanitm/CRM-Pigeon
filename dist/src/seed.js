@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@nestjs/core");
 const app_module_1 = require("./app.module");
 const prisma_service_1 = require("./shared/prisma/prisma.service");
+const segment_service_1 = require("./engines/segmentation/segment.service");
 const demoCustomers = [
     {
         id: 'a1b2c3d4',
@@ -117,6 +118,9 @@ async function bootstrap() {
     console.log('Bootstrapping app context for seeding...');
     const app = await core_1.NestFactory.createApplicationContext(app_module_1.AppModule);
     const prisma = app.get(prisma_service_1.PrismaService);
+    const segmentService = app.get(segment_service_1.SegmentService);
+    console.log('Seeding mandatory segments...');
+    await segmentService.seedMandatorySegments();
     console.log('Seeding demo customers...');
     const gold = await prisma.loyaltyTierConfig.upsert({
         where: { tierCode: 'GOLD' },

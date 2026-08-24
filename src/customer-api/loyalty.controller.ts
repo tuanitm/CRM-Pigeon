@@ -100,11 +100,12 @@ export class LoyaltyController {
         const product = await this.prisma.product.findFirst({
           where: { sku: reward.code },
         });
+        const rewardPrice = reward.price ? Number(reward.price) : 0;
         await this.prisma.order.create({
           data: {
             customerId,
             status: 'pending',
-            totalAmount: 0,
+            totalAmount: rewardPrice,
             isInternal: true,
             isGwp: false,
             orderedAt: new Date(),
@@ -113,8 +114,8 @@ export class LoyaltyController {
                 productId: product?.id,
                 sku: reward.code,
                 quantity: 1,
-                unitPrice: 0,
-                totalPrice: 0,
+                unitPrice: rewardPrice,
+                totalPrice: rewardPrice,
               },
             },
           },

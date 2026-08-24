@@ -4,7 +4,7 @@ import path from 'path'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: './',
+  base: '/portal/',
   plugins: [react()],
   resolve: {
     alias: {
@@ -14,6 +14,7 @@ export default defineConfig({
   server: {
     port: 3000,
     open: true,
+    allowedHosts: true,
     headers: {
       'Access-Control-Allow-Origin': '*',
     },

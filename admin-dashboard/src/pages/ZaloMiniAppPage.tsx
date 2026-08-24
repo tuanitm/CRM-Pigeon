@@ -258,25 +258,25 @@ export default function ZaloMiniAppPage() {
 
         {activeTab === 'intro' && (
           <div style={{ padding: '32px 40px', maxWidth: 800 }}>
-            <Title level={4}>Tổng quan Zalo Mini App</Title>
+            <Title level={4}>Zalo Mini App Overview</Title>
             <Paragraph>
-              Zalo Mini App là ứng dụng nhẹ chạy trên nền tảng Zalo, giúp doanh nghiệp xây dựng kênh tương tác trực tiếp
-              với khách hàng mà không cần cài đặt ứng dụng riêng.
+              Zalo Mini App is a lightweight app running on the Zalo platform, helping businesses build a direct interaction channel
+              with customers without requiring a separate app installation.
             </Paragraph>
             <ul style={{ lineHeight: 2.2, color: '#374151' }}>
-              <li><strong>Thẻ thành viên (Membership Card)</strong> — Quản lý thông tin thành viên, hạng, điểm tích lũy</li>
-              <li><strong>Loyalty / Tích điểm</strong> — Chương trình tích điểm, đổi quà</li>
-              <li><strong>Voucher</strong> — Phát hành và quản lý voucher, coupon giảm giá</li>
-              <li><strong>Minigame</strong> — Vòng quay, quiz, scratch card</li>
-              <li><strong>Survey / Form</strong> — Thu thập dữ liệu khách hàng</li>
-              <li><strong>Order</strong> — Đặt hàng trực tiếp trên Mini App</li>
+              <li><strong>Membership Card</strong> — Manage member info, tiers, and accumulated points</li>
+              <li><strong>Loyalty / Points</strong> — Points accumulation and reward redemption program</li>
+              <li><strong>Voucher</strong> — Issue and manage vouchers and discount coupons</li>
+              <li><strong>Minigame</strong> — Lucky spin, quiz, scratch card</li>
+              <li><strong>Survey / Form</strong> — Collect customer data</li>
+              <li><strong>Order</strong> — Direct ordering on the Mini App</li>
             </ul>
             <Divider />
-            <Title level={5}>Yêu cầu</Title>
+            <Title level={5}>Requirements</Title>
             <Descriptions column={1} bordered size="small">
-              <Descriptions.Item label="Zalo OA">Cần ít nhất 1 OA đã xác thực và kết nối</Descriptions.Item>
-              <Descriptions.Item label="Quyền truy cập">Tài khoản chủ shop hoặc admin ứng dụng</Descriptions.Item>
-              <Descriptions.Item label="Gói dịch vụ">Tính năng phụ thuộc vào gói dịch vụ</Descriptions.Item>
+              <Descriptions.Item label="Zalo OA">Requires at least 1 verified and connected OA</Descriptions.Item>
+              <Descriptions.Item label="Access Rights">Shop owner or app admin account</Descriptions.Item>
+              <Descriptions.Item label="Service Package">Available features depend on your service package</Descriptions.Item>
             </Descriptions>
           </div>
         )}

@@ -26,6 +26,11 @@ export class IdentifyDto {
   @ApiProperty({ required: false })
   @IsOptional()
   @IsString()
+  zaloId?: string;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsString()
   fullName?: string;
 
   @ApiProperty({ required: false })

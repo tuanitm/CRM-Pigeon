@@ -16,6 +16,7 @@ class IdentifyDto {
     phone;
     email;
     anonymousId;
+    zaloId;
     fullName;
     traits;
     idempotencyKey;
@@ -43,6 +44,12 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], IdentifyDto.prototype, "anonymousId", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ required: false }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], IdentifyDto.prototype, "zaloId", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ required: false }),
     (0, class_validator_1.IsOptional)(),

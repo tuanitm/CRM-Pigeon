@@ -24,11 +24,17 @@ const notification_controller_1 = require("./notification.controller");
 const notification_service_1 = require("./notification.service");
 const condition_definition_controller_1 = require("./condition-definition.controller");
 const condition_definition_service_1 = require("./condition-definition.service");
+const dashboard_controller_1 = require("./dashboard.controller");
+const dashboard_service_1 = require("./dashboard.service");
+const segment_controller_1 = require("./segment.controller");
+const segment_service_1 = require("./segment.service");
+const segmentation_module_1 = require("../engines/segmentation/segmentation.module");
 let AdminModule = class AdminModule {
 };
 exports.AdminModule = AdminModule;
 exports.AdminModule = AdminModule = __decorate([
     (0, common_1.Module)({
+        imports: [segmentation_module_1.SegmentationModule],
         controllers: [
             customer_360_controller_1.Customer360Controller,
             dynamic_action_controller_1.DynamicActionController,
@@ -39,6 +45,8 @@ exports.AdminModule = AdminModule = __decorate([
             support_controller_1.AdminSupportController,
             notification_controller_1.NotificationController,
             condition_definition_controller_1.ConditionDefinitionController,
+            dashboard_controller_1.DashboardController,
+            segment_controller_1.SegmentController,
         ],
         providers: [
             dynamic_action_service_1.DynamicActionService,
@@ -48,6 +56,8 @@ exports.AdminModule = AdminModule = __decorate([
             product_service_1.ProductService,
             notification_service_1.NotificationService,
             condition_definition_service_1.ConditionDefinitionService,
+            dashboard_service_1.DashboardService,
+            segment_service_1.SegmentService,
         ],
         exports: [notification_service_1.NotificationService],
     })

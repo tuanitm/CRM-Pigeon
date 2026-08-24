@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:3000/v1';
+const BASE_URL = `https://crm.imv.com.vn/v1`;
 
 export const api = {
   identify: async (phone: string, pinCode?: string, fullName?: string, userAgent?: string) => {
@@ -18,6 +18,20 @@ export const api = {
   getProfile: async (customerId: string) => {
     const res = await fetch(`${BASE_URL}/customers/${customerId}`);
     if (!res.ok) throw new Error('Failed to fetch profile');
+    const text = await res.text();
+    return text ? JSON.parse(text) : null;
+  },
+
+  registerProfile: async (data: any) => {
+    const res = await fetch(`${BASE_URL}/customers`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => ({}));
+      throw new Error(errorData.message || 'Failed to register profile');
+    }
     const text = await res.text();
     return text ? JSON.parse(text) : null;
   },

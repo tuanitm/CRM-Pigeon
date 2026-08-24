@@ -164,6 +164,7 @@ export class LoyaltyService {
     description?: string;
     category?: string;
     pointsCost: number;
+    price?: number;
     stock?: number;
     imageUrl?: string;
     isActive?: boolean;
@@ -175,6 +176,7 @@ export class LoyaltyService {
         description: data.description,
         category: data.category,
         pointsCost: data.pointsCost,
+        price: data.price ?? 0,
         stock: data.stock,
         imageUrl: data.imageUrl,
         isActive: data.isActive ?? true,
@@ -189,6 +191,7 @@ export class LoyaltyService {
     if (data.description !== undefined) d.description = data.description;
     if (data.category !== undefined) d.category = data.category;
     if (data.pointsCost !== undefined) d.pointsCost = data.pointsCost;
+    if (data.price !== undefined) d.price = data.price;
     if (data.stock !== undefined) d.stock = data.stock;
     if (data.imageUrl !== undefined) d.imageUrl = data.imageUrl;
     if (data.isActive !== undefined) d.isActive = data.isActive;

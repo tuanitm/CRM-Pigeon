@@ -76,6 +76,9 @@ let IdentifyController = IdentifyController_1 = class IdentifyController {
                 where: { phone: normalizedPhone },
             });
             if (!customer) {
+                if (dto.source === 'Portal' || dto.source === 'ZaloMiniApp') {
+                    return { status: 'needs_registration', isNew: true, customerId: null };
+                }
                 customer = await this.prisma.customer.create({
                     data: {
                         phone: normalizedPhone,
@@ -99,16 +102,14 @@ let IdentifyController = IdentifyController_1 = class IdentifyController {
         if (customer && customer.isActive === false) {
             throw new common_1.HttpException('Your account has been deactivated. Please contact support.', common_1.HttpStatus.FORBIDDEN);
         }
+        if (customer && !customer.pinCode && dto.source === 'ZaloMiniApp') {
+            return { status: 'needs_registration', isNew: true, customerId: customer.id };
+        }
         if (customer && dto.source !== 'ZaloMiniApp' && !isNew) {
-            if (!dto.pinCode) {
-                throw new common_1.HttpException('PIN is required', common_1.HttpStatus.UNAUTHORIZED);
-            }
-            if (!customer.pinCode) {
-                if (dto.pinCode !== '123456') {
-                    throw new common_1.HttpException('Invalid PIN', common_1.HttpStatus.UNAUTHORIZED);
+            if (customer.pinCode) {
+                if (!dto.pinCode) {
+                    throw new common_1.HttpException('PIN is required', common_1.HttpStatus.UNAUTHORIZED);
                 }
-            }
-            else {
                 const isMatch = await bcrypt.compare(dto.pinCode, customer.pinCode);
                 if (!isMatch) {
                     throw new common_1.HttpException('Invalid PIN', common_1.HttpStatus.UNAUTHORIZED);
@@ -129,6 +130,23 @@ let IdentifyController = IdentifyController_1 = class IdentifyController {
                     identityType: 'anonymous_id',
                     identityValue: dto.anonymousId,
                     priority: 8,
+                },
+            });
+        }
+        if (customer && dto.zaloId) {
+            await this.prisma.customerIdentity.upsert({
+                where: {
+                    identityType_identityValue: {
+                        identityType: 'zalo_id',
+                        identityValue: dto.zaloId,
+                    },
+                },
+                update: { customerId: customer.id },
+                create: {
+                    customerId: customer.id,
+                    identityType: 'zalo_id',
+                    identityValue: dto.zaloId,
+                    priority: 3,
                 },
             });
         }

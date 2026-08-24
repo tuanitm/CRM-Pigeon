@@ -1,4 +1,4 @@
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000/v1';
+const API_BASE = import.meta.env.VITE_API_URL || `https://crm.imv.com.vn/v1`;
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
   const res = await fetch(`${API_BASE}${path}`, {
@@ -12,6 +12,11 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
   const text = await res.text();
   return text ? JSON.parse(text) : null;
 }
+
+// Dashboard APIs
+export const dashboardApi = {
+  getMetrics: () => request<any>('/admin/dashboard/metrics'),
+};
 
 // Customer APIs
 export const customerApi = {
@@ -180,4 +185,12 @@ export const notificationApi = {
     request<any>(`/admin/notifications/${id}/read`, { method: 'PATCH' }),
   markAllRead: () =>
     request<any>('/admin/notifications/read-all', { method: 'PATCH' }),
+};
+
+// Segment APIs
+export const segmentApi = {
+  list: () => request<any[]>('/admin/segments'),
+  seed: () => request<any>('/admin/segments/seed', { method: 'POST' }),
+  create: (data: any) => request<any>('/admin/segments', { method: 'POST', body: JSON.stringify(data) }),
+  update: (code: string, data: any) => request<any>(`/admin/segments/${code}`, { method: 'PATCH', body: JSON.stringify(data) }),
 };

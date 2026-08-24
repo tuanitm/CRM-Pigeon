@@ -13,60 +13,60 @@ const { Title, Text } = Typography;
 
 const games = [
   {
-    id: 1, name: 'Quà bay', desc: 'Quà Bay là minigame tương tác...',
+    id: 1, name: 'Flying Gifts', desc: 'Interactive flying gifts game...',
     color: 'linear-gradient(135deg, #1e40af, #3b82f6)',
-    emoji: '🎁', status: 'installed', plays: 12_450, badge: 'Mới ra mắt',
+    emoji: '🎁', status: 'installed', plays: 12_450, badge: 'New',
   },
   {
-    id: 2, name: 'Mở quà', desc: 'Game Mở Quà cho phép người...',
+    id: 2, name: 'Open Gift', desc: 'Allow users to open mystery gifts...',
     color: 'linear-gradient(135deg, #7c3aed, #a78bfa)',
-    emoji: '🎊', status: 'installed', plays: 8_920, badge: 'Mới ra mắt',
+    emoji: '🎊', status: 'installed', plays: 8_920, badge: 'New',
   },
   {
-    id: 3, name: 'Cắt bánh', desc: 'Cắt Bánh: Người chơi cắt lát...',
+    id: 3, name: 'Slice Cake', desc: 'Players slice cakes for points...',
     color: 'linear-gradient(135deg, #0369a1, #38bdf8)',
-    emoji: '🎂', status: 'available', plays: 0, badge: 'Mới ra mắt',
+    emoji: '🎂', status: 'available', plays: 0, badge: 'New',
   },
   {
-    id: 4, name: 'Lật thẻ', desc: 'Game Lật thẻ là sản phẩm ga...',
+    id: 4, name: 'Flip Card', desc: 'Memory card flipping game...',
     color: 'linear-gradient(135deg, #b91c1c, #f87171)',
-    emoji: '🃏', status: 'installed', plays: 5_340, badge: 'Mới ra mắt',
+    emoji: '🃏', status: 'installed', plays: 5_340, badge: 'New',
   },
   {
-    id: 5, name: 'Lắc quà', desc: 'Lắc Quà (Shake Gift) là game...',
+    id: 5, name: 'Shake Gift', desc: 'Shake device to receive gifts...',
     color: 'linear-gradient(135deg, #a16207, #fbbf24)',
-    emoji: '🎰', status: 'available', plays: 0, badge: 'Mới ra mắt',
+    emoji: '🎰', status: 'available', plays: 0, badge: 'New',
   },
   {
-    id: 6, name: 'Vòng quay', desc: 'Vòng quay may mắn cho khách...',
+    id: 6, name: 'Lucky Spin', desc: 'Classic lucky wheel for users...',
     color: 'linear-gradient(135deg, #15803d, #4ade80)',
-    emoji: '🎡', status: 'installed', plays: 15_680, badge: 'Phổ biến',
+    emoji: '🎡', status: 'installed', plays: 15_680, badge: 'Popular',
   },
   {
-    id: 7, name: 'Đua xe', desc: 'Game đua xe tương tác cho...',
+    id: 7, name: 'Racing', desc: 'Interactive racing game...',
     color: 'linear-gradient(135deg, #c2410c, #fb923c)',
-    emoji: '🏎️', status: 'available', plays: 0, badge: 'Mới ra mắt',
+    emoji: '🏎️', status: 'available', plays: 0, badge: 'New',
   },
   {
-    id: 8, name: 'Bắn bóng', desc: 'Bắn bóng nhận điểm thưởng...',
+    id: 8, name: 'Bubble Shooter', desc: 'Shoot bubbles for rewards...',
     color: 'linear-gradient(135deg, #0e7490, #22d3ee)',
-    emoji: '🎯', status: 'available', plays: 0, badge: 'Mới ra mắt',
+    emoji: '🎯', status: 'available', plays: 0, badge: 'New',
   },
 ];
 
 const myGames = games.filter(g => g.status === 'installed');
 
 const playerData = [
-  { id: 1, name: 'Nguyen Thi Mai', phone: '+84901234567', game: 'Vòng quay', plays: 45, points: 2_250, lastPlay: '29/07/2026' },
-  { id: 2, name: 'Tran Van Duc', phone: '+84912345678', game: 'Quà bay', plays: 23, points: 1_150, lastPlay: '28/07/2026' },
-  { id: 3, name: 'Le Thi Hoa', phone: '+84923456789', game: 'Lật thẻ', plays: 18, points: 900, lastPlay: '27/07/2026' },
-  { id: 4, name: 'Hoang Van Nam', phone: '+84956789012', game: 'Mở quà', plays: 12, points: 600, lastPlay: '26/07/2026' },
-  { id: 5, name: 'Vo Thi Lan', phone: '+84945678901', game: 'Vòng quay', plays: 56, points: 2_800, lastPlay: '29/07/2026' },
+  { id: 1, name: 'Nguyen Thi Mai', phone: '+84901234567', game: 'Lucky Spin', plays: 45, points: 2_250, lastPlay: '29/07/2026' },
+  { id: 2, name: 'Tran Van Duc', phone: '+84912345678', game: 'Flying Gifts', plays: 23, points: 1_150, lastPlay: '28/07/2026' },
+  { id: 3, name: 'Le Thi Hoa', phone: '+84923456789', game: 'Flip Card', plays: 18, points: 900, lastPlay: '27/07/2026' },
+  { id: 4, name: 'Hoang Van Nam', phone: '+84956789012', game: 'Open Gift', plays: 12, points: 600, lastPlay: '26/07/2026' },
+  { id: 5, name: 'Vo Thi Lan', phone: '+84945678901', game: 'Lucky Spin', plays: 56, points: 2_800, lastPlay: '29/07/2026' },
 ];
 
 const playerColumns = [
   {
-    title: 'Người chơi',
+    title: 'Player',
     key: 'name',
     render: (_: any, r: any) => (
       <Space>
@@ -80,9 +80,9 @@ const playerColumns = [
     ),
   },
   { title: 'Game', dataIndex: 'game', key: 'game', render: (g: string) => <Tag>{g}</Tag> },
-  { title: 'Lượt chơi', dataIndex: 'plays', key: 'plays', sorter: (a: any, b: any) => a.plays - b.plays },
-  { title: 'Điểm', dataIndex: 'points', key: 'points', render: (p: number) => <Text strong>{p.toLocaleString()}</Text>, sorter: (a: any, b: any) => a.points - b.points },
-  { title: 'Lần chơi cuối', dataIndex: 'lastPlay', key: 'lastPlay' },
+  { title: 'Plays', dataIndex: 'plays', key: 'plays', sorter: (a: any, b: any) => a.plays - b.plays },
+  { title: 'Points', dataIndex: 'points', key: 'points', render: (p: number) => <Text strong>{p.toLocaleString()}</Text>, sorter: (a: any, b: any) => a.points - b.points },
+  { title: 'Last Played', dataIndex: 'lastPlay', key: 'lastPlay' },
 ];
 
 export default function GamificationPage() {
@@ -145,17 +145,17 @@ export default function GamificationPage() {
                 color: '#fff', fontWeight: 800, fontSize: 12,
               }}>10</div>
               <div>
-                <Text strong style={{ fontSize: 12 }}>Gói Advance</Text>
+                <Text strong style={{ fontSize: 12 }}>Advance Plan</Text>
                 <br />
-                <Tag color="green" style={{ fontSize: 10 }}>Đang sử dụng</Tag>
+                <Tag color="green" style={{ fontSize: 10 }}>Active</Tag>
               </div>
             </Space>
             <div style={{ fontSize: 12, color: '#6b7280', marginBottom: 4 }}>
-              Số game sở hữu: <strong>{myGames.length} / 10</strong>
+              Owned Games: <strong>{myGames.length} / 10</strong>
             </div>
             <Progress percent={(myGames.length / 10) * 100} size="small" showInfo={false} strokeColor="#3b82f6" />
             <div style={{ fontSize: 12, color: '#6b7280', marginTop: 8 }}>
-              Lượt chơi: <strong>{myGames.reduce((s, g) => s + g.plays, 0).toLocaleString()} / 490,000</strong>
+              Plays: <strong>{myGames.reduce((s, g) => s + g.plays, 0).toLocaleString()} / 490,000</strong>
             </div>
             <Progress percent={(myGames.reduce((s, g) => s + g.plays, 0) / 490000) * 100} size="small" showInfo={false} strokeColor="#10b981" />
           </div>
@@ -176,18 +176,18 @@ export default function GamificationPage() {
               overflow: 'hidden',
             }}>
               <Title level={3} style={{ margin: 0, color: '#be185d', fontWeight: 800 }}>
-                {activeSection === 'all' ? 'Kho Game có sẵn' : 'Game của tôi'}
+                {activeSection === 'all' ? 'Available Game Store' : 'My Games'}
               </Title>
               <Text style={{ color: '#9d174d', fontSize: 14 }}>
                 {activeSection === 'all'
-                  ? 'Hệ thống mẫu Game được thiết kế sẵn, giúp bạn dễ dàng lựa chọn theo mục tiêu chiến dịch.'
-                  : `${myGames.length} game đã cài đặt`
+                  ? 'Pre-designed game templates to easily choose based on your campaign goals.'
+                  : `${myGames.length} installed games`
                 }
               </Text>
               {activeSection === 'all' && (
                 <div style={{ marginTop: 4 }}>
                   <Text style={{ color: '#9d174d', fontSize: 13 }}>
-                    Quy trình triển khai tinh gọn: <strong>Chọn mẫu – Tùy chỉnh – Vận hành</strong>
+                    Streamlined process: <strong>Select – Customize – Launch</strong>
                   </Text>
                 </div>
               )}
@@ -220,7 +220,7 @@ export default function GamificationPage() {
                             padding: '3px 10px', borderRadius: 6,
                             fontSize: 10, fontWeight: 700,
                           }}>
-                            Đã cài
+                            Installed
                           </div>
                         )}
                       </div>
@@ -243,7 +243,7 @@ export default function GamificationPage() {
                     </Space>
                     <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
                       <Button size="small" style={{ borderRadius: 6 }} icon={<EyeOutlined />}>
-                        Xem trước
+                        Preview
                       </Button>
                       <Button
                         size="small"
@@ -251,7 +251,7 @@ export default function GamificationPage() {
                         style={{ borderRadius: 6 }}
                         icon={game.status === 'installed' ? <SettingOutlined /> : <GiftOutlined />}
                       >
-                        {game.status === 'installed' ? 'Cài đặt' : 'Thiết lập'}
+                        {game.status === 'installed' ? 'Settings' : 'Setup'}
                       </Button>
                     </Space>
                   </Card>
@@ -263,7 +263,7 @@ export default function GamificationPage() {
 
         {activeSection === 'players' && (
           <div>
-            <Title level={4} style={{ margin: '0 0 16px', fontWeight: 700 }}>Người chơi</Title>
+            <Title level={4} style={{ margin: '0 0 16px', fontWeight: 700 }}>Players</Title>
             <Card variant="outlined" style={{ borderRadius: 10, borderColor: '#e5e7eb' }}>
               <Table columns={playerColumns} dataSource={playerData} rowKey="id" pagination={{ pageSize: 10 }} />
             </Card>
@@ -273,14 +273,14 @@ export default function GamificationPage() {
         {['list', 'sharing', 'logs', 'plays'].includes(activeSection) && (
           <div>
             <Title level={4} style={{ margin: '0 0 16px', fontWeight: 700 }}>
-              {activeSection === 'list' && 'Danh sách game'}
-              {activeSection === 'sharing' && 'Top chia sẻ'}
+              {activeSection === 'list' && 'Game list'}
+              {activeSection === 'sharing' && 'Top sharing'}
               {activeSection === 'logs' && 'Logs'}
-              {activeSection === 'plays' && 'Lượt chơi'}
+              {activeSection === 'plays' && 'Plays'}
             </Title>
             <Card variant="outlined" style={{ borderRadius: 10, borderColor: '#e5e7eb', padding: '40px', textAlign: 'center' }}>
               <TrophyOutlined style={{ fontSize: 48, color: '#d1d5db', marginBottom: 16 }} />
-              <div style={{ color: '#6b7280' }}>Module đang phát triển</div>
+              <div style={{ color: '#6b7280' }}>Module under development</div>
             </Card>
           </div>
         )}

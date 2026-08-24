@@ -1,21 +1,9 @@
-import React, { useState } from 'react';
-import { Card, Typography, Table, Tag, Space, Badge, Row, Col, Statistic, Button } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Card, Typography, Table, Tag, Space, Badge, Row, Col, Statistic, Button, Modal, Form, Input, Select, message } from 'antd';
 import { TeamOutlined, ThunderboltOutlined, ClockCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { segmentApi } from '../services/api';
 
 const { Title, Text } = Typography;
-
-const segmentsData = [
-  { code: 'new_registered_no_order', name: 'Đăng ký, chưa mua hàng', members: 1_840, refresh: 'scheduled', system: true, status: 'active' },
-  { code: 'first_order_no_second', name: 'Mua lần đầu, chưa mua lần 2', members: 2_120, refresh: 'scheduled', system: true, status: 'active' },
-  { code: 'repeat_buyer', name: 'Mua lại (2+ đơn)', members: 4_680, refresh: 'scheduled', system: true, status: 'active' },
-  { code: 'expecting_mother', name: 'Mẹ bầu', members: 320, refresh: 'realtime', system: true, status: 'active' },
-  { code: 'newborn_0_6m', name: 'Trẻ sơ sinh (0-6 tháng)', members: 890, refresh: 'realtime', system: true, status: 'active' },
-  { code: 'scanned_qr_never_bought_web', name: 'Quét QR, chưa mua online', members: 560, refresh: 'scheduled', system: true, status: 'active' },
-  { code: 'high_value_at_risk', name: 'Khách VIP có nguy cơ rời', members: 145, refresh: 'scheduled', system: true, status: 'active' },
-  { code: 'cart_abandoner', name: 'Bỏ giỏ hàng (7 ngày)', members: 78, refresh: 'realtime', system: true, status: 'active' },
-  { code: 'tier_upgrade_candidate', name: 'Ứng viên nâng hạng', members: 420, refresh: 'scheduled', system: true, status: 'active' },
-  { code: 'profile_incomplete', name: 'Hồ sơ thiếu thông tin', members: 3_200, refresh: 'scheduled', system: true, status: 'active' },
-];
 
 const columns = [
   {
@@ -29,47 +17,117 @@ const columns = [
     ),
   },
   {
-    title: 'Thành viên',
-    key: 'members',
-    sorter: (a: any, b: any) => a.members - b.members,
-    render: (_: any, r: any) => <span style={{ fontWeight: 600, fontSize: 16 }}>{r.members.toLocaleString()}</span>,
+    title: 'Members',
+    key: 'memberCount',
+    sorter: (a: any, b: any) => a.memberCount - b.memberCount,
+    render: (_: any, r: any) => <span style={{ fontWeight: 600, fontSize: 16 }}>{r.memberCount?.toLocaleString()}</span>,
   },
   {
-    title: 'Làm mới',
-    key: 'refresh',
+    title: 'Refresh',
+    key: 'refreshMode',
     render: (_: any, r: any) => (
-      <Tag icon={r.refresh === 'realtime' ? <ThunderboltOutlined /> : <ClockCircleOutlined />}
-        color={r.refresh === 'realtime' ? 'green' : 'blue'}>
-        {r.refresh === 'realtime' ? 'Realtime' : 'Định kỳ'}
+      <Tag icon={r.refreshMode === 'realtime' ? <ThunderboltOutlined /> : <ClockCircleOutlined />}
+        color={r.refreshMode === 'realtime' ? 'green' : 'blue'}>
+        {r.refreshMode === 'realtime' ? 'Realtime' : 'Scheduled'}
       </Tag>
     ),
   },
   {
-    title: 'Loại',
-    key: 'system',
-    render: (_: any, r: any) => r.system ? <Tag color="purple">System</Tag> : <Tag>Custom</Tag>,
+    title: 'Type',
+    key: 'isSystem',
+    render: (_: any, r: any) => r.isSystem ? <Tag color="purple">System</Tag> : <Tag>Custom</Tag>,
   },
   {
-    title: 'Trạng thái',
-    key: 'status',
-    render: (_: any, r: any) => <Badge status={r.status === 'active' ? 'success' : 'default'} text={r.status === 'active' ? 'Hoạt động' : 'Bản nháp'} />,
+    title: 'Status',
+    key: 'isActive',
+    render: (_: any, r: any) => <Badge status={r.isActive ? 'success' : 'default'} text={r.isActive ? 'Active' : 'Draft'} />,
+  },
+  {
+    title: 'Action',
+    key: 'action',
+    render: (_: any, r: any, index: number, __?: any) => (
+      <Button type="link" size="small" onClick={() => (window as any).handleEditSegment?.(r)}>Edit</Button>
+    ),
   },
 ];
 
 export default function SegmentsPage() {
-  const [activeTab, setActiveTab] = useState<'intro' | 'list' | 'events' | 'pending'>('list');
-  const totalMembers = segmentsData.reduce((sum, s) => sum + s.members, 0);
+  const [activeTab, setActiveTab] = useState<'list' | 'events' | 'pending'>('list');
+  const [segments, setSegments] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [editingCode, setEditingCode] = useState<string | null>(null);
+  const [form] = Form.useForm();
+
+  const loadData = () => {
+    setLoading(true);
+    segmentApi.list()
+      .then(setSegments)
+      .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const handleSeed = async () => {
+    const hide = message.loading('Seeding default segments...', 0);
+    try {
+      await segmentApi.seed();
+      message.success('Default segments loaded successfully!');
+      loadData();
+    } catch (err: any) {
+      message.error(err.message || 'Failed to seed segments');
+    } finally {
+      hide();
+    }
+  };
+
+  const handleSubmit = async (values: any) => {
+    try {
+      const parsedRules = JSON.parse(values.rules);
+      if (editingCode) {
+        await segmentApi.update(editingCode, { ...values, rules: parsedRules });
+        message.success('Segment updated successfully!');
+      } else {
+        await segmentApi.create({ ...values, rules: parsedRules });
+        message.success('Segment created successfully!');
+      }
+      setIsModalVisible(false);
+      form.resetFields();
+      setEditingCode(null);
+      loadData();
+    } catch (err: any) {
+      if (err instanceof SyntaxError) {
+        message.error('Invalid JSON syntax in rules');
+      } else {
+        message.error(err.message || 'Failed to save segment');
+      }
+    }
+  };
+
+  const handleEdit = (segment: any) => {
+    setEditingCode(segment.code);
+    form.setFieldsValue({
+      name: segment.name,
+      code: segment.code,
+      refreshMode: segment.refreshMode,
+      rules: JSON.stringify(segment.rules, null, 2),
+    });
+    setIsModalVisible(true);
+  };
+  
+  // Attach handleEdit to window for the columns render to access it easily
+  (window as any).handleEditSegment = handleEdit;
+
+  const totalMembers = segments.reduce((sum, s) => sum + (s.memberCount || 0), 0);
 
   return (
     <div style={{ display: 'flex', gap: 0 }}>
       {/* Sub-sidebar */}
       <div className="page-sub-sidebar" style={{ marginLeft: -20, marginTop: -20, marginBottom: -20 }}>
-        <div
-          className={`sub-sidebar-item ${activeTab === 'intro' ? 'sub-sidebar-item--active' : ''}`}
-          onClick={() => setActiveTab('intro')}
-        >
-          <TeamOutlined /> Introduction
-        </div>
+
         <div
           className={`sub-sidebar-item ${activeTab === 'list' ? 'sub-sidebar-item--active' : ''}`}
           onClick={() => setActiveTab('list')}
@@ -96,47 +154,89 @@ export default function SegmentsPage() {
           <>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
               <Title level={3} style={{ margin: 0, fontWeight: 700 }}>Segment List</Title>
-              <Button type="primary" icon={<PlusOutlined />}>Tạo mới</Button>
+              <Space>
+                {segments.length === 0 && (
+                  <Button onClick={handleSeed}>Load Default Segments</Button>
+                )}
+                <Button type="primary" icon={<PlusOutlined />} onClick={() => { setEditingCode(null); form.resetFields(); setIsModalVisible(true); }}>Create New</Button>
+              </Space>
             </div>
 
             <Row gutter={[12, 12]} style={{ marginBottom: 16 }}>
               <Col span={6}>
                 <Card variant="outlined" style={{ borderRadius: 10, borderColor: '#e5e7eb' }}>
-                  <Statistic title="Tổng Segment" value={segmentsData.length} prefix={<TeamOutlined />} />
+                  <Statistic title="Total Segments" value={segments.length} prefix={<TeamOutlined />} />
                 </Card>
               </Col>
               <Col span={6}>
                 <Card variant="outlined" style={{ borderRadius: 10, borderColor: '#e5e7eb' }}>
-                  <Statistic title="Tổng thành viên" value={totalMembers} />
+                  <Statistic title="Total Members" value={totalMembers} />
                 </Card>
               </Col>
               <Col span={6}>
                 <Card variant="outlined" style={{ borderRadius: 10, borderColor: '#e5e7eb' }}>
-                  <Statistic title="Realtime Segment" value={segmentsData.filter((s) => s.refresh === 'realtime').length} prefix={<ThunderboltOutlined />} />
+                  <Statistic title="Realtime Segment" value={segments.filter((s) => s.refreshMode === 'realtime').length} prefix={<ThunderboltOutlined />} />
                 </Card>
               </Col>
               <Col span={6}>
                 <Card variant="outlined" style={{ borderRadius: 10, borderColor: '#e5e7eb' }}>
-                  <Statistic title="System Segment" value={segmentsData.filter((s) => s.system).length} />
+                  <Statistic title="System Segment" value={segments.filter((s) => s.isSystem).length} />
                 </Card>
               </Col>
             </Row>
 
             <Card variant="outlined" style={{ borderRadius: 10, borderColor: '#e5e7eb' }}>
-              <Table columns={columns} dataSource={segmentsData} rowKey="code" pagination={false} />
+              <Table columns={columns} dataSource={segments} rowKey="code" pagination={false} loading={loading} />
             </Card>
           </>
         ) : (
           <div>
             <Title level={4} style={{ margin: '0 0 16px', fontWeight: 700 }}>
-              {activeTab === 'intro' ? 'Introduction' : activeTab === 'events' ? 'Event Stream' : 'Pending Events'}
+              {activeTab === 'events' ? 'Event Stream' : 'Pending Events'}
             </Title>
             <Card variant="outlined" style={{ borderRadius: 10, borderColor: '#e5e7eb' }}>
-              <Text type="secondary">Tính năng đang được phát triển.</Text>
+              <Text type="secondary">Feature under development.</Text>
             </Card>
           </div>
         )}
       </div>
+
+      <Modal
+        title={editingCode ? "Edit Custom Segment" : "Create Custom Segment"}
+        open={isModalVisible}
+        onCancel={() => { setIsModalVisible(false); setEditingCode(null); form.resetFields(); }}
+        onOk={() => form.submit()}
+        width={700}
+      >
+        <Form form={form} layout="vertical" onFinish={handleSubmit}>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item name="name" label="Segment Name" rules={[{ required: true }]}>
+                <Input placeholder="e.g. VIP Customers" />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item name="code" label="Segment Code" rules={[{ required: true }]}>
+                <Input placeholder="e.g. vip_customers" disabled={!!editingCode} />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Form.Item name="refreshMode" label="Evaluation Mode" initialValue="scheduled">
+            <Select>
+              <Select.Option value="scheduled">Scheduled (Every 30 minutes)</Select.Option>
+              <Select.Option value="realtime">Realtime (On every event)</Select.Option>
+            </Select>
+          </Form.Item>
+          <Form.Item 
+            name="rules" 
+            label="Rules Definition (JSON)" 
+            rules={[{ required: true }]}
+            extra="Input valid JSON Rule DSL here. E.g. { 'operator': 'AND', 'conditions': [ ... ] }"
+          >
+            <Input.TextArea rows={8} style={{ fontFamily: 'monospace' }} placeholder={`{\n  "operator": "AND",\n  "conditions": []\n}`} />
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   );
 }

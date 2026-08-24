@@ -184,7 +184,7 @@ export default function LoyaltyPage() {
     if (reward) {
       rewardForm.setFieldsValue({
         code: reward.code, name: reward.name, description: reward.description,
-        category: reward.category, pointsCost: reward.pointsCost,
+        category: reward.category, pointsCost: reward.pointsCost, price: reward.price,
         stock: reward.stock, isActive: reward.isActive, imageUrl: reward.imageUrl,
       });
     } else { rewardForm.resetFields(); }
@@ -241,6 +241,7 @@ export default function LoyaltyPage() {
     { title: 'Reward', dataIndex: 'name', key: 'name', render: (t: string) => <Text strong>{t}</Text> },
     { title: 'Category', dataIndex: 'category', key: 'cat', render: (c: string) => c ? <Tag color="blue">{c}</Tag> : '—' },
     { title: 'Cost', dataIndex: 'pointsCost', key: 'pts', render: (p: number) => <Tag color="gold">{p?.toLocaleString()} pts</Tag> },
+    { title: 'Price (₫)', dataIndex: 'price', key: 'price', render: (p: number) => p ? `${Number(p).toLocaleString()} ₫` : '0 ₫' },
     { title: 'Stock', dataIndex: 'stock', key: 'stock', render: (s: number | null) => s !== null && s !== undefined ? s : '∞' },
     { title: 'Redeemed', key: 'rd', render: (_: any, r: any) => <Badge count={r._count?.reward_redemption || 0} style={{ background: '#6b7280' }} /> },
     { title: 'Active', dataIndex: 'isActive', key: 'act', width: 80, render: (v: boolean) => <Tag color={v ? 'success' : 'default'}>{v ? 'Active' : 'Off'}</Tag> },
@@ -660,7 +661,7 @@ export default function LoyaltyPage() {
             <Input.TextArea rows={2} placeholder="Description (optional)" />
           </Form.Item>
           <Row gutter={12}>
-            <Col span={8}>
+            <Col span={6}>
               <Form.Item name="category" label="Category">
                 <Select allowClear placeholder="Category" options={[
                   { value: 'product', label: 'Brand Product' },
@@ -671,12 +672,17 @@ export default function LoyaltyPage() {
                 ]} />
               </Form.Item>
             </Col>
-            <Col span={8}>
+            <Col span={6}>
               <Form.Item name="pointsCost" label="Points Cost" rules={[{ required: true }]}>
                 <InputNumber style={{ width: '100%' }} min={1} />
               </Form.Item>
             </Col>
-            <Col span={8}>
+            <Col span={6}>
+              <Form.Item name="price" label="Price (₫)" initialValue={0}>
+                <InputNumber style={{ width: '100%' }} min={0} step={1000} />
+              </Form.Item>
+            </Col>
+            <Col span={6}>
               <Form.Item name="stock" label="Stock (empty=∞)">
                 <InputNumber style={{ width: '100%' }} min={0} />
               </Form.Item>

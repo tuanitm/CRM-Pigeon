@@ -1,4 +1,4 @@
-import { Controller, Get, Patch, Param, Body, Logger } from '@nestjs/common';
+import { Controller, Get, Patch, Post, Param, Body, Logger, HttpException, HttpStatus } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { PrismaService } from '../shared/prisma/prisma.service';
 import { JourneyEngineService } from '../engines/journey/journey-engine.service';
@@ -15,6 +15,93 @@ export class ProfileController {
     private journeyEngine: JourneyEngineService,
     private journeyRunService: JourneyRunService,
   ) {}
+
+  @Post()
+  @ApiOperation({ summary: 'Register a new customer from onboarding' })
+  async registerCustomer(@Body() data: any) {
+    // Normalize phone similar to IdentifyController
+    let cleaned = (data.phone || '').replace(/\D/g, '');
+    if (cleaned.startsWith('0')) cleaned = '84' + cleaned.substring(1);
+    if (!cleaned.startsWith('+') && cleaned) cleaned = '+' + cleaned;
+
+    // Check if phone already exists
+    const existing = await this.prisma.customer.findFirst({
+      where: { phone: cleaned },
+    });
+    if (existing) {
+      throw new HttpException('Phone number already in use', HttpStatus.BAD_REQUEST);
+    }
+
+    let hashedPinCode = undefined;
+    if (data.pinCode) {
+      hashedPinCode = await bcrypt.hash(data.pinCode, 10);
+    }
+
+    const newCustomer = await this.prisma.customer.create({
+      data: {
+        phone: cleaned,
+        email: data.email,
+        fullName: data.fullName,
+        customerCode: Math.floor(10000000 + Math.random() * 90000000).toString(),
+        registrationSource: data.source || 'Portal',
+        gender: data.gender,
+        dateOfBirth: data.dateOfBirth ? new Date(data.dateOfBirth) : undefined,
+        pinCode: hashedPinCode,
+        addresses: data.address ? {
+          create: [{ addressLine1: data.address }]
+        } : undefined,
+        identities: data.zaloId ? {
+          create: [{ identityType: 'zalo_id', identityValue: data.zaloId, priority: 3 }]
+        } : undefined,
+        loyaltyAccount: {
+          create: {
+            pointsBalance: 0,
+            pointsLifetime: 0,
+            pointsRedeemed: 0,
+            pointsExpired: 0,
+          },
+        },
+      },
+    });
+
+    if (data.babies && Array.isArray(data.babies)) {
+      for (const b of data.babies) {
+        if (!b.name || !(b.dateOfBirth || b.dueDate)) continue;
+        const babyData = {
+          name: b.name,
+          gender: b.gender,
+          dateOfBirth: b.dateOfBirth ? new Date(b.dateOfBirth) : null,
+          dueDate: b.dueDate ? new Date(b.dueDate) : null,
+          isBorn: b.isBorn !== undefined ? b.isBorn : true,
+          stageCode: b.stageCode,
+          customerId: newCustomer.id
+        };
+        const newBaby = await this.prisma.baby.create({ data: babyData });
+        
+        try {
+          await this.journeyRunService.handleEventTrigger(
+            'baby.profile_created',
+            newCustomer.id,
+            { babyId: newBaby.id, babyName: b.name },
+          );
+        } catch (err) {
+          this.logger.error(`Failed to fire baby.profile_created: ${(err as Error).message}`);
+        }
+      }
+    }
+
+    if (data.isOnboardingCompletion) {
+      try {
+        await this.journeyRunService.handleEventTrigger('customer.profile_completed', newCustomer.id);
+        this.logger.log(`Fired customer.profile_completed for customer ${newCustomer.id}`);
+      } catch (err) {
+        this.logger.error(`Failed to fire customer.profile_completed: ${(err as Error).message}`);
+      }
+    }
+
+    return newCustomer;
+  }
+
 
   @Get(':id')
   @ApiOperation({ summary: 'Get customer profile (360 view)' })
@@ -74,12 +161,16 @@ export class ProfileController {
   @Patch(':id')
   @ApiOperation({ summary: 'Update customer profile' })
   async updateProfile(@Param('id') id: string, @Body() data: any) {
-    // Optionally check if phone is already used by another customer
-    if (data.phone) {
+    let cleanedPhone = data.phone;
+    if (cleanedPhone) {
+      cleanedPhone = cleanedPhone.replace(/\D/g, '');
+      if (cleanedPhone.startsWith('0')) cleanedPhone = '84' + cleanedPhone.substring(1);
+      if (!cleanedPhone.startsWith('+') && cleanedPhone) cleanedPhone = '+' + cleanedPhone;
+
       const existing = await this.prisma.customer.findFirst({
-        where: { phone: data.phone, id: { not: id } },
+        where: { phone: cleanedPhone, id: { not: id } },
       });
-      if (existing) throw new Error('Phone number already in use');
+      if (existing) throw new HttpException('Phone number already in use', HttpStatus.BAD_REQUEST);
     }
 
     const oldCustomer = await this.prisma.customer.findUnique({
@@ -148,6 +239,24 @@ export class ProfileController {
       }
     }
 
+    if (data.zaloId) {
+      await this.prisma.customerIdentity.upsert({
+        where: {
+          identityType_identityValue: {
+            identityType: 'zalo_id',
+            identityValue: data.zaloId,
+          },
+        },
+        update: { customerId: id },
+        create: {
+          customerId: id,
+          identityType: 'zalo_id',
+          identityValue: data.zaloId,
+          priority: 3,
+        },
+      });
+    }
+
     let hashedPinCode = undefined;
     if (data.pinCode) {
       hashedPinCode = await bcrypt.hash(data.pinCode, 10);
@@ -157,7 +266,7 @@ export class ProfileController {
       where: { id },
       data: {
         fullName: data.fullName,
-        phone: data.phone,
+        phone: cleanedPhone,
         email: data.email,
         gender: data.gender,
         customerType: data.customerType,

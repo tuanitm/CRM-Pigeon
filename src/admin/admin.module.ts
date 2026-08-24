@@ -15,8 +15,14 @@ import { NotificationController } from './notification.controller';
 import { NotificationService } from './notification.service';
 import { ConditionDefinitionController } from './condition-definition.controller';
 import { ConditionDefinitionService } from './condition-definition.service';
+import { DashboardController } from './dashboard.controller';
+import { DashboardService } from './dashboard.service';
+import { SegmentController } from './segment.controller';
+import { SegmentService } from './segment.service';
+import { SegmentationModule } from '../engines/segmentation/segmentation.module';
 
 @Module({
+  imports: [SegmentationModule],
   controllers: [
     Customer360Controller,
     DynamicActionController,
@@ -27,6 +33,8 @@ import { ConditionDefinitionService } from './condition-definition.service';
     AdminSupportController,
     NotificationController,
     ConditionDefinitionController,
+    DashboardController,
+    SegmentController,
   ],
   providers: [
     DynamicActionService,
@@ -36,6 +44,8 @@ import { ConditionDefinitionService } from './condition-definition.service';
     ProductService,
     NotificationService,
     ConditionDefinitionService,
+    DashboardService,
+    SegmentService,
   ],
   exports: [NotificationService],
 })
