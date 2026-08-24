@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: pigeon-crm-app
+    restart: always
+    ports:
+      - "5170:5170"
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+      # Override REDIS_HOST from .env to point to the Docker Compose Redis service
+      - REDIS_HOST=redis
+    depends_on:
+      - redis
+    networks:
+      - pigeon-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: pigeon-crm-redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - pigeon-network
+
+volumes:
+  redis_data:
+
+networks:
+  pigeon-network:
+    driver: bridge
