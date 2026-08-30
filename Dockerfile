@@ -38,6 +38,7 @@ RUN npm ci --omit=dev
 # Copy generated Prisma Client and built application from the builder stage
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=builder /app/generated ./generated
 COPY --from=builder /app/dist ./dist
 
 # Expose the application port
